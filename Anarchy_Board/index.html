@@ -2266,7 +2266,7 @@
       fetchLevelNodes: function() {
         var statusText = document.getElementById('sk_preloader_status');
         var progressBar = document.getElementById('sk_preloader_progress');
-        var gitRawLink = "./Anarchy Board.json";
+        var gitRawLink = "https://github.com/ManavBanker/PublishedGames/anarchy_board/levels.json";
 
         fetch(gitRawLink)
           .then(function(response) {
@@ -2279,7 +2279,7 @@
             var cleanJson = rawText.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*/g, "");
             var fetchedLevels = JSON.parse(cleanJson);
             if (Array.isArray(fetchedLevels) && fetchedLevels.length > 0) {
-              var expansionLevels = fetchedLevels.map(function(lvl, i) {
+              var remoteLevels = fetchedLevels.map(function(lvl, i) {
                 var palette = AB.DLC.THEME_PALETTE[i % AB.DLC.THEME_PALETTE.length];
                 return {
                   id: lvl.id,
@@ -2293,13 +2293,13 @@
                   }
                 };
               });
-              AB.State.levels = AB.State.levels.concat(expansionLevels);
-              AB.Renderer.addLog("DECRYPTED DYNAMIC NET NODES SUCCESSFULLY", "#00ffff");
+              AB.State.levels = remoteLevels;
+              AB.Renderer.addLog("DECRYPTED REMOTE NET NODES SUCCESSFULLY", "#00ffff");
             }
           })
           .catch(function(err) {
-            console.warn("Failed fetching expansion levels:", err.message);
-            statusText.textContent = "Connection aborted. Initializing core local nodes...";
+            console.warn("Failed fetching remote levels:", err.message);
+            statusText.textContent = "Remote synchronization failed.";
           })
           .finally(function() {
             progressBar.style.width = "100%";
