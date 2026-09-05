@@ -1,0 +1,592 @@
+[
+  {
+    "levelNum": 6,
+    "targets": [16, 32, 64],
+    "startVal": 2,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 1, "y": 1 }, { "x": 1, "y": 2 }, { "x": 2, "y": 1 },
+      { "x": 18, "y": 1 }, { "x": 18, "y": 2 }, { "x": 17, "y": 1 },
+      { "x": 1, "y": 18 }, { "x": 1, "y": 17 }, { "x": 2, "y": 18 },
+      { "x": 18, "y": 18 }, { "x": 18, "y": 17 }, { "x": 17, "y": 18 }
+    ],
+    "speedMs": 240,
+    "desc": "Corner fortifications. Use multiplication to compound your value quickly."
+  },
+  {
+    "levelNum": 7,
+    "targets": [9, 3, 1],
+    "startVal": 15,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 5, "y": 2 }, { "x": 5, "y": 3 }, { "x": 5, "y": 4 },
+      { "x": 14, "y": 2 }, { "x": 14, "y": 3 }, { "x": 14, "y": 4 },
+      { "x": 5, "y": 15 }, { "x": 5, "y": 16 }, { "x": 5, "y": 17 },
+      { "x": 14, "y": 15 }, { "x": 14, "y": 16 }, { "x": 14, "y": 17 }
+    ],
+    "speedMs": 230,
+    "desc": "Squeeze through side columns while subtraction nodes keep your scale in check."
+  },
+  {
+    "levelNum": 8,
+    "targets": [21, 42, 84],
+    "startVal": 3,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 4 }, { "x": 11, "y": 4 }, { "x": 12, "y": 4 },
+      { "x": 7, "y": 15 }, { "x": 8, "y": 15 }, { "x": 9, "y": 15 }
+    ],
+    "speedMs": 220,
+    "desc": "Offset horizontal blocks require strategic vertical maneuvering."
+  },
+  {
+    "levelNum": 9,
+    "targets": [25, 5, 50],
+    "startVal": 10,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 9, "y": 8 }, { "x": 11, "y": 8 },
+      { "x": 9, "y": 12 }, { "x": 11, "y": 12 }
+    ],
+    "speedMs": 210,
+    "desc": "A tight four-point guard surrounds the starting origin."
+  },
+  {
+    "levelNum": 10,
+    "targets": [50, 100, 150],
+    "startVal": 5,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 4, "y": 4 }, { "x": 4, "y": 5 }, { "x": 5, "y": 4 },
+      { "x": 15, "y": 4 }, { "x": 15, "y": 5 }, { "x": 14, "y": 4 },
+      { "x": 4, "y": 15 }, { "x": 4, "y": 14 }, { "x": 5, "y": 15 },
+      { "x": 15, "y": 15 }, { "x": 15, "y": 14 }, { "x": 14, "y": 15 }
+    ],
+    "speedMs": 200,
+    "desc": "Massive corner strongholds restrict wide loops. Aim for rapid growth."
+  },
+  {
+    "levelNum": 11,
+    "targets": [13, 26, 39],
+    "startVal": 7,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 2, "y": 10 }, { "x": 3, "y": 10 }, { "x": 4, "y": 10 },
+      { "x": 15, "y": 10 }, { "x": 16, "y": 10 }, { "x": 17, "y": 10 }
+    ],
+    "speedMs": 195,
+    "desc": "Horizontal side-spits bisect the layout. Watch your vertical transitions."
+  },
+  {
+    "levelNum": 12,
+    "targets": [11, 22, 44],
+    "startVal": 1,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 6, "y": 6 }, { "x": 7, "y": 7 }, { "x": 8, "y": 8 },
+      { "x": 11, "y": 11 }, { "x": 12, "y": 12 }, { "x": 13, "y": 13 }
+    ],
+    "speedMs": 190,
+    "desc": "Diagonal slash structures break up the center-left and bottom-right sectors."
+  },
+  {
+    "levelNum": 13,
+    "targets": [8, 16, 4],
+    "startVal": 8,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 10, "y": 3 }, { "x": 10, "y": 5 }, { "x": 10, "y": 7 },
+      { "x": 10, "y": 13 }, { "x": 10, "y": 15 }, { "x": 10, "y": 17 }
+    ],
+    "speedMs": 185,
+    "desc": "Dotted central spines challenge precise micro-turns."
+  },
+  {
+    "levelNum": 14,
+    "targets": [33, 66, 99],
+    "startVal": 3,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 3, "y": 3 }, { "x": 16, "y": 3 },
+      { "x": 3, "y": 16 }, { "x": 16, "y": 16 },
+      { "x": 10, "y": 5 }, { "x": 10, "y": 14 }
+    ],
+    "speedMs": 180,
+    "desc": "Pinnacle towers guard the outer edges, forcing action into central lanes."
+  },
+  {
+    "levelNum": 15,
+    "targets": [17, 34, 51],
+    "startVal": 9,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 14, "y": 5 },
+      { "x": 5, "y": 14 }, { "x": 14, "y": 14 },
+      { "x": 10, "y": 9 }, { "x": 10, "y": 11 }
+    ],
+    "speedMs": 175,
+    "desc": "Quadrant anchors. Keep calculations clean as the snake gains speed."
+  },
+  {
+    "levelNum": 16,
+    "targets": [20, 40, 80],
+    "startVal": 2,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 0, "y": 10 }, { "x": 1, "y": 10 }, { "x": 2, "y": 10 },
+      { "x": 17, "y": 10 }, { "x": 18, "y": 10 }, { "x": 19, "y": 10 }
+    ],
+    "speedMs": 170,
+    "desc": "Side vents are sealed! Use the center lanes to build high products."
+  },
+  {
+    "levelNum": 17,
+    "targets": [15, 0, 15],
+    "startVal": 15,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 10, "y": 2 }, { "x": 10, "y": 3 }, { "x": 10, "y": 4 },
+      { "x": 10, "y": 15 }, { "x": 10, "y": 16 }, { "x": 10, "y": 17 },
+      { "x": 2, "y": 10 }, { "x": 3, "y": 10 }, { "x": 17, "y": 10 }, { "x": 16, "y": 10 }
+    ],
+    "speedMs": 165,
+    "desc": "Cross gates partition the arena. Think ahead before switching quadrants."
+  },
+  {
+    "levelNum": 18,
+    "targets": [45, 90, 10],
+    "startVal": 5,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 7, "y": 7 }, { "x": 8, "y": 7 }, { "x": 9, "y": 7 },
+      { "x": 11, "y": 12 }, { "x": 12, "y": 12 }, { "x": 13, "y": 12 }
+    ],
+    "speedMs": 160,
+    "desc": "Dual floating horizontal blocks. Maintain precise control in tight corridors."
+  },
+  {
+    "levelNum": 19,
+    "targets": [14, 28, 56],
+    "startVal": 7,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 7, "y": 7 }, { "x": 7, "y": 8 }, { "x": 7, "y": 9 },
+      { "x": 12, "y": 10 }, { "x": 12, "y": 11 }, { "x": 12, "y": 12 }
+    ],
+    "speedMs": 155,
+    "desc": "Vertical gate blockades require quick horizontal weaves."
+  },
+  {
+    "levelNum": 20,
+    "targets": [27, 81, 9],
+    "startVal": 3,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 6, "y": 5 }, { "x": 7, "y": 5 },
+      { "x": 12, "y": 14 }, { "x": 13, "y": 14 }, { "x": 14, "y": 14 }
+    ],
+    "speedMs": 150,
+    "desc": "Asymmetrical ceiling and floor blockades. High multiplier tactical pathing."
+  },
+  {
+    "levelNum": 21,
+    "targets": [30, 60, 90],
+    "startVal": 10,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 10, "y": 0 }, { "x": 10, "y": 1 }, { "x": 10, "y": 2 },
+      { "x": 10, "y": 17 }, { "x": 10, "y": 18 }, { "x": 10, "y": 19 }
+    ],
+    "speedMs": 145,
+    "desc": "A vertical divider split at top and bottom limits fast looping."
+  },
+  {
+    "levelNum": 22,
+    "targets": [19, 38, 57],
+    "startVal": 1,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 3, "y": 5 }, { "x": 4, "y": 5 }, { "x": 5, "y": 5 },
+      { "x": 14, "y": 14 }, { "x": 15, "y": 14 }, { "x": 16, "y": 14 }
+    ],
+    "speedMs": 140,
+    "desc": "Offset horizontal beams limit safety lanes. Be calculated with your expansion."
+  },
+  {
+    "levelNum": 23,
+    "targets": [12, 6, 24],
+    "startVal": 6,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 5, "y": 10 }, { "x": 6, "y": 10 }, { "x": 7, "y": 10 },
+      { "x": 12, "y": 10 }, { "x": 13, "y": 10 }, { "x": 14, "y": 10 }
+    ],
+    "speedMs": 135,
+    "desc": "Middle split wall creates a bottleneck. Slide through carefully."
+  },
+  {
+    "levelNum": 24,
+    "targets": [40, 80, 120],
+    "startVal": 8,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 5, "y": 6 }, { "x": 6, "y": 5 },
+      { "x": 14, "y": 14 }, { "x": 14, "y": 13 }, { "x": 13, "y": 14 }
+    ],
+    "speedMs": 130,
+    "desc": "Dual corner fortresses block high maneuvers. Stick to the open center."
+  },
+  {
+    "levelNum": 25,
+    "targets": [15, 30, 45],
+    "startVal": 5,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 2, "y": 2 }, { "x": 3, "y": 2 }, { "x": 16, "y": 2 }, { "x": 17, "y": 2 },
+      { "x": 2, "y": 17 }, { "x": 3, "y": 17 }, { "x": 16, "y": 17 }, { "x": 17, "y": 17 }
+    ],
+    "speedMs": 125,
+    "desc": "Corner bumpers restrict edge hugging. Solve targets with swift turns."
+  },
+  {
+    "levelNum": 26,
+    "targets": [100, 50, 200],
+    "startVal": 10,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 10, "y": 6 }, { "x": 9, "y": 6 }, { "x": 11, "y": 6 },
+      { "x": 10, "y": 13 }, { "x": 9, "y": 13 }, { "x": 11, "y": 13 }
+    ],
+    "speedMs": 120,
+    "desc": "Horizontal center bars require precise slalom-like paths."
+  },
+  {
+    "levelNum": 27,
+    "targets": [18, 36, 54],
+    "startVal": 9,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 4, "y": 10 }, { "x": 5, "y": 10 }, { "x": 14, "y": 10 }, { "x": 15, "y": 10 }
+    ],
+    "speedMs": 115,
+    "desc": "Side pins reduce horizontal freedom. Keep operations structured."
+  },
+  {
+    "levelNum": 28,
+    "targets": [22, 11, 33],
+    "startVal": 11,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 10, "y": 4 }, { "x": 10, "y": 5 }, { "x": 10, "y": 14 }, { "x": 10, "y": 15 }
+    ],
+    "speedMs": 110,
+    "desc": "Central split gates force looping routes. Use subtraction wisely."
+  },
+  {
+    "levelNum": 29,
+    "targets": [48, 96, 144],
+    "startVal": 6,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 6, "y": 6 }, { "x": 6, "y": 7 }, { "x": 7, "y": 6 },
+      { "x": 13, "y": 13 }, { "x": 13, "y": 12 }, { "x": 12, "y": 13 }
+    ],
+    "speedMs": 105,
+    "desc": "L-shaped blocks in corners force diagonal-oriented snake flow."
+  },
+  {
+    "levelNum": 30,
+    "targets": [25, 75, 15],
+    "startVal": 5,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 3, "y": 10 }, { "x": 16, "y": 10 },
+      { "x": 10, "y": 3 }, { "x": 10, "y": 16 }
+    ],
+    "speedMs": 100,
+    "desc": "High-speed cross guard. Plan paths carefully to reach outer nodes."
+  },
+  {
+    "levelNum": 31,
+    "targets": [13, 26, 52],
+    "startVal": 13,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 14, "y": 5 },
+      { "x": 5, "y": 14 }, { "x": 14, "y": 14 }
+    ],
+    "speedMs": 100,
+    "desc": "Four pillars. Navigate circles around obstacles to construct your sum."
+  },
+  {
+    "levelNum": 32,
+    "targets": [35, 70, 105],
+    "startVal": 7,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 8, "y": 8 }, { "x": 9, "y": 8 }, { "x": 11, "y": 11 }, { "x": 12, "y": 11 }
+    ],
+    "speedMs": 100,
+    "desc": "Compact obstacles near center lane. Avoid collisions while maximizing products."
+  },
+  {
+    "levelNum": 33,
+    "targets": [17, 9, 25],
+    "startVal": 17,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 2, "y": 5 }, { "x": 17, "y": 5 },
+      { "x": 2, "y": 14 }, { "x": 17, "y": 14 }
+    ],
+    "speedMs": 100,
+    "desc": "Side corridors are narrowed. Squeeze your values to target values safely."
+  },
+  {
+    "levelNum": 34,
+    "targets": [42, 84, 126],
+    "startVal": 2,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 5 }, { "x": 9, "y": 5 }, { "x": 11, "y": 5 },
+      { "x": 10, "y": 14 }, { "x": 9, "y": 14 }, { "x": 11, "y": 14 }
+    ],
+    "speedMs": 100,
+    "desc": "Double central walls block straight vertical loops."
+  },
+  {
+    "levelNum": 35,
+    "targets": [19, 38, 76],
+    "startVal": 19,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 4, "y": 4 }, { "x": 15, "y": 4 },
+      { "x": 4, "y": 15 }, { "x": 15, "y": 15 }
+    ],
+    "speedMs": 100,
+    "desc": "Pillars are shifted wider. The ultimate speed test for math equations."
+  },
+  {
+    "levelNum": 36,
+    "targets": [31, 62, 93],
+    "startVal": 1,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 2 }, { "x": 10, "y": 3 },
+      { "x": 10, "y": 16 }, { "x": 10, "y": 17 }
+    ],
+    "speedMs": 100,
+    "desc": "Double spine bumpers limit room on the top and bottom."
+  },
+  {
+    "levelNum": 37,
+    "targets": [14, 7, 21],
+    "startVal": 14,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 5, "y": 10 }, { "x": 14, "y": 10 }
+    ],
+    "speedMs": 100,
+    "desc": "Two center side pins create subtle routing constraints."
+  },
+  {
+    "levelNum": 38,
+    "targets": [60, 120, 180],
+    "startVal": 10,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 },
+      { "x": 16, "y": 16 }, { "x": 16, "y": 15 }
+    ],
+    "speedMs": 100,
+    "desc": "Corner blockers force snake routing toward the diagonal axes."
+  },
+  {
+    "levelNum": 39,
+    "targets": [29, 58, 87],
+    "startVal": 2,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 10, "y": 8 }, { "x": 10, "y": 11 }
+    ],
+    "speedMs": 100,
+    "desc": "Micro pillars close to start coordinates require immediate action."
+  },
+  {
+    "levelNum": 40,
+    "targets": [54, 108, 162],
+    "startVal": 6,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 4, "y": 10 }, { "x": 15, "y": 10 }
+    ],
+    "speedMs": 100,
+    "desc": "Side bumpers limit lanes. Double up equations cleanly."
+  },
+  {
+    "levelNum": 41,
+    "targets": [13, 3, 23],
+    "startVal": 13,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 10, "y": 5 }, { "x": 10, "y": 14 }
+    ],
+    "speedMs": 100,
+    "desc": "Top/bottom spine pins restrict smooth circle loops."
+  },
+  {
+    "levelNum": 42,
+    "targets": [45, 90, 135],
+    "startVal": 5,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 6, "y": 6 }, { "x": 13, "y": 6 },
+      { "x": 6, "y": 13 }, { "x": 13, "y": 13 }
+    ],
+    "speedMs": 100,
+    "desc": "Four box towers guard inner zones. Scale up with products."
+  },
+  {
+    "levelNum": 43,
+    "targets": [26, 13, 39],
+    "startVal": 26,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 14, "y": 14 }
+    ],
+    "speedMs": 100,
+    "desc": "Symmetric single blocks require diagonal slaloms."
+  },
+  {
+    "levelNum": 44,
+    "targets": [80, 160, 240],
+    "startVal": 8,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 4 }, { "x": 10, "y": 15 }
+    ],
+    "speedMs": 100,
+    "desc": "Vertical central blocks restrict high maneuvers."
+  },
+  {
+    "levelNum": 45,
+    "targets": [37, 74, 111],
+    "startVal": 1,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 4, "y": 4 }, { "x": 15, "y": 15 }
+    ],
+    "speedMs": 100,
+    "desc": "Asymmetric blockers. Maintain high arithmetic precision."
+  },
+  {
+    "levelNum": 46,
+    "targets": [15, 30, 60],
+    "startVal": 15,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 8, "y": 8 }, { "x": 11, "y": 11 }
+    ],
+    "speedMs": 100,
+    "desc": "Central lane anchors restrict free pathing. Build targets."
+  },
+  {
+    "levelNum": 47,
+    "targets": [33, 11, 44],
+    "startVal": 33,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 3, "y": 10 }, { "x": 16, "y": 10 }
+    ],
+    "speedMs": 100,
+    "desc": "Squeeze through side gates to alter and balance equations."
+  },
+  {
+    "levelNum": 48,
+    "targets": [72, 144, 216],
+    "startVal": 9,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 3 }, { "x": 10, "y": 16 }
+    ],
+    "speedMs": 100,
+    "desc": "Long vertical spine blocks limit space in north/south sectors."
+  },
+  {
+    "levelNum": 49,
+    "targets": [23, 46, 69],
+    "startVal": 2,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 14, "y": 5 }
+    ],
+    "speedMs": 100,
+    "desc": "Top corner blockers force operations into the southern hemisphere."
+  },
+  {
+    "levelNum": 50,
+    "targets": [90, 180, 270],
+    "startVal": 10,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 5, "y": 14 }, { "x": 14, "y": 14 }
+    ],
+    "speedMs": 100,
+    "desc": "Southern blockers require north-dominated loops to evaluate targets."
+  },
+  {
+    "levelNum": 51,
+    "targets": [17, 34, 68],
+    "startVal": 17,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 10, "y": 6 }, { "x": 10, "y": 13 }
+    ],
+    "speedMs": 100,
+    "desc": "Inner spine blocks limit quick central switches."
+  },
+  {
+    "levelNum": 52,
+    "targets": [64, 128, 256],
+    "startVal": 4,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 2, "y": 2 }, { "x": 17, "y": 17 }
+    ],
+    "speedMs": 100,
+    "desc": "Extreme corner blockers. Maximize speed and coordinate growth."
+  },
+  {
+    "levelNum": 53,
+    "targets": [19, 9, 29],
+    "startVal": 19,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 6, "y": 10 }, { "x": 13, "y": 10 }
+    ],
+    "speedMs": 100,
+    "desc": "Side gate blockers limit quick switches between left and right zones."
+  },
+  {
+    "levelNum": 54,
+    "targets": [100, 200, 300],
+    "startVal": 5,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 2 }, { "x": 10, "y": 17 }
+    ],
+    "speedMs": 100,
+    "desc": "Spine-tip bumpers restrict open top and bottom loopings."
+  },
+  {
+    "levelNum": 55,
+    "targets": [25, 50, 75],
+    "startVal": 25,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 4, "y": 4 }, { "x": 15, "y": 4 },
+      { "x": 4, "y": 15 }, { "x": 15, "y": 15 }
+    ],
+    "speedMs": 100,
+    "desc": "The Grand Finale. Symmetrical corner pillars, high speeds, and complex math."
+  }
+]

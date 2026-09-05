@@ -1,0 +1,1852 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ouromath - Action-Puzzle Mathematical Snake</title>
+<link rel="stylesheet" href="css/framework.css">`n</head>
+<body style="margin:0; padding:0; background-color:#0f172a; font-family:sans-serif; overflow:hidden; touch-action:none;">
+
+  <!-- ALL HTML ELEMENTS STRICTLY FORMATTED & COMPLETE -->
+  <div class="sk_game_suite_root" id="sk_game_suite_root">
+    
+    <!-- Meta and Labels container -->
+    <div class="sk_labels" data="Snake,Math,Brain-Trainer,Retro" style="display:none;"></div>
+    <meta class="sk_meta" description="A tactical snake game where your body represents an active mathematical equation.">
+
+    <!-- 1. TOP DIV: COMPACT TOP BAR & POPUP NAVIGATION -->
+    <div class="sk_top_bar">
+      <div class="sk_top_left">
+        <div class="sk_title_container">
+          <p class="sk_title_main">OUROMATH</p>
+          <p class="sk_title_sub">Math Snake</p>
+        </div>
+        <div class="sk_score_pill">
+          <span>SCORE:</span> <b id="sk_top_score_val">0</b>
+        </div>
+      </div>
+
+      <div class="sk_header_buttons">
+        <button class="sk_btn" id="sk_btn_menu"><i>â˜° Menu</i></button>
+        <button class="sk_btn sk_btn_accent" id="sk_btn_pause"><i>â¸ Pause</i></button>
+        <button class="sk_btn" id="sk_btn_demo_top"><i>â–¶ Auto-Demo</i></button>
+        <button class="sk_btn" id="sk_btn_orientation"><i>ðŸ”„ Rotate</i></button>
+        <button class="sk_btn" id="sk_btn_fullscreen"><i>â›¶ Fullscreen</i></button>
+      </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE OVERLAY WRAPPER (Popups, Menus, Modals) -->
+    <div class="sk_overlay_wrapper" id="sk_overlay_wrapper">
+
+      <!-- Level Loader Progress Modal -->
+      <div class="sk_screen_panel" id="sk_screen_loader">
+        <p class="sk_panel_title">OUROMATH ENGINE</p>
+        <p class="sk_panel_desc" id="sk_loader_status">Initializing mathematical modules and parsing level packages...</p>
+        <div class="sk_progress_track">
+          <div class="sk_progress_fill" id="sk_loader_progress"></div>
+        </div>
+        <div class="sk_loader_actions">
+          <button class="sk_action_btn" id="sk_btn_load_remote">Fetch Remote Levels (Git)</button>
+          <button class="sk_action_btn sk_btn_sec" id="sk_btn_use_local">Use Built-in Levels</button>
+        </div>
+      </div>
+
+      <!-- Navigation Drawer / Main Menu Popup -->
+      <div class="sk_screen_panel sk_hidden" id="sk_popup_nav_menu">
+        <p class="sk_panel_title">NAVIGATION MENU</p>
+        <div class="sk_nav_list">
+          <button class="sk_action_btn" id="sk_menu_resume">RESUME GAME</button>
+          <button class="sk_action_btn" id="sk_menu_levels">SELECT LEVEL</button>
+          <button class="sk_action_btn" id="sk_menu_scores">LEADERBOARD</button>
+          <button class="sk_action_btn" id="sk_menu_settings">SETTINGS</button>
+          <button class="sk_action_btn" id="sk_menu_info">HOW TO PLAY</button>
+          <button class="sk_action_btn sk_btn_sec" id="sk_menu_demo">START AUTO DEMO</button>
+          <button class="sk_action_btn sk_btn_sec" id="sk_menu_fetch">RE-FETCH LEVELS</button>
+        </div>
+        <button class="sk_action_btn sk_btn_close" id="sk_close_nav_menu">CLOSE</button>
+      </div>
+      
+      <!-- Main Start Screen -->
+      <div class="sk_screen_panel sk_hidden" id="sk_screen_main">
+        <p class="sk_panel_title">OUROMATH</p>
+        <p class="sk_panel_desc">Manipulate your mathematical length. Feed your snake digits and operators. Achieve exact evaluations to consume emerald targets!</p>
+        <button class="sk_action_btn" id="sk_btn_start_game">PLAY GAME (Enter)</button>
+        <button class="sk_action_btn sk_btn_sec" id="sk_btn_watch_demo">WATCH AUTO-DEMO</button>
+      </div>
+
+      <!-- Settings Popup -->
+      <div class="sk_screen_panel sk_hidden" id="sk_popup_settings">
+        <p class="sk_panel_title">SETTINGS</p>
+        <div class="sk_setting_row">
+          <span class="sk_setting_label">SOUND EFFECTS</span>
+          <button class="sk_toggle_btn sk_active" id="sk_sound_toggle">ENABLED</button>
+        </div>
+        <div class="sk_setting_row">
+          <span class="sk_setting_label">DIFFICULTY</span>
+          <div class="sk_btn_group">
+            <button class="sk_toggle_btn" id="sk_diff_easy">EASY</button>
+            <button class="sk_toggle_btn sk_active" id="sk_diff_medium">NORMAL</button>
+            <button class="sk_toggle_btn" id="sk_diff_hard">HARD</button>
+          </div>
+        </div>
+        <button class="sk_action_btn" id="sk_close_settings">SAVE & CLOSE</button>
+      </div>
+
+      <!-- Scores Popup -->
+      <div class="sk_screen_panel sk_hidden" id="sk_popup_scores">
+        <p class="sk_panel_title">LEADERBOARD</p>
+        <div class="sk_scores_container" id="sk_scores_list"></div>
+        <button class="sk_action_btn" id="sk_close_scores">BACK</button>
+      </div>
+
+      <!-- Levels Popup -->
+      <div class="sk_screen_panel sk_hidden" id="sk_popup_levels">
+        <p class="sk_panel_title">SELECT LEVEL</p>
+        <div class="sk_levels_grid" id="sk_levels_container"></div>
+        <button class="sk_action_btn" id="sk_close_levels">BACK</button>
+      </div>
+
+      <!-- Information Popup -->
+      <div class="sk_screen_panel sk_hidden" id="sk_popup_info">
+        <p class="sk_panel_title">HOW TO PLAY</p>
+        <div class="sk_info_text">
+          â€¢ <b>Controls:</b> WASD, Arrow keys, Swipe on canvas, or virtual D-Pad.<br><br>
+          â€¢ <b>Zoom & Pan:</b> 2-Finger Pinch to zoom, Hand Tool / Drag to pan canvas (Works anytime, including Pause/Game Over!). Keyboard: <b>Ctrl + / -</b> or <b>0</b> to reset.<br><br>
+          â€¢ <b>Double-Tap Canvas:</b> Quick Dash/Pulse ability.<br><br>
+          â€¢ <b>Touch Gestures:</b> Multi-touch supported. Move with one finger, pan/zoom or activate buttons simultaneously.<br><br>
+          â€¢ <b>Equations:</b> Calculated strictly Left-to-Right.<br><br>
+          â€¢ <b>Targets:</b> Consume the pulsing emerald node only when current mathematical value equals the target number.<br><br>
+          â€¢ <b>Splicing:</b> Hitting your own tail harmlessly slices off segments.
+        </div>
+        <button class="sk_action_btn" id="sk_close_info">UNDERSTOOD</button>
+      </div>
+
+      <!-- Game Over (Lose) Screen -->
+      <div class="sk_screen_panel sk_hidden" id="sk_screen_gameover">
+        <p class="sk_panel_title sk_text_danger">COLLAPSE DETECTED</p>
+        <p class="sk_panel_desc" id="sk_gameover_reason">Your equation resulted in a negative value!</p>
+        <p class="sk_stat_line">Final Score: <b id="sk_gameover_score">0</b></p>
+        <button class="sk_action_btn" id="sk_btn_retry">TRY AGAIN</button>
+      </div>
+
+      <!-- Victory Screen -->
+      <div class="sk_screen_panel sk_hidden" id="sk_screen_victory">
+        <p class="sk_panel_title sk_text_success">LEVEL COMPLETE!</p>
+        <p class="sk_panel_desc">You successfully solved all mathematical targets!</p>
+        <p class="sk_stat_line">Target Score Achieved: <b id="sk_victory_score">0</b></p>
+        <button class="sk_action_btn" id="sk_btn_next_level">CONTINUE ADVENTURE</button>
+      </div>
+
+    </div>
+
+    <!-- 2. SECOND DIV: MAIN GAME CANVAS (1:1 RATIO) & HUD -->
+    <div class="sk_canvas_container" id="sk_canvas_container">
+      <div class="sk_hud_bar">
+        <div class="sk_hud_metric">
+          <p class="sk_hud_label">EQUATION</p>
+          <p class="sk_hud_value" id="sk_hud_equation">0</p>
+        </div>
+        <div class="sk_hud_metric">
+          <p class="sk_hud_label">VALUE</p>
+          <p class="sk_hud_value sk_text_primary" id="sk_hud_current_val">0</p>
+        </div>
+        <div class="sk_hud_metric">
+          <p class="sk_hud_label">TARGET</p>
+          <p class="sk_hud_value sk_text_success" id="sk_hud_target_val">0</p>
+        </div>
+        <div class="sk_hud_metric">
+          <p class="sk_hud_label">LEVEL</p>
+          <p class="sk_hud_value" id="sk_hud_level">1</p>
+        </div>
+        <div class="sk_hud_metric">
+          <p class="sk_hud_label">ZOOM</p>
+          <p class="sk_hud_value" id="sk_hud_zoom">1.0x</p>
+        </div>
+      </div>
+      
+      <!-- 1:1 Aspect Ratio Canvas Viewport Wrapper -->
+      <div class="sk_viewport_frame" id="sk_viewport_frame">
+        <canvas class="sk_game_canvas" id="sk_canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- FLOATING ZOOM & PAN TOOLBAR -->
+    <div class="sk_zoom_toolbar">
+      <button class="sk_tool_btn" id="sk_btn_pan_mode" title="Hand Pan Tool">âœ‹ Pan</button>
+      <button class="sk_tool_btn" id="sk_btn_zoom_in" title="Zoom In">ðŸ” +</button>
+      <button class="sk_tool_btn" id="sk_btn_zoom_out" title="Zoom Out">ðŸ” -</button>
+      <button class="sk_tool_btn" id="sk_btn_zoom_reset" title="Reset View">â†º 1:1</button>
+    </div>
+
+    <!-- 3. THIRD DIV: DEDICATED SPACIOUS BOTTOM CONTROL WRAPPER -->
+    <div class="sk_bottom_tray">
+      <!-- Draggable & Custom Positionable Virtual Controller -->
+      <div class="sk_virtual_controller" id="sk_controller">
+        <div class="sk_drag_handle" id="sk_drag_handle">â ¿ Drag D-Pad</div>
+        <div class="sk_dpad">
+          <button class="sk_ctrl_btn" id="sk_ctrl_up">â–²</button>
+          <div class="sk_dpad_mid">
+            <button class="sk_ctrl_btn" id="sk_ctrl_left">â—€</button>
+            <button class="sk_ctrl_btn sk_ctrl_center" id="sk_ctrl_pause_mid">â¸</button>
+            <button class="sk_ctrl_btn" id="sk_ctrl_right">â–¶</button>
+          </div>
+          <button class="sk_ctrl_btn" id="sk_ctrl_down">â–¼</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EMBEDDED STYLES -->
+  <style>
+    /* Scope wrapper & Mobile Reset */
+    .sk_game_suite_root {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+      color: #f1f5f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    .sk_game_suite_root * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 1. TOP CONTROL BAR */
+    .sk_top_bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 2px solid #334155;
+      z-index: 100;
+      flex-shrink: 0;
+      height: 48px;
+    }
+
+    .sk_top_left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sk_title_container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sk_title_main {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      background: linear-gradient(to right, #60a5fa, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sk_title_sub {
+      font-size: 9px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sk_score_pill {
+      background: #1e293b;
+      border: 1px solid #3b82f6;
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .sk_score_pill b { color: #38bdf8; }
+
+    .sk_header_buttons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .sk_btn {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .sk_btn:hover {
+      background: #334155;
+      border-color: #60a5fa;
+    }
+
+    .sk_btn_accent {
+      border-color: #f59e0b;
+      color: #fbbf24;
+    }
+
+    /* OVERLAYS AND POPUPS */
+    .sk_overlay_wrapper {
+      position: absolute;
+      top: 48px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 48px);
+      z-index: 150;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(2px);
+    }
+
+    .sk_screen_panel {
+      position: relative;
+      width: 90%;
+      max-width: 440px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 2px solid #3b82f6;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .sk_panel_title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #3b82f6;
+    }
+
+    .sk_text_danger { color: #ef4444; }
+    .sk_text_success { color: #10b981; }
+
+    .sk_panel_desc {
+      font-size: 13px;
+      line-height: 1.4;
+      color: #cbd5e1;
+    }
+
+    .sk_stat_line {
+      font-size: 16px;
+      color: #f8fafc;
+    }
+
+    .sk_action_btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .sk_action_btn:hover { transform: translateY(-1px); }
+    .sk_btn_sec {
+      background: #334155;
+      border: 1px solid #64748b;
+    }
+    .sk_btn_close {
+      background: #475569;
+    }
+
+    .sk_hidden {
+      display: none !important;
+    }
+
+    /* Progress bar */
+    .sk_progress_track {
+      width: 100%;
+      height: 14px;
+      background: #1e293b;
+      border-radius: 7px;
+      overflow: hidden;
+      border: 1px solid #475569;
+    }
+    .sk_progress_fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(to right, #3b82f6, #10b981);
+      transition: width 0.25s ease;
+    }
+    .sk_loader_actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .sk_nav_list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sk_setting_row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #1e293b;
+    }
+    .sk_setting_label { font-size: 13px; font-weight: 600; color: #94a3b8; }
+    .sk_toggle_btn {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .sk_toggle_btn.sk_active {
+      background: #3b82f6;
+      border-color: #60a5fa;
+      color: white;
+    }
+    .sk_btn_group { display: flex; gap: 4px; }
+
+    .sk_scores_container {
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sk_score_row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 10px;
+      background: #1e293b;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .sk_levels_grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .sk_lvl_select {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .sk_lvl_select.sk_unlocked {
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .sk_info_text {
+      text-align: left;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #cbd5e1;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    /* 2. MAIN 1:1 CANVAS AREA & HUD */
+    .sk_canvas_container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 4px 6px;
+    }
+
+    .sk_hud_bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-bottom: 4px;
+      flex-shrink: 0;
+    }
+    .sk_hud_metric { display: flex; flex-direction: column; align-items: center; }
+    .sk_hud_label { font-size: 9px; color: #64748b; font-weight: 700; }
+    .sk_hud_value { font-size: 13px; font-weight: bold; color: #f8fafc; }
+    .sk_text_primary { color: #60a5fa; }
+    .sk_text_success { color: #34d399; }
+
+    .sk_viewport_frame {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .sk_game_canvas {
+      background: #090d16;
+      border: 2px solid #334155;
+      border-radius: 6px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      touch-action: none;
+      display: block;
+    }
+
+    /* ZOOM / PAN FLOATING TOOLBAR */
+    .sk_zoom_toolbar {
+      position: absolute;
+      top: 60px;
+      left: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 105;
+    }
+    .sk_tool_btn {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    .sk_tool_btn.sk_tool_active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: white;
+    }
+
+    /* 3. SPACIOUS BOTTOM TRAY FOR CONTROLS (Prevents Game Clipping) */
+    .sk_bottom_tray {
+      height: 160px;
+      min-height: 140px;
+      width: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 15, 29, 0.7);
+      border-top: 1px solid #1e293b;
+      flex-shrink: 0;
+      z-index: 110;
+    }
+
+    .sk_virtual_controller {
+      position: relative;
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px solid #475569;
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      touch-action: none;
+    }
+
+    .sk_drag_handle {
+      font-size: 9px;
+      color: #94a3b8;
+      margin-bottom: 4px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: move;
+      touch-action: none;
+    }
+
+    .sk_dpad { display: flex; flex-direction: column; align-items: center; }
+    .sk_dpad_mid { display: flex; gap: 8px; }
+    .sk_ctrl_btn {
+      width: 44px;
+      height: 40px;
+      background: #1e293b;
+      border: 2px solid #475569;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .sk_ctrl_btn:active {
+      background: #3b82f6;
+      border-color: #60a5fa;
+    }
+    .sk_ctrl_center {
+      background: #334155;
+      font-size: 13px;
+      color: #f59e0b;
+    }
+
+    @media (max-width: 600px) {
+      .sk_top_bar { padding: 4px 6px; }
+      .sk_title_main { font-size: 14px; }
+      .sk_btn { padding: 4px 6px; font-size: 10px; }
+      .sk_bottom_tray { height: 145px; }
+      .sk_ctrl_btn { width: 40px; height: 36px; font-size: 14px; }
+    }
+  </style>
+
+  <!-- JAVASCRIPT GAME ENGINE -->
+  <script>
+    /* --- 1. DEFAULT LEVEL DATA & LEVEL LOADER SYSTEM --- */
+    const DEFAULT_LEVELS = [
+      {
+        levelNum: 1,
+        targets: [5, 10, 15],
+        startVal: 5,
+        allowedOps: ['+', '-'],
+        obstacles: [],
+        speedMs: 250,
+        desc: "Add and subtract values to match target. Stay away from walls."
+      },
+      {
+        levelNum: 2,
+        targets: [12, 24, 8],
+        startVal: 3,
+        allowedOps: ['+', '-', '*'],
+        obstacles: [
+          { x: 5, y: 5 }, { x: 5, y: 6 }, { x: 5, y: 7 },
+          { x: 14, y: 12 }, { x: 14, y: 13 }, { x: 14, y: 14 }
+        ],
+        speedMs: 220,
+        desc: "Multiplication is now available! Mind the basic wall obstacles."
+      },
+      {
+        levelNum: 3,
+        targets: [40, 20, 60],
+        startVal: 10,
+        allowedOps: ['+', '-', '*'],
+        obstacles: [
+          { x: 3, y: 10 }, { x: 4, y: 10 }, { x: 5, y: 10 },
+          { x: 14, y: 10 }, { x: 15, y: 10 }, { x: 16, y: 10 }
+        ],
+        speedMs: 190,
+        desc: "Split barriers restrict movement. Maintain precision arithmetic!"
+      },
+      {
+        levelNum: 4,
+        targets: [18, 50, 99],
+        startVal: 9,
+        allowedOps: ['+', '-', '*'],
+        obstacles: [
+          { x: 10, y: 2 }, { x: 10, y: 3 }, { x: 10, y: 4 }, { x: 10, y: 5 },
+          { x: 10, y: 14 }, { x: 10, y: 15 }, { x: 10, y: 16 }, { x: 10, y: 17 }
+        ],
+        speedMs: 160,
+        desc: "Central spine obstacle layout. Plan your rotations carefully."
+      },
+      {
+        levelNum: 5,
+        targets: [13, 37, 77],
+        startVal: 2,
+        allowedOps: ['+', '-', '*'],
+        obstacles: [
+          { x: 2, y: 2 }, { x: 17, y: 2 }, { x: 2, y: 17 }, { x: 17, y: 17 },
+          { x: 10, y: 10 }, { x: 9, y: 10 }, { x: 11, y: 10 }
+        ],
+        speedMs: 130,
+        desc: "Core central bunker. High-speed, elite tactical math equations."
+      }
+    ];
+
+    let ACTIVE_LEVELS = JSON.parse(JSON.stringify(DEFAULT_LEVELS));
+
+    /* Strips C-style single-line and multi-line comments and parses JSON/JS array format safely */
+    function parseSanitizedLevelString(rawString) {
+      /* Strip multi-line comments and single-line comments */
+      const cleaned = rawString
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/\/\/(.*)$/gm, '')
+        .trim();
+
+      /* Match Array structure [...] */
+      const arrayMatch = cleaned.match(/\[\s*\{[\s\S]*\}\s*\]/);
+      if (!arrayMatch) {
+        throw new Error("Could not detect valid levels array format in raw source.");
+      }
+
+      /* Format to strict JSON if object keys lack double quotes */
+      let jsonCandidate = arrayMatch[0]
+        .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?\s*:/g, '"$2":')
+        .replace(/'/g, '"');
+
+      return JSON.parse(jsonCandidate);
+    }
+
+    /* Level fetcher */
+    async function fetchRemoteLevels(remoteUrl = "https://github.com/ManavBanker/PublishedGames/blob/main/ouromath/levels.json") {
+      const progressEl = document.getElementById('sk_loader_progress');
+      const statusEl = document.getElementById('sk_loader_status');
+      
+      try {
+        statusEl.innerText = "Connecting to repository...";
+        progressEl.style.width = "30%";
+        
+        const resp = await fetch(remoteUrl);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const rawText = await resp.text();
+
+        const parsed = parseSanitizedLevelString(rawText);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          ACTIVE_LEVELS = parsed;
+          progressEl.style.width = "100%";
+          statusEl.innerText = "Levels Loaded Successfully!";
+          setTimeout(() => {
+            showPanel('main');
+          }, 400);
+        } else {
+          throw new Error("Invalid level array output");
+        }
+      } catch (err) {
+        console.warn("Failed fetching remote levels:", err);
+        statusEl.innerText = "Fetch failed! Could not load remote levels.";
+        progressEl.style.width = "100%";
+      }
+    }
+
+    /* --- 2. SOUND EFFECTS SYNTHESIZER --- */
+    class SoundSynth {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      play(freq, type, duration) {
+        if (!this.enabled) return;
+        this.init();
+        try {
+          const osc = this.ctx.createOscillator();
+          const gainNode = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gainNode.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gainNode);
+          gainNode.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {
+          /* Audio context silent error handler */
+        }
+      }
+      beep() { this.play(220, 'sine', 0.05); }
+      grow() { this.play(580, 'triangle', 0.15); }
+      splice() { this.play(140, 'sawtooth', 0.35); }
+      gameover() {
+        this.play(180, 'sawtooth', 0.25);
+        setTimeout(() => this.play(110, 'sawtooth', 0.4), 200);
+      }
+      win() {
+        const notes = [523, 659, 784, 1046];
+        notes.forEach((freq, idx) => {
+          setTimeout(() => this.play(freq, 'sine', 0.2), idx * 120);
+        });
+      }
+    }
+    const synth = new SoundSynth();
+
+    /* --- 3. SYSTEM STATE --- */
+    const GRID_SIZE = 20;
+    const state = {
+      levelIndex: 0,
+      targetIndex: 0,
+      score: 0,
+      snake: [],
+      direction: { x: 1, y: 0, name: 'RIGHT' },
+      nextDirection: { x: 1, y: 0, name: 'RIGHT' },
+      food: [],
+      debris: [],
+      targetsAchieved: 0,
+      gameActive: false,
+      isPaused: false,
+      demoMode: false,
+      lastTickTime: 0,
+      highScores: [1000, 500, 100],
+      isLandscape: false,
+      /* Viewport Zoom and Pan Engine */
+      zoom: 1.0,
+      panOffset: { x: 0, y: 0 },
+      isPanToolActive: false
+    };
+
+    /* --- 4. DOM ELEMENTS CACHE --- */
+    const els = {
+      root: document.getElementById('sk_game_suite_root'),
+      canvas: document.getElementById('sk_canvas'),
+      container: document.getElementById('sk_canvas_container'),
+      viewport: document.getElementById('sk_viewport_frame'),
+      hudEquation: document.getElementById('sk_hud_equation'),
+      hudCurrentVal: document.getElementById('sk_hud_current_val'),
+      hudTargetVal: document.getElementById('sk_hud_target_val'),
+      hudTopScore: document.getElementById('sk_top_score_val'),
+      hudLevel: document.getElementById('sk_hud_level'),
+      hudZoom: document.getElementById('sk_hud_zoom'),
+      overlay: document.getElementById('sk_overlay_wrapper'),
+      screens: {
+        loader: document.getElementById('sk_screen_loader'),
+        navMenu: document.getElementById('sk_popup_nav_menu'),
+        main: document.getElementById('sk_screen_main'),
+        settings: document.getElementById('sk_popup_settings'),
+        scores: document.getElementById('sk_popup_scores'),
+        levels: document.getElementById('sk_popup_levels'),
+        info: document.getElementById('sk_popup_info'),
+        gameover: document.getElementById('sk_screen_gameover'),
+        victory: document.getElementById('sk_screen_victory')
+      },
+      btns: {
+        menu: document.getElementById('sk_btn_menu'),
+        pause: document.getElementById('sk_btn_pause'),
+        demoTop: document.getElementById('sk_btn_demo_top'),
+        orientation: document.getElementById('sk_btn_orientation'),
+        fullscreen: document.getElementById('sk_btn_fullscreen'),
+        start: document.getElementById('sk_btn_start_game'),
+        demo: document.getElementById('sk_btn_watch_demo'),
+        loadRemote: document.getElementById('sk_btn_load_remote'),
+        useLocal: document.getElementById('sk_btn_use_local'),
+        menuResume: document.getElementById('sk_menu_resume'),
+        menuLevels: document.getElementById('sk_menu_levels'),
+        menuScores: document.getElementById('sk_menu_scores'),
+        menuSettings: document.getElementById('sk_menu_settings'),
+        menuInfo: document.getElementById('sk_menu_info'),
+        menuDemo: document.getElementById('sk_menu_demo'),
+        menuFetch: document.getElementById('sk_menu_fetch'),
+        closeNav: document.getElementById('sk_close_nav_menu'),
+        closeSettings: document.getElementById('sk_close_settings'),
+        closeScores: document.getElementById('sk_close_scores'),
+        closeLevels: document.getElementById('sk_close_levels'),
+        closeInfo: document.getElementById('sk_close_info'),
+        soundToggle: document.getElementById('sk_sound_toggle'),
+        diffEasy: document.getElementById('sk_diff_easy'),
+        diffMed: document.getElementById('sk_diff_medium'),
+        diffHard: document.getElementById('sk_diff_hard'),
+        retry: document.getElementById('sk_btn_retry'),
+        nextLevel: document.getElementById('sk_btn_next_level'),
+        /* Zoom and Pan Tools */
+        panTool: document.getElementById('sk_btn_pan_mode'),
+        zoomIn: document.getElementById('sk_btn_zoom_in'),
+        zoomOut: document.getElementById('sk_btn_zoom_out'),
+        zoomReset: document.getElementById('sk_btn_zoom_reset')
+      },
+      ctrl: {
+        up: document.getElementById('sk_ctrl_up'),
+        left: document.getElementById('sk_ctrl_left'),
+        right: document.getElementById('sk_ctrl_right'),
+        down: document.getElementById('sk_ctrl_down'),
+        midPause: document.getElementById('sk_ctrl_pause_mid'),
+        drag: document.getElementById('sk_drag_handle'),
+        panel: document.getElementById('sk_controller')
+      }
+    };
+
+    const ctx = els.canvas.getContext('2d');
+
+    /* --- 5. INITIALIZATION & DATA PERSISTENCE --- */
+    function loadSavedData() {
+      const scores = localStorage.getItem('sk_high_scores');
+      if (scores) state.highScores = JSON.parse(scores);
+      const muted = localStorage.getItem('sk_muted');
+      if (muted) {
+        synth.enabled = JSON.parse(muted) === false;
+        updateSoundButtonState();
+      }
+    }
+
+    function saveScores() {
+      localStorage.setItem('sk_high_scores', JSON.stringify(state.highScores));
+    }
+
+    /* --- 6. POPUP & NAVIGATION CONTROLLERS --- */
+    function showPanel(panelName) {
+      Object.keys(els.screens).forEach(key => {
+        els.screens[key].classList.add('sk_hidden');
+      });
+      if (panelName) {
+        els.screens[panelName].classList.remove('sk_hidden');
+        els.overlay.style.pointerEvents = 'auto';
+        els.overlay.classList.remove('sk_hidden');
+      } else {
+        els.overlay.classList.add('sk_hidden');
+        els.overlay.style.pointerEvents = 'none';
+      }
+    }
+
+    function togglePause() {
+      if (!state.gameActive) return;
+      state.isPaused = !state.isPaused;
+      els.btns.pause.innerHTML = state.isPaused ? '<i>â–¶ Resume</i>' : '<i>â¸ Pause</i>';
+      els.ctrl.midPause.innerText = state.isPaused ? 'â–¶' : 'â¸';
+    }
+
+    function populateScores() {
+      const container = document.getElementById('sk_scores_list');
+      container.innerHTML = '';
+      state.highScores.forEach((score, index) => {
+        const row = document.createElement('div');
+        row.className = 'sk_score_row';
+        row.innerHTML = `<span>Rank #${index + 1}</span> <b>${score} PTS</b>`;
+        container.appendChild(row);
+      });
+    }
+
+    function populateLevels() {
+      const container = document.getElementById('sk_levels_container');
+      container.innerHTML = '';
+      ACTIVE_LEVELS.forEach((lvl, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'sk_lvl_select sk_unlocked';
+        btn.innerHTML = `${lvl.levelNum}`;
+        btn.addEventListener('click', () => {
+          synth.init();
+          state.levelIndex = index;
+          showPanel(null);
+          initGame();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function updateSoundButtonState() {
+      if (synth.enabled) {
+        els.btns.soundToggle.innerText = 'ENABLED';
+        els.btns.soundToggle.classList.add('sk_active');
+      } else {
+        els.btns.soundToggle.innerText = 'MUTED';
+        els.btns.soundToggle.classList.remove('sk_active');
+      }
+    }
+
+    /* --- 7. ARITHMETIC CORE ENGINE --- */
+    function evaluateEquation(snake) {
+      if (!snake || snake.length === 0) return 0;
+      let total = 0;
+      let currentOp = '+';
+      
+      for (let i = 0; i < snake.length; i++) {
+        const seg = snake[i];
+        if (seg.type === 'digit') {
+          const val = Number(seg.value);
+          if (currentOp === '+') total += val;
+          else if (currentOp === '-') total -= val;
+          else if (currentOp === '*') total *= val;
+        } else if (seg.type === 'op') {
+          currentOp = seg.value;
+        }
+      }
+      return total;
+    }
+
+    function getEquationString(snake) {
+      return snake.map(s => s.value).join(' ');
+    }
+
+    /* --- 8. 1:1 RATIO CANVAS & ZOOM/PAN RENDER PIPELINE --- */
+    function fitCanvas() {
+      const parentW = els.viewport.clientWidth || 320;
+      const parentH = els.viewport.clientHeight || 320;
+      const size = Math.floor(Math.min(parentW - 8, parentH - 8, 500));
+      els.canvas.width = size;
+      els.canvas.height = size;
+    }
+
+    function setZoom(newZoom) {
+      state.zoom = Math.max(0.6, Math.min(newZoom, 3.0));
+      els.hudZoom.innerText = `${state.zoom.toFixed(1)}x`;
+    }
+
+    function resetZoomPan() {
+      state.zoom = 1.0;
+      state.panOffset = { x: 0, y: 0 };
+      els.hudZoom.innerText = '1.0x';
+    }
+
+    function drawGame() {
+      const w = els.canvas.width;
+      const h = els.canvas.height;
+
+      ctx.save();
+      ctx.clearRect(0, 0, w, h);
+
+      /* Apply Zoom and Pan transformations centered on canvas */
+      ctx.translate(w / 2 + state.panOffset.x, h / 2 + state.panOffset.y);
+      ctx.scale(state.zoom, state.zoom);
+      ctx.translate(-w / 2, -h / 2);
+
+      const cell = w / GRID_SIZE;
+
+      /* Draw faint layout grid */
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= GRID_SIZE; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * cell, 0);
+        ctx.lineTo(i * cell, h);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, i * cell);
+        ctx.lineTo(w, i * cell);
+        ctx.stroke();
+      }
+
+      const activeLevel = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+
+      /* Draw Obstacles */
+      ctx.fillStyle = '#64748b';
+      if (activeLevel.obstacles) {
+        activeLevel.obstacles.forEach(o => {
+          ctx.fillRect(o.x * cell + 2, o.y * cell + 2, cell - 4, cell - 4);
+        });
+      }
+
+      /* Draw Debris */
+      state.debris.forEach(d => {
+        const alpha = Math.max(0, d.timer / 100);
+        ctx.fillStyle = `rgba(148, 163, 184, ${alpha})`;
+        ctx.fillRect(d.x * cell + 4, d.y * cell + 4, cell - 8, cell - 8);
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.font = `bold ${cell * 0.5}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(d.val, d.x * cell + cell / 2, d.y * cell + cell / 2);
+      });
+
+      /* Draw Food Elements */
+      state.food.forEach(f => {
+        if (f.type === 'digit') {
+          ctx.fillStyle = '#1e3a8a';
+          ctx.strokeStyle = '#3b82f6';
+        } else if (f.type === 'op') {
+          ctx.fillStyle = '#7f1d1d';
+          ctx.strokeStyle = '#ef4444';
+        } else {
+          /* Target Node Pulsing Animation */
+          const pulse = 1 + Math.sin(Date.now() / 150) * 0.15;
+          ctx.save();
+          ctx.translate(f.x * cell + cell / 2, f.y * cell + cell / 2);
+          ctx.scale(pulse, pulse);
+          ctx.fillStyle = '#064e3b';
+          ctx.strokeStyle = '#10b981';
+          ctx.beginPath();
+          ctx.arc(0, 0, cell / 2 - 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = '#34d399';
+          ctx.font = `bold ${cell * 0.5}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(f.value, 0, 0);
+          ctx.restore();
+          return;
+        }
+
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(f.x * cell + cell / 2, f.y * cell + cell / 2, cell / 2 - 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${cell * 0.5}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(f.value, f.x * cell + cell / 2, f.y * cell + cell / 2);
+      });
+
+      /* Draw Snake Rope */
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i < state.snake.length; i++) {
+        const sx = state.snake[i].x * cell + cell / 2;
+        const sy = state.snake[i].y * cell + cell / 2;
+        if (i === 0) ctx.moveTo(sx, sy);
+        else ctx.lineTo(sx, sy);
+      }
+      ctx.stroke();
+
+      /* Draw Snake Segments */
+      state.snake.forEach((seg, index) => {
+        if (index === 0) {
+          ctx.fillStyle = '#10b981';
+          ctx.beginPath();
+          ctx.arc(seg.x * cell + cell / 2, seg.y * cell + cell / 2, cell / 2 - 1, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `bold ${cell * 0.5}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(seg.value, seg.x * cell + cell / 2, seg.y * cell + cell / 2);
+        } else {
+          ctx.fillStyle = seg.type === 'digit' ? '#3b82f6' : '#ef4444';
+          ctx.fillRect(seg.x * cell + 3, seg.y * cell + 3, cell - 6, cell - 6);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `bold ${cell * 0.55}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(seg.value, seg.x * cell + cell / 2, seg.y * cell + cell / 2);
+        }
+      });
+
+      ctx.restore();
+    }
+
+    /* --- 9. GAME PLAY LOGIC ENGINE --- */
+    function spawnStaticFoodItem(type, allowedValues) {
+      let tries = 0;
+      const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      while (tries < 100) {
+        const x = Math.floor(Math.random() * GRID_SIZE);
+        const y = Math.floor(Math.random() * GRID_SIZE);
+        
+        const hitObstacle = (activeLvl.obstacles || []).some(o => o.x === x && o.y === y);
+        const hitSnake = state.snake.some(s => s.x === x && s.y === y);
+        const hitDebris = state.debris.some(d => d.x === x && d.y === y);
+        const hitFood = state.food.some(f => f.x === x && f.y === y);
+
+        if (!hitObstacle && !hitSnake && !hitDebris && !hitFood) {
+          const value = allowedValues[Math.floor(Math.random() * allowedValues.length)];
+          return { x, y, type, value };
+        }
+        tries++;
+      }
+      return null;
+    }
+
+    function syncTargetFood() {
+      const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      const targetVal = activeLvl.targets[state.targetIndex];
+      state.food = state.food.filter(f => f.type !== 'target');
+      const tNode = spawnStaticFoodItem('target', [targetVal]);
+      if (tNode) state.food.push(tNode);
+    }
+
+    function initGame() {
+      const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      state.targetIndex = 0;
+      state.targetsAchieved = 0;
+      state.gameActive = true;
+      state.isPaused = false;
+      els.btns.pause.innerHTML = '<i>â¸ Pause</i>';
+      els.ctrl.midPause.innerText = 'â¸';
+      state.direction = { x: 1, y: 0, name: 'RIGHT' };
+      state.nextDirection = { x: 1, y: 0, name: 'RIGHT' };
+      state.debris = [];
+      
+      state.snake = [
+        { x: 10, y: 10, type: 'digit', value: activeLvl.startVal.toString() }
+      ];
+
+      state.food = [];
+      for (let i = 0; i < 3; i++) {
+        const fn = spawnStaticFoodItem('digit', ['1', '2', '3', '4', '5', '6', '7', '8', '9']);
+        if (fn) state.food.push(fn);
+      }
+      for (let i = 0; i < 2; i++) {
+        const fo = spawnStaticFoodItem('op', activeLvl.allowedOps);
+        if (fo) state.food.push(fo);
+      }
+
+      syncTargetFood();
+      updateHUD();
+    }
+
+    function updateHUD() {
+      const currentEquation = getEquationString(state.snake);
+      const currentVal = evaluateEquation(state.snake);
+      const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      const currentTarget = activeLvl.targets[state.targetIndex];
+
+      els.hudEquation.innerText = currentEquation || 'None';
+      els.hudCurrentVal.innerText = currentVal;
+      els.hudTargetVal.innerText = currentTarget;
+      els.hudTopScore.innerText = state.score;
+      els.hudLevel.innerText = `${activeLvl.levelNum} (${state.targetIndex + 1}/${activeLvl.targets.length})`;
+      els.hudZoom.innerText = `${state.zoom.toFixed(1)}x`;
+    }
+
+    function handleMathSplicing(collisionIndex) {
+      const severed = state.snake.splice(collisionIndex);
+      severed.forEach(seg => {
+        state.debris.push({
+          x: seg.x,
+          y: seg.y,
+          val: seg.value,
+          timer: 300
+        });
+      });
+      synth.splice();
+      
+      if (state.snake.length === 0) {
+        triggerGameOver("Your snake was completely severed!");
+      } else {
+        const tail = state.snake[state.snake.length - 1];
+        if (tail && tail.type === 'op') {
+          const removed = state.snake.pop();
+          state.debris.push({ x: removed.x, y: removed.y, val: removed.value, timer: 300 });
+        }
+      }
+    }
+
+    function gameStep() {
+      if (!state.gameActive || state.isPaused) return;
+
+      state.debris.forEach(d => d.timer--);
+      state.debris = state.debris.filter(d => d.timer > 0);
+
+      state.direction = state.nextDirection;
+      const head = state.snake[0];
+      const nextX = head.x + state.direction.x;
+      const nextY = head.y + state.direction.y;
+
+      /* Boundary Crash Check */
+      if (nextX < 0 || nextX >= GRID_SIZE || nextY < 0 || nextY >= GRID_SIZE) {
+        triggerGameOver("You crashed into the boundary walls!");
+        return;
+      }
+
+      /* Obstacle Crash Check */
+      const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      const hitObstacle = (activeLvl.obstacles || []).some(o => o.x === nextX && o.y === nextY);
+      if (hitObstacle) {
+        triggerGameOver("You crashed into an obstacle block!");
+        return;
+      }
+
+      /* Debris Collision Check */
+      const hitDebris = state.debris.some(d => d.x === nextX && d.y === nextY);
+      if (hitDebris) {
+        triggerGameOver("You crashed into floating mathematical debris!");
+        return;
+      }
+
+      /* Tail Splicing Check */
+      let collisionIndex = -1;
+      for (let i = 1; i < state.snake.length; i++) {
+        if (state.snake[i].x === nextX && state.snake[i].y === nextY) {
+          collisionIndex = i;
+          break;
+        }
+      }
+      if (collisionIndex !== -1) {
+        handleMathSplicing(collisionIndex);
+      }
+
+      const prevTailPos = { 
+        x: state.snake[state.snake.length - 1].x, 
+        y: state.snake[state.snake.length - 1].y 
+      };
+
+      for (let i = state.snake.length - 1; i > 0; i--) {
+        state.snake[i].x = state.snake[i-1].x;
+        state.snake[i].y = state.snake[i-1].y;
+      }
+      head.x = nextX;
+      head.y = nextY;
+
+      /* Food interaction */
+      let foodEatenIndex = -1;
+      for (let i = 0; i < state.food.length; i++) {
+        const item = state.food[i];
+        if (item.x === head.x && item.y === head.y) {
+          foodEatenIndex = i;
+          break;
+        }
+      }
+
+      if (foodEatenIndex !== -1) {
+        const eaten = state.food[foodEatenIndex];
+        const lastSeg = state.snake[state.snake.length - 1];
+
+        if (eaten.type === 'target') {
+          const mathResult = evaluateEquation(state.snake);
+          const targetNum = eaten.value;
+          
+          if (mathResult === targetNum) {
+            state.targetIndex++;
+            state.score += 100 * state.snake.length;
+            synth.win();
+            
+            if (state.targetIndex >= activeLvl.targets.length) {
+              state.gameActive = false;
+              if (state.score > state.highScores[0]) {
+                state.highScores.unshift(state.score);
+                state.highScores = state.highScores.slice(0, 5);
+                saveScores();
+              }
+              document.getElementById('sk_victory_score').innerText = state.score;
+              showPanel('victory');
+            } else {
+              syncTargetFood();
+            }
+          } else {
+            synth.beep();
+          }
+        } else {
+          if (lastSeg.type === 'digit') {
+            if (eaten.type === 'op') {
+              state.snake.push({ x: prevTailPos.x, y: prevTailPos.y, type: 'op', value: eaten.value });
+              synth.grow();
+            } else {
+              lastSeg.value = eaten.value;
+              synth.beep();
+            }
+          } else if (lastSeg.type === 'op') {
+            if (eaten.type === 'digit') {
+              state.snake.push({ x: prevTailPos.x, y: prevTailPos.y, type: 'digit', value: eaten.value });
+              synth.grow();
+            } else {
+              lastSeg.value = eaten.value;
+              synth.beep();
+            }
+          }
+
+          state.food.splice(foodEatenIndex, 1);
+          if (eaten.type === 'digit') {
+            const nextDigit = spawnStaticFoodItem('digit', ['1', '2', '3', '4', '5', '6', '7', '8', '9']);
+            if (nextDigit) state.food.push(nextDigit);
+          } else {
+            const nextOp = spawnStaticFoodItem('op', activeLvl.allowedOps);
+            if (nextOp) state.food.push(nextOp);
+          }
+        }
+      }
+
+      const finalEvalVal = evaluateEquation(state.snake);
+      if (finalEvalVal < 0) {
+        triggerGameOver("Your equation value dropped below 0!");
+        return;
+      }
+
+      updateHUD();
+    }
+
+    function triggerGameOver(reason) {
+      state.gameActive = false;
+      synth.gameover();
+      document.getElementById('sk_gameover_reason').innerText = reason;
+      document.getElementById('sk_gameover_score').innerText = state.score;
+      
+      if (state.score > 0) {
+        state.highScores.push(state.score);
+        state.highScores.sort((a, b) => b - a);
+        state.highScores = state.highScores.slice(0, 5);
+        saveScores();
+      }
+
+      showPanel('gameover');
+    }
+
+    /* --- 10. DEMO BOT ENGINE --- */
+    function executeBotDecision() {
+      if (!state.gameActive || state.isPaused) return;
+      const head = state.snake[0];
+      const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      const targetVal = activeLvl.targets[state.targetIndex];
+      const currentVal = evaluateEquation(state.snake);
+
+      let targetDestination = null;
+      if (currentVal === targetVal) {
+        targetDestination = state.food.find(f => f.type === 'target');
+      }
+
+      if (!targetDestination) {
+        let minDist = Infinity;
+        state.food.forEach(f => {
+          if (f.type === 'target') return;
+          const dist = Math.abs(head.x - f.x) + Math.abs(head.y - f.y);
+          if (dist < minDist) {
+            minDist = dist;
+            targetDestination = f;
+          }
+        });
+      }
+
+      if (!targetDestination) return;
+
+      const directions = [
+        { x: 0, y: -1, name: 'UP' },
+        { x: 0, y: 1, name: 'DOWN' },
+        { x: -1, y: 0, name: 'LEFT' },
+        { x: 1, y: 0, name: 'RIGHT' }
+      ];
+
+      const safeDirections = directions.filter(d => {
+        const nextX = head.x + d.x;
+        const nextY = head.y + d.y;
+        if (nextX < 0 || nextX >= GRID_SIZE || nextY < 0 || nextY >= GRID_SIZE) return false;
+        if ((activeLvl.obstacles || []).some(o => o.x === nextX && o.y === nextY)) return false;
+        if (state.snake.some(s => s.x === nextX && s.y === nextY)) return false;
+        if (state.debris.some(deb => deb.x === nextX && deb.y === nextY)) return false;
+        if (d.x === -state.direction.x && d.y === -state.direction.y) return false;
+        return true;
+      });
+
+      if (safeDirections.length === 0) return;
+
+      safeDirections.sort((a, b) => {
+        const distA = Math.abs((head.x + a.x) - targetDestination.x) + Math.abs((head.y + a.y) - targetDestination.y);
+        const distB = Math.abs((head.x + b.x) - targetDestination.x) + Math.abs((head.y + b.y) - targetDestination.y);
+        return distA - distB;
+      });
+
+      setDirection(safeDirections[0].x, safeDirections[0].y, safeDirections[0].name);
+    }
+
+    /* --- 11. ADVANCED MULTI-TOUCH, GESTURE, ZOOM & PAN CONTROLLER --- */
+    function setDirection(x, y, name) {
+      if (state.direction.x === -x && state.direction.y === -y) return;
+      state.nextDirection = { x, y, name };
+    }
+
+    /* Track multi-touch pointers dictionary */
+    const activeTouchRegistry = new Map();
+    let lastTapTimestamp = 0;
+    let initialPinchDistance = 0;
+    let initialPinchZoom = 1.0;
+    let panTouchStart = { x: 0, y: 0 };
+    let panOffsetStart = { x: 0, y: 0 };
+
+    /* Canvas Gesture & Touch Handlers (Operates in Play, Pause, and GameOver states) */
+    els.canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      const now = Date.now();
+
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        activeTouchRegistry.set(touch.identifier, {
+          startX: touch.clientX,
+          startY: touch.clientY,
+          lastX: touch.clientX,
+          lastY: touch.clientY,
+          startTime: now,
+          longPressTimer: setTimeout(() => {
+            /* Long-press triggered: Quick recenter */
+            resetZoomPan();
+          }, 550)
+        });
+      }
+
+      /* Double-Tap Detection */
+      if (e.touches.length === 1) {
+        if (now - lastTapTimestamp < 300) {
+          /* Double tap detected: Zoom toggle or pulse boost */
+          setZoom(state.zoom === 1.0 ? 1.4 : 1.0);
+        }
+        lastTapTimestamp = now;
+      }
+
+      /* Two-finger Pinch Zoom initialization */
+      if (e.touches.length === 2) {
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        initialPinchDistance = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        initialPinchZoom = state.zoom;
+      }
+
+      /* Single touch pan tracker */
+      if (e.touches.length === 1 && state.isPanToolActive) {
+        panTouchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        panOffsetStart = { ...state.panOffset };
+      }
+    }, { passive: false });
+
+    els.canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+
+      /* 2-Finger Pinch Zoom Engine */
+      if (e.touches.length === 2 && initialPinchDistance > 0) {
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        const currentDistance = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        const scaleFactor = currentDistance / initialPinchDistance;
+        setZoom(initialPinchZoom * scaleFactor);
+        return;
+      }
+
+      /* Hand Pan Move Tool */
+      if (e.touches.length === 1 && state.isPanToolActive) {
+        const dx = e.touches[0].clientX - panTouchStart.x;
+        const dy = e.touches[0].clientY - panTouchStart.y;
+        state.panOffset.x = panOffsetStart.x + dx;
+        state.panOffset.y = panOffsetStart.y + dy;
+        return;
+      }
+
+      /* Update positions in touch registry and cancel long press on movement */
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        const record = activeTouchRegistry.get(touch.identifier);
+        if (record) {
+          const moveDist = Math.hypot(touch.clientX - record.startX, touch.clientY - record.startY);
+          if (moveDist > 10 && record.longPressTimer) {
+            clearTimeout(record.longPressTimer);
+            record.longPressTimer = null;
+          }
+          record.lastX = touch.clientX;
+          record.lastY = touch.clientY;
+        }
+      }
+    }, { passive: false });
+
+    els.canvas.addEventListener('touchend', e => {
+      e.preventDefault();
+
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        const record = activeTouchRegistry.get(touch.identifier);
+        if (record) {
+          if (record.longPressTimer) clearTimeout(record.longPressTimer);
+
+          /* If not in pan mode and game is running, interpret swipe motion */
+          if (!state.isPanToolActive && state.gameActive && !state.isPaused) {
+            const dx = touch.clientX - record.startX;
+            const dy = touch.clientY - record.startY;
+            if (Math.abs(dx) > 25 || Math.abs(dy) > 25) {
+              if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0) setDirection(1, 0, 'RIGHT');
+                else setDirection(-1, 0, 'LEFT');
+              } else {
+                if (dy > 0) setDirection(0, 1, 'DOWN');
+                else setDirection(0, -1, 'UP');
+              }
+            }
+          }
+          activeTouchRegistry.delete(touch.identifier);
+        }
+      }
+
+      if (e.touches.length < 2) {
+        initialPinchDistance = 0;
+      }
+    }, { passive: false });
+
+    els.canvas.addEventListener('touchcancel', e => {
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        const record = activeTouchRegistry.get(touch.identifier);
+        if (record && record.longPressTimer) clearTimeout(record.longPressTimer);
+        activeTouchRegistry.delete(touch.identifier);
+      }
+    });
+
+    /* Keyboard Controls & Hotkeys */
+    window.addEventListener('keydown', e => {
+      /* Zoom Controls with Ctrl + / - / 0 */
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === '+' || e.key === '=') {
+          e.preventDefault();
+          setZoom(state.zoom + 0.15);
+          return;
+        } else if (e.key === '-' || e.key === '_') {
+          e.preventDefault();
+          setZoom(state.zoom - 0.15);
+          return;
+        } else if (e.key === '0') {
+          e.preventDefault();
+          resetZoomPan();
+          return;
+        }
+      }
+
+      if (e.key === 'Enter' && !state.gameActive) {
+        e.preventDefault();
+        synth.init();
+        showPanel(null);
+        initGame();
+        return;
+      }
+
+      if (e.key.toLowerCase() === 'p') {
+        togglePause();
+        return;
+      }
+
+      if (!state.gameActive || state.isPaused) return;
+
+      switch(e.key.toLowerCase()) {
+        case 'arrowup':
+        case 'w':
+          setDirection(0, -1, 'UP');
+          e.preventDefault();
+          break;
+        case 'arrowdown':
+        case 's':
+          setDirection(0, 1, 'DOWN');
+          e.preventDefault();
+          break;
+        case 'arrowleft':
+        case 'a':
+          setDirection(-1, 0, 'LEFT');
+          e.preventDefault();
+          break;
+        case 'arrowright':
+        case 'd':
+          setDirection(1, 0, 'RIGHT');
+          e.preventDefault();
+          break;
+      }
+    });
+
+    /* --- 12. DRAGGABLE VIRTUAL CONTROLLER --- */
+    (function makeControllerCustomDraggable() {
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let initialLeft = 0, initialTop = 0;
+
+      els.ctrl.drag.addEventListener('mousedown', dragStart);
+      els.ctrl.drag.addEventListener('touchstart', dragStart, { passive: false });
+
+      function dragStart(e) {
+        isDragging = true;
+        const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+        startX = clientX;
+        startY = clientY;
+        
+        const rect = els.ctrl.panel.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        document.addEventListener('mousemove', dragMove);
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('touchmove', dragMove, { passive: false });
+        document.addEventListener('touchend', dragEnd);
+        e.preventDefault();
+      }
+
+      function dragMove(e) {
+        if (!isDragging) return;
+        const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+
+        els.ctrl.panel.style.position = 'fixed';
+        els.ctrl.panel.style.left = `${initialLeft + dx}px`;
+        els.ctrl.panel.style.top = `${initialTop + dy}px`;
+        els.ctrl.panel.style.bottom = 'auto';
+        els.ctrl.panel.style.right = 'auto';
+        e.preventDefault();
+      }
+
+      function dragEnd() {
+        isDragging = false;
+        document.removeEventListener('mousemove', dragMove);
+        document.removeEventListener('mouseup', dragEnd);
+        document.removeEventListener('touchmove', dragMove);
+        document.removeEventListener('touchend', dragEnd);
+      }
+    })();
+
+    /* Multi-Touch Safe Virtual D-Pad Inputs */
+    const attachCtrlTouch = (element, dirX, dirY, name) => {
+      const handler = (e) => {
+        e.preventDefault();
+        setDirection(dirX, dirY, name);
+      };
+      element.addEventListener('touchstart', handler, { passive: false });
+      element.addEventListener('mousedown', handler);
+    };
+
+    attachCtrlTouch(els.ctrl.up, 0, -1, 'UP');
+    attachCtrlTouch(els.ctrl.left, -1, 0, 'LEFT');
+    attachCtrlTouch(els.ctrl.right, 1, 0, 'RIGHT');
+    attachCtrlTouch(els.ctrl.down, 0, 1, 'DOWN');
+    els.ctrl.midPause.addEventListener('click', togglePause);
+
+    /* --- 13. UI EVENT LISTENERS & POPUP BINDINGS --- */
+    els.btns.menu.addEventListener('click', () => showPanel('navMenu'));
+    els.btns.pause.addEventListener('click', togglePause);
+    els.btns.closeNav.addEventListener('click', () => showPanel(null));
+
+    /* Auto-Demo Button */
+    const startDemoMode = () => {
+      synth.init();
+      state.demoMode = true;
+      showPanel(null);
+      initGame();
+    };
+    els.btns.demoTop.addEventListener('click', startDemoMode);
+    els.btns.demo.addEventListener('click', startDemoMode);
+    els.btns.menuDemo.addEventListener('click', startDemoMode);
+
+    /* Navigation Drawer Menu Buttons */
+    els.btns.menuResume.addEventListener('click', () => {
+      if (state.isPaused) togglePause();
+      showPanel(null);
+    });
+    els.btns.menuLevels.addEventListener('click', () => { populateLevels(); showPanel('levels'); });
+    els.btns.menuScores.addEventListener('click', () => { populateScores(); showPanel('scores'); });
+    els.btns.menuSettings.addEventListener('click', () => showPanel('settings'));
+    els.btns.menuInfo.addEventListener('click', () => showPanel('info'));
+    els.btns.menuFetch.addEventListener('click', () => showPanel('loader'));
+
+    /* Close Sub-Popups */
+    els.btns.closeSettings.addEventListener('click', () => showPanel(null));
+    els.btns.closeScores.addEventListener('click', () => showPanel(null));
+    els.btns.closeLevels.addEventListener('click', () => showPanel(null));
+    els.btns.closeInfo.addEventListener('click', () => showPanel(null));
+
+    /* Level Fetcher Actions */
+    els.btns.loadRemote.addEventListener('click', () => fetchRemoteLevels("https://github.com/ManavBanker/PublishedGames/blob/main/ouromath/levels.json"));
+    els.btns.useLocal.style.display = 'none';
+
+    /* Fullscreen API Toggle */
+    els.btns.fullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        els.root.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        document.exitFullscreen().catch(err => console.warn(err));
+      }
+    });
+
+    /* Orientation Rotate Handler */
+    els.btns.orientation.addEventListener('click', () => {
+      state.isLandscape = !state.isLandscape;
+      if (state.isLandscape) {
+        els.root.style.transform = 'rotate(-90deg)';
+        els.root.style.transformOrigin = 'center';
+        els.root.style.width = '100vh';
+        els.root.style.height = '100vw';
+      } else {
+        els.root.style.transform = 'none';
+        els.root.style.width = '100vw';
+        els.root.style.height = '100vh';
+      }
+      setTimeout(fitCanvas, 300);
+    });
+
+    /* Zoom / Pan Toolbar Actions */
+    els.btns.panTool.addEventListener('click', () => {
+      state.isPanToolActive = !state.isPanToolActive;
+      els.btns.panTool.classList.toggle('sk_tool_active', state.isPanToolActive);
+    });
+    els.btns.zoomIn.addEventListener('click', () => setZoom(state.zoom + 0.2));
+    els.btns.zoomOut.addEventListener('click', () => setZoom(state.zoom - 0.2));
+    els.btns.zoomReset.addEventListener('click', resetZoomPan);
+
+    /* Sound settings */
+    els.btns.soundToggle.addEventListener('click', () => {
+      synth.enabled = !synth.enabled;
+      localStorage.setItem('sk_muted', JSON.stringify(!synth.enabled));
+      updateSoundButtonState();
+    });
+
+    /* Difficulty Selectors */
+    const selectDifficulty = (multiplier, activeBtn) => {
+      [els.btns.diffEasy, els.btns.diffMed, els.btns.diffHard].forEach(b => b.classList.remove('sk_active'));
+      activeBtn.classList.add('sk_active');
+      ACTIVE_LEVELS.forEach(l => l.speedMs = 200 * multiplier);
+    };
+
+    els.btns.diffEasy.addEventListener('click', () => selectDifficulty(1.5, els.btns.diffEasy));
+    els.btns.diffMed.addEventListener('click', () => selectDifficulty(1.0, els.btns.diffMed));
+    els.btns.diffHard.addEventListener('click', () => selectDifficulty(0.6, els.btns.diffHard));
+
+    /* Start / Next / Retry Triggers */
+    els.btns.start.addEventListener('click', () => {
+      synth.init();
+      state.demoMode = false;
+      showPanel(null);
+      initGame();
+    });
+
+    els.btns.retry.addEventListener('click', () => {
+      showPanel(null);
+      initGame();
+    });
+
+    els.btns.nextLevel.addEventListener('click', () => {
+      state.levelIndex = (state.levelIndex + 1) % ACTIVE_LEVELS.length;
+      showPanel(null);
+      initGame();
+    });
+
+    window.addEventListener('resize', fitCanvas);
+
+    /* --- 14. GAME MAIN ENGINE LOOP --- */
+    function loop(now) {
+      requestAnimationFrame(loop);
+
+      const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      const speed = activeLvl ? activeLvl.speedMs : 200;
+
+      if (state.gameActive && !state.isPaused) {
+        if (!state.lastTickTime) state.lastTickTime = now;
+        const delta = now - state.lastTickTime;
+
+        if (delta >= speed) {
+          if (state.demoMode) {
+            executeBotDecision();
+          }
+          gameStep();
+          state.lastTickTime = now;
+        }
+      }
+
+      drawGame();
+    }
+
+    /* Boot Sequence */
+    loadSavedData();
+    fitCanvas();
+    showPanel('loader');
+    requestAnimationFrame(loop);
+
+  </script>
+<script src="js/framework.js"></script>`n</body>
+</html>
