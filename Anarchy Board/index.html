@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Anarchy Board - Hacking Simulator</title>
+  <style>
+    /* RESET & BASE */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #020503;
+      color: #00ff66;
+      font-family: 'Courier New', Courier, monospace;
+      overflow-x: hidden;
+      touch-action: none;
+    }
+
+    .sk_game_suite_root {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #050b07;
+      color: #00ff66;
+      border: 3px solid #00ff66;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
+      user-select: none;
+      box-sizing: border-box;
+      padding-bottom: 20px;
+      /* Added extra bottom padding to prevent overlaps */
+    }
+
+    .sk_game_suite_root * {
+      box-sizing: border-box;
+    }
+
+    /* TOP BAR & DROP-DOWN NAVIGATION */
+    .sk_top_bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #020603;
+      padding: 10px;
+      border-bottom: 2px solid #00ff66;
+      z-index: 110;
+      position: relative;
+    }
+
+    .sk_game_title {
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #00ff66;
+      text-shadow: 0 0 5px #00ff66;
+    }
+
+    .sk_top_right_elements {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sk_score_hud {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #33ff99;
+      background: #031c0a;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #00ff66;
+    }
+
+    .sk_combo_hud {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #33ff99;
+      background: #031c0a;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #00ff66;
+      min-width: 42px;
+      text-align: center;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .sk_combo_hud.sk_combo_x2 { color: #ffff00; border-color: #ffff00; }
+    .sk_combo_hud.sk_combo_x3 { color: #ffaa00; border-color: #ffaa00; }
+    .sk_combo_hud.sk_combo_x5 { color: #ff3333; border-color: #ff3333; }
+
+    .sk_top_buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    .sk_btn {
+      background: #051a0b;
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sk_btn:hover {
+      background: #00ff66;
+      color: #020603;
+      box-shadow: 0 0 10px #00ff66;
+    }
+
+    /* COLLAPSIBLE MENU NAVIGATION DRAWER */
+    .sk_menu_dropdown {
+      position: absolute;
+      top: 100%;
+      right: 10px;
+      background: #020603;
+      border: 2px solid #00ff66;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 10px;
+      z-index: 120;
+      box-shadow: 0 10px 25px rgba(0, 255, 102, 0.5);
+      width: 180px;
+    }
+
+    /* POPUP OVERLAYS */
+    .sk_popups_container {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .sk_popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 450px;
+      background: #020603;
+      border: 2px solid #00ff66;
+      border-radius: 6px;
+      padding: 20px;
+      pointer-events: auto;
+      box-shadow: 0 0 30px rgba(0, 255, 102, 0.6);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 130;
+    }
+
+    .sk_popup_title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-bottom: 1px solid #00ff66;
+      padding-bottom: 5px;
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #00ff66;
+      text-transform: uppercase;
+    }
+
+    .sk_popup p {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: #a2ffd0;
+      margin-bottom: 10px;
+    }
+
+    .sk_popup_close {
+      background: #ff3333;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      float: right;
+      margin-top: 10px;
+    }
+
+    .sk_popup_close:hover {
+      background: #ff6666;
+    }
+
+    .sk_hidden {
+      display: none !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* PROGRESS BAR / PRELOADER WINDOW */
+    #sk_preloader_popup {
+      z-index: 200;
+    }
+
+    .sk_progress_container {
+      width: 100%;
+      background: #112211;
+      border: 1px solid #00ff66;
+      border-radius: 4px;
+      height: 20px;
+      overflow: hidden;
+      margin-top: 15px;
+      position: relative;
+    }
+
+    .sk_progress_bar {
+      width: 0%;
+      height: 100%;
+      background: #00ff66;
+      transition: width 0.1s linear;
+    }
+
+    /* LEVEL SELECTION UTILITY */
+    .sk_level_grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .sk_level_btn {
+      background: #04250e;
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: center;
+    }
+
+    .sk_level_btn.sk_locked {
+      border-color: #333;
+      color: #555;
+      cursor: not-allowed;
+      background: #111;
+    }
+
+    .sk_level_btn:not(.sk_locked):hover {
+      background: #00ff66;
+      color: #000;
+    }
+
+    .sk_level_btn.sk_level_cleared {
+      border-color: #33ff99;
+      background: #04240f;
+    }
+
+    /* SETTINGS / SCORES */
+    .sk_btn_toggle {
+      background: #153a1e;
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sk_scores_list {
+      max-height: 150px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .sk_score_row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #004411;
+      padding: 4px 0;
+      font-size: 0.8rem;
+    }
+
+    /* MAIN CANVAS DIVISION - LOCKED TO 1:1 RATIO */
+    .sk_canvas_container {
+      position: relative;
+      width: 90%;
+      max-width: 450px;
+      aspect-ratio: 1 / 1;
+      margin: 10px auto;
+      background: #030804;
+      border: 2px solid #00ff66;
+      border-radius: 6px;
+      overflow: hidden;
+      touch-action: none;
+      /* Prevents default browser panning and zooming */
+    }
+
+    #sk_game_canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #020503;
+    }
+
+    /* UTILITY BUTTONS OVER THE CANVAS */
+    .sk_canvas_tools {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 5px auto;
+      width: 90%;
+      max-width: 450px;
+    }
+
+    /* SCREEN OVERLAYS */
+    .sk_screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(3, 8, 4, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .sk_glitch_text {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #00ff66;
+      text-shadow: 0 0 10px #00ff66;
+      margin: 0 0 10px 0;
+      letter-spacing: 4px;
+      animation: sk_glitch_anim 1s infinite alternate;
+    }
+
+    .sk_glitch_text.sk_red {
+      color: #ff3333;
+      text-shadow: 0 0 10px #ff3333;
+    }
+
+    .sk_glitch_text.sk_green {
+      color: #33ff99;
+      text-shadow: 0 0 10px #33ff99;
+    }
+
+    .sk_subtitle {
+      font-size: 0.8rem;
+      color: #a2ffd0;
+      margin-bottom: 20px;
+      max-width: 500px;
+      line-height: 1.4;
+    }
+
+    .sk_menu_btn {
+      background: #05260f;
+      border: 2px solid #00ff66;
+      color: #00ff66;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+      margin-bottom: 8px;
+    }
+
+    .sk_menu_btn:hover {
+      background: #00ff66;
+      color: #020603;
+      box-shadow: 0 0 20px #00ff66;
+    }
+
+    .sk_btn_landscape_force {
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      border-color: #ffaa00;
+      color: #ffaa00;
+      background: #231100;
+    }
+
+    /* DRAGGABLE VIRTUAL CONTROLLER ZONE */
+    .sk_controls_container {
+      position: relative;
+      width: 95%;
+      max-width: 550px;
+      margin: 10px auto 0 auto;
+      background: #020703;
+      border: 2px solid #00ff66;
+      border-radius: 6px;
+      padding: 6px;
+      z-index: 50;
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.15);
+      touch-action: none;
+    }
+
+    .sk_drag_handle {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #00a344;
+      border-bottom: 1px dashed #004411;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      user-select: none;
+      letter-spacing: 2px;
+      cursor: move;
+    }
+
+    .sk_virtual_keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    /* On-screen word mirror: target + typed progress */
+    .sk_word_mirror {
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 4px;
+      padding: 6px 4px;
+      margin-bottom: 6px;
+      border: 1px dashed var(--sk-dim, #00a344);
+      border-radius: 4px;
+      background: #03150a;
+      color: var(--sk-word-pending, rgba(0, 255, 102, 0.3));
+      min-height: 22px;
+      user-select: none;
+    }
+    .sk_word_mirror .sk_wm_done {
+      color: var(--sk-primary, #00ff66);
+    }
+    .sk_word_mirror .sk_wm_pending {
+      color: var(--sk-word-pending, rgba(0, 255, 102, 0.3));
+    }
+    .sk_word_mirror .sk_wm_bonus {
+      color: #ffcc66;
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      vertical-align: middle;
+    }
+
+    /* Progressive tutorial hint bar */
+    .sk_hint_bar {
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      color: var(--sk-dim, #a2ffd0);
+      margin-bottom: 4px;
+      min-height: 16px;
+      line-height: 1.2;
+      user-select: none;
+    }
+
+    .sk_kb_row {
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+      width: 100%;
+    }
+
+    .sk_kb_key {
+      flex: 1;
+      max-width: 45px;
+      height: 32px;
+      background: #031508;
+      border: 1px solid var(--sk-dim, #00b344);
+      color: var(--sk-primary, #00ff66);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .sk_kb_key:active,
+    .sk_kb_key.sk_active {
+      background: var(--sk-primary, #00ff66);
+      color: #020603;
+      transform: scale(0.92);
+      box-shadow: 0 0 8px var(--sk-primary, #00ff66);
+    }
+
+    .sk_kb_key.sk_blank {
+      color: transparent;
+      background: #010803;
+    }
+
+    /* Mutation visual feedback classes */
+    .sk_kb_key.sk_mutated {
+      background: #3a2c00;
+      border-color: #ffaa00;
+      color: #ffd27a;
+      box-shadow: 0 0 10px #ffaa00;
+    }
+    .sk_kb_key.sk_last_pressed {
+      background: #06341a;
+      border-color: #00ff66;
+      box-shadow: 0 0 10px #00ff66;
+    }
+    .sk_kb_key.sk_ghost_pulse {
+      animation: sk_ghost_pulse 0.6s infinite alternate;
+    }
+    @keyframes sk_ghost_pulse {
+      from { background: #010803; }
+      to { background: #200303; box-shadow: 0 0 8px #ff3333; }
+    }
+
+    .sk_action_row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .sk_action_btn {
+      background: #08220e;
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 0.7rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+      touch-action: none;
+    }
+
+    .sk_action_btn:hover {
+      background: #00ff66;
+      color: #000;
+    }
+
+    .sk_action_btn.sk_tool_active {
+      background: #00ff66;
+      color: #000;
+      box-shadow: 0 0 10px #00ff66;
+    }
+
+    /* ANIMATIONS */
+    @keyframes sk_glitch_anim {
+      0% {
+        text-shadow: 2px 2px 0px rgba(0, 255, 102, 0.4), -2px -2px 0px rgba(0, 150, 255, 0.4);
+      }
+
+      100% {
+        text-shadow: -2px 2px 0px rgba(0, 255, 102, 0.4), 2px -2px 0px rgba(255, 0, 100, 0.4);
+      }
+    }
+
+    /* RESPONSIVE SCALING ADAPTATIONS */
+    @media (max-width: 600px) {
+      .sk_game_title {
+        font-size: 0.85rem;
+      }
+
+      .sk_btn {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+      }
+
+      .sk_glitch_text {
+        font-size: 1.3rem;
+      }
+
+      .sk_kb_key {
+        height: 28px;
+        font-size: 0.7rem;
+      }
+
+      .sk_controls_container {
+        width: 98%;
+      }
+    }
+
+    /* TOUCH DEVICE TUNING (sk_is_touch applied to root on touch hardware) */
+    .sk_is_touch .sk_kb_key {
+      height: 36px;
+      font-size: 0.85rem;
+    }
+    .sk_is_touch .sk_drag_handle {
+      letter-spacing: 1px;
+    }
+    /* Cosmetic SPACE/EXECUTE actions are dead-ends on touch; keep only functional ones */
+    .sk_is_touch #sk_btn_space,
+    .sk_is_touch #sk_btn_submit {
+      display: none;
+    }
+    .sk_is_touch .sk_action_row {
+      gap: 10px;
+    }
+
+    /* HIGH CONTRAST MODE: brighter text, stronger distinctions for readability */
+    .sk_game_suite_root.sk_high_contrast .sk_glitch_text {
+      text-shadow: none;
+      color: #eafff0;
+      font-weight: bold;
+    }
+    .sk_game_suite_root.sk_high_contrast .sk_subtitle {
+      color: #cfd8cf;
+    }
+    .sk_game_suite_root.sk_high_contrast .sk_kb_key {
+      color: #eafff0;
+      border-color: #9fffb9;
+      background: #04210c;
+    }
+    .sk_game_suite_root.sk_high_contrast .sk_word_mirror .sk_wm_done {
+      color: #eafff0;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .sk_game_suite_root.sk_high_contrast .sk_popup {
+      color: #e8f5ea;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sk_game_suite_root">
+    <!-- Labels and meta description -->
+    <div class="sk_labels" data="Typing, Muscle Memory, Retro, Fast-Paced" style="display:none;"></div>
+    <meta class="sk_meta"
+      description="A high-stress hacking simulator where typing a letter physically swaps its input mapping with a neighboring key, forcing you to hunt-and-peck on a dynamically mutating keyboard layout.">
+
+    <!-- TOP BAR: Unified Nav dropdown + Fullscreen, Orientation and Score -->
+    <div class="sk_top_bar">
+      <div class="sk_game_title">ANARCHY_BOARD_v2.0.0</div>
+
+      <div class="sk_top_right_elements">
+        <div class="sk_combo_hud" id="sk_combo_hud" title="Streak Combo Multiplier">x1</div>
+        <div class="sk_score_hud" id="sk_score_hud">PTS: 0</div>
+
+        <div class="sk_top_buttons">
+          <button class="sk_btn" id="sk_btn_fullscreen" title="Toggle Fullscreen">FS</button>
+          <button class="sk_btn" id="sk_btn_landscape" title="Lock Orientation">ROT</button>
+          <button class="sk_btn" id="sk_btn_menu_toggle"><b>MENU ☰</b></button>
+        </div>
+      </div>
+
+      <!-- Collapsible Menu Panel -->
+      <div class="sk_menu_dropdown sk_hidden" id="sk_menu_dropdown">
+        <button class="sk_btn" id="sk_btn_pause_resume">PAUSE</button>
+        <button class="sk_btn" id="sk_btn_levels">NODES</button>
+        <button class="sk_btn" id="sk_btn_settings">SETUP</button>
+        <button class="sk_btn" id="sk_btn_info">MANUAL</button>
+        <button class="sk_btn" id="sk_btn_scores">SCORES</button>
+        <button class="sk_btn" id="sk_btn_demo">AUTO_SOLVER</button>
+      </div>
+    </div>
+
+    <!-- POPUP PANEL WRAPPER -->
+    <div class="sk_popups_container">
+      <!-- Progress Preloader Window -->
+      <div class="sk_popup" id="sk_preloader_popup">
+        <p class="sk_popup_title">SECURE_SYNCING LEVELS...</p>
+        <p>Retrieving target nodes from core matrix cloud bypass repository.</p>
+        <div class="sk_progress_container">
+          <div class="sk_progress_bar" id="sk_preloader_progress"></div>
+        </div>
+        <p id="sk_preloader_status" style="margin-top:10px; font-size:0.75rem; text-align:center;">Initializing...</p>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="sk_popup sk_hidden" id="sk_popup_settings">
+        <p class="sk_popup_title">BREACH PROTOCOL SETUP</p>
+        <p>NEURAL SOUNDS: <button class="sk_btn_toggle" id="sk_toggle_audio">ON</button></p>
+        <p>FIREWALL SPEED: <button class="sk_btn_toggle" id="sk_toggle_difficulty">NORMAL</button></p>
+        <p>HIGH CONTRAST: <button class="sk_btn_toggle" id="sk_toggle_contrast">OFF</button></p>
+        <button class="sk_popup_close" id="sk_close_settings">CLOSE</button>
+      </div>
+
+      <!-- System Manual Panel -->
+      <div class="sk_popup sk_hidden" id="sk_popup_info">
+        <p class="sk_popup_title">Breach Manual</p>
+        <p>Your typing hardware has been hijacked by a dynamic counter-intrusion virus.</p>
+        <p><b>THE ANARCHY MECHANIC:</b> Every time you press a key, the internal registry mutates, swapping key
+          locations on your board.</p>
+        <p>Watch the <b>virtual deck</b> below to track where letters currently reside. Direct touchscreen presses also
+          map directly to the mutated layout.</p>
+        <p>Type matching sequences to push back the encroaching <b>Firewall Breach</b>. Maximize node penetration
+          sequence to bypass security.</p>
+        <button class="sk_popup_close" id="sk_close_info">CLOSE</button>
+      </div>
+
+      <!-- Scores Leaderboard Panel -->
+      <div class="sk_popup sk_hidden" id="sk_popup_scores">
+        <p class="sk_popup_title">LOCAL_LEADERBOARD</p>
+        <div class="sk_scores_list" id="sk_scores_list">
+          <!-- populated dynamically -->
+        </div>
+        <button class="sk_popup_close" id="sk_close_scores">CLOSE</button>
+      </div>
+
+      <!-- Node System Map Selector -->
+      <div class="sk_popup sk_hidden" id="sk_popup_levels">
+        <p class="sk_popup_title">SELECT SECURITY NODE</p>
+        <div class="sk_level_grid" id="sk_level_grid">
+          <!-- dynamic level buttons -->
+        </div>
+        <button class="sk_popup_close" id="sk_close_levels">CLOSE</button>
+      </div>
+    </div>
+
+    <!-- SECOND DIV: Hacking Console Terminal Canvas -->
+    <div class="sk_canvas_container" id="sk_canvas_container">
+      <canvas id="sk_game_canvas"></canvas>
+
+      <!-- Overlay Screen: Start/Main -->
+      <div class="sk_screen" id="sk_screen_start">
+        <p class="sk_glitch_text">ANARCHY_BOARD</p>
+        <p class="sk_subtitle">COUNTER-INTRUSION BYPASS INITIATOR.<br>DECRYPT TARGETS BEFORE FIREWALL CORRUPTION. EXPECT
+          KEYMAP DEVIATIONS.</p>
+        <button class="sk_menu_btn" id="sk_btn_start_game">INITIALIZE BREACH (ENTER)</button>
+      </div>
+
+      <!-- Overlay Screen: Game Over -->
+      <div class="sk_screen sk_hidden" id="sk_screen_gameover">
+        <p class="sk_glitch_text sk_red">BREACH_FAILED</p>
+        <p class="sk_subtitle">TRACE DETECTED. NEURAL CONSOLE TERMINATED.</p>
+        <p>CLEARED LEVEL: <b id="sk_gameover_level">0</b> | NODE YIELD: <b id="sk_gameover_score">0</b></p>
+        <p style="font-size:0.7rem; color:#ffaa00;" id="sk_gameover_best">BEST NODE YIELD: 0 PTS</p>
+        <p style="font-size:0.7rem; color:#a2ffd0;" id="sk_gameover_stats">MAX STREAK: 0 | TIME: 0.0s | COMBO: x1</p>
+        <button class="sk_menu_btn" id="sk_btn_retry">RE-ATTEMPT DECRYPTION</button>
+      </div>
+
+      <!-- Overlay Screen: Victory Node Complete -->
+      <div class="sk_screen sk_hidden" id="sk_screen_victory">
+        <p class="sk_glitch_text sk_green">NODE_COMPROMISED</p>
+        <p class="sk_subtitle">SECURITY PROTOCOLS ROUTED. NEW SYSTEM ACCESS GRANTED.</p>
+        <p>NODE YIELD: <b id="sk_victory_score">0</b> | TIME BONUS: <b id="sk_victory_bonus">0</b></p>
+        <p style="font-size:0.7rem; color:#a2ffd0;" id="sk_victory_stats">MAX STREAK: 0 | TIME: 0.0s | WORDS: 0/5</p>
+        <button class="sk_menu_btn" id="sk_btn_next_level">PROCEED TO ADJACENT NODE</button>
+      </div>
+
+      <!-- Overlay Screen: Pause View -->
+      <div class="sk_screen sk_hidden" id="sk_screen_paused">
+        <p class="sk_glitch_text">SYSTEM_PAUSED</p>
+        <p class="sk_subtitle">DECRYPTION TERMINALS ON STANDBY. ADAPT LAYOUT IN COGNITIVE RELIEF.</p>
+        <button class="sk_menu_btn" id="sk_btn_resume_overlay">RESUME COGNITION</button>
+      </div>
+    </div>
+
+    <!-- CANVAS ZOOM & PAN CONTROLS -->
+    <div class="sk_canvas_tools">
+      <button class="sk_btn" id="sk_zoom_in" title="Zoom In (Ctrl +)">ZOOM IN (+)</button>
+      <button class="sk_btn" id="sk_zoom_out" title="Zoom Out (Ctrl -)">ZOOM OUT (-)</button>
+      <button class="sk_btn" id="sk_zoom_reset" title="Reset Camera">RESET CAM</button>
+      <button class="sk_btn" id="sk_pan_tool" title="Toggle Pan Tool">PAN TOOL [OFF]</button>
+    </div>
+
+    <!-- THIRD DIV: Drag-able Cyber Virtual Controller & Deck -->
+    <div class="sk_controls_container" id="sk_draggable_controls">
+      <div class="sk_drag_handle" id="sk_drag_handle">::: DECK PORTABILITY MOUNT (DRAG ME) :::</div>
+      <!-- On-screen word mirror: target word + typed progress near thumbs -->
+      <div class="sk_word_mirror" id="sk_word_mirror"></div>
+      <!-- Progressive tutorial hint bar (contextual guidance during play) -->
+      <div class="sk_hint_bar" id="sk_hint_bar"></div>
+      <div class="sk_virtual_keyboard" id="sk_virtual_keyboard">
+        <!-- Keys generated systematically by JavaScript engine -->
+      </div>
+      <div class="sk_action_row">
+        <button class="sk_action_btn" id="sk_btn_clear_input">SYS_RESET</button>
+        <button class="sk_action_btn" id="sk_btn_delete">DEL</button>
+        <button class="sk_action_btn" id="sk_btn_space">_SPACE_</button>
+        <button class="sk_action_btn" id="sk_btn_submit">EXECUTE</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================================
+       ANARCHY BOARD v2.0 — NAMESPACED MODULE ARCHITECTURE
+       ============================================================ */
+    const AB = {};
+
+    /* ----------------------------------------------------------
+       CONFIG: Constants, key mappings, level data, difficulties
+       ---------------------------------------------------------- */
+    AB.Config = {
+      PHYSICAL_KEYS: [
+        ["KeyQ", "KeyW", "KeyE", "KeyR", "KeyT", "KeyY", "KeyU", "KeyI", "KeyO", "KeyP"],
+        ["KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH", "KeyJ", "KeyK", "KeyL"],
+        ["KeyZ", "KeyX", "KeyC", "KeyV", "KeyB", "KeyN", "KeyM", "Minus"]
+      ],
+
+      DEFAULT_MAP: {
+        "KeyQ": "Q", "KeyW": "W", "KeyE": "E", "KeyR": "R", "KeyT": "T",
+        "KeyY": "Y", "KeyU": "U", "KeyI": "I", "KeyO": "O", "KeyP": "P",
+        "KeyA": "A", "KeyS": "S", "KeyD": "D", "KeyF": "F", "KeyG": "G",
+        "KeyH": "H", "KeyJ": "J", "KeyK": "K", "KeyL": "L",
+        "KeyZ": "Z", "KeyX": "X", "KeyC": "C", "KeyV": "V", "KeyB": "B",
+        "KeyN": "N", "KeyM": "M",
+        "Minus": "_"
+      },
+
+      CAMPAIGN_LEVELS: [
+        {
+          id: 1, name: "0x7F2A: LOCAL NODE",
+          words: ["CYBER", "DECK", "PORT", "HACK", "DATA"],
+          firewallSpeed: 1.5,
+          mutationDesc: "Adjacent Swapping (Typing swaps key with immediate physical neighbor)",
+          theme: { primary: "#00ff66", dim: "#00a344", danger: "#ff3333", bg: "#020703", word: "#00ff66" },
+          mutate: function(code) { AB.Mutations.swapNeighbor(code); }
+        },
+        {
+          id: 2, name: "0x3C89: MAIN GATEWAY",
+          words: ["PROXY", "ROOTKIT", "SOCKET", "KERNEL", "BYPASS"],
+          firewallSpeed: 2.2,
+          mutationDesc: "Row Rotation (Typing shifts current layout row left/right)",
+          theme: { primary: "#00e5ff", dim: "#0099b3", danger: "#ff5040", bg: "#021013", word: "#00e5ff" },
+          mutate: function(code) { AB.Mutations.rowRotation(code); }
+        },
+        {
+          id: 3, name: "0xFA12: COGNITIVE OVERRIDE",
+          words: ["DECIPHER", "MALWARE", "FIREWALL", "EXPLOIT", "BUFFER"],
+          firewallSpeed: 3.0,
+          mutationDesc: "Mirror Matrix (Key swaps with its symmetrical board position)",
+          theme: { primary: "#ff33cc", dim: "#b3238f", danger: "#ffaa00", bg: "#10020e", word: "#ff33cc" },
+          mutate: function(code) { AB.Mutations.mirrorMatrix(code); }
+        },
+        {
+          id: 4, name: "0xDE99: SECURE ARCHIVE",
+          words: ["ZERO_DAY", "TERMINAL", "ENCRYPT", "PHISHING", "SPYWARE"],
+          firewallSpeed: 3.8,
+          mutationDesc: "Ghost Encryption (Blanks random keys and shifts positions)",
+          theme: { primary: "#ffaa00", dim: "#cc8800", danger: "#ff3333", bg: "#0f0c02", word: "#ffcc66" },
+          mutate: function(code) { AB.Mutations.rowRotation(code); AB.Mutations.ghostBlanks(); }
+        },
+        {
+          id: 5, name: "0xEEEE: THE CORE VAULT",
+          words: ["ANARCHY_CORE", "INTRUSION_LEVEL_FIVE", "SYNAPSE_DESTROYER", "METASTABILITY", "DECRYPTION_COMPLETED"],
+          firewallSpeed: 4.5,
+          mutationDesc: "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)",
+          theme: { primary: "#ff3333", dim: "#cc0000", danger: "#ff8888", bg: "#0f0202", word: "#ff6666" },
+          mutate: function(code) { AB.Mutations.mirrorMatrix(code); AB.Mutations.swapNeighbor(code); AB.Mutations.ghostBlanks(); }
+        }
+      ],
+
+      DIFFICULTIES: [
+        { label: "EASY", val: 0.6 },
+        { label: "NORMAL", val: 1.0 },
+        { label: "INSANE", val: 1.8 }
+      ],
+
+      WORDS_PER_LEVEL: 5,
+      CORRECT_CHAR_POINTS: 10,
+      WORD_CLEAR_POINTS: 100,
+      WORD_CLEAR_FIREWALL_REDUCTION: 25,
+      WRONG_KEY_FIREWALL_PENALTY: 8,
+      WRONG_KEY_STREAK_BREAK_PENALTY: 5,
+      BACKSPACE_FIREWALL_PENALTY: 2,
+      TIME_BONUS_PER_SECOND_UNDER_PAR: 10,
+
+      /* Bonus word mechanic */
+      BONUS_WORD_CHANCE: 0.14,
+      BONUS_WORD_MULTIPLIER: 2,
+      BONUS_EXTRA_FIREWALL_REDUCTION: 15,
+
+      /* Combo tiers: [streakThreshold, multiplier] */
+      COMBO_TIERS: [
+        { streak: 5, multiplier: 2 },
+        { streak: 10, multiplier: 3 },
+        { streak: 20, multiplier: 5 }
+      ]
+    };
+
+    /* ----------------------------------------------------------
+       AUDIO: Web Audio API synthesizer
+       ---------------------------------------------------------- */
+    AB.Audio = {
+      ctx: null,
+      enabled: true,
+
+      init: function() {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      },
+
+      play: function(type) {
+        if (!this.enabled) return;
+        try {
+          if (this.ctx.state === 'suspended') this.ctx.resume();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          const t = this.ctx.currentTime;
+
+          if (type === 'tap') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, t);
+            osc.frequency.exponentialRampToValueAtTime(100, t + 0.08);
+            gain.gain.setValueAtTime(0.15, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+            osc.start(); osc.stop(t + 0.08);
+          } else if (type === 'match') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(800, t);
+            osc.frequency.exponentialRampToValueAtTime(1600, t + 0.15);
+            gain.gain.setValueAtTime(0.2, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+            osc.start(); osc.stop(t + 0.15);
+          } else if (type === 'breach') {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(500, t);
+            osc.frequency.setValueAtTime(800, t + 0.1);
+            osc.frequency.setValueAtTime(1200, t + 0.2);
+            gain.gain.setValueAtTime(0.2, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+            osc.start(); osc.stop(t + 0.3);
+          } else if (type === 'error') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(120, t);
+            osc.frequency.linearRampToValueAtTime(40, t + 0.25);
+            gain.gain.setValueAtTime(0.3, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.25);
+            osc.start(); osc.stop(t + 0.25);
+          } else if (type === 'failure') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, t);
+            osc.frequency.linearRampToValueAtTime(50, t + 0.6);
+            gain.gain.setValueAtTime(0.4, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.6);
+            osc.start(); osc.stop(t + 0.6);
+          } else if (type === 'combo') {
+            /* Combo tier-up: bright ascending arpeggio */
+            var comboFreqs = [523.25, 659.25, 783.99, 1046.50];
+            for (var ci = 0; ci < comboFreqs.length; ci++) {
+              var co = this.ctx.createOscillator();
+              var cg = this.ctx.createGain();
+              co.type = 'triangle';
+              co.frequency.setValueAtTime(comboFreqs[ci], t + ci * 0.07);
+              cg.gain.setValueAtTime(0.15, t + ci * 0.07);
+              cg.gain.exponentialRampToValueAtTime(0.01, t + ci * 0.07 + 0.12);
+              co.connect(cg); cg.connect(this.ctx.destination);
+              co.start(t + ci * 0.07); co.stop(t + ci * 0.07 + 0.15);
+            }
+            osc.start(); osc.stop(t + 0.01);
+          } else if (type === 'levelclear') {
+            /* Level clear: rising success jingle */
+            var clFreqs = [392, 523.25, 659.25, 783.99, 1046.50];
+            for (var cli = 0; cli < clFreqs.length; cli++) {
+              var clo = this.ctx.createOscillator();
+              var clg = this.ctx.createGain();
+              clo.type = 'square';
+              clo.frequency.setValueAtTime(clFreqs[cli], t + cli * 0.1);
+              clg.gain.setValueAtTime(0.1, t + cli * 0.1);
+              clg.gain.exponentialRampToValueAtTime(0.01, t + cli * 0.1 + 0.18);
+              clo.connect(clg); clg.connect(this.ctx.destination);
+              clo.start(t + cli * 0.1); clo.stop(t + cli * 0.1 + 0.2);
+            }
+            osc.start(); osc.stop(t + 0.01);
+          }
+        } catch (e) {
+          console.warn("Audio Context blocked or unsupported");
+        }
+      }
+    };
+
+    /* ----------------------------------------------------------
+       PERSISTENCE: Save/load progress, best scores, settings
+       ---------------------------------------------------------- */
+    AB.Persistence = {
+      STORAGE_KEY: 'sk_anarchy_save',
+      /* Default save structure */
+      _defaults: function() {
+        return {
+          cleared: [],            /* level indexes completed at least once */
+          bestScores: {},         /* levelIndex -> best score */
+          lastLevelIndex: 0,      /* last played/completed node */
+          difficultyIndex: 1,
+          audioEnabled: true,
+          highContrast: false
+        };
+      },
+
+      data: null,
+
+      load: function() {
+        var d;
+        try {
+          d = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
+        } catch (e) { d = null; }
+        if (!d || typeof d !== 'object') d = this._defaults();
+        else {
+          d.cleared = d.cleared || [];
+          d.bestScores = d.bestScores || {};
+          d.lastLevelIndex = d.lastLevelIndex || 0;
+          d.difficultyIndex = (d.difficultyIndex !== undefined) ? d.difficultyIndex : 1;
+          d.audioEnabled = (d.audioEnabled !== undefined) ? d.audioEnabled : true;
+          d.highContrast = (d.highContrast !== undefined) ? d.highContrast : false;
+        }
+        this.data = d;
+        return d;
+      },
+
+      save: function() {
+        try {
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
+        } catch (e) {
+          console.warn("Persistence save failed:", e.message);
+        }
+      },
+
+      isCleared: function(levelIndex) {
+        return this.data && this.data.cleared.indexOf(levelIndex) !== -1;
+      },
+
+      bestScore: function(levelIndex) {
+        return this.data && this.data.bestScores[levelIndex] ? this.data.bestScores[levelIndex] : 0;
+      },
+
+      recordLevelClear: function(levelIndex, score) {
+        var d = this.data;
+        if (d.cleared.indexOf(levelIndex) === -1) d.cleared.push(levelIndex);
+        if (!d.bestScores[levelIndex] || score > d.bestScores[levelIndex]) {
+          d.bestScores[levelIndex] = score;
+        }
+        d.lastLevelIndex = levelIndex;
+        this.save();
+      },
+
+      recordScore: function(levelIndex, score) {
+        if (!this.data) return;
+        if (!this.data.bestScores[levelIndex] || score > this.data.bestScores[levelIndex]) {
+          this.data.bestScores[levelIndex] = score;
+          this.save();
+        }
+      }
+    };
+
+    /* ----------------------------------------------------------
+       STATE: All mutable game state in one place
+       ---------------------------------------------------------- */
+    AB.State = {
+      currentScreen: 'start',
+      levelIndex: 0,
+      score: 0,
+      wordsCleared: 0,
+      currentWord: "",
+      typedBuffer: "",
+      firewallBreach: 0.0,
+      isDemo: false,
+      difficultyScale: 1.0,
+      isPaused: false,
+      isTouchDevice: false,
+      activeMap: {},
+      blankKeys: new Set(),
+      levels: [],
+      activeTheme: { primary: "#00ff66", dim: "#00a344", danger: "#ff3333", bg: "#020703", word: "#00ff66" },
+
+      getTheme: function() {
+        var lvl = this.levels[this.levelIndex];
+        if (lvl && lvl.theme) return lvl.theme;
+        return this.activeTheme;
+      },
+
+      /* Combo / streak / time bonus state */
+      streak: 0,
+      maxStreak: 0,
+      comboMultiplier: 1,
+      levelStartTime: 0,
+      elapsedTime: 0,
+
+      /* Mutation visual feedback state */
+      lastPressedCode: null,
+      lastMutatedKeys: [],
+      mutationCount: 0,
+      _ghostAvoidChar: null,
+      /* Tutorial hints shown this level (per-level, so hints re-teach each node) */
+      hintsShown: {},
+      /* Bonus word mechanic */
+      isBonusWord: false,
+
+      reset: function() {
+        this.score = 0;
+        this.wordsCleared = 0;
+        this.firewallBreach = 0.0;
+        this.isDemo = false;
+        this.isPaused = false;
+        this.isBonusWord = false;
+        this.typedBuffer = "";
+        this.activeMap = Object.assign({}, AB.Config.DEFAULT_MAP);
+        this.blankKeys.clear();
+        this.streak = 0;
+        this.maxStreak = 0;
+        this.comboMultiplier = 1;
+        this.levelStartTime = performance.now();
+        this.elapsedTime = 0;
+        this.lastPressedCode = null;
+        this.lastMutatedKeys = [];
+        this.mutationCount = 0;
+        this._ghostAvoidChar = null;
+        this.hintsShown = {};
+      },
+
+      /* Returns current combo multiplier based on streak */
+      getComboMultiplier: function() {
+        var mult = 1;
+        var tiers = AB.Config.COMBO_TIERS;
+        for (var i = 0; i < tiers.length; i++) {
+          if (this.streak >= tiers[i].streak && tiers[i].multiplier > mult) mult = tiers[i].multiplier;
+        }
+        return mult;
+      }
+    };
+
+    /* ----------------------------------------------------------
+       MUTATIONS: Keyboard layout mutation algorithms
+       ---------------------------------------------------------- */
+    AB.Mutations = {
+      _getFlatKeys: function() {
+        const arr = [];
+        AB.Config.PHYSICAL_KEYS.forEach(function(r) { r.forEach(function(k) { arr.push(k); }); });
+        return arr;
+      },
+
+      _findKeyPosition: function(code) {
+        for (var r = 0; r < AB.Config.PHYSICAL_KEYS.length; r++) {
+          var idx = AB.Config.PHYSICAL_KEYS[r].indexOf(code);
+          if (idx !== -1) return { row: r, col: idx };
+        }
+        return null;
+      },
+
+      /* Record affected keys for visual highlight */
+      _record: function(keys) {
+        AB.State.lastMutatedKeys = keys || [];
+      },
+
+      swapNeighbor: function(code) {
+        var pos = this._findKeyPosition(code);
+        if (!pos) return;
+        var row = AB.Config.PHYSICAL_KEYS[pos.row];
+        var targetCol = pos.col + (Math.random() < 0.5 ? -1 : 1);
+        if (targetCol < 0) targetCol = 1;
+        if (targetCol >= row.length) targetCol = row.length - 2;
+        var targetCode = row[targetCol];
+        var map = AB.State.activeMap;
+        var temp = map[code];
+        map[code] = map[targetCode];
+        map[targetCode] = temp;
+        this._record([code, targetCode]);
+      },
+
+      rowRotation: function(code) {
+        var pos = this._findKeyPosition(code);
+        if (!pos) return;
+        var row = AB.Config.PHYSICAL_KEYS[pos.row];
+        var shiftRight = Math.random() < 0.5;
+        var map = AB.State.activeMap;
+        if (shiftRight) {
+          var lastChar = map[row[row.length - 1]];
+          for (var i = row.length - 1; i > 0; i--) {
+            map[row[i]] = map[row[i - 1]];
+          }
+          map[row[0]] = lastChar;
+        } else {
+          var firstChar = map[row[0]];
+          for (var j = 0; j < row.length - 1; j++) {
+            map[row[j]] = map[row[j + 1]];
+          }
+          map[row[row.length - 1]] = firstChar;
+        }
+        this._record(row.slice());
+      },
+
+      mirrorMatrix: function(code) {
+        var flat = this._getFlatKeys();
+        var idx = flat.indexOf(code);
+        if (idx === -1) return;
+        var mirrorIdx = flat.length - 1 - idx;
+        var mirrorCode = flat[mirrorIdx];
+        var map = AB.State.activeMap;
+        var temp = map[code];
+        map[code] = map[mirrorCode];
+        map[mirrorCode] = temp;
+        this._record([code, mirrorCode]);
+      },
+
+      ghostBlanks: function() {
+        AB.State.blankKeys.clear();
+        var flat = this._getFlatKeys();
+        var avoidChar = AB.State._ghostAvoidChar;
+        var candidates = flat.filter(function(k) {
+          /* Avoid blanking a key that holds the next needed character */
+          if (avoidChar && AB.State.activeMap[k] === avoidChar) return false;
+          return true;
+        });
+        if (candidates.length < 3) candidates = flat;
+        while (AB.State.blankKeys.size < 3) {
+          var randKey = candidates[Math.floor(Math.random() * candidates.length)];
+          AB.State.blankKeys.add(randKey);
+        }
+        this._record(Array.from(AB.State.blankKeys));
+      },
+
+      applyForType: function(type, code) {
+        switch (type) {
+          case 'row_rotation':       this.rowRotation(code); break;
+          case 'mirror_matrix':      this.mirrorMatrix(code); break;
+          case 'row_rotation_ghost': this.rowRotation(code); this.ghostBlanks(); break;
+          case 'chaos_matrix':       this.mirrorMatrix(code); this.swapNeighbor(code); this.ghostBlanks(); break;
+          default:                   this.swapNeighbor(code); break;
+        }
+      }
+    };
+
+    /* ----------------------------------------------------------
+       RENDERER: Canvas drawing, logs, screen shake, camera
+       ---------------------------------------------------------- */
+    AB.Renderer = {
+      canvas: null,
+      ctx: null,
+      particleLogs: [],
+      screenShake: 0,
+      comboFlash: 0,
+      mutationToast: null,
+      camera: { zoomScale: 1.0, panX: 0, panY: 0, isPanningActive: false, isDragging: false, dragStartX: 0, dragStartY: 0 },
+      lastTime: 0,
+
+      init: function() {
+        this.canvas = document.getElementById('sk_game_canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        this.lastTime = performance.now();
+      },
+
+      resize: function() {
+        var parent = this.canvas.parentElement;
+        this.canvas.width = parent.clientWidth;
+        this.canvas.height = parent.clientHeight;
+      },
+
+      addLog: function(msg, color) {
+        color = color || "#00ff66";
+        this.particleLogs.push({ msg: msg, y: this.canvas.height - 20, alpha: 1.0, color: color });
+        if (this.particleLogs.length > 5) this.particleLogs.shift();
+      },
+
+      /* Brief centered toast summarizing which keys mutated */
+      addMutationToast: function(mutatedKeys) {
+        if (!mutatedKeys || !mutatedKeys.length) return;
+        var labels = mutatedKeys.map(function(k) { return AB.State.activeMap[k] || "?"; });
+        var desc = "KEYMAP MUTATED: " + labels.join(" ↔ ");
+        this.mutationToast = { msg: desc, life: 1.0 };
+      },
+
+      /* Convert a #rrggbb hex color to rgba() string with given alpha */
+      _rgba: function(hex, alpha) {
+        if (!hex || hex.length < 7) return "rgba(0,255,102," + alpha + ")";
+        var r = parseInt(hex.slice(1, 3), 16);
+        var g = parseInt(hex.slice(3, 5), 16);
+        var b = parseInt(hex.slice(5, 7), 16);
+        return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+      },
+
+      zoomCamera: function(amount) {
+        this.camera.zoomScale = Math.max(0.5, Math.min(3.0, this.camera.zoomScale + amount));
+      },
+
+      resetCamera: function() {
+        this.camera.zoomScale = 1.0;
+        this.camera.panX = 0;
+        this.camera.panY = 0;
+      },
+
+      draw: function() {
+        var ctx = this.ctx;
+        var c = this.canvas;
+        var cam = this.camera;
+        var state = AB.State;
+        var cfg = AB.Config;
+        var theme = state.getTheme();
+
+        ctx.fillStyle = theme.bg;
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.save();
+
+        ctx.translate(c.width / 2 + cam.panX, c.height / 2 + cam.panY);
+        ctx.scale(cam.zoomScale, cam.zoomScale);
+        ctx.translate(-c.width / 2, -c.height / 2);
+
+        if (this.screenShake > 0) {
+          var dx = (Math.random() - 0.5) * this.screenShake;
+          var dy = (Math.random() - 0.5) * this.screenShake;
+          ctx.translate(dx, dy);
+          this.screenShake *= 0.9;
+          if (this.screenShake < 0.5) this.screenShake = 0;
+        }
+
+        ctx.strokeStyle = this._rgba(theme.primary, 0.06);
+        ctx.lineWidth = 1;
+        var i;
+        for (i = -c.width; i < c.width * 2; i += 30) {
+          ctx.beginPath(); ctx.moveTo(i, -c.height); ctx.lineTo(i, c.height * 2); ctx.stroke();
+        }
+        for (var j = -c.height; j < c.height * 2; j += 30) {
+          ctx.beginPath(); ctx.moveTo(-c.width, j); ctx.lineTo(c.width * 2, j); ctx.stroke();
+        }
+
+        var breachPercent = state.firewallBreach;
+        ctx.fillStyle = breachPercent > 75 ? this._rgba(theme.danger, 0.14) : this._rgba(theme.primary, 0.05);
+        ctx.fillRect(0, 0, c.width, (breachPercent / 100) * c.height);
+
+        ctx.font = "bold 13px 'Courier New'";
+        ctx.fillStyle = theme.primary;
+        var activeLevel = state.levels[state.levelIndex];
+        ctx.fillText("SYSTEM_NODE: " + (activeLevel ? activeLevel.name : "UNKNOWN"), 20, 30);
+        ctx.fillText("STABILITY_YIELD: " + state.score + " PTS", 20, 50);
+        ctx.fillText("DECRYPTS: " + state.wordsCleared + " / " + cfg.WORDS_PER_LEVEL, 20, 70);
+
+        /* Combo multiplier + streak display */
+        ctx.fillStyle = state.comboMultiplier >= 5 ? "#ff3333" : state.comboMultiplier >= 3 ? "#ffaa00" : state.comboMultiplier >= 2 ? "#ffff00" : theme.primary;
+        ctx.fillText("COMBO: x" + state.comboMultiplier + " (STREAK " + state.streak + ")", 20, 90);
+
+        /* Elapsed time display */
+        ctx.fillStyle = theme.dim;
+        ctx.fillText("TIME: " + state.elapsedTime.toFixed(1) + "s", 20, 110);
+
+        /* Mutation count display */
+        ctx.fillStyle = theme.dim;
+        ctx.fillText("MUTATIONS: " + state.mutationCount, 20, 130);
+
+        ctx.fillStyle = theme.bg === "#020703" ? "#11331a" : this._rgba(theme.primary, 0.12);
+        ctx.fillRect(c.width - 220, 20, 200, 18);
+        ctx.strokeStyle = theme.primary;
+        ctx.strokeRect(c.width - 220, 20, 200, 18);
+        var barColor = breachPercent > 75 ? theme.danger : breachPercent > 45 ? "#ffaa00" : theme.primary;
+        ctx.fillStyle = barColor;
+        ctx.fillRect(c.width - 220, 20, (breachPercent / 100) * 200, 18);
+        ctx.fillStyle = "#000";
+        ctx.font = "bold 10px 'Courier New'";
+        ctx.fillText("FIREWALL_BREACH: " + Math.floor(breachPercent) + "%", c.width - 210, 33);
+
+        if (state.currentScreen === 'playing' || state.isPaused) {
+          ctx.textAlign = "center";
+          ctx.fillStyle = this._rgba(theme.primary, 0.06);
+          ctx.strokeStyle = theme.primary;
+          ctx.lineWidth = 2;
+          ctx.fillRect(c.width / 2 - 200, c.height / 2 - 50, 400, 80);
+          ctx.strokeRect(c.width / 2 - 200, c.height / 2 - 50, 400, 80);
+
+          ctx.fillStyle = theme.dim;
+          ctx.font = "11px 'Courier New'";
+          ctx.fillText("TARGET ENCRYPTION SEQUENCE:", c.width / 2, c.height / 2 - 32);
+
+          var target = state.currentWord;
+          var typed = state.typedBuffer;
+          ctx.font = "bold 32px 'Courier New'";
+          ctx.letterSpacing = "4px";
+          var startX = c.width / 2 - (target.length * 11);
+          for (i = 0; i < target.length; i++) {
+            ctx.fillStyle = i < typed.length ? theme.primary : this._rgba(theme.primary, 0.3);
+            ctx.fillText(target[i], startX + (i * 22), c.height / 2 + 15);
+          }
+          if (state.isBonusWord) {
+            ctx.fillStyle = "#ffcc66";
+            ctx.font = "bold 12px 'Courier New'";
+            ctx.fillText("[BONUS x" + AB.Config.BONUS_WORD_MULTIPLIER + "]", startX + (target.length * 22) + 8, c.height / 2 + 15);
+          }
+
+          ctx.fillStyle = theme.dim;
+          ctx.font = "11px 'Courier New'";
+          ctx.fillText("MUTATION VECTOR: " + (activeLevel ? activeLevel.mutationDesc : ""), c.width / 2, c.height / 2 + 55);
+          ctx.textAlign = "left";
+
+          /* Combo tier-up flash banner */
+          if (this.comboFlash > 0) {
+            var flashColor = state.comboMultiplier >= 5 ? "#ff3333" : state.comboMultiplier >= 3 ? "#ffaa00" : "#ffff00";
+            ctx.save();
+            ctx.globalAlpha = this.comboFlash;
+            ctx.fillStyle = flashColor;
+            ctx.font = "bold 48px 'Courier New'";
+            ctx.textAlign = "center";
+            ctx.fillText("COMBO x" + state.comboMultiplier + "!", c.width / 2, c.height / 2 + 150);
+            ctx.restore();
+            this.comboFlash -= 0.03;
+            if (this.comboFlash < 0) this.comboFlash = 0;
+            ctx.textAlign = "left";
+          }
+
+          /* Mutation toast (centered below word box) */
+          if (this.mutationToast && this.mutationToast.life > 0) {
+            ctx.save();
+            ctx.globalAlpha = this.mutationToast.life;
+            ctx.fillStyle = theme.primary;
+            ctx.font = "bold 13px 'Courier New'";
+            ctx.textAlign = "center";
+            ctx.fillText(this.mutationToast.msg, c.width / 2, c.height / 2 + 95);
+            ctx.restore();
+            this.mutationToast.life -= 0.03;
+            if (this.mutationToast.life <= 0) this.mutationToast = null;
+            ctx.textAlign = "left";
+          }
+        }
+
+        ctx.font = "11px 'Courier New'";
+        for (i = 0; i < this.particleLogs.length; i++) {
+          var log = this.particleLogs[i];
+          ctx.fillStyle = log.color;
+          ctx.globalAlpha = log.alpha;
+          ctx.fillText(">_ " + log.msg, 20, c.height - 110 + (i * 18));
+          log.alpha -= 0.002;
+        }
+        ctx.globalAlpha = 1.0;
+        ctx.restore();
+      }
+    };
+
+    /* ----------------------------------------------------------
+       INPUT: Physical keyboard + virtual keyboard handling
+       ---------------------------------------------------------- */
+    AB.Input = {
+      touchMeta: { _pinchStartDist: 0, _pinchStartScale: 1 },
+
+      initVirtualKeyboard: function() {
+        var vKB = document.getElementById('sk_virtual_keyboard');
+        vKB.innerHTML = '';
+        AB.Config.PHYSICAL_KEYS.forEach(function(row) {
+          var rowDiv = document.createElement('div');
+          rowDiv.className = 'sk_kb_row';
+          row.forEach(function(code) {
+            var btn = document.createElement('button');
+            btn.className = 'sk_kb_key';
+            btn.id = 'sk_key_' + code;
+            btn.setAttribute('data-code', code);
+            btn.textContent = AB.State.activeMap[code] || "";
+
+            btn.addEventListener('mousedown', function(e) {
+              e.preventDefault();
+              AB.Engine.handleKeyInput(code);
+            });
+
+            btn.addEventListener('touchstart', function(e) {
+              e.preventDefault();
+              AB.Input.highlightKey(code, 120);
+              AB.Engine.handleKeyInput(code);
+            });
+
+            rowDiv.appendChild(btn);
+          });
+          vKB.appendChild(rowDiv);
+        });
+      },
+
+      updateVirtualKeyboardUI: function(applyFeedback) {
+        var state = AB.State;
+        AB.Config.PHYSICAL_KEYS.forEach(function(row) {
+          row.forEach(function(code) {
+            var btn = document.getElementById('sk_key_' + code);
+            if (btn) {
+              btn.classList.remove('sk_mutated', 'sk_last_pressed', 'sk_ghost_pulse');
+              if (state.blankKeys.has(code)) {
+                btn.classList.add('sk_blank', 'sk_ghost_pulse');
+                btn.textContent = "?";
+              } else {
+                btn.classList.remove('sk_blank');
+                btn.textContent = state.activeMap[code];
+              }
+            }
+          });
+        });
+
+        /* Apply mutation highlight feedback after a mutation occurs */
+        if (applyFeedback) {
+          state.lastMutatedKeys.forEach(function(code) {
+            var btn = document.getElementById('sk_key_' + code);
+            if (btn) btn.classList.add('sk_mutated');
+          });
+          if (state.lastPressedCode) {
+            var lp = document.getElementById('sk_key_' + state.lastPressedCode);
+            if (lp) lp.classList.add('sk_last_pressed');
+          }
+        }
+      },
+
+      highlightKey: function(code, duration) {
+        var btn = document.getElementById('sk_key_' + code);
+        if (btn) {
+          btn.classList.add('sk_active');
+          setTimeout(function() { btn.classList.remove('sk_active'); }, duration || 100);
+        }
+      },
+
+      bindPhysicalKeyboard: function() {
+        window.addEventListener('keydown', function(e) {
+          if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
+            e.preventDefault();
+            AB.Renderer.zoomCamera(0.1);
+            return;
+          }
+          if (e.ctrlKey && (e.key === '-' || e.key === '_')) {
+            e.preventDefault();
+            AB.Renderer.zoomCamera(-0.1);
+            return;
+          }
+
+          var state = AB.State;
+          if (state.currentScreen === 'playing' && !state.isPaused) {
+            /* Backspace deletes last typed character */
+            if (e.key === 'Backspace') {
+              e.preventDefault();
+              AB.Engine.backspace();
+              return;
+            }
+            var flat = AB.Mutations._getFlatKeys();
+            if (flat.includes(e.code)) {
+              e.preventDefault();
+              AB.Input.highlightKey(e.code);
+              AB.Engine.handleKeyInput(e.code);
+            }
+          } else if (e.key === 'Enter') {
+            if (state.currentScreen === 'start') AB.Engine.startGame();
+            else if (state.currentScreen === 'gameover') AB.Engine.startGame();
+            else if (state.currentScreen === 'victory') AB.Engine.nextLevel();
+          } else if (e.key === 'Escape') {
+            /* Close menu dropdown or any open popup */
+            AB.UI.dismissOverlays();
+          }
+        });
+      }
+    };
+
+    /* ----------------------------------------------------------
+       UI: Popups, menus, screens, HUD, level selector, scores
+       ---------------------------------------------------------- */
+    AB.UI = {
+      scoresData: [],
+      difficultyIndex: 1,
+      dragState: { active: false, offsetX: 0, offsetY: 0 },
+
+      init: function() {
+        this.scoresData = JSON.parse(localStorage.getItem('sk_anarchy_scores')) || [
+          { name: "NEO_99", score: 4500, node: 5 },
+          { name: "TRINITY", score: 3200, node: 4 },
+          { name: "ORACLE", score: 1200, node: 2 }
+        ];
+
+        /* Reflect persisted settings in the setup panel */
+        var audioBtn = document.getElementById('sk_toggle_audio');
+        if (audioBtn) audioBtn.textContent = AB.Audio.enabled ? "ON" : "OFF";
+        var diffBtn = document.getElementById('sk_toggle_difficulty');
+        if (diffBtn) diffBtn.textContent = AB.Config.DIFFICULTIES[this.difficultyIndex].label;
+        var contrastBtn = document.getElementById('sk_toggle_contrast');
+        if (contrastBtn) contrastBtn.textContent = AB.Persistence.data.highContrast ? "ON" : "OFF";
+
+        this.bindButtons();
+        this.bindDraggable();
+        this.bindCameraControls();
+      },
+
+      updateScoreHud: function() {
+        document.getElementById('sk_score_hud').textContent = "PTS: " + AB.State.score;
+      },
+
+      updateComboHud: function() {
+        var el = document.getElementById('sk_combo_hud');
+        if (!el) return;
+        var state = AB.State;
+        el.textContent = "x" + state.comboMultiplier + " (" + state.streak + ")";
+        el.classList.remove('sk_combo_x2', 'sk_combo_x3', 'sk_combo_x5');
+        if (state.comboMultiplier >= 5) el.classList.add('sk_combo_x5');
+        else if (state.comboMultiplier >= 3) el.classList.add('sk_combo_x3');
+        else if (state.comboMultiplier >= 2) el.classList.add('sk_combo_x2');
+      },
+
+      /* Render the target word + typed progress near the keyboard */
+      updateWordMirror: function() {
+        var el = document.getElementById('sk_word_mirror');
+        if (!el) return;
+        var state = AB.State;
+        var target = state.currentWord || "";
+        var typed = state.typedBuffer || "";
+        var html = "";
+        for (var i = 0; i < target.length; i++) {
+          var cls = i < typed.length ? 'sk_wm_done' : 'sk_wm_pending';
+          html += '<span class="' + cls + '">' + target[i] + '</span>';
+        }
+        if (state.isBonusWord) html += ' <span class="sk_wm_bonus">[BONUS]</span>';
+        el.innerHTML = html;
+      },
+
+      /* Apply the active level theme to DOM (CSS variables on root suite) */
+      applyTheme: function() {
+        var theme = AB.State.getTheme();
+        var root = document.querySelector('.sk_game_suite_root');
+        if (!root) return;
+        root.style.setProperty('--sk-primary', theme.primary);
+        root.style.setProperty('--sk-dim', theme.dim);
+        root.style.setProperty('--sk-danger', theme.danger);
+        root.style.setProperty('--sk-word', theme.word);
+        /* Pending (dim) word color derived via renderer rgba helper */
+        root.style.setProperty('--sk-word-pending', AB.Renderer._rgba(theme.primary, 0.32));
+      },
+
+      /* Directly set the tutorial hint bar text */
+      updateHint: function(msg) {
+        var el = document.getElementById('sk_hint_bar');
+        if (el) el.textContent = msg || "";
+      },
+
+      /* Show a progressive hint only once per level (key tracks which hint) */
+      showProgressiveHint: function(key, msg) {
+        var state = AB.State;
+        if (state.hintsShown[key]) return;
+        state.hintsShown[key] = true;
+        this.updateHint(msg);
+      },
+
+      saveScore: function(score, nodeIndex) {
+        this.scoresData.push({
+          name: "ANON_" + Math.floor(Math.random() * 900 + 100),
+          score: score,
+          node: nodeIndex + 1
+        });
+        this.scoresData.sort(function(a, b) { return b.score - a.score; });
+        this.scoresData = this.scoresData.slice(0, 10);
+        localStorage.setItem('sk_anarchy_scores', JSON.stringify(this.scoresData));
+        this.renderScores();
+      },
+
+      renderScores: function() {
+        var list = document.getElementById('sk_scores_list');
+        list.innerHTML = '';
+        this.scoresData.forEach(function(s, idx) {
+          var row = document.createElement('div');
+          row.className = 'sk_score_row';
+          row.innerHTML = '<span>#' + (idx + 1) + ' ' + s.name + '</span><span>NODE ' + s.node + '</span><span>' + s.score + ' PTS</span>';
+          list.appendChild(row);
+        });
+      },
+
+      hideAllScreens: function() {
+        document.getElementById('sk_screen_start').classList.add('sk_hidden');
+        document.getElementById('sk_screen_gameover').classList.add('sk_hidden');
+        document.getElementById('sk_screen_victory').classList.add('sk_hidden');
+        document.getElementById('sk_screen_paused').classList.add('sk_hidden');
+      },
+
+      showScreen: function(screenId) {
+        this.hideAllScreens();
+        AB.State.currentScreen = screenId;
+        document.getElementById('sk_screen_' + screenId).classList.remove('sk_hidden');
+      },
+
+      togglePopup: function(popupId) {
+        var pop = document.getElementById(popupId);
+        if (pop.classList.contains('sk_hidden')) {
+          document.querySelectorAll('.sk_popup').forEach(function(p) { p.classList.add('sk_hidden'); });
+          pop.classList.remove('sk_hidden');
+        } else {
+          pop.classList.add('sk_hidden');
+        }
+        document.getElementById('sk_menu_dropdown').classList.add('sk_hidden');
+      },
+
+      /* Hide menu dropdown and all popups (used by Escape key) */
+      dismissOverlays: function() {
+        document.getElementById('sk_menu_dropdown').classList.add('sk_hidden');
+        document.querySelectorAll('.sk_popup').forEach(function(p) { p.classList.add('sk_hidden'); });
+        var state = AB.State;
+        if (state.currentScreen === 'playing' && state.isPaused) {
+          AB.Engine.togglePauseGame();
+        }
+      },
+
+      buildLevelSelector: function() {
+        var grid = document.getElementById('sk_level_grid');
+        grid.innerHTML = '';
+        AB.State.levels.forEach(function(lvl, idx) {
+          var btn = document.createElement('button');
+          var cleared = AB.Persistence.isCleared(idx);
+          var best = AB.Persistence.bestScore(idx);
+          btn.className = 'sk_level_btn' + (cleared ? ' sk_level_cleared' : '');
+          btn.innerHTML = 'NODE ' + (idx + 1) + (cleared ? ' <span style="color:#33ff99;">✓</span>' : '') +
+            '<br><span style="font-size:0.6rem;">' + lvl.name.split(':')[0] + '</span>' +
+            '<br><span style="font-size:0.55rem; color:#ffaa00;">' + (cleared ? 'BEST ' + best : 'LOCKED_ARCHIVE') + '</span>';
+          btn.addEventListener('click', function() {
+            AB.State.levelIndex = idx;
+            AB.UI.togglePopup('sk_popup_levels');
+            AB.Engine.startGame();
+          });
+          grid.appendChild(btn);
+        });
+      },
+
+      bindButtons: function() {
+        var self = this;
+
+        document.getElementById('sk_btn_menu_toggle').addEventListener('click', function() {
+          document.getElementById('sk_menu_dropdown').classList.toggle('sk_hidden');
+        });
+
+        document.getElementById('sk_btn_start_game').addEventListener('click', function() { AB.Engine.startGame(); });
+        document.getElementById('sk_btn_retry').addEventListener('click', function() { AB.Engine.startGame(); });
+        document.getElementById('sk_btn_next_level').addEventListener('click', function() { AB.Engine.nextLevel(); });
+
+        document.getElementById('sk_btn_pause_resume').addEventListener('click', function() {
+          AB.Engine.togglePauseGame();
+          document.getElementById('sk_menu_dropdown').classList.add('sk_hidden');
+        });
+        document.getElementById('sk_btn_resume_overlay').addEventListener('click', function() {
+          AB.Engine.togglePauseGame();
+        });
+
+        document.getElementById('sk_btn_levels').addEventListener('click', function() {
+          self.buildLevelSelector();
+          self.togglePopup('sk_popup_levels');
+        });
+        document.getElementById('sk_btn_settings').addEventListener('click', function() { self.togglePopup('sk_popup_settings'); });
+        document.getElementById('sk_btn_info').addEventListener('click', function() { self.togglePopup('sk_popup_info'); });
+        document.getElementById('sk_btn_scores').addEventListener('click', function() {
+          self.renderScores();
+          self.togglePopup('sk_popup_scores');
+        });
+
+        document.getElementById('sk_close_levels').addEventListener('click', function() { self.togglePopup('sk_popup_levels'); });
+        document.getElementById('sk_close_settings').addEventListener('click', function() { self.togglePopup('sk_popup_settings'); });
+        document.getElementById('sk_close_info').addEventListener('click', function() { self.togglePopup('sk_popup_info'); });
+        document.getElementById('sk_close_scores').addEventListener('click', function() { self.togglePopup('sk_popup_scores'); });
+
+        document.getElementById('sk_toggle_audio').addEventListener('click', function(e) {
+          AB.Audio.enabled = !AB.Audio.enabled;
+          e.target.textContent = AB.Audio.enabled ? "ON" : "OFF";
+          AB.Persistence.data.audioEnabled = AB.Audio.enabled;
+          AB.Persistence.save();
+        });
+
+        document.getElementById('sk_toggle_difficulty').addEventListener('click', function(e) {
+          self.difficultyIndex = (self.difficultyIndex + 1) % AB.Config.DIFFICULTIES.length;
+          AB.State.difficultyScale = AB.Config.DIFFICULTIES[self.difficultyIndex].val;
+          e.target.textContent = AB.Config.DIFFICULTIES[self.difficultyIndex].label;
+          AB.Persistence.data.difficultyIndex = self.difficultyIndex;
+          AB.Persistence.save();
+        });
+
+        document.getElementById('sk_toggle_contrast').addEventListener('click', function(e) {
+          var root = document.querySelector('.sk_game_suite_root');
+          var on = root.classList.toggle('sk_high_contrast');
+          e.target.textContent = on ? "ON" : "OFF";
+          AB.Persistence.data.highContrast = on;
+          AB.Persistence.save();
+        });
+
+        document.getElementById('sk_btn_clear_input').addEventListener('click', function() {
+          AB.State.typedBuffer = "";
+          AB.State.streak = 0;
+          AB.State.comboMultiplier = 1;
+          AB.UI.updateComboHud();
+          AB.UI.updateWordMirror();
+          AB.Audio.play('error');
+          AB.Renderer.addLog("INPUT REGISTER PURGED", "#ffaa00");
+        });
+
+        document.getElementById('sk_btn_delete').addEventListener('click', function() {
+          AB.Engine.backspace();
+        });
+
+        document.getElementById('sk_btn_space').addEventListener('click', function() {
+          var state = AB.State;
+          if (state.currentScreen !== 'playing') return;
+          state.typedBuffer = "";
+          state.streak = 0;
+          state.comboMultiplier = 1;
+          state.blankKeys.clear();
+          AB.UI.updateComboHud();
+          AB.UI.updateWordMirror();
+          AB.Input.updateVirtualKeyboardUI(false);
+          AB.Audio.play('tap');
+          AB.Renderer.addLog("SPACE CHAFF: BUFFER AND GHOST KEYS CLEARED", "#33ff99");
+        });
+
+        document.getElementById('sk_btn_submit').addEventListener('click', function() {
+          AB.Engine.submitWord();
+        });
+
+        document.getElementById('sk_btn_demo').addEventListener('click', function() {
+          AB.Engine.startGame();
+          AB.State.isDemo = true;
+          AB.Renderer.addLog("WATCH MODE DEMO TRIGGERED.", "#00ffff");
+          document.getElementById('sk_menu_dropdown').classList.add('sk_hidden');
+        });
+
+        document.getElementById('sk_btn_fullscreen').addEventListener('click', function() {
+          var rootSuite = document.querySelector('.sk_game_suite_root');
+          if (!document.fullscreenElement) {
+            rootSuite.requestFullscreen().catch(function(err) {
+              alert("Error enabling fullscreen: " + err.message);
+            });
+          } else {
+            document.exitFullscreen();
+          }
+        });
+
+        document.getElementById('sk_btn_landscape').addEventListener('click', function() {
+          var rootSuite = document.querySelector('.sk_game_suite_root');
+          if (screen.orientation && screen.orientation.lock) {
+            rootSuite.requestFullscreen().then(function() {
+              screen.orientation.lock('landscape').catch(function(e) {
+                console.warn("Orientation lock not supported: ", e);
+              });
+            });
+          } else {
+            alert("Locking device orientation is unsupported on this browser. Please rotate manually.");
+          }
+        });
+      },
+
+      bindCameraControls: function() {
+        var canvas = AB.Renderer.canvas;
+        var cam = AB.Renderer.camera;
+
+        document.getElementById('sk_zoom_in').addEventListener('click', function() { AB.Renderer.zoomCamera(0.15); });
+        document.getElementById('sk_zoom_out').addEventListener('click', function() { AB.Renderer.zoomCamera(-0.15); });
+        document.getElementById('sk_zoom_reset').addEventListener('click', function() { AB.Renderer.resetCamera(); });
+
+        var panToolBtn = document.getElementById('sk_pan_tool');
+        panToolBtn.addEventListener('click', function() {
+          cam.isPanningActive = !cam.isPanningActive;
+          panToolBtn.textContent = cam.isPanningActive ? "PAN TOOL [ON]" : "PAN TOOL [OFF]";
+          panToolBtn.classList.toggle('sk_tool_active', cam.isPanningActive);
+        });
+
+        canvas.addEventListener('mousedown', function(e) {
+          if (!cam.isPanningActive) return;
+          cam.isDragging = true;
+          cam.dragStartX = e.clientX - cam.panX;
+          cam.dragStartY = e.clientY - cam.panY;
+        });
+        window.addEventListener('mousemove', function(e) {
+          if (cam.isDragging && cam.isPanningActive) {
+            cam.panX = e.clientX - cam.dragStartX;
+            cam.panY = e.clientY - cam.dragStartY;
+          }
+        });
+        window.addEventListener('mouseup', function() { cam.isDragging = false; });
+
+        canvas.addEventListener('touchstart', function(e) {
+          if (e.touches.length === 1) {
+            cam.isDragging = true;
+            cam.dragStartX = e.touches[0].clientX - cam.panX;
+            cam.dragStartY = e.touches[0].clientY - cam.panY;
+          } else if (e.touches.length === 2) {
+            cam.isDragging = false;
+            var dx = e.touches[0].clientX - e.touches[1].clientX;
+            var dy = e.touches[0].clientY - e.touches[1].clientY;
+            AB.Input.touchMeta._pinchStartDist = Math.hypot(dx, dy);
+            AB.Input.touchMeta._pinchStartScale = cam.zoomScale;
+          }
+        }, { passive: true });
+
+        canvas.addEventListener('touchmove', function(e) {
+          if (e.touches.length === 1 && cam.isDragging && cam.isPanningActive) {
+            cam.panX = e.touches[0].clientX - cam.dragStartX;
+            cam.panY = e.touches[0].clientY - cam.dragStartY;
+          } else if (e.touches.length === 2) {
+            var dx = e.touches[0].clientX - e.touches[1].clientX;
+            var dy = e.touches[0].clientY - e.touches[1].clientY;
+            var currentDist = Math.hypot(dx, dy);
+            var factor = currentDist / AB.Input.touchMeta._pinchStartDist;
+            cam.zoomScale = Math.max(0.5, Math.min(3.0, AB.Input.touchMeta._pinchStartScale * factor));
+          }
+        }, { passive: true });
+
+        canvas.addEventListener('touchend', function() { cam.isDragging = false; });
+      },
+
+      bindDraggable: function() {
+        var dragContainer = document.getElementById('sk_draggable_controls');
+        var dragHandle = document.getElementById('sk_drag_handle');
+        var rootSuite = document.querySelector('.sk_game_suite_root');
+        var self = this;
+
+        function onDragStart(e) {
+          var clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+          var clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+          self.dragState.active = true;
+          var rect = dragContainer.getBoundingClientRect();
+          self.dragState.offsetX = clientX - rect.left;
+          self.dragState.offsetY = clientY - rect.top;
+          window.addEventListener('mousemove', onDragMove);
+          window.addEventListener('mouseup', onDragEnd);
+          window.addEventListener('touchmove', onDragMove, { passive: false });
+          window.addEventListener('touchend', onDragEnd);
+        }
+
+        function onDragMove(e) {
+          if (!self.dragState.active) return;
+          if (e.cancelable) e.preventDefault();
+          var clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+          var clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+          var parentRect = rootSuite.getBoundingClientRect();
+          var x = clientX - parentRect.left - self.dragState.offsetX;
+          var y = clientY - parentRect.top - self.dragState.offsetY;
+          x = Math.max(0, Math.min(x, parentRect.width - dragContainer.offsetWidth));
+          y = Math.max(0, Math.min(y, parentRect.height - dragContainer.offsetHeight));
+          dragContainer.style.left = (x + (dragContainer.offsetWidth / 2)) + 'px';
+          dragContainer.style.top = y + 'px';
+          dragContainer.style.bottom = 'auto';
+          dragContainer.style.position = 'absolute';
+        }
+
+        function onDragEnd() {
+          self.dragState.active = false;
+          window.removeEventListener('mousemove', onDragMove);
+          window.removeEventListener('mouseup', onDragEnd);
+          window.removeEventListener('touchmove', onDragMove);
+          window.removeEventListener('touchend', onDragEnd);
+        }
+
+        dragHandle.addEventListener('mousedown', onDragStart);
+        dragHandle.addEventListener('touchstart', onDragStart, { passive: false });
+      }
+    };
+
+    /* ----------------------------------------------------------
+       ENGINE: Core game loop, start/stop, auto-solver, transitions
+       ---------------------------------------------------------- */
+    AB.Engine = {
+      _nextSolverAction: 0,
+
+      init: function() {
+        AB.State.levels = AB.Config.CAMPAIGN_LEVELS.slice();
+        AB.State.activeMap = Object.assign({}, AB.Config.DEFAULT_MAP);
+        AB.Persistence.load();
+        AB.Audio.enabled = AB.Persistence.data.audioEnabled;
+        AB.UI.difficultyIndex = AB.Persistence.data.difficultyIndex;
+        AB.State.difficultyScale = AB.Config.DIFFICULTIES[AB.UI.difficultyIndex].val;
+        /* Detect touch device to tune virtual keyboard use */
+        AB.State.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        var rootSuite = document.querySelector('.sk_game_suite_root');
+        if (rootSuite) {
+          rootSuite.classList.toggle('sk_is_touch', AB.State.isTouchDevice);
+          rootSuite.classList.toggle('sk_high_contrast', !!AB.Persistence.data.highContrast);
+        }
+        AB.Audio.init();
+        AB.Renderer.init();
+        AB.UI.init();
+        AB.Input.initVirtualKeyboard();
+        AB.Input.bindPhysicalKeyboard();
+        AB.UI.renderScores();
+        AB.DLC.fetchLevelNodes();
+        var self = this;
+        function loop(time) {
+          self._tick(time);
+          requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+      },
+
+      _tick: function(time) {
+        var dt = (time - AB.Renderer.lastTime) / 1000;
+        AB.Renderer.lastTime = time;
+
+        var state = AB.State;
+        if (state.currentScreen === 'playing' && !state.isPaused) {
+          state.elapsedTime = (performance.now() - state.levelStartTime) / 1000;
+          var activeLvl = state.levels[state.levelIndex];
+          state.firewallBreach += activeLvl.firewallSpeed * state.difficultyScale * dt;
+          if (state.firewallBreach >= 100) {
+            state.firewallBreach = 100;
+            this.triggerGameOver();
+          }
+          if (state.firewallBreach > 60) {
+            AB.UI.showProgressiveHint('firewallCritical', "FIREWALL CRITICAL - TYPE WITHOUT ERRORS TO PRESS THE BREACH BACK.");
+          }
+          if (state.isDemo) {
+            this._runAutoSolver();
+          }
+        }
+
+        AB.Renderer.draw();
+      },
+
+      startGame: function() {
+        AB.UI.hideAllScreens();
+        var state = AB.State;
+        state.currentScreen = 'playing';
+        state.reset();
+        AB.UI.applyTheme();
+        AB.UI.updateScoreHud();
+        AB.UI.updateComboHud();
+        AB.Renderer.comboFlash = 0;
+        AB.Renderer.mutationToast = null;
+        this._loadNextWord();
+        AB.Input.initVirtualKeyboard();
+        AB.UI.updateHint("TYPE THE TARGET. EVERY KEYPRESS MUTATES THE BOARD - WATCH THE DECK.");
+        AB.Renderer.addLog("INTRUSION PROTOCOL LAUNCHED. DECRYPTING NODES...", "#00ff66");
+        AB.Audio.play('breach');
+      },
+
+      _loadNextWord: function() {
+        var state = AB.State;
+        state.typedBuffer = "";
+        var lvl = state.levels[state.levelIndex];
+        var words = lvl.words;
+        state.currentWord = words[Math.floor(Math.random() * words.length)];
+        state.isBonusWord = Math.random() < AB.Config.BONUS_WORD_CHANCE;
+        if (state.isBonusWord) {
+          AB.Renderer.addLog("BONUS NODE DETECTED - DOUBLE YIELD ON CLEAR", "#ffcc66");
+        }
+        AB.UI.updateWordMirror();
+      },
+
+      handleKeyInput: function(code) {
+        var state = AB.State;
+        if (state.currentScreen !== 'playing' || state.isPaused) return;
+
+        AB.Audio.play('tap');
+        var char = state.activeMap[code];
+        if (!char) return;
+
+        var nextChar = state.currentWord[state.typedBuffer.length];
+        state.lastPressedCode = code;
+        if (char === nextChar) {
+          var prevMult = state.comboMultiplier;
+          var mult = state.getComboMultiplier();
+          state.typedBuffer += char;
+          state.streak++;
+          if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+          state.comboMultiplier = state.getComboMultiplier();
+          if (state.comboMultiplier > prevMult) {
+            AB.Renderer.comboFlash = 1.0;
+            AB.Audio.play('combo');
+          }
+          state.score += AB.Config.CORRECT_CHAR_POINTS * mult;
+          AB.UI.updateScoreHud();
+          AB.UI.updateWordMirror();
+          AB.UI.updateComboHud();
+          AB.Renderer.addLog("CORRECT REGISTRY PATH DETECTED: [" + char + "] x" + mult, "#00ff66");
+
+          var lvl = state.levels[state.levelIndex];
+          state._ghostAvoidChar = state.currentWord[state.typedBuffer.length] || null;
+          lvl.mutate(code);
+          state.mutationCount++;
+          if (state.mutationCount === 1) {
+            AB.UI.showProgressiveHint('firstMutation', "MUTATION ACTIVATED! THE BOARD SHIFTED - RE-LOCATE THE LETTERS AND KEEP TYPING.");
+          }
+          AB.Renderer.addMutationToast(state.lastMutatedKeys);
+          AB.Input.updateVirtualKeyboardUI(true);
+
+          if (state.typedBuffer === state.currentWord) {
+            AB.Audio.play('match');
+            state.wordsCleared++;
+            var wordPts = AB.Config.WORD_CLEAR_POINTS * mult;
+            if (state.isBonusWord) wordPts *= AB.Config.BONUS_WORD_MULTIPLIER;
+            state.score += wordPts;
+            AB.UI.updateScoreHud();
+            AB.UI.updateComboHud();
+            var reduction = AB.Config.WORD_CLEAR_FIREWALL_REDUCTION;
+            if (state.isBonusWord) reduction += AB.Config.BONUS_EXTRA_FIREWALL_REDUCTION;
+            state.firewallBreach = Math.max(0, state.firewallBreach - reduction);
+            AB.Renderer.addLog((state.isBonusWord ? "BONUS NODE BYPASSED! +" : "NODE BYPASSED. THREAT REDUCED. +") + wordPts, state.isBonusWord ? "#ffcc66" : "#00ffff");
+
+            if (state.wordsCleared >= AB.Config.WORDS_PER_LEVEL) {
+              this.triggerLevelClear();
+            } else {
+              this._loadNextWord();
+            }
+          }
+        } else {
+          AB.Audio.play('error');
+          AB.Renderer.screenShake = 10;
+          state.firewallBreach = Math.min(100, state.firewallBreach + AB.Config.WRONG_KEY_FIREWALL_PENALTY);
+          AB.Renderer.addLog("TRACE ALERT! MIS-MAPPING DETECTED: expected '" + nextChar + "', typed '" + char + "'", "#ff3333");
+
+          if (state.streak >= AB.Config.COMBO_TIERS[0].streak) {
+            state.firewallBreach = Math.min(100, state.firewallBreach + AB.Config.WRONG_KEY_STREAK_BREAK_PENALTY);
+          }
+          state.streak = 0;
+          state.comboMultiplier = 1;
+          AB.UI.updateComboHud();
+
+          var lvl2 = state.levels[state.levelIndex];
+          state._ghostAvoidChar = state.currentWord[state.typedBuffer.length] || null;
+          lvl2.mutate(code);
+          state.mutationCount++;
+          AB.Renderer.addMutationToast(state.lastMutatedKeys);
+          AB.Input.updateVirtualKeyboardUI(true);
+        }
+      },
+
+      backspace: function() {
+        var state = AB.State;
+        if (state.currentScreen !== 'playing' || state.isPaused) return;
+        if (state.typedBuffer.length === 0) return;
+
+        state.typedBuffer = state.typedBuffer.slice(0, -1);
+        state.firewallBreach = Math.min(100, state.firewallBreach + AB.Config.BACKSPACE_FIREWALL_PENALTY);
+        state.streak = 0;
+        state.comboMultiplier = 1;
+        AB.Renderer.comboFlash = 0;
+        AB.UI.updateComboHud();
+        AB.UI.updateWordMirror();
+        AB.Audio.play('error');
+        AB.Renderer.addLog("DECRYPTION STEP REVERTED", "#ffaa00");
+      },
+
+      /* Manually execute the typed sequence: match -> word clear, else firewall penalty */
+      submitWord: function() {
+        var state = AB.State;
+        if (state.currentScreen !== 'playing' || state.isPaused) return;
+
+        var mult = state.comboMultiplier;
+        if (state.typedBuffer === state.currentWord && state.typedBuffer.length > 0) {
+          AB.Audio.play('match');
+          state.wordsCleared++;
+          var wordPts = AB.Config.WORD_CLEAR_POINTS * mult;
+          if (state.isBonusWord) wordPts *= AB.Config.BONUS_WORD_MULTIPLIER;
+          state.score += wordPts;
+          AB.UI.updateScoreHud();
+          var reduction = AB.Config.WORD_CLEAR_FIREWALL_REDUCTION;
+          if (state.isBonusWord) reduction += AB.Config.BONUS_EXTRA_FIREWALL_REDUCTION;
+          state.firewallBreach = Math.max(0, state.firewallBreach - reduction);
+          AB.Renderer.addLog((state.isBonusWord ? "BONUS NODE EXECUTED! +" : "NODE EXECUTED SUCCESSFULLY. +") + wordPts, state.isBonusWord ? "#ffcc66" : "#00ffff");
+          if (state.wordsCleared >= AB.Config.WORDS_PER_LEVEL) {
+            this.triggerLevelClear();
+          } else {
+            this._loadNextWord();
+          }
+        } else {
+          AB.Audio.play('error');
+          AB.Renderer.screenShake = 8;
+          state.firewallBreach = Math.min(100, state.firewallBreach + AB.Config.WRONG_KEY_FIREWALL_PENALTY);
+          AB.Renderer.addLog("EXECUTION REJECTED - SEQUENCE MISMATCH", "#ff3333");
+        }
+      },
+
+      triggerLevelClear: function() {
+        var state = AB.State;
+        state.elapsedTime = (performance.now() - state.levelStartTime) / 1000;
+        var timeBonus = this._computeTimeBonus();
+        state.score += timeBonus;
+
+        AB.UI.hideAllScreens();
+        AB.Audio.play('levelclear');
+        AB.UI.updateScoreHud();
+
+        AB.Persistence.recordLevelClear(state.levelIndex, state.score);
+        AB.UI.saveScore(state.score, state.levelIndex);
+
+        if (state.levelIndex < state.levels.length - 1) {
+          state.currentScreen = 'victory';
+          document.getElementById('sk_victory_score').textContent = state.score;
+          document.getElementById('sk_victory_bonus').textContent = timeBonus;
+          document.getElementById('sk_victory_stats').textContent =
+            "MAX STREAK: " + state.maxStreak + " | TIME: " + state.elapsedTime.toFixed(1) + "s | WORDS: " + state.wordsCleared + "/" + AB.Config.WORDS_PER_LEVEL;
+          document.getElementById('sk_screen_victory').classList.remove('sk_hidden');
+        } else {
+          AB.Renderer.addLog("COMPLETE SYSTEM COMPROMISE ACHIEVED!", "#33ff99");
+          alert("CONGRATULATIONS! You bypassed all security layers of the Anarchy Board!");
+          state.levelIndex = 0;
+          AB.UI.showScreen('start');
+        }
+      },
+
+      _computeTimeBonus: function() {
+        var state = AB.State;
+        var activeLvl = state.levels[state.levelIndex];
+        /* Par time estimate: firewall reach threshold scaled by word count & speed */
+        var parTime = AB.Config.WORDS_PER_LEVEL * (80 / activeLvl.firewallSpeed);
+        var secondsUnder = parTime - state.elapsedTime;
+        if (secondsUnder < 0) return 0;
+        return Math.floor(secondsUnder * AB.Config.TIME_BONUS_PER_SECOND_UNDER_PAR);
+      },
+
+      nextLevel: function() {
+        AB.State.levelIndex++;
+        this.startGame();
+      },
+
+      triggerGameOver: function() {
+        var state = AB.State;
+        state.elapsedTime = (performance.now() - state.levelStartTime) / 1000;
+
+        AB.Persistence.recordScore(state.levelIndex, state.score);
+
+        AB.UI.hideAllScreens();
+        AB.Audio.play('failure');
+        state.currentScreen = 'gameover';
+        document.getElementById('sk_gameover_score').textContent = state.score;
+        document.getElementById('sk_gameover_level').textContent = state.levelIndex + 1;
+        document.getElementById('sk_gameover_best').textContent =
+          "BEST NODE YIELD: " + AB.Persistence.bestScore(state.levelIndex) + " PTS";
+        document.getElementById('sk_gameover_stats').textContent =
+          "MAX STREAK: " + state.maxStreak + " | TIME: " + state.elapsedTime.toFixed(1) + "s | COMBO: x" + state.comboMultiplier;
+        document.getElementById('sk_screen_gameover').classList.remove('sk_hidden');
+        AB.UI.saveScore(state.score, state.levelIndex);
+      },
+
+      togglePauseGame: function() {
+        var state = AB.State;
+        if (state.currentScreen !== 'playing') return;
+        state.isPaused = !state.isPaused;
+        var pauseBtn = document.getElementById('sk_btn_pause_resume');
+        if (state.isPaused) {
+          pauseBtn.textContent = "RESUME";
+          document.getElementById('sk_screen_paused').classList.remove('sk_hidden');
+          AB.Renderer.addLog("DECRYPTOR PAUSED - SYSTEM CHILLING", "#ffa500");
+        } else {
+          pauseBtn.textContent = "PAUSE";
+          document.getElementById('sk_screen_paused').classList.add('sk_hidden');
+          AB.Renderer.addLog("RESUMED CONNECTION", "#00ff66");
+        }
+      },
+
+      _runAutoSolver: function() {
+        var now = performance.now();
+        if (now <= this._nextSolverAction) return;
+        var state = AB.State;
+        var targetChar = state.currentWord[state.typedBuffer.length];
+        if (!targetChar) return;
+        var foundCode = null;
+        var entries = Object.entries(state.activeMap);
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i][1] === targetChar) { foundCode = entries[i][0]; break; }
+        }
+        if (foundCode) {
+          this._nextSolverAction = now + 400 + Math.random() * 300;
+          AB.Input.highlightKey(foundCode, 150);
+          this.handleKeyInput(foundCode);
+        }
+      }
+    };
+
+    /* ----------------------------------------------------------
+       DLC: Expansion level loader from JSON
+       ---------------------------------------------------------- */
+    AB.DLC = {
+      /* Themed palettes cycled across expansion nodes when JSON lacks a theme */
+      THEME_PALETTE: [
+        { primary: "#00e5ff", dim: "#0099b3", danger: "#ff5040", bg: "#021013", word: "#00e5ff" },
+        { primary: "#ff33cc", dim: "#b3238f", danger: "#ffaa00", bg: "#10020e", word: "#ff33cc" },
+        { primary: "#ffaa00", dim: "#cc8800", danger: "#ff3333", bg: "#0f0c02", word: "#ffcc66" },
+        { primary: "#b26bff", dim: "#8a4fd6", danger: "#ff3333", bg: "#0e0613", word: "#d4a6ff" },
+        { primary: "#00ffb3", dim: "#00b380", danger: "#ff5c33", bg: "#020f0b", word: "#00ffb3" }
+      ],
+
+      fetchLevelNodes: function() {
+        var statusText = document.getElementById('sk_preloader_status');
+        var progressBar = document.getElementById('sk_preloader_progress');
+        var gitRawLink = "./Anarchy Board.json";
+
+        fetch(gitRawLink)
+          .then(function(response) {
+            if (!response.ok) throw new Error("Connection failed");
+            return response.text();
+          })
+          .then(function(rawText) {
+            progressBar.style.width = "70%";
+            statusText.textContent = "Decrypting response stream...";
+            var cleanJson = rawText.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*/g, "");
+            var fetchedLevels = JSON.parse(cleanJson);
+            if (Array.isArray(fetchedLevels) && fetchedLevels.length > 0) {
+              var expansionLevels = fetchedLevels.map(function(lvl, i) {
+                var palette = AB.DLC.THEME_PALETTE[i % AB.DLC.THEME_PALETTE.length];
+                return {
+                  id: lvl.id,
+                  name: lvl.name,
+                  words: lvl.words,
+                  firewallSpeed: lvl.firewallSpeed,
+                  mutationDesc: lvl.mutationDesc,
+                  theme: lvl.theme || palette,
+                  mutate: function(code) {
+                    AB.Mutations.applyForType(lvl.mutationType, code);
+                  }
+                };
+              });
+              AB.State.levels = AB.State.levels.concat(expansionLevels);
+              AB.Renderer.addLog("DECRYPTED DYNAMIC NET NODES SUCCESSFULLY", "#00ffff");
+            }
+          })
+          .catch(function(err) {
+            console.warn("Failed fetching expansion levels:", err.message);
+            statusText.textContent = "Connection aborted. Initializing core local nodes...";
+          })
+          .finally(function() {
+            progressBar.style.width = "100%";
+            statusText.textContent = "SYNCHRONIZATION COMPLETED";
+            setTimeout(function() {
+              document.getElementById('sk_preloader_popup').classList.add('sk_hidden');
+            }, 1000);
+          });
+      }
+    };
+
+    /* ----------------------------------------------------------
+       BOOT: Initialize everything on window load
+       ---------------------------------------------------------- */
+    window.addEventListener('load', function() {
+      AB.Engine.init();
+    });
+  </script>
+</body>
+
+</html>
+```

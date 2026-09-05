@@ -1,0 +1,402 @@
+[
+  {
+    "id": 6,
+    "name": "0x4A1B: PACKET SNIFFER",
+    "words": ["PING", "ICMP", "SNIFF", "TRACE", "ROUTE"],
+    "firewallSpeed": 1.6,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 7,
+    "name": "0x9E2D: SUBNET MASK",
+    "words": ["CIDR", "SUBNET", "GATEWAY", "IP_CLASS", "BROADCAST"],
+    "firewallSpeed": 1.7,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 8,
+    "name": "0x1B8F: DNS POISONING",
+    "words": ["CACHE", "SPOOF", "RESOLVER", "DOMAINS", "POISON"],
+    "firewallSpeed": 1.8,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 9,
+    "name": "0x8C3A: SQL_INJECTOR",
+    "words": ["QUERY", "SELECT", "UNION_ALL", "DATABASE", "TABLES"],
+    "firewallSpeed": 1.9,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 10,
+    "name": "0x5D4C: SYN_FLOOD",
+    "words": ["DDoS", "TCP_HANDSHAKE", "FLOODER", "BOTNET", "ZOMBIES"],
+    "firewallSpeed": 2.0,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 11,
+    "name": "0x2F7E: PORT_TRIGGER",
+    "words": ["FORWARD", "TRIGGER", "LISTEN", "BIND_PORT", "ESTABLISHED"],
+    "firewallSpeed": 2.1,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 12,
+    "name": "0x6A9D: COOKIE_JAR",
+    "words": ["SESSION", "COOKIES", "EXPIRED", "HIJACK", "TOKENS"],
+    "firewallSpeed": 2.2,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 13,
+    "name": "0x3B5C: CROSS_SITE",
+    "words": ["SCRIPTS", "XSS_VECTOR", "REFLECTED", "STORED", "PAYLOAD"],
+    "firewallSpeed": 2.3,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 14,
+    "name": "0x7E1A: BRUTE_FORCE",
+    "words": ["PASSWD", "DICTIONARY", "RETRY_LIMIT", "ATTEMPTS", "LOCKOUT"],
+    "firewallSpeed": 2.4,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 15,
+    "name": "0x0C9F: SALTY_HASH",
+    "words": ["SALTED", "SHA_TWO_FIVE_SIX", "PBKDF_TWO", "PEPPER", "ITERATIONS"],
+    "firewallSpeed": 2.5,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 16,
+    "name": "0xBF32: BLACK_HAT",
+    "words": ["CRACKER", "EXTORTION", "CYBER_GANG", "DARKNET", "RANSOM"],
+    "firewallSpeed": 2.6,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 17,
+    "name": "0xDF54: WHITE_HAT",
+    "words": ["DEFENDER", "PATCHING", "AUDITING", "COMPLIANCE", "HARDENING"],
+    "firewallSpeed": 2.7,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 18,
+    "name": "0xEF76: SHADOW_IT",
+    "words": ["UNAPPROVED", "CLOUD_SINK", "LEAKAGE", "BACKDOOR", "BYOD_RISK"],
+    "firewallSpeed": 2.8,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 19,
+    "name": "0xAF11: AIR_GAP",
+    "words": ["ISOLATED", "PHYSICAL", "ACOUSTIC", "MALWARE_HOP", "INFRARED"],
+    "firewallSpeed": 2.9,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 20,
+    "name": "0xCF99: ZERO_KNOWLEDGE",
+    "words": ["PROOFS", "ZKP_SHIELD", "CRYPTOGRAPHY", "VERIFIER", "WITNESS"],
+    "firewallSpeed": 3.0,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 21,
+    "name": "0x123A: DEEP_WEB",
+    "words": ["ONION_ROUTER", "TOR_CIRCUIT", "HIDDEN_SERVICE", "RELAYS", "DIRECTORY"],
+    "firewallSpeed": 3.1,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  },
+  {
+    "id": 22,
+    "name": "0x456B: REVERSE_SHELL",
+    "words": ["NETCAT", "LISTENER", "NC_COMMAND", "OUTBOUND", "CONNECTION"],
+    "firewallSpeed": 3.2,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 23,
+    "name": "0x789C: PRIVILEGE_ESCALATION",
+    "words": ["ROOT_ACCESS", "SUDO_EXPLOIT", "K_SU", "SYSTEM_LEVEL", "OVERRIDE"],
+    "firewallSpeed": 3.3,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 24,
+    "name": "0xABCD: BUFFER_OVERFLOW",
+    "words": ["STACK_POINTER", "HEAP_SPRAY", "NOP_SLED", "SHELLCODE", "OVERWRITE"],
+    "firewallSpeed": 3.4,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 25,
+    "name": "0xBCDE: KEYLOGGER_DAEMON",
+    "words": ["HOOKING", "KEY_CAPTURE", "LOG_EXFILTRATION", "STEALTH", "HOOK_DLL"],
+    "firewallSpeed": 3.5,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 26,
+    "name": "0xCDEF: ROOTKIT_SURVEILLANCE",
+    "words": ["KERNEL_PATCH", "SYSTEM_CALL", "HOOKING_SYS", "RING_ZERO", "HYPERVISOR"],
+    "firewallSpeed": 3.6,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  },
+  {
+    "id": 27,
+    "name": "0xDEFA: RAM_SCRAPER",
+    "words": ["MEMORY_DUMP", "POS_SCRAPER", "PROCESS_SCAN", "READ_PROCESS", "BUFFERS"],
+    "firewallSpeed": 3.7,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 28,
+    "name": "0xEFAB: TIME_BOMB",
+    "words": ["LOGIC_BOMB", "CRON_JOB", "SCHEDULER", "TRIGGER_DATE", "DESTRUCTION"],
+    "firewallSpeed": 3.8,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 29,
+    "name": "0xFABC: MAC_SPOOFER",
+    "words": ["HARDWARE_ADDR", "ETHERNET", "SPOOF_MAC", "ARP_CACHE", "OUI_OCTET"],
+    "firewallSpeed": 3.9,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 30,
+    "name": "0x1111: QUANTUM_DECRYPT",
+    "words": ["SHORS_ALGO", "QUBITS", "SUPERPOSITION", "ENTANGLEMENT", "CRYPTO_APOCALYPSE"],
+    "firewallSpeed": 4.0,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 31,
+    "name": "0x2222: BLOCKCHAIN_BREACH",
+    "words": ["FIFTY_ONE_ATTACK", "GENESIS_BLOCK", "DOUBLE_SPEND", "SMART_CONTRACT", "MEMPOOL"],
+    "firewallSpeed": 4.1,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  },
+  {
+    "id": 32,
+    "name": "0x3333: INDUSTRIAL_SPILL",
+    "words": ["SCADA_SYSTEMS", "MODBUS_FUZZER", "PROGRAMMABLE", "LOGIC_CONTROLLER", "STUXNET"],
+    "firewallSpeed": 4.2,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 33,
+    "name": "0x4444: FIRMWARE_OVERWRITE",
+    "words": ["BOOTLOADER", "FLASH_CHIP", "BIOS_BRICK", "SIGNATURE_BYPASS", "EEPROM"],
+    "firewallSpeed": 4.3,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 34,
+    "name": "0x5555: MAN_IN_THE_MIDDLE",
+    "words": ["INTERCEPTOR", "SSL_STRIP", "DECRYPTION_KEYS", "PROXY_INJECT", "MITM_SURVEY"],
+    "firewallSpeed": 4.4,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 35,
+    "name": "0x6666: WI_FI_CRACKER",
+    "words": ["HANDSHAKE_WPA", "WPS_PIN_FORCE", "AIRCRACK_NG", "BEACON_FLOOD", "DEAUTH"],
+    "firewallSpeed": 4.5,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 36,
+    "name": "0x7777: ADVANCED_PERSISTENT",
+    "words": ["APT_CAMPAIGN", "LATERAL_MOVE", "DATA_HARVEST", "STEALTH_BEACON", "CHINESE_WALL"],
+    "firewallSpeed": 4.6,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  },
+  {
+    "id": 37,
+    "name": "0x8888: SOCIAL_ENGINEER",
+    "words": ["PHISHING_MAIL", "SPEAR_CAMPAIGN", "PRETEXTING", "BAITING", "CREDENTIAL_STEAL"],
+    "firewallSpeed": 4.7,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 38,
+    "name": "0x9999: HONEYPOT_TRAP",
+    "words": ["DECOY_SERVER", "SANDBOX_BREACH", "CANARY_TOKEN", "LOGGER", "INTRUSION_ALERT"],
+    "firewallSpeed": 4.8,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 39,
+    "name": "0xAAAA: BACKDOOR_SHELL",
+    "words": ["WEBSHELL_PHP", "COMMAND_EXEC", "UPLOAD_VULN", "OBFUSCATION", "STAGED_PAYLOAD"],
+    "firewallSpeed": 4.9,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 40,
+    "name": "0xBBBB: DARK_ROUTER",
+    "words": ["BGP_HIJACKING", "TRAFFIC_REDIRECT", "IP_TRANSIT", "ROUTING_TABLE", "PEERING_LEAK"],
+    "firewallSpeed": 5.0,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 41,
+    "name": "0xCCCC: ZERO_DAY_EXPLOIT",
+    "words": ["UNPATCHED_BUG", "WILD_EXPLOIT", "VULNERABILITY", "CVE_ID_ZERO", "MEMORY_CORRUPT"],
+    "firewallSpeed": 5.1,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  },
+  {
+    "id": 42,
+    "name": "0xDDDD: SIDE_CHANNEL",
+    "words": ["POWER_ANALYSIS", "TIMING_ATTACK", "ELECTROMAGNETIC", "CACHE_MISS", "TEMPEST_LEAK"],
+    "firewallSpeed": 5.2,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 43,
+    "name": "0xEEEE: HARDWARE_TROJAN",
+    "words": ["CHIP_ALTERATION", "SILICON_BACKDOOR", "SPURIOUS_SIGNAL", "ASIC_EXPLOIT", "SANDBOX_ESCAPE"],
+    "firewallSpeed": 5.3,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 44,
+    "name": "0xFFFF: DIRECT_MEMORY",
+    "words": ["DMA_ATTACK", "PCIE_LEECH", "THUNDERBOLT_VULN", "PAGE_TABLES", "ROOT_ACCESS_NOW"],
+    "firewallSpeed": 5.4,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 45,
+    "name": "0x0001: CLOUD_HIJACK",
+    "words": ["METADATA_API", "CONTAINER_ESCAPE", "KUBERNETES_SUITE", "S_THREE_BUCKET", "TOKEN_EXFIL"],
+    "firewallSpeed": 5.5,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 46,
+    "name": "0x0002: CRYPTO_MINER",
+    "words": ["MONERO_NODE", "COINHIVE_JS", "CPU_THROTTLING", "MINING_POOL", "STRATUM_PROTO"],
+    "firewallSpeed": 5.6,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  },
+  {
+    "id": 47,
+    "name": "0x0003: DNSSEC_STRIP",
+    "words": ["ZONE_TRANSFER", "SECURE_ENTRY", "KEY_SIGNING", "RESOURCE_RECORD", "VALIDATION_FAIL"],
+    "firewallSpeed": 5.7,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 48,
+    "name": "0x0004: IPSEC_TUNNEL",
+    "words": ["ENCRYPTING_ESP", "IKE_NEGOTIATION", "PRE_SHARED_KEY", "SECURITY_ASSOC", "RE_KEYING"],
+    "firewallSpeed": 5.8,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 49,
+    "name": "0x0005: MALWARE_PACKER",
+    "words": ["POLYMORPHIC", "UPX_COMPRESSION", "DECRYPTION_LOOP", "ANTI_DEBUG", "VIRTUAL_BOX_BYPASS"],
+    "firewallSpeed": 5.9,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 50,
+    "name": "0x0006: TELEMETRY_EXFIL",
+    "words": ["DNS_TUNNELING", "STEG_IMAGES", "RECON_BEACON", "ENCRYPTED_ARCHIVE", "LEAKING_LOGS"],
+    "firewallSpeed": 6.0,
+    "mutationType": "row_rotation_ghost",
+    "mutationDesc": "Ghost Encryption (Blanks random keys and shifts positions)"
+  },
+  {
+    "id": 51,
+    "name": "0x0007: ZERO_TRUST_BYPASS",
+    "words": ["IDENTITY_IDENTITY", "POLICIES_OVERRIDE", "ENDPOINT_SPOOFING", "SEGMENT_ESCAPE", "SESSION_REVOKED"],
+    "firewallSpeed": 6.1,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  },
+  {
+    "id": 52,
+    "name": "0x0008: DEEPFAKED_AUTH",
+    "words": ["BIOMETRIC_REPLAY", "VOICE_CLONING", "SYNTHETIC_ID", "FACIAL_SCANNER", "SPOOF_INJECTION"],
+    "firewallSpeed": 6.2,
+    "mutationType": "swap_neighbor",
+    "mutationDesc": "Adjacent Swapping (Typing swaps key with immediate physical neighbor)"
+  },
+  {
+    "id": 53,
+    "name": "0x0009: OVER_THE_AIR",
+    "words": ["BASEBAND_EXPLOIT", "LTE_STINGRAY", "CELL_TOWER_SPOOF", "IMEI_CLONING", "RADIO_FIRMWARE"],
+    "firewallSpeed": 6.3,
+    "mutationType": "row_rotation",
+    "mutationDesc": "Row Rotation (Typing shifts current layout row left/right)"
+  },
+  {
+    "id": 54,
+    "name": "0x000A: SIM_SWAP",
+    "words": ["PORT_OUT_FRAUD", "CARRIER_PORTAL", "OTP_BYPASSING", "SOCIAL_STEAL", "SMS_INTERCEPT"],
+    "firewallSpeed": 6.4,
+    "mutationType": "mirror_matrix",
+    "mutationDesc": "Mirror Matrix (Key swaps with its symmetrical board position)"
+  },
+  {
+    "id": 55,
+    "name": "0x000B: THE ABSOLUTE VOID",
+    "words": ["QUANTUM_CHAOS_KEY", "ENTROPY_OVERFLOW", "ALPHANUMERIC_CRASH", "SYSTEM_TERMINATED", "ANARCHY_COMPLETE"],
+    "firewallSpeed": 6.5,
+    "mutationType": "chaos_matrix",
+    "mutationDesc": "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)"
+  }
+]
