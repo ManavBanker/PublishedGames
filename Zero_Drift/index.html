@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zero Drift - Mathematical Sliding Puzzle</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="margin:0; padding:0; background-color:#eef2f7; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; overflow:hidden; touch-action:none;">
+
+<div class="sk_game_suite_root">
+  <!-- Game Metadata -->
+  <div class="sk_labels" data="Minimalist,Sliding-Puzzle,Math,Logic" style="display:none;"></div>
+  <meta class="sk_meta" description="A minimalist sliding-puzzle game where you must navigate an icy grid of mathematical operators to reduce your block's value to exactly zero before sliding into the exit." style="display:none;">
+
+  <!-- Top Control Bar -->
+  <div class="sk_top_bar">
+    <div class="sk_top_left">
+      <span class="sk_game_title">ZERO DRIFT</span>
+    </div>
+    <div class="sk_top_buttons">
+      <button class="sk_btn sk_btn_pause" id="sk_btn_pause" title="Pause Game">Pause</button>
+      <button class="sk_btn sk_btn_menu" id="sk_btn_menu" title="Menu">Menu</button>
+      <button class="sk_btn sk_btn_accent" id="sk_btn_fullscreen" title="Toggle Fullscreen">Fullscreen</button>
+    </div>
+  </div>
+
+  <!-- Collapsible Side Drawer Navigation Menu -->
+  <div class="sk_side_drawer sk_drawer_closed" id="sk_side_drawer">
+    <div class="sk_drawer_header">
+      <span>Navigation Menu</span>
+      <button class="sk_drawer_close" id="sk_btn_close_drawer">&times;</button>
+    </div>
+    <div class="sk_drawer_body">
+      <button class="sk_drawer_btn" id="sk_btn_levels">🗺️ Select Level</button>
+      <button class="sk_drawer_btn" id="sk_btn_settings">⚙️ Game Settings</button>
+      <button class="sk_drawer_btn" id="sk_btn_scores">🏆 High Scores</button>
+      <button class="sk_drawer_btn" id="sk_btn_info">ℹ️ How to Play</button>
+      <button class="sk_drawer_btn sk_drawer_accent" id="sk_btn_start_demo_menu">🤖 Watch Auto-Demo</button>
+    </div>
+  </div>
+  <div class="sk_drawer_overlay sk_hidden" id="sk_drawer_overlay"></div>
+
+  <!-- Loading & Level Fetcher Progress Overlay -->
+  <div class="sk_overlay" id="sk_overlay_loader">
+    <p class="sk_overlay_title">LOADING GAME DATA</p>
+    <p class="sk_overlay_subtitle" id="sk_loader_status">Initializing level fetcher from remote...</p>
+    <div class="sk_progress_container">
+      <div class="sk_progress_bar" id="sk_loader_progress"></div>
+    </div>
+    <p class="sk_overlay_desc" style="margin-top:10px; font-size:12px;">Fetching configurations from remote repository with local structural fallback.</p>
+  </div>
+
+  <!-- Main Game Layout Content -->
+  <div class="sk_main_content">
+    <div class="sk_canvas_container" id="sk_canvas_container">
+      <canvas id="sk_game_canvas"></canvas>
+
+      <!-- Overlay views -->
+      <div class="sk_overlay sk_hidden" id="sk_overlay_start">
+        <p class="sk_overlay_title">ZERO DRIFT</p>
+        <p class="sk_overlay_subtitle">A Mathematical Sliding Puzzle on Ice</p>
+        <p class="sk_overlay_desc">Fling your block through operators. Hit the golden Exit with <b>exactly 0</b>!</p>
+        <button class="sk_overlay_btn" id="sk_btn_start_play">PLAY GAME (Enter)</button>
+        <button class="sk_overlay_btn sk_btn_sec" id="sk_btn_start_demo">WATCH DEMO</button>
+      </div>
+
+      <div class="sk_overlay sk_hidden" id="sk_overlay_paused">
+        <p class="sk_overlay_title" style="color:var(--accent);">GAME PAUSED</p>
+        <p class="sk_overlay_desc">Navigational math computations suspended. Feel free to Pinch-to-Zoom or Pan and inspect the board path.</p>
+        <button class="sk_overlay_btn" id="sk_btn_resume">RESUME (Space)</button>
+      </div>
+
+      <div class="sk_overlay sk_hidden" id="sk_overlay_gameover">
+        <p class="sk_overlay_title sk_color_fail">DRIFT LOST</p>
+        <p class="sk_overlay_msg" id="sk_fail_msg">Your block value went out of bounds (0-99)!</p>
+        <button class="sk_overlay_btn" id="sk_btn_retry">TRY AGAIN (R)</button>
+      </div>
+
+      <div class="sk_overlay sk_hidden" id="sk_overlay_victory">
+        <p class="sk_overlay_title sk_color_win">LEVEL CLEARED!</p>
+        <p class="sk_overlay_msg" id="sk_victory_msg">Mathematical equation solved perfectly!</p>
+        <button class="sk_overlay_btn" id="sk_btn_next_level">NEXT LEVEL</button>
+      </div>
+
+      <div class="sk_overlay sk_hidden" id="sk_overlay_game_win">
+        <p class="sk_overlay_title sk_color_win">ABSOLUTE ZERO</p>
+        <p class="sk_overlay_msg">Incredible! You have mastered the icy calculus of Zero Drift.</p>
+        <button class="sk_overlay_btn" id="sk_btn_restart_all">PLAY AGAIN</button>
+      </div>
+    </div>
+
+    <!-- Draggable Virtual Controller Panel -->
+    <div class="sk_draggable_controls" id="sk_drag_controls">
+      <div class="sk_drag_handle">✟ Drag Controls Here</div>
+      <div class="sk_dpad">
+        <button class="sk_dpad_btn sk_dpad_up" id="sk_ctrl_up">▲</button>
+        <div class="sk_dpad_row">
+          <button class="sk_dpad_btn sk_dpad_left" id="sk_ctrl_left">◀</button>
+          <div class="sk_dpad_center" id="sk_ctrl_center">⟲</div>
+          <button class="sk_dpad_btn sk_dpad_right" id="sk_ctrl_right">▶</button>
+        </div>
+        <button class="sk_dpad_btn sk_dpad_down" id="sk_ctrl_down">▼</button>
+      </div>
+      
+      <div class="sk_zoom_hud_row">
+        <button class="sk_zoom_btn" id="sk_zoom_in" title="Zoom In (Ctrl +)">➕ Zoom</button>
+        <button class="sk_zoom_btn" id="sk_zoom_out" title="Zoom Out (Ctrl -)">➖ Zoom</button>
+        <button class="sk_zoom_btn" id="sk_pan_toggle" title="Toggle Pan Tool">🖐 Slide</button>
+      </div>
+
+      <div class="sk_hud_action_buttons">
+        <button class="sk_hud_btn" id="sk_hud_reset">RESET (R)</button>
+        <button class="sk_hud_btn" id="sk_hud_view_mode">PORTRAIT / LANDSCAPE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popups Modals -->
+  <div class="sk_popup sk_hidden" id="sk_popup_levels">
+    <div class="sk_popup_header">
+      <b>Select Level</b>
+      <button class="sk_popup_close" id="sk_close_levels">&times;</button>
+    </div>
+    <div class="sk_popup_body" id="sk_levels_grid"></div>
+  </div>
+
+  <div class="sk_popup sk_hidden" id="sk_popup_settings">
+    <div class="sk_popup_header">
+      <b>Settings</b>
+      <button class="sk_popup_close" id="sk_close_settings">&times;</button>
+    </div>
+    <div class="sk_popup_body">
+      <p>Sound FX: <button class="sk_toggle_btn" id="sk_toggle_sound">ON</button></p>
+      <p>Theme: <span class="sk_badge">Minimalist Arctic</span></p>
+      <p>Friction: <span class="sk_badge">Frictionless (0)</span></p>
+      <p>Level Loader: <button class="sk_toggle_btn" id="sk_toggle_loader">Switch Fallback</button></p>
+    </div>
+  </div>
+
+  <div class="sk_popup sk_hidden" id="sk_popup_scores">
+    <div class="sk_popup_header">
+      <b>High Scores & Progress</b>
+      <button class="sk_popup_close" id="sk_close_scores">&times;</button>
+    </div>
+    <div class="sk_popup_body" id="sk_scores_body"></div>
+  </div>
+
+  <div class="sk_popup sk_hidden" id="sk_popup_info">
+    <div class="sk_popup_header">
+      <b>How to Play</b>
+      <button class="sk_popup_close" id="sk_close_info">&times;</button>
+    </div>
+    <div class="sk_popup_body">
+      <p><b>Goal:</b> Slide the block into the golden exit with a value of exactly <b>0</b>.</p>
+      <p><b>Movement:</b> Use Keyboard Arrow Keys, WASD, or swipe the screen to fling. Because of the frictionless ice, you slide until hitting a Wall or Edge.</p>
+      <p><b>Operators:</b> Passing over math pads changes your value instantly.</p>
+      <p><b>Limit:</b> Keeping values between <b>0</b> and <b>99</b>. Going out of limits triggers instant drift failure!</p>
+      <p><b>Zoom & Pan Tools:</b> Toggle 🖐 to dynamic pan, zoom using virtual control triggers or hold keyboard controls. Two-finger touch scales elements natively!</p>
+    </div>
+  </div>
+
+  <!-- Bottom Stats HUD Bar -->
+  <div class="sk_bottom_hud">
+    <span>LEVEL: <b id="sk_hud_level">1</b></span>
+    <span>CURRENT VALUE: <b id="sk_hud_value">10</b></span>
+    <span>MOVES: <b id="sk_hud_moves">0</b></span>
+  </div>
+</div>
+
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

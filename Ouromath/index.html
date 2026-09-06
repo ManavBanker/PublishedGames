@@ -27,11 +27,11 @@
       </div>
 
       <div class="sk_header_buttons">
-        <button class="sk_btn" id="sk_btn_menu"><i>â˜° Menu</i></button>
-        <button class="sk_btn sk_btn_accent" id="sk_btn_pause"><i>â¸ Pause</i></button>
-        <button class="sk_btn" id="sk_btn_demo_top"><i>â–¶ Auto-Demo</i></button>
-        <button class="sk_btn" id="sk_btn_orientation"><i>ðŸ”„ Rotate</i></button>
-        <button class="sk_btn" id="sk_btn_fullscreen"><i>â›¶ Fullscreen</i></button>
+        <button class="sk_btn" id="sk_btn_menu"><i>☰ Menu</i></button>
+        <button class="sk_btn sk_btn_accent" id="sk_btn_pause"><i>⏸ Pause</i></button>
+        <button class="sk_btn" id="sk_btn_demo_top"><i>▶ Auto-Demo</i></button>
+        <button class="sk_btn" id="sk_btn_orientation"><i>🔄 Rotate</i></button>
+        <button class="sk_btn" id="sk_btn_fullscreen"><i>⛶ Fullscreen</i></button>
       </div>
     </div>
 
@@ -110,13 +110,13 @@
       <div class="sk_screen_panel sk_hidden" id="sk_popup_info">
         <p class="sk_panel_title">HOW TO PLAY</p>
         <div class="sk_info_text">
-          â€¢ <b>Controls:</b> WASD, Arrow keys, Swipe on canvas, or virtual D-Pad.<br><br>
-          â€¢ <b>Zoom & Pan:</b> 2-Finger Pinch to zoom, Hand Tool / Drag to pan canvas (Works anytime, including Pause/Game Over!). Keyboard: <b>Ctrl + / -</b> or <b>0</b> to reset.<br><br>
-          â€¢ <b>Double-Tap Canvas:</b> Quick Dash/Pulse ability.<br><br>
-          â€¢ <b>Touch Gestures:</b> Multi-touch supported. Move with one finger, pan/zoom or activate buttons simultaneously.<br><br>
-          â€¢ <b>Equations:</b> Calculated strictly Left-to-Right.<br><br>
-          â€¢ <b>Targets:</b> Consume the pulsing emerald node only when current mathematical value equals the target number.<br><br>
-          â€¢ <b>Splicing:</b> Hitting your own tail harmlessly slices off segments.
+          • <b>Controls:</b> WASD, Arrow keys, Swipe on canvas, or virtual D-Pad.<br><br>
+          • <b>Zoom & Pan:</b> 2-Finger Pinch to zoom, Hand Tool / Drag to pan canvas (Works anytime, including Pause/Game Over!). Keyboard: <b>Ctrl + / -</b> or <b>0</b> to reset.<br><br>
+          • <b>Double-Tap Canvas:</b> Quick Dash/Pulse ability.<br><br>
+          • <b>Touch Gestures:</b> Multi-touch supported. Move with one finger, pan/zoom or activate buttons simultaneously.<br><br>
+          • <b>Equations:</b> Calculated strictly Left-to-Right.<br><br>
+          • <b>Targets:</b> Consume the pulsing emerald node only when current mathematical value equals the target number.<br><br>
+          • <b>Splicing:</b> Hitting your own tail harmlessly slices off segments.
         </div>
         <button class="sk_action_btn" id="sk_close_info">UNDERSTOOD</button>
       </div>
@@ -199,6 +199,22 @@
 
   <!-- EMBEDDED STYLES -->
   <style>
+    /* Cyberpunk CRT Scanline overlay */
+    .sk_game_suite_root::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 999;
+      background-size: 100% 3px, 3px 100%;
+      pointer-events: none;
+    }
+
+    /* Add glowing effects to canvas & HUD */
+    .sk_hud_value.sk_text_primary { text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); }
+    .sk_hud_value.sk_text_success { text-shadow: 0 0 10px rgba(52, 211, 153, 0.6); }
+
     /* Scope wrapper & Mobile Reset */
     .sk_game_suite_root {
       position: relative;
@@ -722,14 +738,8 @@
     }
 
     /* Level fetcher */
-    async function fetchRemoteLevels(remoteUrl = "https://github.com/ManavBanker/PublishedGames/blob/main/ouromath/levels.json") {
-      const progressEl = document.getElementById('sk_loader_progress');
-      const statusEl = document.getElementById('sk_loader_status');
-      
+    async function fetchRemoteLevels(remoteUrl = "https://github.com/ManavBanker/PublishedGames/blob/main/Ouromath/levels.json") {
       try {
-        statusEl.innerText = "Connecting to repository...";
-        progressEl.style.width = "30%";
-        
         const resp = await fetch(remoteUrl);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const rawText = await resp.text();
@@ -737,18 +747,12 @@
         const parsed = parseSanitizedLevelString(rawText);
         if (Array.isArray(parsed) && parsed.length > 0) {
           ACTIVE_LEVELS = parsed;
-          progressEl.style.width = "100%";
-          statusEl.innerText = "Levels Loaded Successfully!";
-          setTimeout(() => {
-            showPanel('main');
-          }, 400);
+          console.log("Remote levels loaded successfully in background.");
         } else {
           throw new Error("Invalid level array output");
         }
       } catch (err) {
-        console.warn("Failed fetching remote levels:", err);
-        statusEl.innerText = "Fetch failed! Could not load remote levels.";
-        progressEl.style.width = "100%";
+        console.warn("Failed fetching remote levels in background:", err);
       }
     }
 
@@ -970,6 +974,26 @@
       }
     }
 
+    /* Global particle array for visual feedback effects */
+    let particles = [];
+
+    function addParticles(x, y, color, count = 10) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 1 + Math.random() * 3;
+        particles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1.0,
+          decay: 0.02 + Math.random() * 0.03,
+          color: color,
+          size: 2 + Math.random() * 3
+        });
+      }
+    }
+
     /* --- 7. ARITHMETIC CORE ENGINE --- */
     function evaluateEquation(snake) {
       if (!snake || snake.length === 0) return 0;
@@ -1140,6 +1164,24 @@
           ctx.fillText(seg.value, seg.x * cell + cell / 2, seg.y * cell + cell / 2);
         }
       });
+
+      /* Update and draw particles */
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= p.decay;
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.beginPath();
+        ctx.arc(p.x * cell + cell / 2, p.y * cell + cell / 2, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      }
 
       ctx.restore();
     }
@@ -1319,6 +1361,7 @@
             state.targetIndex++;
             state.score += 100 * state.snake.length;
             synth.win();
+            addParticles(eaten.x, eaten.y, '#34d399', 25);
             
             if (state.targetIndex >= activeLvl.targets.length) {
               state.gameActive = false;
@@ -1355,6 +1398,7 @@
           }
 
           state.food.splice(foodEatenIndex, 1);
+          addParticles(eaten.x, eaten.y, eaten.type === 'digit' ? '#3b82f6' : '#ef4444', 12);
           if (eaten.type === 'digit') {
             const nextDigit = spawnStaticFoodItem('digit', ['1', '2', '3', '4', '5', '6', '7', '8', '9']);
             if (nextDigit) state.food.push(nextDigit);
@@ -1742,7 +1786,7 @@
     els.btns.closeInfo.addEventListener('click', () => showPanel(null));
 
     /* Level Fetcher Actions */
-    els.btns.loadRemote.addEventListener('click', () => fetchRemoteLevels("https://github.com/ManavBanker/PublishedGames/blob/main/ouromath/levels.json"));
+    els.btns.loadRemote.addEventListener('click', () => fetchRemoteLevels("https://github.com/ManavBanker/PublishedGames/blob/main/Ouromath/levels.json"));
     els.btns.useLocal.style.display = 'none';
 
     /* Fullscreen API Toggle */
@@ -1844,7 +1888,8 @@
     /* Boot Sequence */
     loadSavedData();
     fitCanvas();
-    showPanel('loader');
+    showPanel('main');
+    fetchRemoteLevels();
     requestAnimationFrame(loop);
 
   </script>
