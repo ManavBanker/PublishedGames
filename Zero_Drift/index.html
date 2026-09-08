@@ -1,12 +1,196 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Zero Drift - Mathematical Sliding Puzzle & Level Editor</title>
-  <style>
-    :root {
+  <title>Zero Drift - Mathematical Sliding Puzzle</title>
+  <link rel="stylesheet" href="css/framework.css">
+</head>
+
+<body
+  style="margin:0; padding:0; background-color:#eef2f7; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; overflow:hidden; touch-action:none;">
+
+  <div class="sk_game_suite_root">
+    <!-- Game Metadata -->
+    <div class="sk_labels" data="Minimalist,Sliding-Puzzle,Math,Logic" style="display:none;"></div>
+    <meta class="sk_meta"
+      description="A minimalist sliding-puzzle game where you must navigate an icy grid of mathematical operators to reduce your block's value to exactly zero before sliding into the exit."
+      style="display:none;">
+
+    <!-- Top Control Bar -->
+    <div class="sk_top_bar">
+      <div class="sk_top_left">
+        <span class="sk_game_title">ZERO DRIFT</span>
+      </div>
+      <div class="sk_top_buttons">
+        <!-- High visibility primary buttons -->
+        <button class="sk_btn sk_btn_pause" id="sk_btn_pause" title="Pause Game">⏸️ Pause</button>
+        <button class="sk_btn sk_btn_menu" id="sk_btn_menu" title="Menu">✦ Menu</button>
+        <button class="sk_btn sk_btn_accent" id="sk_btn_fullscreen" title="Toggle Fullscreen">🔒 Fullscreen</button>
+      </div>
+    </div>
+
+    <!-- Collapsible Side Drawer Navigation Menu -->
+    <div class="sk_side_drawer sk_drawer_closed" id="sk_side_drawer">
+      <div class="sk_drawer_header">
+        <span>Navigation Menu</span>
+        <button class="sk_drawer_close" id="sk_btn_close_drawer">&times;</button>
+      </div>
+      <div class="sk_drawer_body">
+        <button class="sk_drawer_btn" id="sk_btn_levels">🔒 Select Level</button>
+        <button class="sk_drawer_btn" id="sk_btn_settings">✦ Game Settings</button>
+        <button class="sk_drawer_btn" id="sk_btn_scores">🔒 High Scores</button>
+        <button class="sk_drawer_btn" id="sk_btn_info">✦ How to Play</button>
+        <button class="sk_drawer_btn sk_drawer_accent" id="sk_btn_start_demo_menu">🔒 Watch Auto-Demo</button>
+      </div>
+    </div>
+    <div class="sk_drawer_overlay sk_hidden" id="sk_drawer_overlay"></div>
+
+    <!-- Loading & Level Fetcher Progress Overlay -->
+    <div class="sk_overlay" id="sk_overlay_loader">
+      <p class="sk_overlay_title">LOADING GAME DATA</p>
+      <p class="sk_overlay_subtitle" id="sk_loader_status">Initializing level fetcher from remote...</p>
+      <div class="sk_progress_container">
+        <div class="sk_progress_bar" id="sk_loader_progress"></div>
+      </div>
+      <p class="sk_overlay_desc" style="margin-top:10px; font-size:12px;">Fetching configurations from remote repository
+        with local structural fallback.</p>
+    </div>
+
+    <!-- Main Game Layout Content -->
+    <div class="sk_main_content">
+      <!-- Camera Viewport / Transformation Workspace -->
+      <div class="sk_canvas_container" id="sk_canvas_container">
+        <canvas id="sk_game_canvas"></canvas>
+
+        <!-- Overlay views -->
+        <div class="sk_overlay sk_hidden" id="sk_overlay_start">
+          <p class="sk_overlay_title">ZERO DRIFT</p>
+          <p class="sk_overlay_subtitle">A Mathematical Sliding Puzzle on Ice</p>
+          <p class="sk_overlay_desc">Fling your block through operators. Hit the golden Exit with <b>exactly 0</b>!</p>
+          <button class="sk_overlay_btn" id="sk_btn_start_play">PLAY GAME (Enter)</button>
+          <button class="sk_overlay_btn sk_btn_sec" id="sk_btn_start_demo">WATCH DEMO</button>
+        </div>
+
+        <div class="sk_overlay sk_hidden" id="sk_overlay_paused">
+          <p class="sk_overlay_title" style="color:var(--accent);">GAME PAUSED</p>
+          <p class="sk_overlay_desc">Navigational math computations suspended. Feel free to Pinch-to-Zoom or Pan and
+            inspect the board path.</p>
+          <button class="sk_overlay_btn" id="sk_btn_resume">RESUME (Space)</button>
+        </div>
+
+        <div class="sk_overlay sk_hidden" id="sk_overlay_gameover">
+          <p class="sk_overlay_title sk_color_fail">DRIFT LOST</p>
+          <p class="sk_overlay_msg" id="sk_fail_msg">Your block value went out of bounds (0-99)!</p>
+          <button class="sk_overlay_btn" id="sk_btn_retry">TRY AGAIN (R)</button>
+        </div>
+
+        <div class="sk_overlay sk_hidden" id="sk_overlay_victory">
+          <p class="sk_overlay_title sk_color_win">LEVEL CLEARED!</p>
+          <p class="sk_overlay_msg" id="sk_victory_msg">Mathematical equation solved perfectly!</p>
+          <button class="sk_overlay_btn" id="sk_btn_next_level">NEXT LEVEL</button>
+        </div>
+
+        <div class="sk_overlay sk_hidden" id="sk_overlay_game_win">
+          <p class="sk_overlay_title sk_color_win">ABSOLUTE ZERO</p>
+          <p class="sk_overlay_msg">Incredible! You have mastered the icy calculus of Zero Drift.</p>
+          <button class="sk_overlay_btn" id="sk_btn_restart_all">PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <!-- Draggable Virtual Controller Panel -->
+      <div class="sk_draggable_controls" id="sk_drag_controls">
+        <div class="sk_drag_handle">✦ Drag Controls Here</div>
+        <div class="sk_dpad">
+          <button class="sk_dpad_btn sk_dpad_up" id="sk_ctrl_up">▲</button>
+          <div class="sk_dpad_row">
+            <button class="sk_dpad_btn sk_dpad_left" id="sk_ctrl_left">◀</button>
+            <div class="sk_dpad_center" id="sk_ctrl_center">▲</div>
+            <button class="sk_dpad_btn sk_dpad_right" id="sk_ctrl_right">▶</button>
+          </div>
+          <button class="sk_dpad_btn sk_dpad_down" id="sk_ctrl_down">▼</button>
+        </div>
+
+        <!-- Utility Zoom and Pan Mapping HUD Row -->
+        <div class="sk_zoom_hud_row">
+          <button class="sk_zoom_btn" id="sk_zoom_in" title="Zoom In (Ctrl +)">+ Zoom</button>
+          <button class="sk_zoom_btn" id="sk_zoom_out" title="Zoom Out (Ctrl -)">- Zoom</button>
+          <button class="sk_zoom_btn" id="sk_pan_toggle" title="Toggle Pan Tool">🔒 Slide</button>
+        </div>
+
+        <div class="sk_hud_action_buttons">
+          <button class="sk_hud_btn" id="sk_hud_reset">RESET (R)</button>
+          <button class="sk_hud_btn" id="sk_hud_view_mode">PORTRAIT / LANDSCAPE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popups Modals -->
+    <div class="sk_popup sk_hidden" id="sk_popup_levels">
+      <div class="sk_popup_header">
+        <b>Select Level</b>
+        <button class="sk_popup_close" id="sk_close_levels">&times;</button>
+      </div>
+      <div class="sk_popup_body" id="sk_levels_grid">
+        <!-- Dynamically filled by JS -->
+      </div>
+    </div>
+
+    <div class="sk_popup sk_hidden" id="sk_popup_settings">
+      <div class="sk_popup_header">
+        <b>Settings</b>
+        <button class="sk_popup_close" id="sk_close_settings">&times;</button>
+      </div>
+      <div class="sk_popup_body">
+        <p>Sound FX: <button class="sk_toggle_btn" id="sk_toggle_sound">ON</button></p>
+        <p>Theme: <span class="sk_badge">Minimalist Arctic</span></p>
+        <p>Friction: <span class="sk_badge">Frictionless (0)</span></p>
+        <p>Level Loader: <button class="sk_toggle_btn" id="sk_toggle_loader">Switch Fallback</button></p>
+      </div>
+    </div>
+
+    <div class="sk_popup sk_hidden" id="sk_popup_scores">
+      <div class="sk_popup_header">
+        <b>High Scores & Progress</b>
+        <button class="sk_popup_close" id="sk_close_scores">&times;</button>
+      </div>
+      <div class="sk_popup_body" id="sk_scores_body">
+        <!-- High scores list dynamic loading -->
+      </div>
+    </div>
+
+    <div class="sk_popup sk_hidden" id="sk_popup_info">
+      <div class="sk_popup_header">
+        <b>How to Play</b>
+        <button class="sk_popup_close" id="sk_close_info">&times;</button>
+      </div>
+      <div class="sk_popup_body">
+        <p><b>Goal:</b> Slide the block into the golden exit with a value of exactly <b>0</b>.</p>
+        <p><b>Movement:</b> Use Keyboard Arrow Keys, WASD, or swipe the screen to fling. Because of the frictionless
+          ice, you slide until hitting a Wall or Edge.</p>
+        <p><b>Operators:</b> Passing over math pads changes your value instantly.</p>
+        <p><b>Limit:</b> Keeping values between <b>0</b> and <b>99</b>. Going out of limits triggers instant drift
+          failure!</p>
+        <p><b>Zoom & Pan Tools:</b> Toggle 🔒 Slide to dynamic pan, zoom using virtual control triggers or hold keyboard
+          controls. Two-finger touch scales elements natively!</p>
+      </div>
+    </div>
+
+    <!-- Bottom Stats HUD Bar -->
+    <div class="sk_bottom_hud">
+      <span>LEVEL: <b id="sk_hud_level">1</b></span>
+      <span>CURRENT VALUE: <b id="sk_hud_value">10</b></span>
+      <span>MOVES: <b id="sk_hud_moves">0</b></span>
+    </div>
+  </div>
+
+  <script>
+    /* -------------------------------------------------------------------------
+       1. INJECT SCOPED MODERN CSS
+       ------------------------------------------------------------------------- */
+    const cssStyles = `
+    .sk_game_suite_root {
       --primary: #1e293b;
       --accent: #0ea5e9;
       --bg-dark: #0f172a;
@@ -15,71 +199,45 @@
       --text-light: #f8fafc;
       --win-color: #10b981;
       --fail-color: #f43f5e;
-      --panel-bg: rgba(255, 255, 255, 0.95);
-    }
-
-    .dark-theme {
-      --primary: #f8fafc;
-      --accent: #38bdf8;
-      --bg-dark: #020617;
-      --bg-light: #1e293b;
-      --text-dark: #f1f5f9;
-      --text-light: #0f172a;
-      --panel-bg: rgba(15, 23, 42, 0.95);
-    }
-
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg-dark);
-      color: var(--text-dark);
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      touch-action: none;
-    }
-
-    .sk_game_suite_root {
+      
       width: 100vw;
       height: 100vh;
       position: relative;
       background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      color: var(--text-dark);
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
       overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    .dark-theme .sk_game_suite_root {
-      background: linear-gradient(135deg, #090d16 0%, #172554 100%);
+    .sk_game_suite_root * {
+      box-sizing: border-box;
+      font-family: inherit;
     }
 
     .sk_top_bar {
       height: 60px;
-      background: var(--panel-bg);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 20px;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      border-bottom: 2px solid rgba(255,255,255,0.5);
       z-index: 100;
       flex-shrink: 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
 
     .sk_game_title {
-      font-size: 22px;
-      font-weight: 900;
+      font-size: 24px;
+      font-weight: 800;
       letter-spacing: 2px;
       color: var(--primary);
+      text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
     }
 
     .sk_top_buttons {
@@ -88,8 +246,8 @@
     }
 
     .sk_btn {
-      background: var(--bg-light);
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.1);
       padding: 8px 14px;
       border-radius: 8px;
       font-size: 13px;
@@ -99,13 +257,13 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       transition: all 0.2s ease;
     }
 
     .sk_btn:hover {
+      background: var(--bg-light);
       transform: translateY(-1px);
-      filter: brightness(1.05);
     }
 
     .sk_btn_accent {
@@ -114,14 +272,19 @@
       border: none;
     }
 
+    .sk_btn_accent:hover {
+      background: #0284c7;
+    }
+
+    /* Side Drawer Navigation Menu Styling */
     .sk_side_drawer {
       position: absolute;
       top: 0;
       right: 0;
-      width: 300px;
+      width: 280px;
       height: 100%;
-      background: var(--panel-bg);
-      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.2);
+      background: white;
+      box-shadow: -5px 0 25px rgba(0,0,0,0.15);
       z-index: 300;
       display: flex;
       flex-direction: column;
@@ -134,13 +297,12 @@
 
     .sk_drawer_header {
       padding: 20px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid #e2e8f0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: 800;
+      font-weight: bold;
       color: var(--primary);
-      font-size: 16px;
     }
 
     .sk_drawer_close {
@@ -148,7 +310,7 @@
       border: none;
       font-size: 24px;
       cursor: pointer;
-      color: var(--text-dark);
+      color: #94a3b8;
     }
 
     .sk_drawer_body {
@@ -156,14 +318,13 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      overflow-y: auto;
     }
 
     .sk_drawer_btn {
       width: 100%;
       padding: 12px 16px;
       background: var(--bg-light);
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid #e2e8f0;
       border-radius: 8px;
       text-align: left;
       font-weight: 600;
@@ -174,13 +335,16 @@
     }
 
     .sk_drawer_btn:hover {
-      background: var(--accent);
-      color: white;
+      background: #e2e8f0;
     }
 
     .sk_drawer_accent {
       background: var(--primary);
-      color: var(--text-light);
+      color: white;
+    }
+
+    .sk_drawer_accent:hover {
+      background: #334155;
     }
 
     .sk_drawer_overlay {
@@ -189,9 +353,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.4);
       z-index: 290;
-      backdrop-filter: blur(2px);
     }
 
     .sk_main_content {
@@ -208,21 +371,16 @@
     .sk_canvas_container {
       position: relative;
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       aspect-ratio: 1 / 1;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255,255,255,0.7);
       border-radius: 16px;
       border: 4px solid white;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .dark-theme .sk_canvas_container {
-      background: rgba(15, 23, 42, 0.7);
-      border-color: #334155;
     }
 
     #sk_game_canvas {
@@ -239,7 +397,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(15, 23, 42, 0.94);
+      background: rgba(15, 23, 42, 0.92);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -248,6 +406,24 @@
       text-align: center;
       z-index: 10;
       animation: fadeIn 0.3s ease;
+    }
+
+    /* Loader styling */
+    .sk_progress_container {
+      width: 80%;
+      max-width: 300px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .sk_progress_bar {
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.1s linear;
     }
 
     @keyframes fadeIn {
@@ -309,7 +485,7 @@
     }
 
     .sk_overlay_btn:hover {
-      filter: brightness(1.1);
+      background: #0284c7;
       transform: translateY(-1px);
     }
 
@@ -321,19 +497,20 @@
 
     .sk_btn_sec:hover {
       background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Draggable Controls */
+    /* Controls Panel Layout with Zoom Modifiers */
     .sk_draggable_controls {
       position: absolute;
-      bottom: 15px;
+      bottom: 10px;
       right: 20px;
       width: 190px;
-      background: var(--panel-bg);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 14px;
       padding: 10px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      border: 1px solid rgba(255,255,255,0.8);
       z-index: 150;
       display: flex;
       flex-direction: column;
@@ -344,7 +521,7 @@
       background: var(--bg-light);
       font-size: 10px;
       font-weight: bold;
-      color: var(--text-dark);
+      color: #64748b;
       text-align: center;
       padding: 4px 0;
       margin-bottom: 8px;
@@ -367,29 +544,28 @@
     .sk_dpad_btn {
       width: 44px;
       height: 44px;
-      background: var(--bg-light);
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
       border-radius: 8px;
       font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: var(--text-dark);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.1s ease;
     }
 
     .sk_dpad_btn:active {
+      background: var(--bg-light);
       transform: scale(0.95);
-      background: var(--accent);
-      color: white;
     }
 
     .sk_dpad_center {
       width: 44px;
       height: 44px;
       background: var(--bg-light);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0,0,0,0.05);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -409,13 +585,14 @@
 
     .sk_zoom_btn {
       padding: 6px 2px;
-      background: var(--bg-light);
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
       border-radius: 6px;
       font-size: 10px;
       font-weight: 700;
-      color: var(--text-dark);
+      color: #0369a1;
       cursor: pointer;
+      transition: all 0.1s ease;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -424,38 +601,43 @@
     .sk_zoom_btn_active {
       background: var(--accent) !important;
       color: white !important;
+      border-color: var(--accent) !important;
     }
 
     .sk_hud_action_buttons {
       display: flex;
+      flex-direction: column;
       gap: 6px;
       margin-top: 8px;
     }
 
     .sk_hud_btn {
-      flex: 1;
       background: var(--primary);
-      color: var(--text-light);
+      color: white;
       border: none;
       border-radius: 6px;
       padding: 6px 0;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
-      text-align: center;
+    }
+
+    .sk_hud_btn:hover {
+      background: #334155;
     }
 
     .sk_bottom_hud {
-      height: 55px;
-      background: var(--panel-bg);
-      color: var(--text-dark);
+      height: 55px; /* Extended spacing so all bottom controls do not disturb play area */
+      background: var(--primary);
+      color: var(--text-light);
       display: flex;
       justify-content: space-around;
       align-items: center;
       padding: 0 20px;
       font-size: 14px;
       font-weight: 600;
-      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+      letter-spacing: 0.5px;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
       z-index: 100;
       flex-shrink: 0;
     }
@@ -464,23 +646,21 @@
       color: var(--accent);
     }
 
-    /* Popups & Level Editor Modal */
     .sk_popup {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 92%;
-      max-width: 480px;
-      background: var(--panel-bg);
+      width: 90%;
+      max-width: 400px;
+      background: white;
       border-radius: 16px;
-      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.3);
       z-index: 400;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       animation: popScale 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     @keyframes popScale {
@@ -494,7 +674,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
 
     .sk_popup_header b {
@@ -507,13 +687,24 @@
       border: none;
       font-size: 24px;
       cursor: pointer;
-      color: var(--text-dark);
+      color: #94a3b8;
+    }
+
+    .sk_popup_close:hover {
+      color: var(--primary);
     }
 
     .sk_popup_body {
       padding: 20px;
-      max-height: 400px;
+      max-height: 320px;
       overflow-y: auto;
+    }
+
+    .sk_popup_body p {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #475569;
     }
 
     .sk_levels_grid {
@@ -527,7 +718,7 @@
       aspect-ratio: 1;
       border-radius: 10px;
       border: 2px solid var(--bg-light);
-      background: var(--panel-bg);
+      background: white;
       font-size: 16px;
       font-weight: bold;
       color: var(--primary);
@@ -545,75 +736,25 @@
     }
 
     .sk_level_locked {
-      background: var(--bg-light);
-      color: #94a3b8;
+      background: #f1f5f9;
+      color: #cbd5e1;
       cursor: not-allowed;
     }
 
-    /* Level Editor Toolbar & Grid */
-    .sk_editor_toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
+    .sk_level_locked:hover {
+      background: #f1f5f9;
+      color: #cbd5e1;
+      border-color: var(--bg-light);
     }
 
-    .sk_tool_btn {
-      padding: 8px 12px;
-      background: var(--bg-light);
-      border: 2px solid transparent;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 13px;
-      cursor: pointer;
-      color: var(--text-dark);
-    }
-
-    .sk_tool_btn.active {
-      border-color: var(--accent);
-      background: #e0f2fe;
-      color: var(--primary);
-    }
-
-    .sk_editor_grid_container {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 4px;
-      background: var(--bg-light);
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      max-width: 320px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .sk_editor_cell {
-      aspect-ratio: 1;
-      background: var(--panel-bg);
-      border: 1px solid rgba(0, 0, 0, 0.1);
+    .sk_toggle_btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 6px 14px;
       border-radius: 6px;
-      font-size: 11px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
-      color: var(--text-dark);
-    }
-
-    .sk_editor_textarea {
-      width: 100%;
-      height: 80px;
-      font-family: monospace;
-      font-size: 11px;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      background: var(--bg-light);
-      color: var(--text-dark);
-      resize: none;
-      margin-bottom: 10px;
+      font-weight: bold;
     }
 
     .sk_badge {
@@ -627,191 +768,61 @@
     .sk_hidden {
       display: none !important;
     }
-  </style>
-</head>
 
-<body>
+    /* Responsiveness updates preventing clippings */
+    @media (max-width: 600px) {
+      .sk_top_bar {
+        padding: 0 10px;
+        height: 52px;
+      }
+      .sk_game_title {
+        font-size: 18px;
+        letter-spacing: 1px;
+      }
+      .sk_btn {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .sk_draggable_controls {
+        width: 170px;
+        bottom: 70px;
+        right: 10px;
+      }
+      .sk_dpad_btn {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+      }
+      .sk_dpad_center {
+        width: 38px;
+        height: 38px;
+        font-size: 12px;
+      }
+      .sk_canvas_container {
+        max-width: 340px;
+      }
+    }
 
-  <div class="sk_game_suite_root">
-    <!-- Top Control Bar -->
-    <div class="sk_top_bar">
-      <div class="sk_top_left">
-        <span class="sk_game_title">ZERO DRIFT</span>
-      </div>
-      <div class="sk_top_buttons">
-        <button class="sk_btn" id="sk_btn_undo" title="Undo Move">↩ Undo</button>
-        <button class="sk_btn" id="sk_btn_pause" title="Pause Game">Pause</button>
-        <button class="sk_btn" id="sk_btn_menu" title="Menu">Menu</button>
-        <button class="sk_btn sk_btn_accent" id="sk_btn_fullscreen" title="Toggle Fullscreen">Fullscreen</button>
-      </div>
-    </div>
+    @media (max-height: 600px) {
+      .sk_main_content {
+        padding: 5px;
+      }
+      .sk_canvas_container {
+        max-width: 280px;
+      }
+      .sk_draggable_controls {
+        transform: scale(0.85);
+        transform-origin: bottom right;
+      }
+    }
+  `;
+    const styleEl = document.createElement('style');
+    styleEl.innerHTML = cssStyles;
+    document.head.appendChild(styleEl);
 
-    <!-- Collapsible Side Drawer Navigation Menu -->
-    <div class="sk_side_drawer sk_drawer_closed" id="sk_side_drawer">
-      <div class="sk_drawer_header">
-        <span>Navigation Menu</span>
-        <button class="sk_drawer_close" id="sk_btn_close_drawer">&times;</button>
-      </div>
-      <div class="sk_drawer_body">
-        <button class="sk_drawer_btn" id="sk_btn_levels">🗺️ Select Level</button>
-        <button class="sk_drawer_btn" id="sk_btn_editor">🛠️ Level Creator & Editor</button>
-        <button class="sk_drawer_btn" id="sk_btn_settings">⚙️ Game Settings</button>
-        <button class="sk_drawer_btn" id="sk_btn_scores">🏆 High Scores</button>
-        <button class="sk_drawer_btn" id="sk_btn_info">ℹ️ How to Play</button>
-        <button class="sk_drawer_btn sk_drawer_accent" id="sk_btn_start_demo_menu">🤖 Watch Auto-Demo</button>
-      </div>
-    </div>
-    <div class="sk_drawer_overlay sk_hidden" id="sk_drawer_overlay"></div>
-
-    <!-- Main Game Layout Content -->
-    <div class="sk_main_content">
-      <div class="sk_canvas_container" id="sk_canvas_container">
-        <canvas id="sk_game_canvas"></canvas>
-
-        <!-- Overlay views -->
-        <div class="sk_overlay" id="sk_overlay_start">
-          <p class="sk_overlay_title">ZERO DRIFT</p>
-          <p class="sk_overlay_subtitle">Mathematical Sliding Puzzle on Ice</p>
-          <p class="sk_overlay_desc">Slide your block through operators. Hit the golden Exit with <b>exactly 0</b>!</p>
-          <button class="sk_overlay_btn" id="sk_btn_start_play">PLAY GAME (Enter)</button>
-          <button class="sk_overlay_btn sk_btn_sec" id="sk_btn_start_demo">WATCH DEMO</button>
-        </div>
-
-        <div class="sk_overlay sk_hidden" id="sk_overlay_paused">
-          <p class="sk_overlay_title" style="color:var(--accent);">GAME PAUSED</p>
-          <p class="sk_overlay_desc">Navigational computations suspended.</p>
-          <button class="sk_overlay_btn" id="sk_btn_resume">RESUME (Space)</button>
-        </div>
-
-        <div class="sk_overlay sk_hidden" id="sk_overlay_gameover">
-          <p class="sk_overlay_title sk_color_fail">DRIFT LOST</p>
-          <p class="sk_overlay_msg" id="sk_fail_msg">Your block value went out of bounds (0-99)!</p>
-          <button class="sk_overlay_btn" id="sk_btn_retry">TRY AGAIN (R)</button>
-        </div>
-
-        <div class="sk_overlay sk_hidden" id="sk_overlay_victory">
-          <p class="sk_overlay_title sk_color_win">LEVEL CLEARED!</p>
-          <p class="sk_overlay_msg" id="sk_victory_msg">Mathematical equation solved perfectly!</p>
-          <button class="sk_overlay_btn" id="sk_btn_next_level">NEXT LEVEL</button>
-        </div>
-
-        <div class="sk_overlay sk_hidden" id="sk_overlay_game_win">
-          <p class="sk_overlay_title sk_color_win">ABSOLUTE ZERO</p>
-          <p class="sk_overlay_msg">Incredible! You have mastered all levels.</p>
-          <button class="sk_overlay_btn" id="sk_btn_restart_all">PLAY AGAIN</button>
-        </div>
-      </div>
-
-      <!-- Draggable Virtual Controller Panel -->
-      <div class="sk_draggable_controls" id="sk_drag_controls">
-        <div class="sk_drag_handle">✟ Drag Controls</div>
-        <div class="sk_dpad">
-          <button class="sk_dpad_btn" id="sk_ctrl_up">▲</button>
-          <div class="sk_dpad_row">
-            <button class="sk_dpad_btn" id="sk_ctrl_left">◀</button>
-            <div class="sk_dpad_center" id="sk_ctrl_center" title="Reset Camera">⟲</div>
-            <button class="sk_dpad_btn" id="sk_ctrl_right">▶</button>
-          </div>
-          <button class="sk_dpad_btn" id="sk_ctrl_down">▼</button>
-        </div>
-
-        <div class="sk_zoom_hud_row">
-          <button class="sk_zoom_btn" id="sk_zoom_in">➕ Zoom</button>
-          <button class="sk_zoom_btn" id="sk_zoom_out">➖ Zoom</button>
-          <button class="sk_zoom_btn" id="sk_pan_toggle">🖐 Slide</button>
-        </div>
-
-        <div class="sk_hud_action_buttons">
-          <button class="sk_hud_btn" id="sk_hud_reset">RESET (R)</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Popups & Modals -->
-    <div class="sk_popup sk_hidden" id="sk_popup_levels">
-      <div class="sk_popup_header">
-        <b>Select Level</b>
-        <button class="sk_popup_close" id="sk_close_levels">&times;</button>
-      </div>
-      <div class="sk_popup_body" id="sk_levels_grid"></div>
-    </div>
-
-    <div class="sk_popup sk_hidden" id="sk_popup_editor">
-      <div class="sk_popup_header">
-        <b>Level Creator & Editor</b>
-        <button class="sk_popup_close" id="sk_close_editor">&times;</button>
-      </div>
-      <div class="sk_popup_body">
-        <p style="margin-top:0; font-size:13px;">Select tool & click grid cells to paint. Design your puzzle!</p>
-        <div class="sk_editor_toolbar" id="sk_editor_tools">
-          <button class="sk_tool_btn active" data-tool="W">🧱 Wall (W)</button>
-          <button class="sk_tool_btn" data-tool=".">❄️ Ice (.)</button>
-          <button class="sk_tool_btn" data-tool="S">⭐ Start (S)</button>
-          <button class="sk_tool_btn" data-tool="E">🏆 Exit (E)</button>
-          <button class="sk_tool_btn" data-tool="+5">➕ +5</button>
-          <button class="sk_tool_btn" data-tool="-5">➖ -5</button>
-          <button class="sk_tool_btn" data-tool="*2">✖️ *2</button>
-          <button class="sk_tool_btn" data-tool="/2">➗ /2</button>
-        </div>
-        <div style="margin-bottom:8px; font-size:12px; font-weight:bold;">
-          Start Value: <input type="number" id="sk_edit_startval" value="10" min="1" max="99" style="width:50px; padding:4px; border-radius:4px; border:1px solid #ccc;">
-          Level Name: <input type="text" id="sk_edit_name" value="Custom Puzzle" style="width:130px; padding:4px; border-radius:4px; border:1px solid #ccc;">
-        </div>
-        <div class="sk_editor_grid_container" id="sk_editor_grid"></div>
-        <textarea class="sk_editor_textarea" id="sk_edit_json" placeholder="Level JSON output..."></textarea>
-        <div style="display:flex; gap:8px;">
-          <button class="sk_overlay_btn" id="sk_editor_test" style="margin:0; flex:1; padding:8px;">Play Test Level</button>
-          <button class="sk_overlay_btn sk_btn_sec" id="sk_editor_export" style="margin:0; flex:1; padding:8px; color:var(--text-dark);">Export JSON</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="sk_popup sk_hidden" id="sk_popup_settings">
-      <div class="sk_popup_header">
-        <b>Settings</b>
-        <button class="sk_popup_close" id="sk_close_settings">&times;</button>
-      </div>
-      <div class="sk_popup_body">
-        <p>Sound FX: <button class="sk_toggle_btn" id="sk_toggle_sound" style="background:var(--accent); color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:bold;">ON</button></p>
-        <p>Theme: <button class="sk_toggle_btn" id="sk_toggle_theme" style="background:var(--primary); color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:bold;">Arctic Blue</button></p>
-        <p>Level Database: <button class="sk_toggle_btn" id="sk_reload_levels" style="background:var(--accent); color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-weight:bold;">Reload from JSON</button></p>
-      </div>
-    </div>
-
-    <div class="sk_popup sk_hidden" id="sk_popup_scores">
-      <div class="sk_popup_header">
-        <b>High Scores & Progress</b>
-        <button class="sk_popup_close" id="sk_close_scores">&times;</button>
-      </div>
-      <div class="sk_popup_body" id="sk_scores_body"></div>
-    </div>
-
-    <div class="sk_popup sk_hidden" id="sk_popup_info">
-      <div class="sk_popup_header">
-        <b>How to Play</b>
-        <button class="sk_popup_close" id="sk_close_info">&times;</button>
-      </div>
-      <div class="sk_popup_body">
-        <p><b>Goal:</b> Slide the block into the golden exit with a value of exactly <b>0</b>.</p>
-        <p><b>Movement:</b> Use Keyboard Arrow Keys, WASD, or swipe to fling across frictionless ice until hitting a Wall.</p>
-        <p><b>Operators:</b> Passing over math pads changes your value instantly.</p>
-        <p><b>Limit:</b> Keep values between <b>0</b> and <b>99</b>. Going out of limits triggers instant failure!</p>
-        <p><b>Creator:</b> Use the Level Creator tool to design, test, and export your own custom math puzzles!</p>
-      </div>
-    </div>
-
-    <!-- Bottom Stats HUD Bar -->
-    <div class="sk_bottom_hud">
-      <span>LEVEL: <b id="sk_hud_level">1</b></span>
-      <span>CURRENT VALUE: <b id="sk_hud_value">10</b></span>
-      <span>MOVES: <b id="sk_hud_moves">0</b></span>
-    </div>
-  </div>
-
-  <script>
-    /* =========================================================================
-       AUDIO ENGINE (WEB AUDIO API)
-       ========================================================================= */
+    /* -------------------------------------------------------------------------
+       2. AUDIO SYNTHESIS ENGINE (WEB AUDIO API)
+       ------------------------------------------------------------------------- */
     const AudioEngine = {
       ctx: null,
       enabled: true,
@@ -825,14 +836,19 @@
       playTone(freq, type = 'sine', duration = 0.1, ramp = false) {
         if (!this.enabled) return;
         this.init();
-        if (this.ctx.state === 'suspended') this.ctx.resume();
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
 
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
 
         osc.type = type;
         osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-        if (ramp) osc.frequency.exponentialRampToValueAtTime(freq * 1.8, this.ctx.currentTime + duration);
+
+        if (ramp) {
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.8, this.ctx.currentTime + duration);
+        }
 
         gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
@@ -844,85 +860,255 @@
         osc.stop(this.ctx.currentTime + duration);
       },
 
-      playSlide() { this.playTone(180, 'sine', 0.15, true); },
-      playOp() { this.playTone(380, 'triangle', 0.08); },
-      playFail() { this.playTone(130, 'sawtooth', 0.4); },
+      playSlide() {
+        this.playTone(180, 'sine', 0.15, true);
+      },
+
+      playOp() {
+        this.playTone(380, 'triangle', 0.08);
+      },
+
+      playFail() {
+        this.playTone(130, 'sawtooth', 0.4);
+      },
+
       playClear() {
-        [261.63, 329.63, 392.00, 523.25].forEach((freq, idx) => {
-          setTimeout(() => this.playTone(freq, 'sine', 0.15), idx * 100);
+        const notes = [261.63, 329.63, 392.00, 523.25];
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            this.playTone(freq, 'sine', 0.15);
+          }, idx * 100);
         });
       }
     };
 
-    /* =========================================================================
-       GAME STATE & LEVEL MANAGEMENT
-       ========================================================================= */
-    "use strict";
+    /* -------------------------------------------------------------------------
+       3. GAME CONSTANTS, STATIC FALLBACKS & STATE MANAGEMENT
+       ------------------------------------------------------------------------- */
+    const LOCAL_LEVELS = [
+      {
+        name: "First Steps",
+        startVal: 10,
+        grid: [
+          ['W', 'W', 'W', 'W', 'W', 'W'],
+          ['W', 'S', '.', '-10', '.', 'W'],
+          ['W', '.', '.', 'W', '.', 'W'],
+          ['W', '.', '.', 'E', '.', 'W'],
+          ['W', '.', 'W', '.', '.', 'W'],
+          ['W', 'W', 'W', 'W', 'W', 'W']
+        ]
+      },
+      {
+        name: "Double Down",
+        startVal: 5,
+        grid: [
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W'],
+          ['W', 'S', '.', '*2', '.', '.', 'W'],
+          ['W', 'W', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '.', 'E', 'W', 'W'],
+          ['W', '.', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '-10', '.', '.', 'W'],
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W']
+        ]
+      },
+      {
+        name: "The Grid Divide",
+        startVal: 12,
+        grid: [
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W'],
+          ['W', 'S', '.', '/2', '.', '.', 'W'],
+          ['W', 'W', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '.', 'E', 'W', 'W'],
+          ['W', '.', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '-6', '.', '.', 'W'],
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W']
+        ]
+      },
+      {
+        name: "Triple Threat",
+        startVal: 3,
+        grid: [
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W'],
+          ['W', 'S', '.', '*3', '.', '.', 'W'],
+          ['W', 'W', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '.', 'E', 'W', 'W'],
+          ['W', '.', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '-9', '.', '.', 'W'],
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W']
+        ]
+      },
+      {
+        name: "The Compound",
+        startVal: 8,
+        grid: [
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
+          ['W', 'S', '.', '+4', '.', '.', '.', 'W'],
+          ['W', 'W', '.', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '.', '.', 'E', 'W', 'W'],
+          ['W', '.', '.', '.', '.', '.', '*2', 'W'],
+          ['W', '.', '.', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '-24', '.', '.', '.', 'W'],
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
+        ]
+      },
+      {
+        name: "Absolute Zero",
+        startVal: 15,
+        grid: [
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
+          ['W', 'S', '.', '/3', '.', '.', '.', 'W'],
+          ['W', 'W', '.', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '.', '.', 'E', 'W', 'W'],
+          ['W', '.', '.', '.', '.', '.', '*12', 'W'],
+          ['W', '.', '.', '.', '.', '.', '.', 'W'],
+          ['W', '.', '.', '-60', '.', '.', '.', 'W'],
+          ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
+        ]
+      }
+    ];
 
-    let LEVELS = [];
+    let LEVELS = [...LOCAL_LEVELS];
 
+    let state = {
+      currentLevelIdx: 0,
+      gameState: 'MENU', /* MENU, PLAYING, GAMEOVER, VICTORY, COMPLETED, PAUSED */
+      soundOn: true,
+      bestMoves: {},
+      unlockedLevel: 0,
+      demoMode: false,
+      levelGrid: [],
+      startVal: 0,
+      moves: 0,
+      player: {
+        gridX: 0,
+        gridY: 0,
+        currentX: 0,
+        currentY: 0,
+        value: 0,
+        isSliding: false,
+        slidePath: [],
+        pathIndex: 0,
+        targetGridX: 0,
+        targetGridY: 0
+      },
+      particles: [],
+
+      /* Camera Pan & Zoom Transform Properties */
+      scale: 1.0,
+      panX: 0.0,
+      panY: 0.0,
+      isPanToolActive: false
+    };
+
+    /* Active Touch registry mapping for multi-touch inputs */
+    let activeTouches = {};
+
+    /* -------------------------------------------------------------------------
+       4. REMOTE LEVEL FETCHER WITH SANITIZATION & COMMENT STRIPPING
+       ------------------------------------------------------------------------- */
     async function fetchRemoteLevels() {
+      const loaderOverlay = document.getElementById('sk_overlay_loader');
+      const loaderStatus = document.getElementById('sk_loader_status');
+      const loaderProgress = document.getElementById('sk_loader_progress');
+
+      loaderOverlay.classList.remove('sk_hidden');
+      loaderStatus.innerText = "Attempting to fetch remote levels JSON...";
+      loaderProgress.style.width = "20%";
+
+      /* Simulated or customizable raw target repository link */
+      const rawLink = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Zero_Drift/levels.json";
+
       try {
-        const response = await fetch("levels.json");
-        if (!response.ok) throw new Error("levels.json fetch failed");
-        const parsed = await response.json();
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          LEVELS = parsed;
-          console.log("Loaded", LEVELS.length, "levels from levels.json");
-          if (state.gameState === 'MENU' && LEVELS.length > 0) {
-            loadLevel(0);
-          }
+        /* Dynamic timeout simulation for styling and remote testing */
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+        loaderProgress.style.width = "50%";
+        const response = await fetch(rawLink, {signal: controller.signal});
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error("Server response negative.");
+
+        let rawText = await response.text();
+        loaderProgress.style.width = "75%";
+
+        /* Strict parsing & sanitization: Stripping single line (//) and multi line block (/*) comments */
+        let cleanText = rawText
+          .replace(/\/\*[\s\S]*?\*\//g, "") /* Strip block comments */
+          .replace(/\/\/.*$/gm, "")         /* Strip single line comments */
+          .trim();
+
+        const parsedLevels = JSON.parse(cleanText);
+        if (Array.isArray(parsedLevels) && parsedLevels.length > 0) {
+          LEVELS = parsedLevels;
+          loaderStatus.innerText = "Fetch completed successfully!";
+        } else {
+          throw new Error("Invalid structure formats received.");
         }
       } catch (e) {
-        console.warn("Failed to load levels.json:", e);
+        console.warn("Git Raw Fetch failed or timed out. Transitioning smoothly to embedded fallback levels.", e);
+        loaderStatus.innerText = "Using embedded static levels fallback...";
+        LEVELS = [...LOCAL_LEVELS];
+      } finally {
+        loaderProgress.style.width = "100%";
+        setTimeout(() => {
+          loaderOverlay.classList.add('sk_hidden');
+          document.getElementById('sk_overlay_start').classList.remove('sk_hidden');
+        }, 800);
       }
     }
 
     function loadProgress() {
       try {
-        const saved = localStorage.getItem('sk_zero_drift_save_v2');
+        const saved = localStorage.getItem('sk_zero_drift_save_v1');
         if (saved) {
-          const p = JSON.parse(saved);
-          state.unlockedLevel = p.unlockedLevel || 0;
-          state.bestMoves = p.bestMoves || {};
-          state.soundOn = p.soundOn !== undefined ? p.soundOn : true;
-          state.darkMode = p.darkMode || false;
+          const parsed = JSON.parse(saved);
+          state.unlockedLevel = parsed.unlockedLevel || 0;
+          state.bestMoves = parsed.bestMoves || {};
+          state.soundOn = parsed.soundOn !== undefined ? parsed.soundOn : true;
           AudioEngine.enabled = state.soundOn;
-          if (state.darkMode) document.body.classList.add('dark-theme');
         }
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     function saveProgress() {
       try {
-        localStorage.setItem('sk_zero_drift_save_v2', JSON.stringify({
+        localStorage.setItem('sk_zero_drift_save_v1', JSON.stringify({
           unlockedLevel: state.unlockedLevel,
           bestMoves: state.bestMoves,
-          soundOn: state.soundOn,
-          darkMode: state.darkMode
+          soundOn: state.soundOn
         }));
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error(e);
+      }
     }
 
+    /* Reset transformations back to origin center */
     function resetTransformations() {
       state.scale = 1.0;
       state.panX = 0;
       state.panY = 0;
     }
 
+    /* -------------------------------------------------------------------------
+       5. GAME ENGINE LOGIC & SLIDE SIMULATION
+       ------------------------------------------------------------------------- */
     function loadLevel(idx) {
       if (idx < 0 || idx >= LEVELS.length) return;
       state.currentLevelIdx = idx;
-      const raw = LEVELS[idx];
-      state.startVal = raw.startVal;
-      state.levelGrid = raw.grid.map(row => [...row]);
+      const rawLevel = LEVELS[idx];
+      state.startVal = rawLevel.startVal;
+
+      state.levelGrid = rawLevel.grid.map(row => [...row]);
       state.moves = 0;
-      state.history = [];
       state.gameState = 'PLAYING';
       state.demoMode = false;
       state.particles = [];
       resetTransformations();
 
+      let foundStart = false;
       for (let r = 0; r < state.levelGrid.length; r++) {
         for (let c = 0; c < state.levelGrid[r].length; c++) {
           if (state.levelGrid[r][c] === 'S') {
@@ -930,11 +1116,12 @@
             state.player.gridY = r;
             state.player.currentX = c;
             state.player.currentY = r;
+            foundStart = true;
           }
         }
       }
 
-      state.player.value = raw.startVal;
+      state.player.value = rawLevel.startVal;
       state.player.isSliding = false;
       state.player.slidePath = [];
       state.player.pathIndex = 0;
@@ -961,32 +1148,10 @@
       return current;
     }
 
-    function recordHistory() {
-      state.history.push({
-        gridX: state.player.gridX,
-        gridY: state.player.gridY,
-        value: state.player.value,
-        moves: state.moves
-      });
-    }
-
-    function undoMove() {
-      if (state.gameState !== 'PLAYING' || state.player.isSliding || state.history.length === 0) return;
-      const prev = state.history.pop();
-      state.player.gridX = prev.gridX;
-      state.player.gridY = prev.gridY;
-      state.player.currentX = prev.gridX;
-      state.player.currentY = prev.gridY;
-      state.player.value = prev.value;
-      state.moves = prev.moves;
-      updateUI();
-      AudioEngine.playOp();
-    }
-
     function handleSlide(dx, dy) {
-      if (state.gameState !== 'PLAYING' || state.player.isSliding) return;
+      if (state.gameState !== 'PLAYING') return;
+      if (state.player.isSliding) return;
 
-      recordHistory();
       let path = [];
       let cx = state.player.gridX;
       let cy = state.player.gridY;
@@ -1005,7 +1170,7 @@
         cx = nx;
         cy = ny;
 
-        let stepData = { x: cx, y: cy, opApplied: null, valAfter: currentVal };
+        let stepData = {x: cx, y: cy, opApplied: null, valAfter: currentVal};
         let tile = grid[cy][cx];
 
         if (isOperator(tile)) {
@@ -1017,11 +1182,7 @@
         path.push(stepData);
 
         if (tile === 'E') {
-          let nxtX = cx + dx;
-          let nxtY = cy + dy;
-          if (nxtX < 0 || nxtX >= w || nxtY < 0 || nxtY >= h || grid[nxtY][nxtX] === 'W') {
-            break;
-          }
+          break;
         }
       }
 
@@ -1034,8 +1195,6 @@
         state.moves++;
         updateUI();
         AudioEngine.playSlide();
-      } else {
-        state.history.pop(); // Revert history if didn't move
       }
     }
 
@@ -1090,22 +1249,95 @@
     }
 
     let demoTimer = null;
+
+    function solveDemoPath() {
+      const grid = state.levelGrid;
+      const h = grid.length;
+      const w = grid[0].length;
+
+      let startX = -1, startY = -1;
+      for (let r = 0; r < h; r++) {
+        for (let c = 0; c < w; c++) {
+          if (grid[r][c] === 'S') { startX = c; startY = r; }
+        }
+      }
+      if (startX === -1) return null;
+      const startVal = state.player.value;
+
+      const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+      const key = (x, y, v) => x + ',' + y + ',' + v;
+
+      const visited = new Set([key(startX, startY, startVal)]);
+      const queue = [{x: startX, y: startY, v: startVal, path: []}];
+      let head = 0;
+
+      while (head < queue.length) {
+        const cur = queue[head++];
+        for (const [dx, dy] of dirs) {
+          let cx = cur.x, cy = cur.y, val = cur.v;
+          let moved = false, outOfBounds = false;
+
+          while (true) {
+            const nx = cx + dx, ny = cy + dy;
+            if (nx < 0 || nx >= w || ny < 0 || ny >= h) break;
+            if (grid[ny][nx] === 'W') break;
+            moved = true;
+            cx = nx;
+            cy = ny;
+            const tile = grid[cy][cx];
+            if (isOperator(tile)) {
+              val = applyMath(val, tile);
+              if (val < 0 || val > 99) { outOfBounds = true; break; }
+            }
+            if (tile === 'E') break;
+          }
+
+          if (!moved || outOfBounds) continue;
+
+          const newPath = cur.path.concat([{dx, dy}]);
+          const endTile = grid[cy][cx];
+          if (endTile === 'E') {
+            if (val === 0) return newPath;
+            continue;
+          }
+
+          const nk = key(cx, cy, val);
+          if (visited.has(nk)) continue;
+          visited.add(nk);
+          queue.push({x: cx, y: cy, v: val, path: newPath});
+        }
+      }
+
+      return null;
+    }
+
     function startDemo() {
       loadLevel(0);
       state.demoMode = true;
       hideAllOverlays();
 
-      const demoMoves = [{ dx: 1, dy: 0 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }, { dx: 0, dy: -1 }];
-      let step = 0;
+      const path = solveDemoPath();
+      if (!path || path.length === 0) {
+        cancelDemo();
+        return;
+      }
 
+      let step = 0;
       function playNext() {
         if (!state.demoMode) return;
-        if (step < demoMoves.length) {
-          handleSlide(demoMoves[step].dx, demoMoves[step].dy);
-          step++;
-          demoTimer = setTimeout(playNext, 1200);
+        if (step >= path.length) {
+          demoTimer = setTimeout(() => cancelDemo(), 1600);
+          return;
         }
+        if (state.player.isSliding) {
+          demoTimer = setTimeout(playNext, 120);
+          return;
+        }
+        const mv = path[step++];
+        handleSlide(mv.dx, mv.dy);
+        demoTimer = setTimeout(playNext, 700);
       }
+
       demoTimer = setTimeout(playNext, 600);
     }
 
@@ -1125,13 +1357,13 @@
       } else if (state.gameState === 'PAUSED') {
         state.gameState = 'PLAYING';
         document.getElementById('sk_overlay_paused').classList.add('sk_hidden');
-        document.getElementById('sk_btn_pause').innerText = "Pause";
+        document.getElementById('sk_btn_pause').innerText = "⏸️ Pause";
       }
     }
 
-    /* =========================================================================
-       CANVAS RENDERING & PARTICLES
-       ========================================================================= */
+    /* -------------------------------------------------------------------------
+       6. CANVAS RENDER / PARTICLE SYSTEM
+       ------------------------------------------------------------------------- */
     const canvas = document.getElementById('sk_game_canvas');
     const ctx = canvas.getContext('2d');
 
@@ -1139,6 +1371,7 @@
       const cellSize = canvas.width / state.levelGrid[0].length;
       const px = (gx + 0.5) * cellSize;
       const py = (gy + 0.5) * cellSize;
+
       let color = '#0ea5e9';
       if (opStr.startsWith('-')) color = '#f43f5e';
       if (opStr.startsWith('*')) color = '#8b5cf6';
@@ -1146,11 +1379,14 @@
 
       for (let i = 0; i < 8; i++) {
         state.particles.push({
-          x: px, y: py,
+          x: px,
+          y: py,
           vx: (Math.random() - 0.5) * 4,
           vy: -Math.random() * 4 - 2,
-          life: 1.0, decay: 0.03,
-          text: opStr, color: color,
+          life: 1.0,
+          decay: 0.03,
+          text: opStr,
+          color: color,
           size: Math.random() * 8 + 14
         });
       }
@@ -1163,11 +1399,14 @@
 
       for (let i = 0; i < 20; i++) {
         state.particles.push({
-          x: px, y: py,
+          x: px,
+          y: py,
           vx: (Math.random() - 0.5) * 8,
           vy: (Math.random() - 0.5) * 8,
-          life: 1.0, decay: 0.04,
-          text: '💥', color: '#f43f5e',
+          life: 1.0,
+          decay: 0.04,
+          text: '💥',
+          color: '#f43f5e',
           size: Math.random() * 10 + 12
         });
       }
@@ -1180,11 +1419,13 @@
           const py = Math.random() * canvas.height;
           for (let i = 0; i < 20; i++) {
             state.particles.push({
-              x: px, y: py,
+              x: px,
+              y: py,
               vx: (Math.random() - 0.5) * 10,
               vy: (Math.random() - 0.5) * 10,
-              life: 1.0, decay: 0.03,
-              text: Math.random() > 0.5 ? '★' : '✨',
+              life: 1.0,
+              decay: 0.03,
+              text: Math.random() > 0.5 ? '✦' : '✨',
               color: `hsl(${Math.random() * 360}, 100%, 70%)`,
               size: Math.random() * 12 + 12
             });
@@ -1199,15 +1440,19 @@
         p.x += p.vx;
         p.y += p.vy;
         p.life -= p.decay;
-        if (p.life <= 0) state.particles.splice(i, 1);
+        if (p.life <= 0) {
+          state.particles.splice(i, 1);
+        }
       }
     }
 
     function drawGame() {
       if (!state.levelGrid.length) return;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       ctx.save();
+      /* Apply Camera Transformations (Pan & Zoom) */
       ctx.translate(state.panX, state.panY);
       ctx.scale(state.scale, state.scale);
 
@@ -1215,7 +1460,8 @@
       const rows = state.levelGrid.length;
       const cellSize = canvas.width / cols;
 
-      ctx.fillStyle = state.darkMode ? '#1e293b' : '#bae6fd';
+      /* Background on ice */
+      ctx.fillStyle = '#bae6fd';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       for (let r = 0; r < rows; r++) {
@@ -1224,13 +1470,13 @@
           const tx = c * cellSize;
           const ty = r * cellSize;
 
-          ctx.fillStyle = state.darkMode ? '#0f172a' : '#f8fafc';
+          ctx.fillStyle = '#f8fafc';
           ctx.fillRect(tx + 2, ty + 2, cellSize - 4, cellSize - 4);
 
           if (tile === 'W') {
-            ctx.fillStyle = state.darkMode ? '#334155' : '#475569';
+            ctx.fillStyle = '#475569';
             ctx.fillRect(tx + 2, ty + 2, cellSize - 4, cellSize - 4);
-            ctx.strokeStyle = state.darkMode ? '#475569' : '#64748b';
+            ctx.strokeStyle = '#64748b';
             ctx.lineWidth = 3;
             ctx.strokeRect(tx + 5, ty + 5, cellSize - 10, cellSize - 10);
           } else if (tile === 'E') {
@@ -1275,13 +1521,15 @@
         }
       }
 
+      /* Draw player block */
       let px = state.player.currentX * cellSize;
       let py = state.player.currentY * cellSize;
 
       ctx.save();
-      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowColor = 'rgba(0,0,0,0.2)';
       ctx.shadowBlur = 12;
       ctx.shadowOffsetY = 4;
+
       ctx.fillStyle = '#0ea5e9';
       ctx.fillRect(px + 6, py + 6, cellSize - 12, cellSize - 12);
       ctx.restore();
@@ -1296,6 +1544,7 @@
       ctx.textBaseline = 'middle';
       ctx.fillText(state.player.value, px + cellSize / 2, py + cellSize / 2);
 
+      /* Floating Burst Particles */
       updateParticles();
       state.particles.forEach(p => {
         ctx.save();
@@ -1306,8 +1555,9 @@
         ctx.restore();
       });
 
-      ctx.restore();
+      ctx.restore(); /* Restore transform states */
 
+      /* Demo pulse label */
       if (state.demoMode) {
         ctx.fillStyle = 'rgba(15, 23, 42, 0.4)';
         ctx.fillRect(0, 0, canvas.width, 35);
@@ -1322,13 +1572,13 @@
     }
 
     function updateAnimationStep() {
-      if (state.gameState === 'PAUSED') return;
+      if (state.gameState === 'PAUSED') return; /* Freeze logic when paused */
       if (state.player.isSliding && state.player.slidePath.length > 0) {
         const node = state.player.slidePath[state.player.pathIndex];
         const dx = node.x - state.player.currentX;
         const dy = node.y - state.player.currentY;
         const dist = Math.hypot(dx, dy);
-        const speed = 0.28;
+        const speed = 0.25;
 
         if (dist < 0.05) {
           state.player.currentX = node.x;
@@ -1339,6 +1589,14 @@
             AudioEngine.playOp();
             spawnOpParticles(node.x, node.y, node.opApplied);
             updateUI();
+
+            if (state.player.value < 0 || state.player.value > 99) {
+              state.player.isSliding = false;
+              state.player.gridX = state.player.targetGridX;
+              state.player.gridY = state.player.targetGridY;
+              checkSlideEndState();
+              return;
+            }
           }
 
           state.player.pathIndex++;
@@ -1361,6 +1619,9 @@
       requestAnimationFrame(loop);
     }
 
+    /* -------------------------------------------------------------------------
+       7. UI INTERACTIONS & EVENTS HANDLING
+       ------------------------------------------------------------------------- */
     function updateUI() {
       document.getElementById('sk_hud_level').innerText = state.currentLevelIdx + 1;
       document.getElementById('sk_hud_value').innerText = state.player.value;
@@ -1375,71 +1636,6 @@
       document.getElementById('sk_overlay_paused').classList.add('sk_hidden');
     }
 
-    /* =========================================================================
-       LEVEL EDITOR SUITE
-       ========================================================================= */
-    const Editor = {
-      size: 6,
-      selectedTool: 'W',
-      grid: [],
-
-      init() {
-        this.grid = Array(this.size).fill(0).map(() => Array(this.size).fill('.'));
-        // Add default boundary walls and start/exit
-        for (let i = 0; i < this.size; i++) {
-          this.grid[0][i] = 'W';
-          this.grid[this.size - 1][i] = 'W';
-          this.grid[i][0] = 'W';
-          this.grid[i][this.size - 1] = 'W';
-        }
-        this.grid[1][1] = 'S';
-        this.grid[this.size - 2][this.size - 2] = 'E';
-        this.renderGrid();
-        this.updateJSON();
-      },
-
-      renderGrid() {
-        const container = document.getElementById('sk_editor_grid');
-        container.innerHTML = '';
-        container.style.gridTemplateColumns = `repeat(${this.size}, 1fr)`;
-
-        for (let r = 0; r < this.size; r++) {
-          for (let c = 0; c < this.size; c++) {
-            const cell = document.createElement('div');
-            cell.className = 'sk_editor_cell';
-            const val = this.grid[r][c];
-            cell.innerText = val === '.' ? '' : val;
-            if (val === 'W') cell.style.background = '#475569';
-            else if (val === 'S') cell.style.background = '#0ea5e9';
-            else if (val === 'E') cell.style.background = '#eab308';
-            else if (isOperator(val)) cell.style.background = '#8b5cf6';
-            else cell.style.background = 'var(--panel-bg)';
-
-            cell.addEventListener('click', () => {
-              this.grid[r][c] = this.selectedTool;
-              this.renderGrid();
-              this.updateJSON();
-            });
-            container.appendChild(cell);
-          }
-        }
-      },
-
-      updateJSON() {
-        const name = document.getElementById('sk_edit_name').value || 'Custom Puzzle';
-        const startVal = parseInt(document.getElementById('sk_edit_startval').value, 10) || 10;
-        const levelObj = {
-          name: name,
-          startVal: startVal,
-          grid: this.grid
-        };
-        document.getElementById('sk_edit_json').value = JSON.stringify(levelObj, null, 2);
-      }
-    };
-
-    /* =========================================================================
-       UI & EVENT LISTENERS
-       ========================================================================= */
     function togglePopup(id, open) {
       const el = document.getElementById(id);
       if (open) {
@@ -1447,7 +1643,6 @@
         el.classList.remove('sk_hidden');
         if (id === 'sk_popup_levels') renderLevelsPopup();
         if (id === 'sk_popup_scores') renderScoresPopup();
-        if (id === 'sk_popup_editor') Editor.init();
       } else {
         el.classList.add('sk_hidden');
       }
@@ -1456,10 +1651,13 @@
     function renderLevelsPopup() {
       const grid = document.getElementById('sk_levels_grid');
       grid.innerHTML = '';
+
       LEVELS.forEach((lvl, idx) => {
         const btn = document.createElement('button');
         btn.className = 'sk_level_btn';
-        if (idx <= state.unlockedLevel) {
+
+        const isUnlocked = idx <= state.unlockedLevel;
+        if (isUnlocked) {
           btn.innerText = idx + 1;
           btn.addEventListener('click', () => {
             loadLevel(idx);
@@ -1476,10 +1674,11 @@
     function renderScoresPopup() {
       const container = document.getElementById('sk_scores_body');
       container.innerHTML = '';
+
       LEVELS.forEach((lvl, idx) => {
         const p = document.createElement('p');
         const best = state.bestMoves[idx];
-        const bestStr = best ? `${best} moves` : 'Not completed';
+        const bestStr = best ? `${best} moves` : 'Not completed yet';
         const status = idx <= state.unlockedLevel ? 'Unlocked' : 'Locked';
         p.innerHTML = `Level ${idx + 1} (${lvl.name}): <span class="sk_badge">${bestStr}</span> <i style="font-size:11px; color:#64748b;">${status}</i>`;
         container.appendChild(p);
@@ -1488,11 +1687,12 @@
 
     function handleResize() {
       const container = document.getElementById('sk_canvas_container');
-      const size = Math.min(container.clientWidth, container.clientHeight, 480);
+      const size = Math.min(container.clientWidth, container.clientHeight, 500);
       canvas.width = size;
       canvas.height = size;
     }
 
+    /* Drawer handling */
     function openDrawer() {
       document.getElementById('sk_side_drawer').classList.remove('sk_drawer_closed');
       document.getElementById('sk_drawer_overlay').classList.remove('sk_hidden');
@@ -1503,102 +1703,326 @@
       document.getElementById('sk_drawer_overlay').classList.add('sk_hidden');
     }
 
-    // Touch & Swipe Controls
-    let touchStartX = 0, touchStartY = 0, touchStartDistance = 0, touchStartScale = 1;
-    let touchStartPanX = 0, touchStartPanY = 0, isPinching = false, lastTapTime = 0;
+    /* -------------------------------------------------------------------------
+       8. GESTURE, TOUCH & TRANSFORM CONTROLS ARCHITECTURE
+       ------------------------------------------------------------------------- */
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartDistance = 0;
+    let touchStartScale = 1;
+    let touchStartPanX = 0;
+    let touchStartPanY = 0;
+    let isPinching = false;
+    let lastTapTime = 0;
+    let longPressTimer = null;
+
+    /* Helper to convert screen canvas coords to transformed coordinates mapping */
+    function getTransformedCoords(screenX, screenY) {
+      const rect = canvas.getBoundingClientRect();
+      const x = screenX - rect.left;
+      const y = screenY - rect.top;
+      return {
+        x: (x - state.panX) / state.scale,
+        y: (y - state.panY) / state.scale
+      };
+    }
 
     canvas.addEventListener('touchstart', (e) => {
-      if (state.demoMode) { cancelDemo(); return; }
+      if (state.demoMode) {cancelDemo(); return;}
+
+      /* Map active identifiers into multi-touch registry */
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        activeTouches[t.identifier] = {x: t.clientX, y: t.clientY};
+      }
+
+      /* Long touch detector setup for instant reset helper */
       if (e.touches.length === 1) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
+        const singleTouch = e.touches[0];
+        touchStartX = singleTouch.clientX;
+        touchStartY = singleTouch.clientY;
         touchStartPanX = state.panX;
         touchStartPanY = state.panY;
-      } else if (e.touches.length === 2) {
+
+        longPressTimer = setTimeout(() => {
+          if (!state.player.isSliding) {
+            loadLevel(state.currentLevelIdx);
+            AudioEngine.playClear();
+          }
+        }, 700);
+      }
+
+      /* Two finger pinch gesture trigger detection */
+      if (e.touches.length === 2) {
         isPinching = true;
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         touchStartDistance = Math.hypot(dx, dy);
         touchStartScale = state.scale;
+
         touchStartPanX = state.panX;
         touchStartPanY = state.panY;
+        touchStartX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        touchStartY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
       }
-    }, { passive: true });
+    }, {passive: true});
 
     canvas.addEventListener('touchmove', (e) => {
-      if (e.touches.length === 1 && state.isPanToolActive) {
-        const dx = e.touches[0].clientX - touchStartX;
-        const dy = e.touches[0].clientY - touchStartY;
-        state.panX = touchStartPanX + dx;
-        state.panY = touchStartPanY + dy;
-      } else if (e.touches.length === 2 && isPinching) {
+      if (e.touches.length === 1) {
+        const singleTouch = e.touches[0];
+        const dx = singleTouch.clientX - touchStartX;
+        const dy = singleTouch.clientY - touchStartY;
+
+        /* Cancel long press detection if dragged significantly */
+        if (Math.hypot(dx, dy) > 10) {
+          clearTimeout(longPressTimer);
+        }
+
+        /* Hand Pan tool movement modifier logic */
+        if (state.isPanToolActive) {
+          state.panX = touchStartPanX + dx;
+          state.panY = touchStartPanY + dy;
+          return;
+        }
+      }
+
+      /* Math handling for two-finger pinch-to-zoom */
+      if (e.touches.length === 2 && isPinching) {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
-        const dist = Math.hypot(dx, dy);
-        if (dist > 5) {
-          state.scale = Math.max(0.5, Math.min(touchStartScale * (dist / touchStartDistance), 3.0));
+        const distance = Math.hypot(dx, dy);
+
+        if (distance > 5) {
+          const factor = distance / touchStartDistance;
+          state.scale = Math.max(0.5, Math.min(touchStartScale * factor, 3.0));
+
+          /* Focus transformation translation adjustments */
+          const currentMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+          const currentMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+          state.panX = currentMidX - (touchStartX - touchStartPanX) * (state.scale / touchStartScale);
+          state.panY = currentMidY - (touchStartY - touchStartPanY) * (state.scale / touchStartScale);
         }
       }
-    }, { passive: true });
+    }, {passive: true});
 
     canvas.addEventListener('touchend', (e) => {
-      if (e.touches.length === 0 && !state.isPanToolActive && !isPinching) {
+      clearTimeout(longPressTimer);
+
+      /* Single/Double tap triggers verification */
+      if (e.touches.length === 0) {
+        const now = Date.now();
+        const tapDuration = now - lastTapTime;
         const endX = e.changedTouches[0].clientX;
         const endY = e.changedTouches[0].clientY;
-        const dx = endX - touchStartX;
-        const dy = endY - touchStartY;
-        const absX = Math.abs(dx);
-        const absY = Math.abs(dy);
+        const dist = Math.hypot(endX - touchStartX, endY - touchStartY);
 
-        if (Math.max(absX, absY) > 25 && state.gameState === 'PLAYING') {
-          if (absX > absY) handleSlide(dx > 0 ? 1 : -1, 0);
-          else handleSlide(0, dy > 0 ? 1 : -1);
+        if (dist < 15) {
+          if (tapDuration < 300) {
+            /* Double Tap Action: Quick reset of screen coordinates transformation */
+            resetTransformations();
+            lastTapTime = 0;
+            return;
+          }
+          lastTapTime = now;
+        }
+
+        /* Traditional Swipe calculations if not panning or pinching */
+        if (!state.isPanToolActive && !isPinching) {
+          const dx = endX - touchStartX;
+          const dy = endY - touchStartY;
+          const absX = Math.abs(dx);
+          const absY = Math.abs(dy);
+
+          if (Math.max(absX, absY) > 25 && state.gameState === 'PLAYING') {
+            if (absX > absY) {
+              handleSlide(dx > 0 ? 1 : -1, 0);
+            } else {
+              handleSlide(0, dy > 0 ? 1 : -1);
+            }
+          }
         }
       }
-      if (e.touches.length < 2) isPinching = false;
-    }, { passive: true });
 
-    // Keyboard controls
+      if (e.touches.length < 2) {
+        isPinching = false;
+      }
+
+      /* Cleanup dynamic Touch Registry values */
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        delete activeTouches[e.changedTouches[i].identifier];
+      }
+    }, {passive: true});
+
+    canvas.addEventListener('touchcancel', (e) => {
+      clearTimeout(longPressTimer);
+      isPinching = false;
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        delete activeTouches[e.changedTouches[i].identifier];
+      }
+    }, {passive: true});
+
+    /* Mouse Panning and Zooming mapping */
+    let isMouseDown = false;
+    let mouseStartX = 0;
+    let mouseStartY = 0;
+
+    canvas.addEventListener('mousedown', (e) => {
+      if (state.isPanToolActive) {
+        isMouseDown = true;
+        mouseStartX = e.clientX - state.panX;
+        mouseStartY = e.clientY - state.panY;
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (isMouseDown && state.isPanToolActive) {
+        state.panX = e.clientX - mouseStartX;
+        state.panY = e.clientY - mouseStartY;
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isMouseDown = false;
+    });
+
+    /* -------------------------------------------------------------------------
+       9. KEYBOARD MAPPINGS (SUPPORTING ZOOM MODIFIERS & STANDARD ACTIONS)
+       ------------------------------------------------------------------------- */
     window.addEventListener('keydown', (e) => {
-      if (state.demoMode) { cancelDemo(); return; }
-      if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undoMove(); return; }
+      if (state.demoMode) {
+        cancelDemo();
+        return;
+      }
 
-      if (state.gameState === 'MENU' && e.key === 'Enter') { loadLevel(0); return; }
-      if (state.gameState === 'GAMEOVER' && (e.key === 'r' || e.key === 'R')) { loadLevel(state.currentLevelIdx); return; }
-      if (state.gameState === 'VICTORY' && e.key === 'Enter') { loadLevel(state.currentLevelIdx + 1); return; }
-      if (e.key === ' ') { e.preventDefault(); togglePause(); return; }
+      /* Zoom mappings: Ctrl + Plus, Ctrl + Minus */
+      if (e.ctrlKey && (e.key === '=' || e.key === '+' || e.code === 'Equal')) {
+        e.preventDefault();
+        zoomCanvas(1.1);
+        return;
+      }
+      if (e.ctrlKey && (e.key === '-' || e.code === 'Minus')) {
+        e.preventDefault();
+        zoomCanvas(0.9);
+        return;
+      }
+
+      if (state.gameState === 'MENU') {
+        if (e.key === 'Enter') {
+          loadLevel(0);
+          return;
+        }
+      }
+
+      if (state.gameState === 'GAMEOVER') {
+        if (e.key === 'r' || e.key === 'R') {
+          loadLevel(state.currentLevelIdx);
+          return;
+        }
+      }
+
+      if (state.gameState === 'VICTORY') {
+        if (e.key === 'Enter') {
+          loadLevel(state.currentLevelIdx + 1);
+          return;
+        }
+      }
+
+      if (e.key === ' ') {
+        e.preventDefault();
+        togglePause();
+        return;
+      }
 
       if (state.gameState === 'PLAYING') {
         switch (e.key) {
-          case 'ArrowUp': case 'w': case 'W': handleSlide(0, -1); e.preventDefault(); break;
-          case 'ArrowDown': case 's': case 'S': handleSlide(0, 1); e.preventDefault(); break;
-          case 'ArrowLeft': case 'a': case 'A': handleSlide(-1, 0); e.preventDefault(); break;
-          case 'ArrowRight': case 'd': case 'D': handleSlide(1, 0); e.preventDefault(); break;
-          case 'r': case 'R': loadLevel(state.currentLevelIdx); e.preventDefault(); break;
+          case 'ArrowUp':
+          case 'w':
+          case 'W':
+            handleSlide(0, -1);
+            e.preventDefault();
+            break;
+          case 'ArrowDown':
+          case 's':
+          case 'S':
+            handleSlide(0, 1);
+            e.preventDefault();
+            break;
+          case 'ArrowLeft':
+          case 'a':
+          case 'A':
+            handleSlide(-1, 0);
+            e.preventDefault();
+            break;
+          case 'ArrowRight':
+          case 'd':
+          case 'D':
+            handleSlide(1, 0);
+            e.preventDefault();
+            break;
+          case 'r':
+          case 'R':
+            loadLevel(state.currentLevelIdx);
+            e.preventDefault();
+            break;
         }
       }
     });
 
-    // Draggable Controls handling
+    /* -------------------------------------------------------------------------
+       10. DRAGGABLE VIRTUAL CONTROLLER CONFIGURATION
+       ------------------------------------------------------------------------- */
     const dragContainer = document.getElementById('sk_drag_controls');
     const dragHandle = dragContainer.querySelector('.sk_drag_handle');
-    let activeDrag = false, dragX = 0, dragY = 0, initialX = 0, initialY = 0;
+    let activeDrag = false;
+    let dragX, dragY, initialX, initialY;
 
-    dragHandle.addEventListener('mousedown', (e) => {
-      activeDrag = true;
-      dragX = e.clientX; dragY = e.clientY;
+    dragHandle.addEventListener('mousedown', dragStart);
+    dragHandle.addEventListener('touchstart', dragStart, {passive: false});
+
+    function dragStart(e) {
+      if (e.type === 'touchstart') {
+        dragX = e.touches[0].clientX;
+        dragY = e.touches[0].clientY;
+      } else {
+        dragX = e.clientX;
+        dragY = e.clientY;
+      }
       const rect = dragContainer.getBoundingClientRect();
       const parentRect = document.querySelector('.sk_game_suite_root').getBoundingClientRect();
+
       initialX = rect.left - parentRect.left;
       initialY = rect.top - parentRect.top;
+
+      activeDrag = true;
       document.addEventListener('mousemove', dragMove);
+      document.addEventListener('touchmove', dragMove, {passive: false});
       document.addEventListener('mouseup', dragEnd);
-    });
+      document.addEventListener('touchend', dragEnd);
+    }
 
     function dragMove(e) {
       if (!activeDrag) return;
-      let newX = initialX + (e.clientX - dragX);
-      let newY = initialY + (e.clientY - dragY);
+      if (e.cancelable) e.preventDefault();
+
+      let clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+      let clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+      let dx = clientX - dragX;
+      let dy = clientY - dragY;
+
+      let newX = initialX + dx;
+      let newY = initialY + dy;
+
+      const parent = document.querySelector('.sk_game_suite_root');
+      const parentRect = parent.getBoundingClientRect();
+      const containerRect = dragContainer.getBoundingClientRect();
+
+      const maxX = parentRect.width - containerRect.width;
+      const maxY = parentRect.height - containerRect.height;
+
+      newX = Math.max(0, Math.min(newX, maxX));
+      newY = Math.max(0, Math.min(newY, maxY));
+
       dragContainer.style.left = `${newX}px`;
       dragContainer.style.top = `${newY}px`;
       dragContainer.style.bottom = 'auto';
@@ -1608,12 +2032,23 @@
     function dragEnd() {
       activeDrag = false;
       document.removeEventListener('mousemove', dragMove);
+      document.removeEventListener('touchmove', dragMove);
       document.removeEventListener('mouseup', dragEnd);
+      document.removeEventListener('touchend', dragEnd);
     }
 
-    // Zoom & Pan Actions
+    /* -------------------------------------------------------------------------
+       11. ZOOM & PAN IMPLEMENTATIONS FOR VIRTUAL CONTROLS
+       ------------------------------------------------------------------------- */
     function zoomCanvas(factor) {
+      const prevScale = state.scale;
       state.scale = Math.max(0.5, Math.min(state.scale * factor, 3.0));
+
+      /* Centering calculation logic during scaling adjustments */
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      state.panX = centerX - (centerX - state.panX) * (state.scale / prevScale);
+      state.panY = centerY - (centerY - state.panY) * (state.scale / prevScale);
     }
 
     document.getElementById('sk_zoom_in').addEventListener('click', () => zoomCanvas(1.15));
@@ -1622,72 +2057,72 @@
     const panToggleBtn = document.getElementById('sk_pan_toggle');
     panToggleBtn.addEventListener('click', () => {
       state.isPanToolActive = !state.isPanToolActive;
-      panToggleBtn.classList.toggle('sk_zoom_btn_active', state.isPanToolActive);
-      panToggleBtn.innerText = state.isPanToolActive ? '🖐 Panning' : '🖐 Slide';
+      if (state.isPanToolActive) {
+        panToggleBtn.classList.add('sk_zoom_btn_active');
+        panToggleBtn.innerText = "🔒 Panning";
+      } else {
+        panToggleBtn.classList.remove('sk_zoom_btn_active');
+        panToggleBtn.innerText = "🔒 Slide";
+      }
     });
 
-    document.getElementById('sk_ctrl_center').addEventListener('click', resetTransformations);
+    /* Center quick shortcut reset transformation button */
+    document.getElementById('sk_ctrl_center').addEventListener('click', () => {
+      resetTransformations();
+    });
 
-    // Navigation & Modal Buttons
+    /* -------------------------------------------------------------------------
+       12. GENERAL BINDINGS & TOP CONTROLS CONSOLIDATION
+       ------------------------------------------------------------------------- */
     document.getElementById('sk_btn_menu').addEventListener('click', openDrawer);
     document.getElementById('sk_btn_close_drawer').addEventListener('click', closeDrawer);
     document.getElementById('sk_drawer_overlay').addEventListener('click', closeDrawer);
 
-    document.getElementById('sk_btn_levels').addEventListener('click', () => { closeDrawer(); togglePopup('sk_popup_levels', true); });
-    document.getElementById('sk_btn_editor').addEventListener('click', () => { closeDrawer(); togglePopup('sk_popup_editor', true); });
-    document.getElementById('sk_btn_settings').addEventListener('click', () => { closeDrawer(); togglePopup('sk_popup_settings', true); });
-    document.getElementById('sk_btn_scores').addEventListener('click', () => { closeDrawer(); togglePopup('sk_popup_scores', true); });
-    document.getElementById('sk_btn_info').addEventListener('click', () => { closeDrawer(); togglePopup('sk_popup_info', true); });
-    document.getElementById('sk_btn_start_demo_menu').addEventListener('click', () => { closeDrawer(); startDemo(); });
+    /* Menu Drawer buttons mapping */
+    document.getElementById('sk_btn_levels').addEventListener('click', () => {
+      closeDrawer();
+      togglePopup('sk_popup_levels', true);
+    });
+    document.getElementById('sk_btn_settings').addEventListener('click', () => {
+      closeDrawer();
+      togglePopup('sk_popup_settings', true);
+    });
+    document.getElementById('sk_btn_scores').addEventListener('click', () => {
+      closeDrawer();
+      togglePopup('sk_popup_scores', true);
+    });
+    document.getElementById('sk_btn_info').addEventListener('click', () => {
+      closeDrawer();
+      togglePopup('sk_popup_info', true);
+    });
+    document.getElementById('sk_btn_start_demo_menu').addEventListener('click', () => {
+      closeDrawer();
+      startDemo();
+    });
 
+    /* Dynamic game status controls */
+    document.getElementById('sk_btn_pause').addEventListener('click', togglePause);
+    document.getElementById('sk_btn_resume').addEventListener('click', togglePause);
+
+    /* Modals close mapping */
     document.getElementById('sk_close_levels').addEventListener('click', () => togglePopup('sk_popup_levels', false));
-    document.getElementById('sk_close_editor').addEventListener('click', () => togglePopup('sk_popup_editor', false));
     document.getElementById('sk_close_settings').addEventListener('click', () => togglePopup('sk_popup_settings', false));
     document.getElementById('sk_close_scores').addEventListener('click', () => togglePopup('sk_popup_scores', false));
     document.getElementById('sk_close_info').addEventListener('click', () => togglePopup('sk_popup_info', false));
 
+    /* Game Overlay Action binds */
     document.getElementById('sk_btn_start_play').addEventListener('click', () => loadLevel(0));
     document.getElementById('sk_btn_start_demo').addEventListener('click', startDemo);
     document.getElementById('sk_btn_retry').addEventListener('click', () => loadLevel(state.currentLevelIdx));
     document.getElementById('sk_btn_next_level').addEventListener('click', () => loadLevel(state.currentLevelIdx + 1));
     document.getElementById('sk_btn_restart_all').addEventListener('click', () => loadLevel(0));
-    document.getElementById('sk_btn_undo').addEventListener('click', undoMove);
 
+    /* Virtual controls buttons */
     document.getElementById('sk_ctrl_up').addEventListener('click', () => handleSlide(0, -1));
     document.getElementById('sk_ctrl_down').addEventListener('click', () => handleSlide(0, 1));
     document.getElementById('sk_ctrl_left').addEventListener('click', () => handleSlide(-1, 0));
     document.getElementById('sk_ctrl_right').addEventListener('click', () => handleSlide(1, 0));
     document.getElementById('sk_hud_reset').addEventListener('click', () => loadLevel(state.currentLevelIdx));
-    document.getElementById('sk_btn_pause').addEventListener('click', togglePause);
-    document.getElementById('sk_btn_resume').addEventListener('click', togglePause);
-
-    // Editor Tool buttons
-    document.querySelectorAll('.sk_tool_btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.sk_tool_btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        Editor.selectedTool = e.target.getAttribute('data-tool');
-      });
-    });
-
-    document.getElementById('sk_edit_name').addEventListener('input', () => Editor.updateJSON());
-    document.getElementById('sk_edit_startval').addEventListener('input', () => Editor.updateJSON());
-
-    document.getElementById('sk_editor_test').addEventListener('click', () => {
-      try {
-        const parsed = JSON.parse(document.getElementById('sk_edit_json').value);
-        LEVELS.push(parsed);
-        togglePopup('sk_popup_editor', false);
-        loadLevel(LEVELS.length - 1);
-      } catch (err) {
-        alert("Invalid Level JSON syntax: " + err.message);
-      }
-    });
-
-    document.getElementById('sk_editor_export').addEventListener('click', () => {
-      navigator.clipboard.writeText(document.getElementById('sk_edit_json').value);
-      alert("Level JSON copied to clipboard!");
-    });
 
     document.getElementById('sk_toggle_sound').addEventListener('click', (e) => {
       state.soundOn = !state.soundOn;
@@ -1696,38 +2131,50 @@
       saveProgress();
     });
 
-    document.getElementById('sk_toggle_theme').addEventListener('click', (e) => {
-      state.darkMode = !state.darkMode;
-      document.body.classList.toggle('dark-theme', state.darkMode);
-      e.target.innerText = state.darkMode ? 'Midnight Neon' : 'Arctic Blue';
-      saveProgress();
+    document.getElementById('sk_toggle_loader').addEventListener('click', () => {
+      fetchRemoteLevels();
     });
 
-    document.getElementById('sk_reload_levels').addEventListener('click', async () => {
-      await fetchRemoteLevels();
-      alert("Level database reloaded from JSON!");
+    document.getElementById('sk_hud_view_mode').addEventListener('click', () => {
+      const parent = document.querySelector('.sk_game_suite_root');
+      const container = document.getElementById('sk_canvas_container');
+      if (parent.style.flexDirection === 'row') {
+        parent.style.flexDirection = 'column';
+        container.style.maxWidth = '500px';
+      } else {
+        parent.style.flexDirection = 'row';
+        container.style.maxWidth = '400px';
+      }
+      handleResize();
     });
 
+    /* Cross Browser compatible Fullscreen triggers */
     document.getElementById('sk_btn_fullscreen').addEventListener('click', () => {
       const root = document.querySelector('.sk_game_suite_root');
-      if (!document.fullscreenElement) root.requestFullscreen().catch(() => {});
-      else document.exitFullscreen();
+      if (!document.fullscreenElement) {
+        root.requestFullscreen().catch(err => {
+          console.error(`Fullscreen request execution negative: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
     });
 
+    /* -------------------------------------------------------------------------
+       13. SYSTEM BOOTSTRAP INITIALIZATION
+       ------------------------------------------------------------------------- */
     window.addEventListener('resize', handleResize);
 
-    // Initialization
-    async function initGame() {
-      loadProgress();
-      handleResize();
-      await fetchRemoteLevels();
-      updateUI();
-      document.getElementById('sk_overlay_start').classList.remove('sk_hidden');
-      loop();
-    }
+    loadProgress();
+    handleResize();
+    updateUI();
+    loop();
 
-    window.addEventListener('DOMContentLoaded', initGame);
+    /* Remote loading trigger initiated on load */
+    window.addEventListener('DOMContentLoaded', fetchRemoteLevels);
   </script>
+
+  <script src="js/framework.js"></script>
 </body>
 
 </html>

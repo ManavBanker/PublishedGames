@@ -92,9 +92,21 @@
       text-align: center;
       transition: color 0.2s ease, border-color 0.2s ease;
     }
-    .sk_combo_hud.sk_combo_x2 { color: #ffff00; border-color: #ffff00; }
-    .sk_combo_hud.sk_combo_x3 { color: #ffaa00; border-color: #ffaa00; }
-    .sk_combo_hud.sk_combo_x5 { color: #ff3333; border-color: #ff3333; }
+
+    .sk_combo_hud.sk_combo_x2 {
+      color: #ffff00;
+      border-color: #ffff00;
+    }
+
+    .sk_combo_hud.sk_combo_x3 {
+      color: #ffaa00;
+      border-color: #ffaa00;
+    }
+
+    .sk_combo_hud.sk_combo_x5 {
+      color: #ff3333;
+      border-color: #ff3333;
+    }
 
     .sk_top_buttons {
       display: flex;
@@ -447,12 +459,15 @@
       min-height: 22px;
       user-select: none;
     }
+
     .sk_word_mirror .sk_wm_done {
       color: var(--sk-primary, #00ff66);
     }
+
     .sk_word_mirror .sk_wm_pending {
       color: var(--sk-word-pending, rgba(0, 255, 102, 0.3));
     }
+
     .sk_word_mirror .sk_wm_bonus {
       color: #ffcc66;
       font-size: 0.6rem;
@@ -519,17 +534,26 @@
       color: #ffd27a;
       box-shadow: 0 0 10px #ffaa00;
     }
+
     .sk_kb_key.sk_last_pressed {
       background: #06341a;
       border-color: #00ff66;
       box-shadow: 0 0 10px #00ff66;
     }
+
     .sk_kb_key.sk_ghost_pulse {
       animation: sk_ghost_pulse 0.6s infinite alternate;
     }
+
     @keyframes sk_ghost_pulse {
-      from { background: #010803; }
-      to { background: #200303; box-shadow: 0 0 8px #ff3333; }
+      from {
+        background: #010803;
+      }
+
+      to {
+        background: #200303;
+        box-shadow: 0 0 8px #ff3333;
+      }
     }
 
     .sk_action_row {
@@ -604,14 +628,17 @@
       height: 36px;
       font-size: 0.85rem;
     }
+
     .sk_is_touch .sk_drag_handle {
       letter-spacing: 1px;
     }
+
     /* Cosmetic SPACE/EXECUTE actions are dead-ends on touch; keep only functional ones */
     .sk_is_touch #sk_btn_space,
     .sk_is_touch #sk_btn_submit {
       display: none;
     }
+
     .sk_is_touch .sk_action_row {
       gap: 10px;
     }
@@ -622,19 +649,23 @@
       color: #eafff0;
       font-weight: bold;
     }
+
     .sk_game_suite_root.sk_high_contrast .sk_subtitle {
       color: #cfd8cf;
     }
+
     .sk_game_suite_root.sk_high_contrast .sk_kb_key {
       color: #eafff0;
       border-color: #9fffb9;
       background: #04210c;
     }
+
     .sk_game_suite_root.sk_high_contrast .sk_word_mirror .sk_wm_done {
       color: #eafff0;
       text-decoration: underline;
       text-underline-offset: 3px;
     }
+
     .sk_game_suite_root.sk_high_contrast .sk_popup {
       color: #e8f5ea;
     }
@@ -826,47 +857,47 @@
           words: ["CYBER", "DECK", "PORT", "HACK", "DATA"],
           firewallSpeed: 1.5,
           mutationDesc: "Adjacent Swapping (Typing swaps key with immediate physical neighbor)",
-          theme: { primary: "#00ff66", dim: "#00a344", danger: "#ff3333", bg: "#020703", word: "#00ff66" },
-          mutate: function(code) { AB.Mutations.swapNeighbor(code); }
+          theme: {primary: "#00ff66", dim: "#00a344", danger: "#ff3333", bg: "#020703", word: "#00ff66"},
+          mutate: function (code) {AB.Mutations.swapNeighbor(code);}
         },
         {
           id: 2, name: "0x3C89: MAIN GATEWAY",
           words: ["PROXY", "ROOTKIT", "SOCKET", "KERNEL", "BYPASS"],
           firewallSpeed: 2.2,
           mutationDesc: "Row Rotation (Typing shifts current layout row left/right)",
-          theme: { primary: "#00e5ff", dim: "#0099b3", danger: "#ff5040", bg: "#021013", word: "#00e5ff" },
-          mutate: function(code) { AB.Mutations.rowRotation(code); }
+          theme: {primary: "#00e5ff", dim: "#0099b3", danger: "#ff5040", bg: "#021013", word: "#00e5ff"},
+          mutate: function (code) {AB.Mutations.rowRotation(code);}
         },
         {
           id: 3, name: "0xFA12: COGNITIVE OVERRIDE",
           words: ["DECIPHER", "MALWARE", "FIREWALL", "EXPLOIT", "BUFFER"],
           firewallSpeed: 3.0,
           mutationDesc: "Mirror Matrix (Key swaps with its symmetrical board position)",
-          theme: { primary: "#ff33cc", dim: "#b3238f", danger: "#ffaa00", bg: "#10020e", word: "#ff33cc" },
-          mutate: function(code) { AB.Mutations.mirrorMatrix(code); }
+          theme: {primary: "#ff33cc", dim: "#b3238f", danger: "#ffaa00", bg: "#10020e", word: "#ff33cc"},
+          mutate: function (code) {AB.Mutations.mirrorMatrix(code);}
         },
         {
           id: 4, name: "0xDE99: SECURE ARCHIVE",
           words: ["ZERO_DAY", "TERMINAL", "ENCRYPT", "PHISHING", "SPYWARE"],
           firewallSpeed: 3.8,
           mutationDesc: "Ghost Encryption (Blanks random keys and shifts positions)",
-          theme: { primary: "#ffaa00", dim: "#cc8800", danger: "#ff3333", bg: "#0f0c02", word: "#ffcc66" },
-          mutate: function(code) { AB.Mutations.rowRotation(code); AB.Mutations.ghostBlanks(); }
+          theme: {primary: "#ffaa00", dim: "#cc8800", danger: "#ff3333", bg: "#0f0c02", word: "#ffcc66"},
+          mutate: function (code) {AB.Mutations.rowRotation(code); AB.Mutations.ghostBlanks();}
         },
         {
           id: 5, name: "0xEEEE: THE CORE VAULT",
           words: ["ANARCHY_CORE", "INTRUSION_LEVEL_FIVE", "SYNAPSE_DESTROYER", "METASTABILITY", "DECRYPTION_COMPLETED"],
           firewallSpeed: 4.5,
           mutationDesc: "Complete Chaos Matrix (Continuous shift, swaps, and blanked values)",
-          theme: { primary: "#ff3333", dim: "#cc0000", danger: "#ff8888", bg: "#0f0202", word: "#ff6666" },
-          mutate: function(code) { AB.Mutations.mirrorMatrix(code); AB.Mutations.swapNeighbor(code); AB.Mutations.ghostBlanks(); }
+          theme: {primary: "#ff3333", dim: "#cc0000", danger: "#ff8888", bg: "#0f0202", word: "#ff6666"},
+          mutate: function (code) {AB.Mutations.mirrorMatrix(code); AB.Mutations.swapNeighbor(code); AB.Mutations.ghostBlanks();}
         }
       ],
 
       DIFFICULTIES: [
-        { label: "EASY", val: 0.6 },
-        { label: "NORMAL", val: 1.0 },
-        { label: "INSANE", val: 1.8 }
+        {label: "EASY", val: 0.6},
+        {label: "NORMAL", val: 1.0},
+        {label: "INSANE", val: 1.8}
       ],
 
       WORDS_PER_LEVEL: 5,
@@ -885,9 +916,9 @@
 
       /* Combo tiers: [streakThreshold, multiplier] */
       COMBO_TIERS: [
-        { streak: 5, multiplier: 2 },
-        { streak: 10, multiplier: 3 },
-        { streak: 20, multiplier: 5 }
+        {streak: 5, multiplier: 2},
+        {streak: 10, multiplier: 3},
+        {streak: 20, multiplier: 5}
       ]
     };
 
@@ -898,11 +929,11 @@
       ctx: null,
       enabled: true,
 
-      init: function() {
+      init: function () {
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       },
 
-      play: function(type) {
+      play: function (type) {
         if (!this.enabled) return;
         try {
           if (this.ctx.state === 'suspended') this.ctx.resume();
@@ -989,7 +1020,7 @@
     AB.Persistence = {
       STORAGE_KEY: 'sk_anarchy_save',
       /* Default save structure */
-      _defaults: function() {
+      _defaults: function () {
         return {
           cleared: [],            /* level indexes completed at least once */
           bestScores: {},         /* levelIndex -> best score */
@@ -1002,11 +1033,11 @@
 
       data: null,
 
-      load: function() {
+      load: function () {
         var d;
         try {
           d = JSON.parse(localStorage.getItem(this.STORAGE_KEY));
-        } catch (e) { d = null; }
+        } catch (e) {d = null;}
         if (!d || typeof d !== 'object') d = this._defaults();
         else {
           d.cleared = d.cleared || [];
@@ -1020,7 +1051,7 @@
         return d;
       },
 
-      save: function() {
+      save: function () {
         try {
           localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.data));
         } catch (e) {
@@ -1028,15 +1059,15 @@
         }
       },
 
-      isCleared: function(levelIndex) {
+      isCleared: function (levelIndex) {
         return this.data && this.data.cleared.indexOf(levelIndex) !== -1;
       },
 
-      bestScore: function(levelIndex) {
+      bestScore: function (levelIndex) {
         return this.data && this.data.bestScores[levelIndex] ? this.data.bestScores[levelIndex] : 0;
       },
 
-      recordLevelClear: function(levelIndex, score) {
+      recordLevelClear: function (levelIndex, score) {
         var d = this.data;
         if (d.cleared.indexOf(levelIndex) === -1) d.cleared.push(levelIndex);
         if (!d.bestScores[levelIndex] || score > d.bestScores[levelIndex]) {
@@ -1046,7 +1077,7 @@
         this.save();
       },
 
-      recordScore: function(levelIndex, score) {
+      recordScore: function (levelIndex, score) {
         if (!this.data) return;
         if (!this.data.bestScores[levelIndex] || score > this.data.bestScores[levelIndex]) {
           this.data.bestScores[levelIndex] = score;
@@ -1073,9 +1104,9 @@
       activeMap: {},
       blankKeys: new Set(),
       levels: [],
-      activeTheme: { primary: "#00ff66", dim: "#00a344", danger: "#ff3333", bg: "#020703", word: "#00ff66" },
+      activeTheme: {primary: "#00ff66", dim: "#00a344", danger: "#ff3333", bg: "#020703", word: "#00ff66"},
 
-      getTheme: function() {
+      getTheme: function () {
         var lvl = this.levels[this.levelIndex];
         if (lvl && lvl.theme) return lvl.theme;
         return this.activeTheme;
@@ -1087,6 +1118,8 @@
       comboMultiplier: 1,
       levelStartTime: 0,
       elapsedTime: 0,
+      pausedAt: 0,
+      pausedElapsed: 0,
 
       /* Mutation visual feedback state */
       lastPressedCode: null,
@@ -1098,7 +1131,7 @@
       /* Bonus word mechanic */
       isBonusWord: false,
 
-      reset: function() {
+      reset: function () {
         this.score = 0;
         this.wordsCleared = 0;
         this.firewallBreach = 0.0;
@@ -1113,6 +1146,8 @@
         this.comboMultiplier = 1;
         this.levelStartTime = performance.now();
         this.elapsedTime = 0;
+        this.pausedAt = 0;
+        this.pausedElapsed = 0;
         this.lastPressedCode = null;
         this.lastMutatedKeys = [];
         this.mutationCount = 0;
@@ -1121,7 +1156,7 @@
       },
 
       /* Returns current combo multiplier based on streak */
-      getComboMultiplier: function() {
+      getComboMultiplier: function () {
         var mult = 1;
         var tiers = AB.Config.COMBO_TIERS;
         for (var i = 0; i < tiers.length; i++) {
@@ -1135,26 +1170,26 @@
        MUTATIONS: Keyboard layout mutation algorithms
        ---------------------------------------------------------- */
     AB.Mutations = {
-      _getFlatKeys: function() {
+      _getFlatKeys: function () {
         const arr = [];
-        AB.Config.PHYSICAL_KEYS.forEach(function(r) { r.forEach(function(k) { arr.push(k); }); });
+        AB.Config.PHYSICAL_KEYS.forEach(function (r) {r.forEach(function (k) {arr.push(k);});});
         return arr;
       },
 
-      _findKeyPosition: function(code) {
+      _findKeyPosition: function (code) {
         for (var r = 0; r < AB.Config.PHYSICAL_KEYS.length; r++) {
           var idx = AB.Config.PHYSICAL_KEYS[r].indexOf(code);
-          if (idx !== -1) return { row: r, col: idx };
+          if (idx !== -1) return {row: r, col: idx};
         }
         return null;
       },
 
       /* Record affected keys for visual highlight */
-      _record: function(keys) {
+      _record: function (keys) {
         AB.State.lastMutatedKeys = keys || [];
       },
 
-      swapNeighbor: function(code) {
+      swapNeighbor: function (code) {
         var pos = this._findKeyPosition(code);
         if (!pos) return;
         var row = AB.Config.PHYSICAL_KEYS[pos.row];
@@ -1169,7 +1204,7 @@
         this._record([code, targetCode]);
       },
 
-      rowRotation: function(code) {
+      rowRotation: function (code) {
         var pos = this._findKeyPosition(code);
         if (!pos) return;
         var row = AB.Config.PHYSICAL_KEYS[pos.row];
@@ -1191,11 +1226,14 @@
         this._record(row.slice());
       },
 
-      mirrorMatrix: function(code) {
+      mirrorMatrix: function (code) {
         var flat = this._getFlatKeys();
         var idx = flat.indexOf(code);
         if (idx === -1) return;
+        /* With an odd number of keys the exact middle key mirrors to itself
+           (a self-swap no-op). Nudge it one position so the mutation still fires. */
         var mirrorIdx = flat.length - 1 - idx;
+        if (mirrorIdx === idx) mirrorIdx = (idx + 1) % flat.length;
         var mirrorCode = flat[mirrorIdx];
         var map = AB.State.activeMap;
         var temp = map[code];
@@ -1204,11 +1242,11 @@
         this._record([code, mirrorCode]);
       },
 
-      ghostBlanks: function() {
+      ghostBlanks: function () {
         AB.State.blankKeys.clear();
         var flat = this._getFlatKeys();
         var avoidChar = AB.State._ghostAvoidChar;
-        var candidates = flat.filter(function(k) {
+        var candidates = flat.filter(function (k) {
           /* Avoid blanking a key that holds the next needed character */
           if (avoidChar && AB.State.activeMap[k] === avoidChar) return false;
           return true;
@@ -1221,13 +1259,13 @@
         this._record(Array.from(AB.State.blankKeys));
       },
 
-      applyForType: function(type, code) {
+      applyForType: function (type, code) {
         switch (type) {
-          case 'row_rotation':       this.rowRotation(code); break;
-          case 'mirror_matrix':      this.mirrorMatrix(code); break;
+          case 'row_rotation': this.rowRotation(code); break;
+          case 'mirror_matrix': this.mirrorMatrix(code); break;
           case 'row_rotation_ghost': this.rowRotation(code); this.ghostBlanks(); break;
-          case 'chaos_matrix':       this.mirrorMatrix(code); this.swapNeighbor(code); this.ghostBlanks(); break;
-          default:                   this.swapNeighbor(code); break;
+          case 'chaos_matrix': this.mirrorMatrix(code); this.swapNeighbor(code); this.ghostBlanks(); break;
+          default: this.swapNeighbor(code); break;
         }
       }
     };
@@ -1242,38 +1280,38 @@
       screenShake: 0,
       comboFlash: 0,
       mutationToast: null,
-      camera: { zoomScale: 1.0, panX: 0, panY: 0, isPanningActive: false, isDragging: false, dragStartX: 0, dragStartY: 0 },
+      camera: {zoomScale: 1.0, panX: 0, panY: 0, isPanningActive: false, isDragging: false, dragStartX: 0, dragStartY: 0},
       lastTime: 0,
 
-      init: function() {
+      init: function () {
         this.canvas = document.getElementById('sk_game_canvas');
         this.ctx = this.canvas.getContext('2d');
         this.resize();
         this.lastTime = performance.now();
       },
 
-      resize: function() {
+      resize: function () {
         var parent = this.canvas.parentElement;
         this.canvas.width = parent.clientWidth;
         this.canvas.height = parent.clientHeight;
       },
 
-      addLog: function(msg, color) {
+      addLog: function (msg, color) {
         color = color || "#00ff66";
-        this.particleLogs.push({ msg: msg, y: this.canvas.height - 20, alpha: 1.0, color: color });
+        this.particleLogs.push({msg: msg, y: this.canvas.height - 20, alpha: 1.0, color: color});
         if (this.particleLogs.length > 5) this.particleLogs.shift();
       },
 
       /* Brief centered toast summarizing which keys mutated */
-      addMutationToast: function(mutatedKeys) {
+      addMutationToast: function (mutatedKeys) {
         if (!mutatedKeys || !mutatedKeys.length) return;
-        var labels = mutatedKeys.map(function(k) { return AB.State.activeMap[k] || "?"; });
+        var labels = mutatedKeys.map(function (k) {return AB.State.activeMap[k] || "?";});
         var desc = "KEYMAP MUTATED: " + labels.join(" ↔ ");
-        this.mutationToast = { msg: desc, life: 1.0 };
+        this.mutationToast = {msg: desc, life: 1.0};
       },
 
       /* Convert a #rrggbb hex color to rgba() string with given alpha */
-      _rgba: function(hex, alpha) {
+      _rgba: function (hex, alpha) {
         if (!hex || hex.length < 7) return "rgba(0,255,102," + alpha + ")";
         var r = parseInt(hex.slice(1, 3), 16);
         var g = parseInt(hex.slice(3, 5), 16);
@@ -1281,17 +1319,17 @@
         return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
       },
 
-      zoomCamera: function(amount) {
+      zoomCamera: function (amount) {
         this.camera.zoomScale = Math.max(0.5, Math.min(3.0, this.camera.zoomScale + amount));
       },
 
-      resetCamera: function() {
+      resetCamera: function () {
         this.camera.zoomScale = 1.0;
         this.camera.panX = 0;
         this.camera.panY = 0;
       },
 
-      draw: function() {
+      draw: function () {
         var ctx = this.ctx;
         var c = this.canvas;
         var cam = this.camera;
@@ -1438,27 +1476,27 @@
        INPUT: Physical keyboard + virtual keyboard handling
        ---------------------------------------------------------- */
     AB.Input = {
-      touchMeta: { _pinchStartDist: 0, _pinchStartScale: 1 },
+      touchMeta: {_pinchStartDist: 0, _pinchStartScale: 1},
 
-      initVirtualKeyboard: function() {
+      initVirtualKeyboard: function () {
         var vKB = document.getElementById('sk_virtual_keyboard');
         vKB.innerHTML = '';
-        AB.Config.PHYSICAL_KEYS.forEach(function(row) {
+        AB.Config.PHYSICAL_KEYS.forEach(function (row) {
           var rowDiv = document.createElement('div');
           rowDiv.className = 'sk_kb_row';
-          row.forEach(function(code) {
+          row.forEach(function (code) {
             var btn = document.createElement('button');
             btn.className = 'sk_kb_key';
             btn.id = 'sk_key_' + code;
             btn.setAttribute('data-code', code);
             btn.textContent = AB.State.activeMap[code] || "";
 
-            btn.addEventListener('mousedown', function(e) {
+            btn.addEventListener('mousedown', function (e) {
               e.preventDefault();
               AB.Engine.handleKeyInput(code);
             });
 
-            btn.addEventListener('touchstart', function(e) {
+            btn.addEventListener('touchstart', function (e) {
               e.preventDefault();
               AB.Input.highlightKey(code, 120);
               AB.Engine.handleKeyInput(code);
@@ -1470,10 +1508,10 @@
         });
       },
 
-      updateVirtualKeyboardUI: function(applyFeedback) {
+      updateVirtualKeyboardUI: function (applyFeedback) {
         var state = AB.State;
-        AB.Config.PHYSICAL_KEYS.forEach(function(row) {
-          row.forEach(function(code) {
+        AB.Config.PHYSICAL_KEYS.forEach(function (row) {
+          row.forEach(function (code) {
             var btn = document.getElementById('sk_key_' + code);
             if (btn) {
               btn.classList.remove('sk_mutated', 'sk_last_pressed', 'sk_ghost_pulse');
@@ -1490,7 +1528,7 @@
 
         /* Apply mutation highlight feedback after a mutation occurs */
         if (applyFeedback) {
-          state.lastMutatedKeys.forEach(function(code) {
+          state.lastMutatedKeys.forEach(function (code) {
             var btn = document.getElementById('sk_key_' + code);
             if (btn) btn.classList.add('sk_mutated');
           });
@@ -1501,16 +1539,16 @@
         }
       },
 
-      highlightKey: function(code, duration) {
+      highlightKey: function (code, duration) {
         var btn = document.getElementById('sk_key_' + code);
         if (btn) {
           btn.classList.add('sk_active');
-          setTimeout(function() { btn.classList.remove('sk_active'); }, duration || 100);
+          setTimeout(function () {btn.classList.remove('sk_active');}, duration || 100);
         }
       },
 
-      bindPhysicalKeyboard: function() {
-        window.addEventListener('keydown', function(e) {
+      bindPhysicalKeyboard: function () {
+        window.addEventListener('keydown', function (e) {
           if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
             e.preventDefault();
             AB.Renderer.zoomCamera(0.1);
@@ -1554,13 +1592,13 @@
     AB.UI = {
       scoresData: [],
       difficultyIndex: 1,
-      dragState: { active: false, offsetX: 0, offsetY: 0 },
+      dragState: {active: false, offsetX: 0, offsetY: 0},
 
-      init: function() {
+      init: function () {
         this.scoresData = JSON.parse(localStorage.getItem('sk_anarchy_scores')) || [
-          { name: "NEO_99", score: 4500, node: 5 },
-          { name: "TRINITY", score: 3200, node: 4 },
-          { name: "ORACLE", score: 1200, node: 2 }
+          {name: "NEO_99", score: 4500, node: 5},
+          {name: "TRINITY", score: 3200, node: 4},
+          {name: "ORACLE", score: 1200, node: 2}
         ];
 
         /* Reflect persisted settings in the setup panel */
@@ -1576,11 +1614,11 @@
         this.bindCameraControls();
       },
 
-      updateScoreHud: function() {
+      updateScoreHud: function () {
         document.getElementById('sk_score_hud').textContent = "PTS: " + AB.State.score;
       },
 
-      updateComboHud: function() {
+      updateComboHud: function () {
         var el = document.getElementById('sk_combo_hud');
         if (!el) return;
         var state = AB.State;
@@ -1592,7 +1630,7 @@
       },
 
       /* Render the target word + typed progress near the keyboard */
-      updateWordMirror: function() {
+      updateWordMirror: function () {
         var el = document.getElementById('sk_word_mirror');
         if (!el) return;
         var state = AB.State;
@@ -1608,7 +1646,7 @@
       },
 
       /* Apply the active level theme to DOM (CSS variables on root suite) */
-      applyTheme: function() {
+      applyTheme: function () {
         var theme = AB.State.getTheme();
         var root = document.querySelector('.sk_game_suite_root');
         if (!root) return;
@@ -1621,35 +1659,35 @@
       },
 
       /* Directly set the tutorial hint bar text */
-      updateHint: function(msg) {
+      updateHint: function (msg) {
         var el = document.getElementById('sk_hint_bar');
         if (el) el.textContent = msg || "";
       },
 
       /* Show a progressive hint only once per level (key tracks which hint) */
-      showProgressiveHint: function(key, msg) {
+      showProgressiveHint: function (key, msg) {
         var state = AB.State;
         if (state.hintsShown[key]) return;
         state.hintsShown[key] = true;
         this.updateHint(msg);
       },
 
-      saveScore: function(score, nodeIndex) {
+      saveScore: function (score, nodeIndex) {
         this.scoresData.push({
           name: "ANON_" + Math.floor(Math.random() * 900 + 100),
           score: score,
           node: nodeIndex + 1
         });
-        this.scoresData.sort(function(a, b) { return b.score - a.score; });
+        this.scoresData.sort(function (a, b) {return b.score - a.score;});
         this.scoresData = this.scoresData.slice(0, 10);
         localStorage.setItem('sk_anarchy_scores', JSON.stringify(this.scoresData));
         this.renderScores();
       },
 
-      renderScores: function() {
+      renderScores: function () {
         var list = document.getElementById('sk_scores_list');
         list.innerHTML = '';
-        this.scoresData.forEach(function(s, idx) {
+        this.scoresData.forEach(function (s, idx) {
           var row = document.createElement('div');
           row.className = 'sk_score_row';
           row.innerHTML = '<span>#' + (idx + 1) + ' ' + s.name + '</span><span>NODE ' + s.node + '</span><span>' + s.score + ' PTS</span>';
@@ -1657,23 +1695,23 @@
         });
       },
 
-      hideAllScreens: function() {
+      hideAllScreens: function () {
         document.getElementById('sk_screen_start').classList.add('sk_hidden');
         document.getElementById('sk_screen_gameover').classList.add('sk_hidden');
         document.getElementById('sk_screen_victory').classList.add('sk_hidden');
         document.getElementById('sk_screen_paused').classList.add('sk_hidden');
       },
 
-      showScreen: function(screenId) {
+      showScreen: function (screenId) {
         this.hideAllScreens();
         AB.State.currentScreen = screenId;
         document.getElementById('sk_screen_' + screenId).classList.remove('sk_hidden');
       },
 
-      togglePopup: function(popupId) {
+      togglePopup: function (popupId) {
         var pop = document.getElementById(popupId);
         if (pop.classList.contains('sk_hidden')) {
-          document.querySelectorAll('.sk_popup').forEach(function(p) { p.classList.add('sk_hidden'); });
+          document.querySelectorAll('.sk_popup').forEach(function (p) {p.classList.add('sk_hidden');});
           pop.classList.remove('sk_hidden');
         } else {
           pop.classList.add('sk_hidden');
@@ -1682,27 +1720,34 @@
       },
 
       /* Hide menu dropdown and all popups (used by Escape key) */
-      dismissOverlays: function() {
+      dismissOverlays: function () {
         document.getElementById('sk_menu_dropdown').classList.add('sk_hidden');
-        document.querySelectorAll('.sk_popup').forEach(function(p) { p.classList.add('sk_hidden'); });
+        document.querySelectorAll('.sk_popup').forEach(function (p) {p.classList.add('sk_hidden');});
         var state = AB.State;
         if (state.currentScreen === 'playing' && state.isPaused) {
           AB.Engine.togglePauseGame();
         }
       },
 
-      buildLevelSelector: function() {
+      buildLevelSelector: function () {
         var grid = document.getElementById('sk_level_grid');
         grid.innerHTML = '';
-        AB.State.levels.forEach(function(lvl, idx) {
+        /* Determine the highest cleared node to enforce sequential unlock. */
+        var highestCleared = -1;
+        AB.State.levels.forEach(function (_, i) {
+          if (AB.Persistence.isCleared(i)) highestCleared = i;
+        });
+        AB.State.levels.forEach(function (lvl, idx) {
           var btn = document.createElement('button');
           var cleared = AB.Persistence.isCleared(idx);
           var best = AB.Persistence.bestScore(idx);
-          btn.className = 'sk_level_btn' + (cleared ? ' sk_level_cleared' : '');
+          var unlocked = idx === 0 || cleared || idx <= highestCleared + 1;
+          btn.className = 'sk_level_btn' + (cleared ? ' sk_level_cleared' : '') + (unlocked ? '' : ' sk_locked');
           btn.innerHTML = 'NODE ' + (idx + 1) + (cleared ? ' <span style="color:#33ff99;">✓</span>' : '') +
             '<br><span style="font-size:0.6rem;">' + lvl.name.split(':')[0] + '</span>' +
-            '<br><span style="font-size:0.55rem; color:#ffaa00;">' + (cleared ? 'BEST ' + best : 'LOCKED_ARCHIVE') + '</span>';
-          btn.addEventListener('click', function() {
+            '<br><span style="font-size:0.55rem; color:#ffaa00;">' + (cleared ? 'BEST ' + best : (unlocked ? 'AVAILABLE' : 'LOCKED_ARCHIVE')) + '</span>';
+          btn.addEventListener('click', function () {
+            if (!unlocked) return;
             AB.State.levelIndex = idx;
             AB.UI.togglePopup('sk_popup_levels');
             AB.Engine.startGame();
@@ -1711,49 +1756,49 @@
         });
       },
 
-      bindButtons: function() {
+      bindButtons: function () {
         var self = this;
 
-        document.getElementById('sk_btn_menu_toggle').addEventListener('click', function() {
+        document.getElementById('sk_btn_menu_toggle').addEventListener('click', function () {
           document.getElementById('sk_menu_dropdown').classList.toggle('sk_hidden');
         });
 
-        document.getElementById('sk_btn_start_game').addEventListener('click', function() { AB.Engine.startGame(); });
-        document.getElementById('sk_btn_retry').addEventListener('click', function() { AB.Engine.startGame(); });
-        document.getElementById('sk_btn_next_level').addEventListener('click', function() { AB.Engine.nextLevel(); });
+        document.getElementById('sk_btn_start_game').addEventListener('click', function () {AB.Engine.startGame();});
+        document.getElementById('sk_btn_retry').addEventListener('click', function () {AB.Engine.startGame();});
+        document.getElementById('sk_btn_next_level').addEventListener('click', function () {AB.Engine.nextLevel();});
 
-        document.getElementById('sk_btn_pause_resume').addEventListener('click', function() {
+        document.getElementById('sk_btn_pause_resume').addEventListener('click', function () {
           AB.Engine.togglePauseGame();
           document.getElementById('sk_menu_dropdown').classList.add('sk_hidden');
         });
-        document.getElementById('sk_btn_resume_overlay').addEventListener('click', function() {
+        document.getElementById('sk_btn_resume_overlay').addEventListener('click', function () {
           AB.Engine.togglePauseGame();
         });
 
-        document.getElementById('sk_btn_levels').addEventListener('click', function() {
+        document.getElementById('sk_btn_levels').addEventListener('click', function () {
           self.buildLevelSelector();
           self.togglePopup('sk_popup_levels');
         });
-        document.getElementById('sk_btn_settings').addEventListener('click', function() { self.togglePopup('sk_popup_settings'); });
-        document.getElementById('sk_btn_info').addEventListener('click', function() { self.togglePopup('sk_popup_info'); });
-        document.getElementById('sk_btn_scores').addEventListener('click', function() {
+        document.getElementById('sk_btn_settings').addEventListener('click', function () {self.togglePopup('sk_popup_settings');});
+        document.getElementById('sk_btn_info').addEventListener('click', function () {self.togglePopup('sk_popup_info');});
+        document.getElementById('sk_btn_scores').addEventListener('click', function () {
           self.renderScores();
           self.togglePopup('sk_popup_scores');
         });
 
-        document.getElementById('sk_close_levels').addEventListener('click', function() { self.togglePopup('sk_popup_levels'); });
-        document.getElementById('sk_close_settings').addEventListener('click', function() { self.togglePopup('sk_popup_settings'); });
-        document.getElementById('sk_close_info').addEventListener('click', function() { self.togglePopup('sk_popup_info'); });
-        document.getElementById('sk_close_scores').addEventListener('click', function() { self.togglePopup('sk_popup_scores'); });
+        document.getElementById('sk_close_levels').addEventListener('click', function () {self.togglePopup('sk_popup_levels');});
+        document.getElementById('sk_close_settings').addEventListener('click', function () {self.togglePopup('sk_popup_settings');});
+        document.getElementById('sk_close_info').addEventListener('click', function () {self.togglePopup('sk_popup_info');});
+        document.getElementById('sk_close_scores').addEventListener('click', function () {self.togglePopup('sk_popup_scores');});
 
-        document.getElementById('sk_toggle_audio').addEventListener('click', function(e) {
+        document.getElementById('sk_toggle_audio').addEventListener('click', function (e) {
           AB.Audio.enabled = !AB.Audio.enabled;
           e.target.textContent = AB.Audio.enabled ? "ON" : "OFF";
           AB.Persistence.data.audioEnabled = AB.Audio.enabled;
           AB.Persistence.save();
         });
 
-        document.getElementById('sk_toggle_difficulty').addEventListener('click', function(e) {
+        document.getElementById('sk_toggle_difficulty').addEventListener('click', function (e) {
           self.difficultyIndex = (self.difficultyIndex + 1) % AB.Config.DIFFICULTIES.length;
           AB.State.difficultyScale = AB.Config.DIFFICULTIES[self.difficultyIndex].val;
           e.target.textContent = AB.Config.DIFFICULTIES[self.difficultyIndex].label;
@@ -1761,7 +1806,7 @@
           AB.Persistence.save();
         });
 
-        document.getElementById('sk_toggle_contrast').addEventListener('click', function(e) {
+        document.getElementById('sk_toggle_contrast').addEventListener('click', function (e) {
           var root = document.querySelector('.sk_game_suite_root');
           var on = root.classList.toggle('sk_high_contrast');
           e.target.textContent = on ? "ON" : "OFF";
@@ -1769,7 +1814,7 @@
           AB.Persistence.save();
         });
 
-        document.getElementById('sk_btn_clear_input').addEventListener('click', function() {
+        document.getElementById('sk_btn_clear_input').addEventListener('click', function () {
           AB.State.typedBuffer = "";
           AB.State.streak = 0;
           AB.State.comboMultiplier = 1;
@@ -1779,11 +1824,11 @@
           AB.Renderer.addLog("INPUT REGISTER PURGED", "#ffaa00");
         });
 
-        document.getElementById('sk_btn_delete').addEventListener('click', function() {
+        document.getElementById('sk_btn_delete').addEventListener('click', function () {
           AB.Engine.backspace();
         });
 
-        document.getElementById('sk_btn_space').addEventListener('click', function() {
+        document.getElementById('sk_btn_space').addEventListener('click', function () {
           var state = AB.State;
           if (state.currentScreen !== 'playing') return;
           state.typedBuffer = "";
@@ -1797,21 +1842,21 @@
           AB.Renderer.addLog("SPACE CHAFF: BUFFER AND GHOST KEYS CLEARED", "#33ff99");
         });
 
-        document.getElementById('sk_btn_submit').addEventListener('click', function() {
+        document.getElementById('sk_btn_submit').addEventListener('click', function () {
           AB.Engine.submitWord();
         });
 
-        document.getElementById('sk_btn_demo').addEventListener('click', function() {
+        document.getElementById('sk_btn_demo').addEventListener('click', function () {
           AB.Engine.startGame();
           AB.State.isDemo = true;
           AB.Renderer.addLog("WATCH MODE DEMO TRIGGERED.", "#00ffff");
           document.getElementById('sk_menu_dropdown').classList.add('sk_hidden');
         });
 
-        document.getElementById('sk_btn_fullscreen').addEventListener('click', function() {
+        document.getElementById('sk_btn_fullscreen').addEventListener('click', function () {
           var rootSuite = document.querySelector('.sk_game_suite_root');
           if (!document.fullscreenElement) {
-            rootSuite.requestFullscreen().catch(function(err) {
+            rootSuite.requestFullscreen().catch(function (err) {
               alert("Error enabling fullscreen: " + err.message);
             });
           } else {
@@ -1819,11 +1864,11 @@
           }
         });
 
-        document.getElementById('sk_btn_landscape').addEventListener('click', function() {
+        document.getElementById('sk_btn_landscape').addEventListener('click', function () {
           var rootSuite = document.querySelector('.sk_game_suite_root');
           if (screen.orientation && screen.orientation.lock) {
-            rootSuite.requestFullscreen().then(function() {
-              screen.orientation.lock('landscape').catch(function(e) {
+            rootSuite.requestFullscreen().then(function () {
+              screen.orientation.lock('landscape').catch(function (e) {
                 console.warn("Orientation lock not supported: ", e);
               });
             });
@@ -1833,36 +1878,36 @@
         });
       },
 
-      bindCameraControls: function() {
+      bindCameraControls: function () {
         var canvas = AB.Renderer.canvas;
         var cam = AB.Renderer.camera;
 
-        document.getElementById('sk_zoom_in').addEventListener('click', function() { AB.Renderer.zoomCamera(0.15); });
-        document.getElementById('sk_zoom_out').addEventListener('click', function() { AB.Renderer.zoomCamera(-0.15); });
-        document.getElementById('sk_zoom_reset').addEventListener('click', function() { AB.Renderer.resetCamera(); });
+        document.getElementById('sk_zoom_in').addEventListener('click', function () {AB.Renderer.zoomCamera(0.15);});
+        document.getElementById('sk_zoom_out').addEventListener('click', function () {AB.Renderer.zoomCamera(-0.15);});
+        document.getElementById('sk_zoom_reset').addEventListener('click', function () {AB.Renderer.resetCamera();});
 
         var panToolBtn = document.getElementById('sk_pan_tool');
-        panToolBtn.addEventListener('click', function() {
+        panToolBtn.addEventListener('click', function () {
           cam.isPanningActive = !cam.isPanningActive;
           panToolBtn.textContent = cam.isPanningActive ? "PAN TOOL [ON]" : "PAN TOOL [OFF]";
           panToolBtn.classList.toggle('sk_tool_active', cam.isPanningActive);
         });
 
-        canvas.addEventListener('mousedown', function(e) {
+        canvas.addEventListener('mousedown', function (e) {
           if (!cam.isPanningActive) return;
           cam.isDragging = true;
           cam.dragStartX = e.clientX - cam.panX;
           cam.dragStartY = e.clientY - cam.panY;
         });
-        window.addEventListener('mousemove', function(e) {
+        window.addEventListener('mousemove', function (e) {
           if (cam.isDragging && cam.isPanningActive) {
             cam.panX = e.clientX - cam.dragStartX;
             cam.panY = e.clientY - cam.dragStartY;
           }
         });
-        window.addEventListener('mouseup', function() { cam.isDragging = false; });
+        window.addEventListener('mouseup', function () {cam.isDragging = false;});
 
-        canvas.addEventListener('touchstart', function(e) {
+        canvas.addEventListener('touchstart', function (e) {
           if (e.touches.length === 1) {
             cam.isDragging = true;
             cam.dragStartX = e.touches[0].clientX - cam.panX;
@@ -1874,9 +1919,9 @@
             AB.Input.touchMeta._pinchStartDist = Math.hypot(dx, dy);
             AB.Input.touchMeta._pinchStartScale = cam.zoomScale;
           }
-        }, { passive: true });
+        }, {passive: true});
 
-        canvas.addEventListener('touchmove', function(e) {
+        canvas.addEventListener('touchmove', function (e) {
           if (e.touches.length === 1 && cam.isDragging && cam.isPanningActive) {
             cam.panX = e.touches[0].clientX - cam.dragStartX;
             cam.panY = e.touches[0].clientY - cam.dragStartY;
@@ -1887,12 +1932,12 @@
             var factor = currentDist / AB.Input.touchMeta._pinchStartDist;
             cam.zoomScale = Math.max(0.5, Math.min(3.0, AB.Input.touchMeta._pinchStartScale * factor));
           }
-        }, { passive: true });
+        }, {passive: true});
 
-        canvas.addEventListener('touchend', function() { cam.isDragging = false; });
+        canvas.addEventListener('touchend', function () {cam.isDragging = false;});
       },
 
-      bindDraggable: function() {
+      bindDraggable: function () {
         var dragContainer = document.getElementById('sk_draggable_controls');
         var dragHandle = document.getElementById('sk_drag_handle');
         var rootSuite = document.querySelector('.sk_game_suite_root');
@@ -1907,7 +1952,7 @@
           self.dragState.offsetY = clientY - rect.top;
           window.addEventListener('mousemove', onDragMove);
           window.addEventListener('mouseup', onDragEnd);
-          window.addEventListener('touchmove', onDragMove, { passive: false });
+          window.addEventListener('touchmove', onDragMove, {passive: false});
           window.addEventListener('touchend', onDragEnd);
         }
 
@@ -1936,7 +1981,7 @@
         }
 
         dragHandle.addEventListener('mousedown', onDragStart);
-        dragHandle.addEventListener('touchstart', onDragStart, { passive: false });
+        dragHandle.addEventListener('touchstart', onDragStart, {passive: false});
       }
     };
 
@@ -1946,7 +1991,7 @@
     AB.Engine = {
       _nextSolverAction: 0,
 
-      init: function() {
+      init: function () {
         AB.State.levels = AB.Config.CAMPAIGN_LEVELS.slice();
         AB.State.activeMap = Object.assign({}, AB.Config.DEFAULT_MAP);
         AB.Persistence.load();
@@ -1975,7 +2020,7 @@
         requestAnimationFrame(loop);
       },
 
-      _tick: function(time) {
+      _tick: function (time) {
         var dt = (time - AB.Renderer.lastTime) / 1000;
         AB.Renderer.lastTime = time;
 
@@ -1999,7 +2044,7 @@
         AB.Renderer.draw();
       },
 
-      startGame: function() {
+      startGame: function () {
         AB.UI.hideAllScreens();
         var state = AB.State;
         state.currentScreen = 'playing';
@@ -2016,7 +2061,7 @@
         AB.Audio.play('breach');
       },
 
-      _loadNextWord: function() {
+      _loadNextWord: function () {
         var state = AB.State;
         state.typedBuffer = "";
         var lvl = state.levels[state.levelIndex];
@@ -2029,7 +2074,7 @@
         AB.UI.updateWordMirror();
       },
 
-      handleKeyInput: function(code) {
+      handleKeyInput: function (code) {
         var state = AB.State;
         if (state.currentScreen !== 'playing' || state.isPaused) return;
 
@@ -2041,11 +2086,11 @@
         state.lastPressedCode = code;
         if (char === nextChar) {
           var prevMult = state.comboMultiplier;
-          var mult = state.getComboMultiplier();
           state.typedBuffer += char;
           state.streak++;
           if (state.streak > state.maxStreak) state.maxStreak = state.streak;
-          state.comboMultiplier = state.getComboMultiplier();
+          var mult = state.getComboMultiplier();
+          state.comboMultiplier = mult;
           if (state.comboMultiplier > prevMult) {
             AB.Renderer.comboFlash = 1.0;
             AB.Audio.play('combo');
@@ -2107,7 +2152,7 @@
         }
       },
 
-      backspace: function() {
+      backspace: function () {
         var state = AB.State;
         if (state.currentScreen !== 'playing' || state.isPaused) return;
         if (state.typedBuffer.length === 0) return;
@@ -2124,7 +2169,7 @@
       },
 
       /* Manually execute the typed sequence: match -> word clear, else firewall penalty */
-      submitWord: function() {
+      submitWord: function () {
         var state = AB.State;
         if (state.currentScreen !== 'playing' || state.isPaused) return;
 
@@ -2146,6 +2191,10 @@
             this._loadNextWord();
           }
         } else {
+          if (state.typedBuffer.length === 0) {
+            AB.Renderer.addLog("EXECUTION QUEUE EMPTY - NOTHING TO SUBMIT", "#8899aa");
+            return;
+          }
           AB.Audio.play('error');
           AB.Renderer.screenShake = 8;
           state.firewallBreach = Math.min(100, state.firewallBreach + AB.Config.WRONG_KEY_FIREWALL_PENALTY);
@@ -2153,7 +2202,7 @@
         }
       },
 
-      triggerLevelClear: function() {
+      triggerLevelClear: function () {
         var state = AB.State;
         state.elapsedTime = (performance.now() - state.levelStartTime) / 1000;
         var timeBonus = this._computeTimeBonus();
@@ -2181,7 +2230,7 @@
         }
       },
 
-      _computeTimeBonus: function() {
+      _computeTimeBonus: function () {
         var state = AB.State;
         var activeLvl = state.levels[state.levelIndex];
         /* Par time estimate: firewall reach threshold scaled by word count & speed */
@@ -2191,12 +2240,12 @@
         return Math.floor(secondsUnder * AB.Config.TIME_BONUS_PER_SECOND_UNDER_PAR);
       },
 
-      nextLevel: function() {
+      nextLevel: function () {
         AB.State.levelIndex++;
         this.startGame();
       },
 
-      triggerGameOver: function() {
+      triggerGameOver: function () {
         var state = AB.State;
         state.elapsedTime = (performance.now() - state.levelStartTime) / 1000;
 
@@ -2215,23 +2264,32 @@
         AB.UI.saveScore(state.score, state.levelIndex);
       },
 
-      togglePauseGame: function() {
+      togglePauseGame: function () {
         var state = AB.State;
         if (state.currentScreen !== 'playing') return;
         state.isPaused = !state.isPaused;
         var pauseBtn = document.getElementById('sk_btn_pause_resume');
         if (state.isPaused) {
+          state.pausedAt = performance.now();
           pauseBtn.textContent = "RESUME";
           document.getElementById('sk_screen_paused').classList.remove('sk_hidden');
           AB.Renderer.addLog("DECRYPTOR PAUSED - SYSTEM CHILLING", "#ffa500");
         } else {
+          if (state.pausedAt) {
+            state.pausedElapsed += performance.now() - state.pausedAt;
+            state.pausedAt = 0;
+          }
+          /* Shift levelStartTime forward by accumulated paused time so the
+             timer/time-bonus ignore wall-clock time spent paused. */
+          state.levelStartTime += state.pausedElapsed;
+          state.pausedElapsed = 0;
           pauseBtn.textContent = "PAUSE";
           document.getElementById('sk_screen_paused').classList.add('sk_hidden');
           AB.Renderer.addLog("RESUMED CONNECTION", "#00ff66");
         }
       },
 
-      _runAutoSolver: function() {
+      _runAutoSolver: function () {
         var now = performance.now();
         if (now <= this._nextSolverAction) return;
         var state = AB.State;
@@ -2240,7 +2298,7 @@
         var foundCode = null;
         var entries = Object.entries(state.activeMap);
         for (var i = 0; i < entries.length; i++) {
-          if (entries[i][1] === targetChar) { foundCode = entries[i][0]; break; }
+          if (entries[i][1] === targetChar) {foundCode = entries[i][0]; break;}
         }
         if (foundCode) {
           this._nextSolverAction = now + 400 + Math.random() * 300;
@@ -2256,30 +2314,30 @@
     AB.DLC = {
       /* Themed palettes cycled across expansion nodes when JSON lacks a theme */
       THEME_PALETTE: [
-        { primary: "#00e5ff", dim: "#0099b3", danger: "#ff5040", bg: "#021013", word: "#00e5ff" },
-        { primary: "#ff33cc", dim: "#b3238f", danger: "#ffaa00", bg: "#10020e", word: "#ff33cc" },
-        { primary: "#ffaa00", dim: "#cc8800", danger: "#ff3333", bg: "#0f0c02", word: "#ffcc66" },
-        { primary: "#b26bff", dim: "#8a4fd6", danger: "#ff3333", bg: "#0e0613", word: "#d4a6ff" },
-        { primary: "#00ffb3", dim: "#00b380", danger: "#ff5c33", bg: "#020f0b", word: "#00ffb3" }
+        {primary: "#00e5ff", dim: "#0099b3", danger: "#ff5040", bg: "#021013", word: "#00e5ff"},
+        {primary: "#ff33cc", dim: "#b3238f", danger: "#ffaa00", bg: "#10020e", word: "#ff33cc"},
+        {primary: "#ffaa00", dim: "#cc8800", danger: "#ff3333", bg: "#0f0c02", word: "#ffcc66"},
+        {primary: "#b26bff", dim: "#8a4fd6", danger: "#ff3333", bg: "#0e0613", word: "#d4a6ff"},
+        {primary: "#00ffb3", dim: "#00b380", danger: "#ff5c33", bg: "#020f0b", word: "#00ffb3"}
       ],
 
-      fetchLevelNodes: function() {
+      fetchLevelNodes: function () {
         var statusText = document.getElementById('sk_preloader_status');
         var progressBar = document.getElementById('sk_preloader_progress');
-        var gitRawLink = "https://github.com/ManavBanker/PublishedGames/blob/main/Anarchy_Board/levels.json";
+        var gitRawLink = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Anarchy_Board/levels.json";
 
         fetch(gitRawLink)
-          .then(function(response) {
+          .then(function (response) {
             if (!response.ok) throw new Error("Connection failed");
             return response.text();
           })
-          .then(function(rawText) {
+          .then(function (rawText) {
             progressBar.style.width = "70%";
             statusText.textContent = "Decrypting response stream...";
             var cleanJson = rawText.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*/g, "");
             var fetchedLevels = JSON.parse(cleanJson);
             if (Array.isArray(fetchedLevels) && fetchedLevels.length > 0) {
-              var remoteLevels = fetchedLevels.map(function(lvl, i) {
+              var remoteLevels = fetchedLevels.map(function (lvl, i) {
                 var palette = AB.DLC.THEME_PALETTE[i % AB.DLC.THEME_PALETTE.length];
                 return {
                   id: lvl.id,
@@ -2288,7 +2346,7 @@
                   firewallSpeed: lvl.firewallSpeed,
                   mutationDesc: lvl.mutationDesc,
                   theme: lvl.theme || palette,
-                  mutate: function(code) {
+                  mutate: function (code) {
                     AB.Mutations.applyForType(lvl.mutationType, code);
                   }
                 };
@@ -2297,14 +2355,14 @@
               AB.Renderer.addLog("DECRYPTED REMOTE NET NODES SUCCESSFULLY", "#00ffff");
             }
           })
-          .catch(function(err) {
+          .catch(function (err) {
             console.warn("Failed fetching remote levels:", err.message);
             statusText.textContent = "Remote synchronization failed.";
           })
-          .finally(function() {
+          .finally(function () {
             progressBar.style.width = "100%";
             statusText.textContent = "SYNCHRONIZATION COMPLETED";
-            setTimeout(function() {
+            setTimeout(function () {
               document.getElementById('sk_preloader_popup').classList.add('sk_hidden');
             }, 1000);
           });
@@ -2314,11 +2372,10 @@
     /* ----------------------------------------------------------
        BOOT: Initialize everything on window load
        ---------------------------------------------------------- */
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
       AB.Engine.init();
     });
   </script>
 </body>
 
 </html>
-```

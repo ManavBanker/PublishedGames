@@ -1,18 +1,23 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Ouromath - Action-Puzzle Mathematical Snake</title>
-<link rel="stylesheet" href="css/framework.css">`n</head>
-<body style="margin:0; padding:0; background-color:#0f172a; font-family:sans-serif; overflow:hidden; touch-action:none;">
+  <link rel="stylesheet" href="css/framework.css">
+</head>
+
+<body
+  style="margin:0; padding:0; background-color:#0f172a; font-family:sans-serif; overflow:hidden; touch-action:none;">
 
   <!-- ALL HTML ELEMENTS STRICTLY FORMATTED & COMPLETE -->
   <div class="sk_game_suite_root" id="sk_game_suite_root">
-    
+
     <!-- Meta and Labels container -->
     <div class="sk_labels" data="Snake,Math,Brain-Trainer,Retro" style="display:none;"></div>
-    <meta class="sk_meta" description="A tactical snake game where your body represents an active mathematical equation.">
+    <meta class="sk_meta"
+      description="A tactical snake game where your body represents an active mathematical equation.">
 
     <!-- 1. TOP DIV: COMPACT TOP BAR & POPUP NAVIGATION -->
     <div class="sk_top_bar">
@@ -41,7 +46,8 @@
       <!-- Level Loader Progress Modal -->
       <div class="sk_screen_panel" id="sk_screen_loader">
         <p class="sk_panel_title">OUROMATH ENGINE</p>
-        <p class="sk_panel_desc" id="sk_loader_status">Initializing mathematical modules and parsing level packages...</p>
+        <p class="sk_panel_desc" id="sk_loader_status">Initializing mathematical modules and parsing level packages...
+        </p>
         <div class="sk_progress_track">
           <div class="sk_progress_fill" id="sk_loader_progress"></div>
         </div>
@@ -65,11 +71,12 @@
         </div>
         <button class="sk_action_btn sk_btn_close" id="sk_close_nav_menu">CLOSE</button>
       </div>
-      
+
       <!-- Main Start Screen -->
       <div class="sk_screen_panel sk_hidden" id="sk_screen_main">
         <p class="sk_panel_title">OUROMATH</p>
-        <p class="sk_panel_desc">Manipulate your mathematical length. Feed your snake digits and operators. Achieve exact evaluations to consume emerald targets!</p>
+        <p class="sk_panel_desc">Manipulate your mathematical length. Feed your snake digits and operators. Achieve
+          exact evaluations to consume emerald targets!</p>
         <button class="sk_action_btn" id="sk_btn_start_game">PLAY GAME (Enter)</button>
         <button class="sk_action_btn sk_btn_sec" id="sk_btn_watch_demo">WATCH AUTO-DEMO</button>
       </div>
@@ -111,11 +118,14 @@
         <p class="sk_panel_title">HOW TO PLAY</p>
         <div class="sk_info_text">
           • <b>Controls:</b> WASD, Arrow keys, Swipe on canvas, or virtual D-Pad.<br><br>
-          • <b>Zoom & Pan:</b> 2-Finger Pinch to zoom, Hand Tool / Drag to pan canvas (Works anytime, including Pause/Game Over!). Keyboard: <b>Ctrl + / -</b> or <b>0</b> to reset.<br><br>
+          • <b>Zoom & Pan:</b> 2-Finger Pinch to zoom, Hand Tool / Drag to pan canvas (Works anytime, including
+          Pause/Game Over!). Keyboard: <b>Ctrl + / -</b> or <b>0</b> to reset.<br><br>
           • <b>Double-Tap Canvas:</b> Quick Dash/Pulse ability.<br><br>
-          • <b>Touch Gestures:</b> Multi-touch supported. Move with one finger, pan/zoom or activate buttons simultaneously.<br><br>
+          • <b>Touch Gestures:</b> Multi-touch supported. Move with one finger, pan/zoom or activate buttons
+          simultaneously.<br><br>
           • <b>Equations:</b> Calculated strictly Left-to-Right.<br><br>
-          • <b>Targets:</b> Consume the pulsing emerald node only when current mathematical value equals the target number.<br><br>
+          • <b>Targets:</b> Consume the pulsing emerald node only when current mathematical value equals the target
+          number.<br><br>
           • <b>Splicing:</b> Hitting your own tail harmlessly slices off segments.
         </div>
         <button class="sk_action_btn" id="sk_close_info">UNDERSTOOD</button>
@@ -163,7 +173,7 @@
           <p class="sk_hud_value" id="sk_hud_zoom">1.0x</p>
         </div>
       </div>
-      
+
       <!-- 1:1 Aspect Ratio Canvas Viewport Wrapper -->
       <div class="sk_viewport_frame" id="sk_viewport_frame">
         <canvas class="sk_game_canvas" id="sk_canvas"></canvas>
@@ -172,25 +182,25 @@
 
     <!-- FLOATING ZOOM & PAN TOOLBAR -->
     <div class="sk_zoom_toolbar">
-      <button class="sk_tool_btn" id="sk_btn_pan_mode" title="Hand Pan Tool">âœ‹ Pan</button>
-      <button class="sk_tool_btn" id="sk_btn_zoom_in" title="Zoom In">ðŸ” +</button>
-      <button class="sk_tool_btn" id="sk_btn_zoom_out" title="Zoom Out">ðŸ” -</button>
-      <button class="sk_tool_btn" id="sk_btn_zoom_reset" title="Reset View">â†º 1:1</button>
+      <button class="sk_tool_btn" id="sk_btn_pan_mode" title="Hand Pan Tool">✋ Pan</button>
+      <button class="sk_tool_btn" id="sk_btn_zoom_in" title="Zoom In">🔍 +</button>
+      <button class="sk_tool_btn" id="sk_btn_zoom_out" title="Zoom Out">🔍 -</button>
+      <button class="sk_tool_btn" id="sk_btn_zoom_reset" title="Reset View">1:1</button>
     </div>
 
     <!-- 3. THIRD DIV: DEDICATED SPACIOUS BOTTOM CONTROL WRAPPER -->
     <div class="sk_bottom_tray">
       <!-- Draggable & Custom Positionable Virtual Controller -->
       <div class="sk_virtual_controller" id="sk_controller">
-        <div class="sk_drag_handle" id="sk_drag_handle">â ¿ Drag D-Pad</div>
+        <div class="sk_drag_handle" id="sk_drag_handle">⋮⋮ Drag D-Pad</div>
         <div class="sk_dpad">
-          <button class="sk_ctrl_btn" id="sk_ctrl_up">â–²</button>
+          <button class="sk_ctrl_btn" id="sk_ctrl_up">▲</button>
           <div class="sk_dpad_mid">
-            <button class="sk_ctrl_btn" id="sk_ctrl_left">â—€</button>
-            <button class="sk_ctrl_btn sk_ctrl_center" id="sk_ctrl_pause_mid">â¸</button>
-            <button class="sk_ctrl_btn" id="sk_ctrl_right">â–¶</button>
+            <button class="sk_ctrl_btn" id="sk_ctrl_left">◀</button>
+            <button class="sk_ctrl_btn sk_ctrl_center" id="sk_ctrl_pause_mid">⏸</button>
+            <button class="sk_ctrl_btn" id="sk_ctrl_right">▶</button>
           </div>
-          <button class="sk_ctrl_btn" id="sk_ctrl_down">â–¼</button>
+          <button class="sk_ctrl_btn" id="sk_ctrl_down">▼</button>
         </div>
       </div>
     </div>
@@ -204,7 +214,10 @@
       content: " ";
       display: block;
       position: absolute;
-      top: 0; left: 0; bottom: 0; right: 0;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
       background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
       z-index: 999;
       background-size: 100% 3px, 3px 100%;
@@ -212,8 +225,13 @@
     }
 
     /* Add glowing effects to canvas & HUD */
-    .sk_hud_value.sk_text_primary { text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); }
-    .sk_hud_value.sk_text_success { text-shadow: 0 0 10px rgba(52, 211, 153, 0.6); }
+    .sk_hud_value.sk_text_primary {
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    }
+
+    .sk_hud_value.sk_text_success {
+      text-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+    }
 
     /* Scope wrapper & Mobile Reset */
     .sk_game_suite_root {
@@ -289,7 +307,10 @@
       font-size: 12px;
       color: #94a3b8;
     }
-    .sk_score_pill b { color: #38bdf8; }
+
+    .sk_score_pill b {
+      color: #38bdf8;
+    }
 
     .sk_header_buttons {
       display: flex;
@@ -333,7 +354,7 @@
       justify-content: center;
       align-items: center;
       pointer-events: none;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(2px);
     }
 
@@ -362,8 +383,13 @@
       color: #3b82f6;
     }
 
-    .sk_text_danger { color: #ef4444; }
-    .sk_text_success { color: #10b981; }
+    .sk_text_danger {
+      color: #ef4444;
+    }
+
+    .sk_text_success {
+      color: #10b981;
+    }
 
     .sk_panel_desc {
       font-size: 13px;
@@ -387,11 +413,16 @@
       cursor: pointer;
       transition: transform 0.1s, box-shadow 0.2s;
     }
-    .sk_action_btn:hover { transform: translateY(-1px); }
+
+    .sk_action_btn:hover {
+      transform: translateY(-1px);
+    }
+
     .sk_btn_sec {
       background: #334155;
       border: 1px solid #64748b;
     }
+
     .sk_btn_close {
       background: #475569;
     }
@@ -409,12 +440,14 @@
       overflow: hidden;
       border: 1px solid #475569;
     }
+
     .sk_progress_fill {
       width: 0%;
       height: 100%;
       background: linear-gradient(to right, #3b82f6, #10b981);
       transition: width 0.25s ease;
     }
+
     .sk_loader_actions {
       display: flex;
       flex-direction: column;
@@ -435,7 +468,13 @@
       padding: 6px 0;
       border-bottom: 1px solid #1e293b;
     }
-    .sk_setting_label { font-size: 13px; font-weight: 600; color: #94a3b8; }
+
+    .sk_setting_label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
     .sk_toggle_btn {
       background: #334155;
       border: 1px solid #475569;
@@ -446,12 +485,17 @@
       font-size: 12px;
       cursor: pointer;
     }
+
     .sk_toggle_btn.sk_active {
       background: #3b82f6;
       border-color: #60a5fa;
       color: white;
     }
-    .sk_btn_group { display: flex; gap: 4px; }
+
+    .sk_btn_group {
+      display: flex;
+      gap: 4px;
+    }
 
     .sk_scores_container {
       max-height: 180px;
@@ -460,6 +504,7 @@
       flex-direction: column;
       gap: 6px;
     }
+
     .sk_score_row {
       display: flex;
       justify-content: space-between;
@@ -476,6 +521,7 @@
       max-height: 200px;
       overflow-y: auto;
     }
+
     .sk_lvl_select {
       background: #1e293b;
       border: 1px solid #475569;
@@ -486,6 +532,7 @@
       font-size: 14px;
       cursor: pointer;
     }
+
     .sk_lvl_select.sk_unlocked {
       border-color: #10b981;
       color: #10b981;
@@ -525,11 +572,32 @@
       margin-bottom: 4px;
       flex-shrink: 0;
     }
-    .sk_hud_metric { display: flex; flex-direction: column; align-items: center; }
-    .sk_hud_label { font-size: 9px; color: #64748b; font-weight: 700; }
-    .sk_hud_value { font-size: 13px; font-weight: bold; color: #f8fafc; }
-    .sk_text_primary { color: #60a5fa; }
-    .sk_text_success { color: #34d399; }
+
+    .sk_hud_metric {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sk_hud_label {
+      font-size: 9px;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .sk_hud_value {
+      font-size: 13px;
+      font-weight: bold;
+      color: #f8fafc;
+    }
+
+    .sk_text_primary {
+      color: #60a5fa;
+    }
+
+    .sk_text_success {
+      color: #34d399;
+    }
 
     .sk_viewport_frame {
       position: relative;
@@ -545,7 +613,7 @@
       background: #090d16;
       border: 2px solid #334155;
       border-radius: 6px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
       touch-action: none;
       display: block;
     }
@@ -560,6 +628,7 @@
       gap: 6px;
       z-index: 105;
     }
+
     .sk_tool_btn {
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid #475569;
@@ -571,6 +640,7 @@
       cursor: pointer;
       backdrop-filter: blur(4px);
     }
+
     .sk_tool_btn.sk_tool_active {
       background: #2563eb;
       border-color: #60a5fa;
@@ -601,7 +671,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       touch-action: none;
     }
 
@@ -615,8 +685,17 @@
       touch-action: none;
     }
 
-    .sk_dpad { display: flex; flex-direction: column; align-items: center; }
-    .sk_dpad_mid { display: flex; gap: 8px; }
+    .sk_dpad {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sk_dpad_mid {
+      display: flex;
+      gap: 8px;
+    }
+
     .sk_ctrl_btn {
       width: 44px;
       height: 40px;
@@ -631,10 +710,12 @@
       justify-content: center;
       align-items: center;
     }
+
     .sk_ctrl_btn:active {
       background: #3b82f6;
       border-color: #60a5fa;
     }
+
     .sk_ctrl_center {
       background: #334155;
       font-size: 13px;
@@ -642,11 +723,28 @@
     }
 
     @media (max-width: 600px) {
-      .sk_top_bar { padding: 4px 6px; }
-      .sk_title_main { font-size: 14px; }
-      .sk_btn { padding: 4px 6px; font-size: 10px; }
-      .sk_bottom_tray { height: 145px; }
-      .sk_ctrl_btn { width: 40px; height: 36px; font-size: 14px; }
+      .sk_top_bar {
+        padding: 4px 6px;
+      }
+
+      .sk_title_main {
+        font-size: 14px;
+      }
+
+      .sk_btn {
+        padding: 4px 6px;
+        font-size: 10px;
+      }
+
+      .sk_bottom_tray {
+        height: 145px;
+      }
+
+      .sk_ctrl_btn {
+        width: 40px;
+        height: 36px;
+        font-size: 14px;
+      }
     }
   </style>
 
@@ -669,8 +767,8 @@
         startVal: 3,
         allowedOps: ['+', '-', '*'],
         obstacles: [
-          { x: 5, y: 5 }, { x: 5, y: 6 }, { x: 5, y: 7 },
-          { x: 14, y: 12 }, { x: 14, y: 13 }, { x: 14, y: 14 }
+          {x: 5, y: 5}, {x: 5, y: 6}, {x: 5, y: 7},
+          {x: 14, y: 12}, {x: 14, y: 13}, {x: 14, y: 14}
         ],
         speedMs: 220,
         desc: "Multiplication is now available! Mind the basic wall obstacles."
@@ -681,8 +779,8 @@
         startVal: 10,
         allowedOps: ['+', '-', '*'],
         obstacles: [
-          { x: 3, y: 10 }, { x: 4, y: 10 }, { x: 5, y: 10 },
-          { x: 14, y: 10 }, { x: 15, y: 10 }, { x: 16, y: 10 }
+          {x: 3, y: 10}, {x: 4, y: 10}, {x: 5, y: 10},
+          {x: 14, y: 10}, {x: 15, y: 10}, {x: 16, y: 10}
         ],
         speedMs: 190,
         desc: "Split barriers restrict movement. Maintain precision arithmetic!"
@@ -693,8 +791,8 @@
         startVal: 9,
         allowedOps: ['+', '-', '*'],
         obstacles: [
-          { x: 10, y: 2 }, { x: 10, y: 3 }, { x: 10, y: 4 }, { x: 10, y: 5 },
-          { x: 10, y: 14 }, { x: 10, y: 15 }, { x: 10, y: 16 }, { x: 10, y: 17 }
+          {x: 10, y: 2}, {x: 10, y: 3}, {x: 10, y: 4}, {x: 10, y: 5},
+          {x: 10, y: 14}, {x: 10, y: 15}, {x: 10, y: 16}, {x: 10, y: 17}
         ],
         speedMs: 160,
         desc: "Central spine obstacle layout. Plan your rotations carefully."
@@ -705,8 +803,8 @@
         startVal: 2,
         allowedOps: ['+', '-', '*'],
         obstacles: [
-          { x: 2, y: 2 }, { x: 17, y: 2 }, { x: 2, y: 17 }, { x: 17, y: 17 },
-          { x: 10, y: 10 }, { x: 9, y: 10 }, { x: 11, y: 10 }
+          {x: 2, y: 2}, {x: 17, y: 2}, {x: 2, y: 17}, {x: 17, y: 17},
+          {x: 10, y: 10}, {x: 9, y: 10}, {x: 11, y: 10}
         ],
         speedMs: 130,
         desc: "Core central bunker. High-speed, elite tactical math equations."
@@ -714,6 +812,15 @@
     ];
 
     let ACTIVE_LEVELS = JSON.parse(JSON.stringify(DEFAULT_LEVELS));
+
+    /* Remember each level's intrinsic speed so the difficulty selector can
+       scale per-level tuning instead of flattening it to a single value. */
+    function syncBaseSpeeds() {
+      ACTIVE_LEVELS.forEach(l => {
+        if (typeof l.baseSpeedMs !== 'number') l.baseSpeedMs = l.speedMs;
+      });
+    }
+    syncBaseSpeeds();
 
     /* Strips C-style single-line and multi-line comments and parses JSON/JS array format safely */
     function parseSanitizedLevelString(rawString) {
@@ -747,6 +854,7 @@
         const parsed = parseSanitizedLevelString(rawText);
         if (Array.isArray(parsed) && parsed.length > 0) {
           ACTIVE_LEVELS = parsed;
+          syncBaseSpeeds();
           console.log("Remote levels loaded successfully in background.");
         } else {
           throw new Error("Invalid level array output");
@@ -788,9 +896,9 @@
           /* Audio context silent error handler */
         }
       }
-      beep() { this.play(220, 'sine', 0.05); }
-      grow() { this.play(580, 'triangle', 0.15); }
-      splice() { this.play(140, 'sawtooth', 0.35); }
+      beep() {this.play(220, 'sine', 0.05);}
+      grow() {this.play(580, 'triangle', 0.15);}
+      splice() {this.play(140, 'sawtooth', 0.35);}
       gameover() {
         this.play(180, 'sawtooth', 0.25);
         setTimeout(() => this.play(110, 'sawtooth', 0.4), 200);
@@ -811,8 +919,8 @@
       targetIndex: 0,
       score: 0,
       snake: [],
-      direction: { x: 1, y: 0, name: 'RIGHT' },
-      nextDirection: { x: 1, y: 0, name: 'RIGHT' },
+      direction: {x: 1, y: 0, name: 'RIGHT'},
+      nextDirection: {x: 1, y: 0, name: 'RIGHT'},
       food: [],
       debris: [],
       targetsAchieved: 0,
@@ -824,7 +932,7 @@
       isLandscape: false,
       /* Viewport Zoom and Pan Engine */
       zoom: 1.0,
-      panOffset: { x: 0, y: 0 },
+      panOffset: {x: 0, y: 0},
       isPanToolActive: false
     };
 
@@ -932,8 +1040,8 @@
     function togglePause() {
       if (!state.gameActive) return;
       state.isPaused = !state.isPaused;
-      els.btns.pause.innerHTML = state.isPaused ? '<i>â–¶ Resume</i>' : '<i>â¸ Pause</i>';
-      els.ctrl.midPause.innerText = state.isPaused ? 'â–¶' : 'â¸';
+      els.btns.pause.innerHTML = state.isPaused ? '<i>▶ Resume</i>' : '<i>⏸ Pause</i>';
+      els.ctrl.midPause.innerText = state.isPaused ? '▶' : '⏸';
     }
 
     function populateScores() {
@@ -999,7 +1107,7 @@
       if (!snake || snake.length === 0) return 0;
       let total = 0;
       let currentOp = '+';
-      
+
       for (let i = 0; i < snake.length; i++) {
         const seg = snake[i];
         if (seg.type === 'digit') {
@@ -1034,7 +1142,7 @@
 
     function resetZoomPan() {
       state.zoom = 1.0;
-      state.panOffset = { x: 0, y: 0 };
+      state.panOffset = {x: 0, y: 0};
       els.hudZoom.innerText = '1.0x';
     }
 
@@ -1193,7 +1301,7 @@
       while (tries < 100) {
         const x = Math.floor(Math.random() * GRID_SIZE);
         const y = Math.floor(Math.random() * GRID_SIZE);
-        
+
         const hitObstacle = (activeLvl.obstacles || []).some(o => o.x === x && o.y === y);
         const hitSnake = state.snake.some(s => s.x === x && s.y === y);
         const hitDebris = state.debris.some(d => d.x === x && d.y === y);
@@ -1201,7 +1309,7 @@
 
         if (!hitObstacle && !hitSnake && !hitDebris && !hitFood) {
           const value = allowedValues[Math.floor(Math.random() * allowedValues.length)];
-          return { x, y, type, value };
+          return {x, y, type, value};
         }
         tries++;
       }
@@ -1218,18 +1326,20 @@
 
     function initGame() {
       const activeLvl = ACTIVE_LEVELS[state.levelIndex] || ACTIVE_LEVELS[0];
+      state.score = 0;
       state.targetIndex = 0;
       state.targetsAchieved = 0;
       state.gameActive = true;
       state.isPaused = false;
-      els.btns.pause.innerHTML = '<i>â¸ Pause</i>';
-      els.ctrl.midPause.innerText = 'â¸';
-      state.direction = { x: 1, y: 0, name: 'RIGHT' };
-      state.nextDirection = { x: 1, y: 0, name: 'RIGHT' };
+      state.lastTickTime = 0;
+      els.btns.pause.innerHTML = '<i>⏸ Pause</i>';
+      els.ctrl.midPause.innerText = '⏸';
+      state.direction = {x: 1, y: 0, name: 'RIGHT'};
+      state.nextDirection = {x: 1, y: 0, name: 'RIGHT'};
       state.debris = [];
-      
+
       state.snake = [
-        { x: 10, y: 10, type: 'digit', value: activeLvl.startVal.toString() }
+        {x: 10, y: 10, type: 'digit', value: activeLvl.startVal.toString()}
       ];
 
       state.food = [];
@@ -1271,14 +1381,14 @@
         });
       });
       synth.splice();
-      
+
       if (state.snake.length === 0) {
         triggerGameOver("Your snake was completely severed!");
       } else {
         const tail = state.snake[state.snake.length - 1];
         if (tail && tail.type === 'op') {
           const removed = state.snake.pop();
-          state.debris.push({ x: removed.x, y: removed.y, val: removed.value, timer: 300 });
+          state.debris.push({x: removed.x, y: removed.y, val: removed.value, timer: 300});
         }
       }
     }
@@ -1325,16 +1435,19 @@
       }
       if (collisionIndex !== -1) {
         handleMathSplicing(collisionIndex);
+        /* The splice may have ended the game (snake fully severed); bail out
+           before touching state.snake again. */
+        if (!state.gameActive) return;
       }
 
-      const prevTailPos = { 
-        x: state.snake[state.snake.length - 1].x, 
-        y: state.snake[state.snake.length - 1].y 
+      const prevTailPos = {
+        x: state.snake[state.snake.length - 1].x,
+        y: state.snake[state.snake.length - 1].y
       };
 
       for (let i = state.snake.length - 1; i > 0; i--) {
-        state.snake[i].x = state.snake[i-1].x;
-        state.snake[i].y = state.snake[i-1].y;
+        state.snake[i].x = state.snake[i - 1].x;
+        state.snake[i].y = state.snake[i - 1].y;
       }
       head.x = nextX;
       head.y = nextY;
@@ -1356,17 +1469,18 @@
         if (eaten.type === 'target') {
           const mathResult = evaluateEquation(state.snake);
           const targetNum = eaten.value;
-          
+
           if (mathResult === targetNum) {
             state.targetIndex++;
             state.score += 100 * state.snake.length;
             synth.win();
             addParticles(eaten.x, eaten.y, '#34d399', 25);
-            
+
             if (state.targetIndex >= activeLvl.targets.length) {
               state.gameActive = false;
-              if (state.score > state.highScores[0]) {
-                state.highScores.unshift(state.score);
+              if (state.score > 0) {
+                state.highScores.push(state.score);
+                state.highScores.sort((a, b) => b - a);
                 state.highScores = state.highScores.slice(0, 5);
                 saveScores();
               }
@@ -1381,7 +1495,7 @@
         } else {
           if (lastSeg.type === 'digit') {
             if (eaten.type === 'op') {
-              state.snake.push({ x: prevTailPos.x, y: prevTailPos.y, type: 'op', value: eaten.value });
+              state.snake.push({x: prevTailPos.x, y: prevTailPos.y, type: 'op', value: eaten.value});
               synth.grow();
             } else {
               lastSeg.value = eaten.value;
@@ -1389,7 +1503,7 @@
             }
           } else if (lastSeg.type === 'op') {
             if (eaten.type === 'digit') {
-              state.snake.push({ x: prevTailPos.x, y: prevTailPos.y, type: 'digit', value: eaten.value });
+              state.snake.push({x: prevTailPos.x, y: prevTailPos.y, type: 'digit', value: eaten.value});
               synth.grow();
             } else {
               lastSeg.value = eaten.value;
@@ -1423,7 +1537,7 @@
       synth.gameover();
       document.getElementById('sk_gameover_reason').innerText = reason;
       document.getElementById('sk_gameover_score').innerText = state.score;
-      
+
       if (state.score > 0) {
         state.highScores.push(state.score);
         state.highScores.sort((a, b) => b - a);
@@ -1462,10 +1576,10 @@
       if (!targetDestination) return;
 
       const directions = [
-        { x: 0, y: -1, name: 'UP' },
-        { x: 0, y: 1, name: 'DOWN' },
-        { x: -1, y: 0, name: 'LEFT' },
-        { x: 1, y: 0, name: 'RIGHT' }
+        {x: 0, y: -1, name: 'UP'},
+        {x: 0, y: 1, name: 'DOWN'},
+        {x: -1, y: 0, name: 'LEFT'},
+        {x: 1, y: 0, name: 'RIGHT'}
       ];
 
       const safeDirections = directions.filter(d => {
@@ -1493,7 +1607,7 @@
     /* --- 11. ADVANCED MULTI-TOUCH, GESTURE, ZOOM & PAN CONTROLLER --- */
     function setDirection(x, y, name) {
       if (state.direction.x === -x && state.direction.y === -y) return;
-      state.nextDirection = { x, y, name };
+      state.nextDirection = {x, y, name};
     }
 
     /* Track multi-touch pointers dictionary */
@@ -1501,8 +1615,8 @@
     let lastTapTimestamp = 0;
     let initialPinchDistance = 0;
     let initialPinchZoom = 1.0;
-    let panTouchStart = { x: 0, y: 0 };
-    let panOffsetStart = { x: 0, y: 0 };
+    let panTouchStart = {x: 0, y: 0};
+    let panOffsetStart = {x: 0, y: 0};
 
     /* Canvas Gesture & Touch Handlers (Operates in Play, Pause, and GameOver states) */
     els.canvas.addEventListener('touchstart', e => {
@@ -1543,10 +1657,10 @@
 
       /* Single touch pan tracker */
       if (e.touches.length === 1 && state.isPanToolActive) {
-        panTouchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        panOffsetStart = { ...state.panOffset };
+        panTouchStart = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+        panOffsetStart = {...state.panOffset};
       }
-    }, { passive: false });
+    }, {passive: false});
 
     els.canvas.addEventListener('touchmove', e => {
       e.preventDefault();
@@ -1584,7 +1698,7 @@
           record.lastY = touch.clientY;
         }
       }
-    }, { passive: false });
+    }, {passive: false});
 
     els.canvas.addEventListener('touchend', e => {
       e.preventDefault();
@@ -1616,7 +1730,7 @@
       if (e.touches.length < 2) {
         initialPinchDistance = 0;
       }
-    }, { passive: false });
+    }, {passive: false});
 
     els.canvas.addEventListener('touchcancel', e => {
       for (let i = 0; i < e.changedTouches.length; i++) {
@@ -1661,7 +1775,7 @@
 
       if (!state.gameActive || state.isPaused) return;
 
-      switch(e.key.toLowerCase()) {
+      switch (e.key.toLowerCase()) {
         case 'arrowup':
         case 'w':
           setDirection(0, -1, 'UP');
@@ -1692,7 +1806,7 @@
       let initialLeft = 0, initialTop = 0;
 
       els.ctrl.drag.addEventListener('mousedown', dragStart);
-      els.ctrl.drag.addEventListener('touchstart', dragStart, { passive: false });
+      els.ctrl.drag.addEventListener('touchstart', dragStart, {passive: false});
 
       function dragStart(e) {
         isDragging = true;
@@ -1700,14 +1814,14 @@
         const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
         startX = clientX;
         startY = clientY;
-        
+
         const rect = els.ctrl.panel.getBoundingClientRect();
         initialLeft = rect.left;
         initialTop = rect.top;
 
         document.addEventListener('mousemove', dragMove);
         document.addEventListener('mouseup', dragEnd);
-        document.addEventListener('touchmove', dragMove, { passive: false });
+        document.addEventListener('touchmove', dragMove, {passive: false});
         document.addEventListener('touchend', dragEnd);
         e.preventDefault();
       }
@@ -1742,7 +1856,7 @@
         e.preventDefault();
         setDirection(dirX, dirY, name);
       };
-      element.addEventListener('touchstart', handler, { passive: false });
+      element.addEventListener('touchstart', handler, {passive: false});
       element.addEventListener('mousedown', handler);
     };
 
@@ -1773,8 +1887,8 @@
       if (state.isPaused) togglePause();
       showPanel(null);
     });
-    els.btns.menuLevels.addEventListener('click', () => { populateLevels(); showPanel('levels'); });
-    els.btns.menuScores.addEventListener('click', () => { populateScores(); showPanel('scores'); });
+    els.btns.menuLevels.addEventListener('click', () => {populateLevels(); showPanel('levels');});
+    els.btns.menuScores.addEventListener('click', () => {populateScores(); showPanel('scores');});
     els.btns.menuSettings.addEventListener('click', () => showPanel('settings'));
     els.btns.menuInfo.addEventListener('click', () => showPanel('info'));
     els.btns.menuFetch.addEventListener('click', () => showPanel('loader'));
@@ -1786,7 +1900,7 @@
     els.btns.closeInfo.addEventListener('click', () => showPanel(null));
 
     /* Level Fetcher Actions */
-    els.btns.loadRemote.addEventListener('click', () => fetchRemoteLevels("https://github.com/ManavBanker/PublishedGames/blob/main/Ouromath/levels.json"));
+    els.btns.loadRemote.addEventListener('click', () => fetchRemoteLevels("https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Ouromath/levels.json"));
     els.btns.useLocal.style.display = 'none';
 
     /* Fullscreen API Toggle */
@@ -1834,7 +1948,10 @@
     const selectDifficulty = (multiplier, activeBtn) => {
       [els.btns.diffEasy, els.btns.diffMed, els.btns.diffHard].forEach(b => b.classList.remove('sk_active'));
       activeBtn.classList.add('sk_active');
-      ACTIVE_LEVELS.forEach(l => l.speedMs = 200 * multiplier);
+      ACTIVE_LEVELS.forEach(l => {
+        if (typeof l.baseSpeedMs !== 'number') l.baseSpeedMs = l.speedMs;
+        l.speedMs = Math.max(60, Math.round(l.baseSpeedMs * multiplier));
+      });
     };
 
     els.btns.diffEasy.addEventListener('click', () => selectDifficulty(1.5, els.btns.diffEasy));
@@ -1893,5 +2010,7 @@
     requestAnimationFrame(loop);
 
   </script>
-<script src="js/framework.js"></script>`n</body>
+  <script src="js/framework.js"></script>
+</body>
+
 </html>
