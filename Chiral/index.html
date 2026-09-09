@@ -1,0 +1,1815 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chiral - Symmetry-Shifting Puzzle</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <div class="sk_game_suite_root">
+    <!-- METADATA & LABELS -->
+    <div class="sk_labels" data="Grid-based, Spatial Reasoning, Mirroring, Minimalist"></div>
+    <meta name="description"
+      content="Navigate twin avatars simultaneously through asymmetric maze grids where the rules of symmetry shift every five moves, forcing you to constantly rewrite your spatial logic.">
+
+    <!-- TOP DIV: CONTROL BAR -->
+    <div class="sk_top_bar">
+      <span class="sk_title_text">CHIRAL</span>
+      <div class="sk_top_buttons">
+        <!-- Unified Dropdown Navigation Menu -->
+        <div class="sk_nav_dropdown">
+          <button id="sk_btn_menu_toggle" class="sk_btn">â˜° Menu</button>
+          <div id="sk_dropdown_menu" class="sk_dropdown_content">
+            <button id="sk_btn_levels">Levels</button>
+            <button id="sk_btn_settings">Settings</button>
+            <button id="sk_btn_info">How to Play</button>
+            <button id="sk_btn_scores">Performance</button>
+            <button id="sk_btn_pause_toggle">Pause Game</button>
+          </div>
+        </div>
+        <button id="sk_btn_fullscreen" class="sk_btn">Full Screen</button>
+      </div>
+    </div>
+
+    <!-- POPUPS -->
+    <!-- Loader Popup -->
+    <div id="sk_popup_loader" class="sk_popup">
+      <div class="sk_popup_content">
+        <p class="sk_popup_title">Initializing Neural Alignment</p>
+        <p style="font-size: 13px; color: #a0aec0;" id="sk_loader_text">Fetching grid parameters...</p>
+        <div class="sk_loader_progress_container">
+          <div id="sk_loader_progress_bar" class="sk_loader_progress_bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Levels Popup -->
+    <div id="sk_popup_levels" class="sk_popup sk_hidden">
+      <div class="sk_popup_content">
+        <p class="sk_popup_title">Select Level</p>
+        <div class="sk_level_grid" id="sk_level_selector_grid">
+          <!-- Populated by JS -->
+        </div>
+        <br>
+        <button class="sk_btn sk_close_popup">Close</button>
+      </div>
+    </div>
+
+    <!-- Settings Popup -->
+    <div id="sk_popup_settings" class="sk_popup sk_hidden">
+      <div class="sk_popup_content">
+        <p class="sk_popup_title">Settings</p>
+        <div class="sk_popup_row">
+          <span>Synthesizer Audio</span>
+          <button id="sk_toggle_audio" class="sk_btn sk_btn_active">ON</button>
+        </div>
+        <div class="sk_popup_row">
+          <span>Symmetry visual aid</span>
+          <button id="sk_toggle_gridlines" class="sk_btn sk_btn_active">ON</button>
+        </div>
+        <br>
+        <button class="sk_btn sk_close_popup">Save & Close</button>
+      </div>
+    </div>
+
+    <!-- Info Popup -->
+    <div id="sk_popup_info" class="sk_popup sk_hidden">
+      <div class="sk_popup_content">
+        <p class="sk_popup_title">How to Play</p>
+        <div class="sk_popup_body">
+          <p>â€¢ You control the <b class="sk_neon_cyan">BLUE (Real) Node</b> directly using WASD, Arrows, or the virtual
+            D-Pad.</p>
+          <p>â€¢ The <b class="sk_neon_pink">PINK (Reflection) Node</b> moves simultaneously based on the current <b
+              class="sk_neon_green">Symmetry Rule</b>.</p>
+          <p>â€¢ The active Symmetry Rule <b>shifts every 5 moves</b>! Watch the indicator carefully.</p>
+          <p>â€¢ Navigate obstacles. Use walls strategically to get nodes in and out of sync.</p>
+          <p>â€¢ Land both nodes on their respective glowing <b class="sk_neon_cyan">Cyan</b> & <b
+              class="sk_neon_pink">Pink</b> <b>Symmetry Gates</b> on the exact same move to win.</p>
+           <p>â€¢ Touch a <b class="sk_neon_orange">Red Void Hazard</b> or exceed par, and the level resets. Use <b>Undo
+              (Z)</b> or Double Tap to experiment safely!</p>
+        </div>
+        <button class="sk_btn sk_close_popup">Got It</button>
+      </div>
+    </div>
+
+    <!-- Scores Popup -->
+    <div id="sk_popup_scores" class="sk_popup sk_hidden">
+      <div class="sk_popup_content">
+        <p class="sk_popup_title">Performance Log</p>
+        <div class="sk_popup_body" id="sk_highscores_list" style="max-height: 200px; overflow-y: auto;">
+          <!-- Populated by JS -->
+        </div>
+        <button class="sk_btn sk_close_popup">Close</button>
+      </div>
+    </div>
+
+    <!-- SECOND DIV: CANVAS GAME ENVIRONMENT -->
+    <div class="sk_game_container" id="sk_interactive_zone">
+
+      <!-- HUD (Live metrics) -->
+      <div class="sk_hud">
+        <div class="sk_hud_item">LV: <span id="sk_hud_level_val" class="sk_neon_cyan">1</span></div>
+        <div class="sk_hud_item">MOVES: <span id="sk_hud_moves_val" class="sk_neon_pink">0</span></div>
+        <div class="sk_hud_item">RULE: <span id="sk_hud_rule_val" class="sk_neon_green">Vertical</span></div>
+        <div class="sk_hud_item">SHIFT IN: <span id="sk_hud_shift_val" class="sk_neon_yellow">5</span></div>
+        <button id="sk_btn_hud_restart" class="sk_btn" style="font-size:10px;padding:3px 8px;">Restart</button>
+      </div>
+
+      <!-- MAIN CANVAS WRAPPER (1:1 Aspect Ratio) -->
+      <div class="sk_canvas_wrapper" id="sk_wrapper">
+        <canvas class="sk_canvas" id="sk_main_canvas"></canvas>
+      </div>
+
+      <!-- MAIN MENU OVERLAY SCREEN -->
+      <div id="sk_screen_menu" class="sk_screen">
+        <p class="sk_game_logo">CHIRAL</p>
+        <p class="sk_game_subtitle">Divergent Symmetry Puzzle</p>
+        <button id="sk_btn_play" class="sk_menu_btn">Play (Enter)</button>
+        <button id="sk_btn_menu_levels" class="sk_menu_btn">Select Level</button>
+      </div>
+
+      <!-- PAUSED OVERLAY SCREEN -->
+      <div id="sk_screen_paused" class="sk_screen sk_hidden">
+        <p class="sk_screen_title sk_neon_cyan">MATRIX PAUSED</p>
+        <p style="margin-bottom: 25px; font-size:14px; color:#a0aec0;">System operations suspended.</p>
+        <button id="sk_btn_resume_game" class="sk_menu_btn">Resume (Space)</button>
+        <button id="sk_btn_paused_menu" class="sk_menu_btn">Main Menu</button>
+      </div>
+
+      <!-- GAME OVER SCREEN -->
+      <div id="sk_screen_lose" class="sk_screen sk_hidden">
+        <p class="sk_screen_title sk_lose_color">COLLAPSE</p>
+        <p id="sk_lose_reason" style="margin-bottom: 25px; font-size:14px; color:#a0aec0;">You stepped into a spatial
+          hazard!</p>
+        <button id="sk_btn_retry" class="sk_menu_btn">Retry level</button>
+        <button id="sk_btn_lose_menu" class="sk_menu_btn">Main Menu</button>
+      </div>
+
+      <!-- LEVEL CLEARED SCREEN -->
+      <div id="sk_screen_win" class="sk_screen sk_hidden">
+        <p class="sk_screen_title sk_win_color">ALIGNMENT ACHIEVED</p>
+        <p id="sk_win_stats" style="margin-bottom: 25px; font-size:14px; color:#a0aec0;">Resolved in 12 moves!</p>
+        <button id="sk_btn_next_level" class="sk_menu_btn">Next Shift</button>
+        <button id="sk_btn_win_menu" class="sk_menu_btn">Main Menu</button>
+      </div>
+
+      <!-- GRAND VICTORY SCREEN -->
+      <div id="sk_screen_victory" class="sk_screen sk_hidden">
+        <p class="sk_screen_title sk_victory_color">CHIRAL MASTER</p>
+        <p
+          style="margin-bottom: 25px; text-align:center; font-size:14px; color:#a0aec0; max-width:400px; line-height: 1.6;">
+          You have achieved total cerebral alignment across all shift sequences!</p>
+        <button id="sk_btn_restart_game" class="sk_menu_btn">Replay</button>
+        <button id="sk_btn_victory_menu" class="sk_menu_btn">Main Menu</button>
+      </div>
+
+      <!-- TUTORIAL OVERLAY -->
+      <div id="sk_screen_tutorial" class="sk_screen sk_hidden">
+        <p class="sk_screen_title sk_neon_cyan">TUTORIAL</p>
+        <div id="sk_tutorial_text" style="margin-bottom: 20px; font-size: 13px; color: #e2e8f0; max-width: 380px; line-height: 1.6; text-align: center;"></div>
+        <button id="sk_btn_tutorial_next" class="sk_menu_btn">Next</button>
+        <button id="sk_btn_tutorial_skip" class="sk_menu_btn" style="font-size: 11px; opacity: 0.6;">Skip Tutorial</button>
+      </div>
+    </div>
+
+    <!-- THIRD DIV: DRAGGABLE VIRTUAL CONTROLS -->
+    <div class="sk_controls_container" id="sk_draggable_controls">
+      <div class="sk_drag_handle">â†• Drag Control Panel â†•</div>
+      <div class="sk_control_row">
+        <button id="sk_ctrl_up" class="sk_ctrl_btn">â–²</button>
+      </div>
+      <div class="sk_control_row">
+        <button id="sk_ctrl_left" class="sk_ctrl_btn">â—€</button>
+        <button id="sk_ctrl_undo" class="sk_ctrl_btn_action">Undo (Z)</button>
+        <button id="sk_ctrl_right" class="sk_ctrl_btn">â–¶</button>
+      </div>
+      <div class="sk_control_row">
+        <button id="sk_ctrl_down" class="sk_ctrl_btn">â–¼</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- AUDIO ENGINE & WEB GAME ENGINE -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ==========================================
+         WEB AUDIO SYNTHESIZER
+         ========================================== */
+      let audioCtx = null;
+      let soundEnabled = true;
+
+      function initAudio() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      }
+
+      function playSound(type) {
+        if (!soundEnabled) return;
+        initAudio();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'move') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+          gainNode.gain.setValueAtTime(0.15, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        } else if (type === 'bonk') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
+          gainNode.gain.setValueAtTime(0.2, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'hazard') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.linearRampToValueAtTime(50, now + 0.5);
+          gainNode.gain.setValueAtTime(0.25, now);
+          gainNode.gain.linearRampToValueAtTime(0.01, now + 0.5);
+          osc.start(now);
+          osc.stop(now + 0.5);
+        } else if (type === 'shift') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now);
+          osc.frequency.exponentialRampToValueAtTime(1174.66, now + 0.3);
+          gainNode.gain.setValueAtTime(0.1, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else if (type === 'win') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const nodeOsc = audioCtx.createOscillator();
+            const nodeGain = audioCtx.createGain();
+            nodeOsc.connect(nodeGain);
+            nodeGain.connect(audioCtx.destination);
+            nodeOsc.type = 'sine';
+            nodeOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            nodeGain.gain.setValueAtTime(0.12, now + idx * 0.08);
+            nodeGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+            nodeOsc.start(now + idx * 0.08);
+            nodeOsc.stop(now + idx * 0.08 + 0.4);
+          });
+        } else if (type === 'undo') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(220, now + 0.12);
+          gainNode.gain.setValueAtTime(0.12, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        }
+      }
+
+      /* Ambient Drone System */
+      let ambientOsc = null;
+      let ambientGain = null;
+      let ambientLfo = null;
+
+      function startAmbient() {
+        if (!soundEnabled || ambientOsc) return;
+        initAudio();
+        if (!audioCtx) return;
+        ambientOsc = audioCtx.createOscillator();
+        ambientGain = audioCtx.createGain();
+        ambientLfo = audioCtx.createOscillator();
+        const lfoGain = audioCtx.createGain();
+        ambientOsc.type = 'sine';
+        ambientOsc.frequency.setValueAtTime(110, audioCtx.currentTime);
+        ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
+        ambientGain.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 2);
+        ambientLfo.type = 'sine';
+        ambientLfo.frequency.setValueAtTime(0.1, audioCtx.currentTime);
+        lfoGain.gain.setValueAtTime(5, audioCtx.currentTime);
+        ambientLfo.connect(lfoGain);
+        lfoGain.connect(ambientOsc.frequency);
+        ambientOsc.connect(ambientGain);
+        ambientGain.connect(audioCtx.destination);
+        ambientOsc.start();
+        ambientLfo.start();
+      }
+
+      function stopAmbient() {
+        if (ambientOsc) {
+          ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
+          setTimeout(() => {
+            try { ambientOsc.stop(); } catch(e) {}
+            try { ambientLfo.stop(); } catch(e) {}
+            ambientOsc = null;
+            ambientGain = null;
+            ambientLfo = null;
+          }, 1200);
+        }
+      }
+
+      /* ==========================================
+         STATE MANAGEMENT & DATA MODELS
+         ========================================== */
+      const SYMMETRY_RULES = [
+        {name: 'Vertical Reflection', color: '#39ff14', desc: 'Ref flips Left/Right'},
+        {name: 'Horizontal Reflection', color: '#ffff00', desc: 'Ref flips Up/Down'},
+        {name: 'Rotational Symmetry', color: '#ff6600', desc: 'Ref rotates 180\u00b0'},
+        {name: 'Diagonal Chiral', color: '#cc00ff', desc: 'Ref swaps X/Y'}
+      ];
+
+      const LEVEL_THEMES = [
+        {real: '#00f3ff', ref: '#ff007f', wall: '#1b1e2e', wallStroke: '#00f3ff'},
+        {real: '#39ff14', ref: '#ff3300', wall: '#1b2e1e', wallStroke: '#39ff14'},
+        {real: '#ffff00', ref: '#cc00ff', wall: '#2e2b1b', wallStroke: '#ffff00'},
+        {real: '#ff6600', ref: '#00c8ff', wall: '#2e1b1b', wallStroke: '#ff6600'},
+        {real: '#ff007f', ref: '#39ff14', wall: '#2e1b2b', wallStroke: '#ff007f'}
+      ];
+
+      function getTheme() {
+        const idx = Math.floor(state.currentLevel / 10) % LEVEL_THEMES.length;
+        return LEVEL_THEMES[idx];
+      }
+
+      /* Local levels fallback */
+      const LOCAL_LEVELS = [
+        {
+          leftGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          rightGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          realStart: {x: 1, y: 3},
+          realGate: {x: 4, y: 3},
+          refStart: {x: 10, y: 3},
+          refGate: {x: 7, y: 3},
+          par: 10
+        },
+        {
+          leftGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          rightGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          realStart: {x: 1, y: 2},
+          realGate: {x: 4, y: 2},
+          refStart: {x: 10, y: 2},
+          refGate: {x: 7, y: 2},
+          par: 15
+        },
+        {
+          leftGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 2, 2, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0],
+            [0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 2, 2, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          rightGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 2, 0],
+            [0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0],
+            [0, 2, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          realStart: {x: 1, y: 4},
+          realGate: {x: 4, y: 1},
+          refStart: {x: 10, y: 4},
+          refGate: {x: 7, y: 1},
+          par: 20
+        },
+        {
+          leftGrid: [
+            [0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 1, 0, 0],
+            [1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1],
+            [0, 0, 1, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0]
+          ],
+          rightGrid: [
+            [0, 0, 1, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1],
+            [1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 1, 0, 0]
+          ],
+          realStart: {x: 1, y: 1},
+          realGate: {x: 4, y: 4},
+          refStart: {x: 10, y: 1},
+          refGate: {x: 7, y: 4},
+          par: 25
+        },
+        {
+          leftGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 0],
+            [0, 1, 2, 2, 1, 0],
+            [0, 1, 0, 0, 1, 0],
+            [0, 1, 1, 0, 1, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          rightGrid: [
+            [0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 0],
+            [0, 1, 2, 2, 1, 0],
+            [0, 1, 0, 0, 1, 0],
+            [0, 1, 0, 1, 1, 0],
+            [0, 0, 0, 0, 0, 0]
+          ],
+          realStart: {x: 0, y: 0},
+          realGate: {x: 3, y: 3},
+          refStart: {x: 11, y: 0},
+          refGate: {x: 8, y: 3},
+          par: 30
+        }
+      ];
+
+      let LEVELS = [...LOCAL_LEVELS];
+
+      let state = {
+        gameState: 'menu', /* menu, playing, paused, lose, win, victory, demo */
+        currentLevel: 0,
+        moves: 0,
+        realPos: {x: 0, y: 0},
+        refPos: {x: 0, y: 0},
+        realVisual: {x: 0, y: 0},
+        refVisual: {x: 0, y: 0},
+        realTrail: [],
+        refTrail: [],
+        history: [],
+        unlockedLevel: 0,
+        highscores: {},
+        stars: {},
+        activeRuleIndex: 0,
+        showGridlines: true,
+        shakeFrames: 0,
+        shiftFlashFrames: 0,
+        shiftFlashColor: '#ffffff',
+        switchState: {},
+        undoCount: 0,
+        particles: [],
+        transitionFrames: 0,
+        hoverGrid: null
+      };
+
+      let doubleTapTimeout = null;
+      let longPressTimeout = null;
+      let lastTapTime = 0;
+
+      /* Load Save Progression */
+      function loadSave() {
+        const local = localStorage.getItem('sk_chiral_save_v1');
+        if (local) {
+          try {
+            const data = JSON.parse(local);
+            state.unlockedLevel = data.unlockedLevel || 0;
+            state.highscores = data.highscores || {};
+            state.stars = data.stars || {};
+          } catch (e) {
+            console.error("Corrupted localstorage save. Resetting.");
+          }
+        }
+      }
+
+      function saveProgress() {
+        localStorage.setItem('sk_chiral_save_v1', JSON.stringify({
+          unlockedLevel: state.unlockedLevel,
+          highscores: state.highscores,
+          stars: state.stars
+        }));
+      }
+
+      /* ==========================================
+         UI / SCREEN UTILITIES
+         ========================================== */
+      const elements = {
+        btnMenuToggle: document.getElementById('sk_btn_menu_toggle'),
+        dropdownMenu: document.getElementById('sk_dropdown_menu'),
+        btnPlay: document.getElementById('sk_btn_play'),
+        btnLevels: document.getElementById('sk_btn_levels'),
+        btnMenuLevels: document.getElementById('sk_btn_menu_levels'),
+        btnSettings: document.getElementById('sk_btn_settings'),
+        btnInfo: document.getElementById('sk_btn_info'),
+        btnScores: document.getElementById('sk_btn_scores'),
+        btnPauseToggle: document.getElementById('sk_btn_pause_toggle'),
+        btnFullscreen: document.getElementById('sk_btn_fullscreen'),
+        btnRetry: document.getElementById('sk_btn_retry'),
+        btnLoseMenu: document.getElementById('sk_btn_lose_menu'),
+        btnNextLevel: document.getElementById('sk_btn_next_level'),
+        btnWinMenu: document.getElementById('sk_btn_win_menu'),
+        btnRestartGame: document.getElementById('sk_btn_restart_game'),
+        btnVictoryMenu: document.getElementById('sk_btn_victory_menu'),
+        btnToggleAudio: document.getElementById('sk_toggle_audio'),
+        btnToggleGridlines: document.getElementById('sk_toggle_gridlines'),
+
+        screenMenu: document.getElementById('sk_screen_menu'),
+        screenPaused: document.getElementById('sk_screen_paused'),
+        screenLose: document.getElementById('sk_screen_lose'),
+        screenWin: document.getElementById('sk_screen_win'),
+        screenVictory: document.getElementById('sk_screen_victory'),
+
+        popupLevels: document.getElementById('sk_popup_levels'),
+        popupSettings: document.getElementById('sk_popup_settings'),
+        popupInfo: document.getElementById('sk_popup_info'),
+        popupScores: document.getElementById('sk_popup_scores'),
+        popupLoader: document.getElementById('sk_popup_loader'),
+
+        levelSelectorGrid: document.getElementById('sk_level_selector_grid'),
+        highscoresList: document.getElementById('sk_highscores_list'),
+
+        hudLevel: document.getElementById('sk_hud_level_val'),
+        hudMoves: document.getElementById('sk_hud_moves_val'),
+        hudRule: document.getElementById('sk_hud_rule_val'),
+        hudShift: document.getElementById('sk_hud_shift_val'),
+
+        canvas: document.getElementById('sk_main_canvas'),
+        wrapper: document.getElementById('sk_wrapper'),
+        interactiveZone: document.getElementById('sk_interactive_zone'),
+        draggableControls: document.getElementById('sk_draggable_controls'),
+
+        btnResumeGame: document.getElementById('sk_btn_resume_game'),
+        btnPausedMenu: document.getElementById('sk_btn_paused_menu')
+      };
+
+      /* Dropdown actions */
+      elements.btnMenuToggle.addEventListener('click', (e) => {
+        elements.dropdownMenu.classList.toggle('sk_dropdown_show');
+        e.stopPropagation();
+      });
+
+      document.addEventListener('click', () => {
+        elements.dropdownMenu.classList.remove('sk_dropdown_show');
+      });
+
+      function showPopup(popup) {
+        elements.popupLevels.classList.add('sk_hidden');
+        elements.popupSettings.classList.add('sk_hidden');
+        elements.popupInfo.classList.add('sk_hidden');
+        elements.popupScores.classList.add('sk_hidden');
+        if (popup) popup.classList.remove('sk_hidden');
+      }
+
+      function closeAllPopups() {
+        elements.popupLevels.classList.add('sk_hidden');
+        elements.popupSettings.classList.add('sk_hidden');
+        elements.popupInfo.classList.add('sk_hidden');
+        elements.popupScores.classList.add('sk_hidden');
+        elements.popupLoader.classList.add('sk_hidden');
+      }
+
+      function buildLevelSelector() {
+        elements.levelSelectorGrid.innerHTML = '';
+        LEVELS.forEach((level, index) => {
+          const cell = document.createElement('button');
+          cell.className = 'sk_level_cell';
+          const stars = state.stars[index] || 0;
+          const starText = stars > 0 ? '\u2605'.repeat(stars) + '\u2606'.repeat(3 - stars) : '';
+          cell.innerHTML = `<span>${index + 1}</span><br><small style="font-size:9px;color:#a0aec0;">Par:${level.par}</small><br><span style="font-size:8px;color:#ffd700;">${starText}</span>`;
+
+          if (index <= state.unlockedLevel) {
+            cell.classList.add('sk_level_unlocked');
+          } else {
+            cell.disabled = true;
+            cell.style.opacity = '0.3';
+            cell.style.cursor = 'not-allowed';
+          }
+
+          if (state.highscores[index]) {
+            cell.classList.add('sk_level_completed');
+          }
+
+          cell.addEventListener('click', () => {
+            closeAllPopups();
+            startLevel(index);
+          });
+          elements.levelSelectorGrid.appendChild(cell);
+        });
+      }
+
+      function renderHighscores() {
+        elements.highscoresList.innerHTML = '';
+        LEVELS.forEach((level, index) => {
+          const row = document.createElement('div');
+          row.className = 'sk_popup_row';
+          const score = state.highscores[index] ? `${state.highscores[index]} Moves (Par: ${level.par})` : 'Unresolved';
+          row.innerHTML = `<span>Level ${index + 1}</span><span style="color:#00f3ff; font-weight:bold;">${score}</span>`;
+          elements.highscoresList.appendChild(row);
+        });
+      }
+
+      /* ==========================================
+         LEVEL FETCHER FROM JSON
+         ========================================== */
+      function fetchRemoteLevels() {
+        const remoteUrl = "./Chiral.json";
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+          if (progress < 85) {
+            progress += Math.floor(Math.random() * 10) + 5;
+            if (progress > 85) progress = 85;
+            document.getElementById('sk_loader_progress_bar').style.width = `${progress}%`;
+          }
+        }, 150);
+
+        fetch(remoteUrl)
+          .then(res => {
+            if (!res.ok) throw new Error("Could not fetch remote map sequence parameters");
+            return res.text();
+          })
+          .then(rawText => {
+            /* Strip comments clean and construct JSON representation */
+            let cleaned = rawText.replace(/\/\/.*$/gm, '');
+            cleaned = cleaned.replace(/\/\*[\s\S]*?\*\//g, '');
+
+            const parsed = JSON.parse(cleaned);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              const valid = parsed.every(l =>
+                l.leftGrid && l.leftGrid.length === 6 &&
+                l.rightGrid && l.rightGrid.length === 6 &&
+                l.realStart && l.realGate && l.refStart && l.refGate &&
+                typeof l.par === 'number'
+              );
+              if (!valid) throw new Error("Level data validation failed");
+              LEVELS = parsed;
+              document.getElementById('sk_loader_text').innerText = "Matrix synced successfully!";
+            } else {
+              throw new Error("Invalid levels data sequence format");
+            }
+          })
+          .catch(err => {
+            console.warn("Fallback local structures initialized. Fetch failure: ", err);
+            document.getElementById('sk_loader_text').innerText = "Sync failure. Initializing local structures...";
+            LEVELS = [...LOCAL_LEVELS];
+          })
+          .finally(() => {
+            clearInterval(progressInterval);
+            document.getElementById('sk_loader_progress_bar').style.width = "100%";
+            setTimeout(() => {
+              closeAllPopups();
+              buildLevelSelector();
+            }, 600);
+          });
+      }
+
+      /* ==========================================
+         GAME MECHANICS & CAMERA
+         ========================================== */
+      function startLevel(levelIndex) {
+        const data = LEVELS[levelIndex];
+        state.gameState = 'playing';
+        state.currentLevel = levelIndex;
+        state.moves = 0;
+        state.activeRuleIndex = 0;
+        state.realPos = {...data.realStart};
+        state.refPos = {...data.refStart};
+        state.realVisual = {...data.realStart};
+        state.refVisual = {...data.refStart};
+        state.realTrail = [];
+        state.refTrail = [];
+        state.history = [];
+        state.switchState = {};
+        state.undoCount = 0;
+        state.transitionFrames = 30;
+
+        elements.screenMenu.classList.add('sk_hidden');
+        elements.screenLose.classList.add('sk_hidden');
+        elements.screenWin.classList.add('sk_hidden');
+        elements.screenVictory.classList.add('sk_hidden');
+        elements.screenPaused.classList.add('sk_hidden');
+
+        elements.btnPauseToggle.innerText = "Pause Game";
+
+        updateHUD();
+        resizeCanvas();
+        playSound('shift');
+
+        if (state.currentLevel === 0 && !localStorage.getItem('sk_chiral_tutorial_done')) {
+          startTutorial();
+        }
+        startAmbient();
+      }
+
+      /* Tutorial System */
+      const TUTORIAL_STEPS = [
+        {text: 'Welcome to CHIRAL! You control TWO nodes simultaneously.\n\nThe CYAN (Real) node moves exactly as you press.\nThe PINK (Reflection) node mirrors your movement.', highlight: null},
+        {text: 'Use WASD or Arrow Keys to move.\nOn mobile, swipe or use the D-Pad.\n\nTry pressing RIGHT now to see both nodes move!', highlight: 'move'},
+        {text: 'The symmetry rule SHIFTS every few moves!\n\nCurrently: VERTICAL (mirror left/right)\nWatch the HUD for the rule and countdown.', highlight: 'rule'},
+        {text: 'Land BOTH nodes on their glowing gates\nat the SAME TIME to complete the level.\n\nCyan gate = Real node\nPink gate = Reflection node', highlight: 'gates'},
+        {text: 'If a node touches a RED VOID, the level fails.\n\nUse UNDO (Z key / double-tap) to reverse mistakes!\nGood luck, Chiral Master!', highlight: null}
+      ];
+      let tutorialStep = 0;
+
+      function startTutorial() {
+        tutorialStep = 0;
+        showTutorialStep();
+        document.getElementById('sk_screen_tutorial').classList.remove('sk_hidden');
+      }
+
+      function showTutorialStep() {
+        if (tutorialStep >= TUTORIAL_STEPS.length) {
+          endTutorial();
+          return;
+        }
+        document.getElementById('sk_tutorial_text').innerText = TUTORIAL_STEPS[tutorialStep].text;
+      }
+
+      function endTutorial() {
+        document.getElementById('sk_screen_tutorial').classList.add('sk_hidden');
+        localStorage.setItem('sk_chiral_tutorial_done', '1');
+      }
+
+      document.getElementById('sk_btn_tutorial_next').addEventListener('click', () => {
+        tutorialStep++;
+        showTutorialStep();
+      });
+      document.getElementById('sk_btn_tutorial_skip').addEventListener('click', endTutorial);
+
+      function togglePause() {
+        if (state.gameState === 'playing') {
+          state.gameState = 'paused';
+          elements.screenPaused.classList.remove('sk_hidden');
+          elements.btnPauseToggle.innerText = "Resume Game";
+        } else if (state.gameState === 'paused') {
+          state.gameState = 'playing';
+          elements.screenPaused.classList.add('sk_hidden');
+          elements.btnPauseToggle.innerText = "Pause Game";
+        }
+      }
+
+      function updateHUD() {
+        elements.hudLevel.innerText = (state.currentLevel + 1).toString();
+        elements.hudMoves.innerText = state.moves.toString();
+
+        const levelData = LEVELS[state.currentLevel];
+        const shiftInterval = (levelData.shiftInterval || 5);
+        state.activeRuleIndex = Math.floor(state.moves / shiftInterval) % 4;
+        const rule = SYMMETRY_RULES[state.activeRuleIndex];
+        elements.hudRule.innerText = rule.name;
+
+        elements.hudRule.className = '';
+        if (state.activeRuleIndex === 0) elements.hudRule.classList.add('sk_neon_green');
+        if (state.activeRuleIndex === 1) elements.hudRule.classList.add('sk_neon_yellow');
+        if (state.activeRuleIndex === 2) elements.hudRule.classList.add('sk_neon_orange');
+        if (state.activeRuleIndex === 3) elements.hudRule.classList.add('sk_neon_purple');
+
+        elements.hudShift.innerText = (shiftInterval - (state.moves % shiftInterval)).toString();
+      }
+
+      function getRefTranslation(dx, dy, ruleIndex) {
+        switch (ruleIndex) {
+          case 0: /* Vertical */
+            return {dx: -dx, dy: dy};
+          case 1: /* Horizontal */
+            return {dx: dx, dy: -dy};
+          case 2: /* Rotational */
+            return {dx: -dx, dy: -dy};
+          case 3: /* Diagonal */
+            return {dx: dy, dy: dx};
+          default:
+            return {dx: 0, dy: 0};
+        }
+      }
+
+      function attemptMove(dx, dy) {
+        if (state.gameState !== 'playing' && state.gameState !== 'demo') return;
+
+        const levelData = LEVELS[state.currentLevel];
+        const oldRule = state.activeRuleIndex;
+
+        state.history.push({
+          realPos: {...state.realPos},
+          refPos: {...state.refPos},
+          moves: state.moves,
+          switchState: {...state.switchState}
+        });
+
+        const realTarget = {x: state.realPos.x + dx, y: state.realPos.y + dy};
+        const refDelta = getRefTranslation(dx, dy, state.activeRuleIndex);
+        const refTarget = {x: state.refPos.x + refDelta.dx, y: state.refPos.y + refDelta.dy};
+
+        let realMoved = false;
+        let refMoved = false;
+
+        function isCellPassable(grid, tx, ty, fromX, fromY, side) {
+          if (tx < 0 || tx > 5 || ty < 0 || ty > 5) return false;
+          const val = grid[ty][tx];
+          if (val === 0 || val === 2 || val === 3 || val === 4) return true;
+          if (val === 5) {
+            const dirX = tx - fromX;
+            const dirY = ty - fromY;
+            if (side === 'left') {
+              return (dirX === 1 && dirY === 0);
+            } else {
+              return (dirX === -1 && dirY === 0);
+            }
+          }
+          if (val === 6) {
+            const key = side + '_' + tx + '_' + ty;
+            return state.switchState[key] === true;
+          }
+          return false;
+        }
+
+        const realValid = isCellPassable(levelData.leftGrid, realTarget.x, realTarget.y, state.realPos.x, state.realPos.y, 'left');
+        const refValid = isCellPassable(levelData.rightGrid, refTarget.x - 6, refTarget.y, state.refPos.x - 6, state.refPos.y, 'right');
+
+        if (realValid) {
+          state.realTrail.push({...state.realPos});
+          if (state.realTrail.length > 5) state.realTrail.shift();
+          state.realPos = realTarget;
+          realMoved = true;
+        }
+        if (refValid) {
+          state.refTrail.push({...state.refPos});
+          if (state.refTrail.length > 5) state.refTrail.shift();
+          state.refPos = refTarget;
+          refMoved = true;
+        }
+
+        if (!realMoved && !refMoved) {
+          state.history.pop();
+          state.shakeFrames = 8;
+          playSound('bonk');
+          return;
+        }
+
+        function processTeleporters(pos, grid, side) {
+          const val = grid[pos.y][pos.x - (side === 'right' ? 6 : 0)];
+          if (val === 3) {
+            const cx = pos.x - (side === 'right' ? 6 : 0);
+            for (let r = 0; r < 6; r++) {
+              for (let c = 0; c < 6; c++) {
+                if (grid[r][c] === 3 && (c !== cx || r !== pos.y)) {
+                  pos.x = side === 'right' ? c + 6 : c;
+                  pos.y = r;
+                  return;
+                }
+              }
+            }
+          }
+        }
+
+        function processSwitches(pos, grid, side) {
+          const cx = pos.x - (side === 'right' ? 6 : 0);
+          const val = grid[pos.y][cx];
+          if (val === 4) {
+            const key = side + '_switch_' + cx + '_' + pos.y;
+            if (!state.switchState[key]) {
+              state.switchState[key] = true;
+              for (let r = 0; r < 6; r++) {
+                for (let c = 0; c < 6; c++) {
+                  if (grid[r][c] === 6) {
+                    const wallKey = side + '_' + c + '_' + r;
+                    state.switchState[wallKey] = !state.switchState[wallKey];
+                  }
+                }
+              }
+              playSound('shift');
+            }
+          }
+        }
+
+        if (realMoved) processTeleporters(state.realPos, levelData.leftGrid, 'left');
+        if (refMoved) processTeleporters(state.refPos, levelData.rightGrid, 'right');
+        if (realMoved) processSwitches(state.realPos, levelData.leftGrid, 'left');
+        if (refMoved) processSwitches(state.refPos, levelData.rightGrid, 'right');
+
+        state.moves++;
+        updateHUD();
+
+        if (state.activeRuleIndex !== oldRule) {
+          playSound('shift');
+          state.shiftFlashFrames = 20;
+          state.shiftFlashColor = SYMMETRY_RULES[state.activeRuleIndex].color;
+          const cw = elements.canvas.width / 12;
+          const ch = elements.canvas.height / 6;
+          spawnParticles(elements.canvas.width / 2, elements.canvas.height / 2, SYMMETRY_RULES[state.activeRuleIndex].color, 15);
+        } else {
+          playSound('move');
+        }
+
+        evaluateBoard();
+      }
+
+      function triggerUndo() {
+        if (state.gameState !== 'playing' || state.history.length === 0) return;
+        const levelData = LEVELS[state.currentLevel];
+        const maxUndos = levelData.maxUndos;
+        if (maxUndos && state.undoCount >= maxUndos) {
+          state.shakeFrames = 5;
+          return;
+        }
+        const previous = state.history.pop();
+        state.realPos = previous.realPos;
+        state.refPos = previous.refPos;
+        state.moves = previous.moves;
+        state.switchState = previous.switchState || {};
+        state.undoCount++;
+        updateHUD();
+        playSound('undo');
+      }
+
+      function evaluateBoard() {
+        const levelData = LEVELS[state.currentLevel];
+
+        const realOnHazard = levelData.leftGrid[state.realPos.y][state.realPos.x] === 2;
+        const refOnHazard = levelData.rightGrid[state.refPos.y][state.refPos.x - 6] === 2;
+
+        if (realOnHazard || refOnHazard) {
+          playSound('hazard');
+          state.shakeFrames = 15;
+          const cellW = elements.canvas.width / 12;
+          const cellH = elements.canvas.height / 6;
+          if (realOnHazard) spawnParticles(state.realPos.x * cellW + cellW / 2, state.realPos.y * cellH + cellH / 2, '#ff3300', 12);
+          if (refOnHazard) spawnParticles(state.refPos.x * cellW + cellW / 2, state.refPos.y * cellH + cellH / 2, '#ff3300', 12);
+          setTimeout(() => {
+            triggerFail('A node dissolved in a spatial void!');
+          }, 400);
+          return;
+        }
+
+        const realOnGate = state.realPos.x === levelData.realGate.x && state.realPos.y === levelData.realGate.y;
+        const refOnGate = state.refPos.x === levelData.refGate.x && state.refPos.y === levelData.refGate.y;
+
+        if (realOnGate && refOnGate) {
+          triggerSuccess();
+          return;
+        }
+
+        if (state.moves >= levelData.par) {
+          playSound('hazard');
+          state.shakeFrames = 15;
+          setTimeout(() => {
+            triggerFail('Matrix destabilized: Exceeded limit parameters!');
+          }, 400);
+        }
+      }
+
+      function triggerFail(reason) {
+        state.gameState = 'lose';
+        document.getElementById('sk_lose_reason').innerText = reason;
+        elements.screenLose.classList.remove('sk_hidden');
+      }
+
+      function spawnParticles(x, y, color, count) {
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 / count) * i + Math.random() * 0.5;
+          const speed = 1.5 + Math.random() * 3;
+          state.particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            life: 30 + Math.random() * 20,
+            maxLife: 50,
+            color: color,
+            size: 2 + Math.random() * 3
+          });
+        }
+      }
+
+      function updateParticles() {
+        for (let i = state.particles.length - 1; i >= 0; i--) {
+          const p = state.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+          p.life--;
+          if (p.life <= 0) {
+            state.particles.splice(i, 1);
+          }
+        }
+      }
+
+      function triggerSuccess() {
+        playSound('win');
+        const cellW = elements.canvas.width / 12;
+        const cellH = elements.canvas.height / 6;
+        spawnParticles(state.realPos.x * cellW + cellW / 2, state.realPos.y * cellH + cellH / 2, '#00f3ff', 20);
+        spawnParticles(state.refPos.x * cellW + cellW / 2, state.refPos.y * cellH + cellH / 2, '#ff007f', 20);
+
+        if (!state.highscores[state.currentLevel] || state.moves < state.highscores[state.currentLevel]) {
+          state.highscores[state.currentLevel] = state.moves;
+        }
+
+        const par = LEVELS[state.currentLevel].par;
+        let earnedStars = 1;
+        if (state.moves <= par) earnedStars = 2;
+        if (state.moves < par) earnedStars = 3;
+        if (!state.stars[state.currentLevel] || earnedStars > state.stars[state.currentLevel]) {
+          state.stars[state.currentLevel] = earnedStars;
+        }
+
+        if (state.currentLevel === state.unlockedLevel && state.unlockedLevel < LEVELS.length - 1) {
+          state.unlockedLevel++;
+        }
+        saveProgress();
+
+        if (state.currentLevel < LEVELS.length - 1) {
+          state.gameState = 'win';
+          const starDisplay = '\u2605'.repeat(earnedStars) + '\u2606'.repeat(3 - earnedStars);
+          document.getElementById('sk_win_stats').innerText = `Solved in ${state.moves} shifts! (Par: ${par}) ${starDisplay}`;
+          elements.screenWin.classList.remove('sk_hidden');
+        } else {
+          state.gameState = 'victory';
+          elements.screenVictory.classList.remove('sk_hidden');
+        }
+      }
+
+      /* Transform window event coordinates directly to grid layout positions */
+      function getGridCoordinates(clientX, clientY) {
+        const rect = elements.canvas.getBoundingClientRect();
+        const canvasX = ((clientX - rect.left) / rect.width) * elements.canvas.width;
+        const canvasY = ((clientY - rect.top) / rect.height) * elements.canvas.height;
+        const cellW = elements.canvas.width / 12;
+        const cellH = elements.canvas.height / 6;
+        const gridX = Math.floor(canvasX / cellW);
+        const gridY = Math.floor(canvasY / cellH);
+        return {gridX, gridY};
+      }
+
+      /* ==========================================
+          INTERACTIVE CANVAS RENDER ENGINE
+          ========================================== */
+      const ctx = elements.canvas.getContext('2d');
+
+      function resizeCanvas() {
+        const side = Math.min(elements.wrapper.clientWidth, elements.wrapper.clientHeight);
+        const targetW = Math.max(280, side);
+        elements.canvas.width = targetW;
+        elements.canvas.height = targetW; /* Strictly 1:1 Aspect Ratio enforced */
+      }
+
+      function draw() {
+        const w = elements.canvas.width;
+        const h = elements.canvas.height;
+
+        /* Render bounds logic fits 12 columns x 6 rows into 1:1 layout space cleanly */
+        const cellW = w / 12;
+        const cellH = h / 6;
+
+        ctx.clearRect(0, 0, w, h);
+
+        let shakeX = 0;
+        let shakeY = 0;
+        if (state.shakeFrames > 0) {
+          shakeX = (Math.random() - 0.5) * 10;
+          shakeY = (Math.random() - 0.5) * 10;
+          state.shakeFrames--;
+        }
+
+        ctx.save();
+        if (shakeX !== 0 || shakeY !== 0) {
+          ctx.translate(shakeX, shakeY);
+        }
+
+        if (state.shiftFlashFrames > 0) {
+          const flashAlpha = state.shiftFlashFrames / 20 * 0.25;
+          ctx.fillStyle = state.shiftFlashColor;
+          ctx.globalAlpha = flashAlpha;
+          ctx.fillRect(0, 0, w, h);
+          ctx.globalAlpha = 1.0;
+          state.shiftFlashFrames--;
+        }
+
+        /* Cyber Grid Lines (Left Side Domain) */
+        for (let r = 0; r <= 6; r++) {
+          ctx.beginPath();
+          ctx.moveTo(0, r * cellH);
+          ctx.lineTo(w / 2, r * cellH);
+          ctx.strokeStyle = '#151821';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        for (let c = 0; c <= 6; c++) {
+          ctx.beginPath();
+          ctx.moveTo(c * cellW, 0);
+          ctx.lineTo(c * cellW, h);
+          ctx.strokeStyle = '#151821';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        /* Cyber Grid Lines (Right Side Domain) */
+        for (let r = 0; r <= 6; r++) {
+          ctx.beginPath();
+          ctx.moveTo(w / 2, r * cellH);
+          ctx.lineTo(w, r * cellH);
+          ctx.strokeStyle = '#151821';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        for (let c = 6; c <= 12; c++) {
+          ctx.beginPath();
+          ctx.moveTo(c * cellW, 0);
+          ctx.lineTo(c * cellW, h);
+          ctx.strokeStyle = '#151821';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        /* Symmetry Helper Guidelines */
+        if (state.showGridlines && (state.gameState === 'playing' || state.gameState === 'paused')) {
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.lineWidth = 1.5;
+          if (state.activeRuleIndex === 0) {
+            ctx.beginPath();
+            ctx.moveTo(w / 4, 0); ctx.lineTo(w / 4, h);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(w * 3 / 4, 0); ctx.lineTo(w * 3 / 4, h);
+            ctx.stroke();
+          } else if (state.activeRuleIndex === 1) {
+            ctx.beginPath();
+            ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2);
+            ctx.stroke();
+          } else if (state.activeRuleIndex === 2) {
+            ctx.beginPath();
+            ctx.moveTo(w / 4, 0); ctx.lineTo(w / 4, h);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(w * 3 / 4, 0); ctx.lineTo(w * 3 / 4, h);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2);
+            ctx.stroke();
+          } else if (state.activeRuleIndex === 3) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(w / 2, h);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(w / 2, 0); ctx.lineTo(w, h);
+            ctx.stroke();
+          }
+        }
+
+        /* Hover Cell Highlight */
+        if (state.hoverGrid && (state.gameState === 'playing' || state.gameState === 'paused')) {
+          const hx = state.hoverGrid.x;
+          const hy = state.hoverGrid.y;
+          if (hx >= 0 && hx <= 11 && hy >= 0 && hy <= 5) {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(hx * cellW + 2, hy * cellH + 2, cellW - 4, cellH - 4);
+          }
+        }
+
+        /* Obstacles & Hazards Rendering */
+        const theme = getTheme();
+        const levelData = LEVELS[state.currentLevel];
+        if (levelData) {
+          /* Left Side (Real Domain) */
+          for (let r = 0; r < 6; r++) {
+            for (let c = 0; c < 6; c++) {
+              const val = levelData.leftGrid[r][c];
+              const px = c * cellW;
+              const py = r * cellH;
+              if (val === 1) {
+                ctx.fillStyle = theme.wall;
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.strokeStyle = theme.wallStroke;
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(px + 4, py + 4, cellW - 8, cellH - 8);
+              } else if (val === 2) {
+                ctx.fillStyle = 'rgba(255, 51, 0, 0.2)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.fillStyle = '#ff3300';
+                ctx.beginPath();
+                ctx.arc(px + cellW / 2, py + cellH / 2, Math.min(cellW, cellH) * 0.15, 0, Math.PI * 2);
+                ctx.fill();
+              } else if (val === 3) {
+                ctx.fillStyle = 'rgba(0, 200, 255, 0.15)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.strokeStyle = '#00c8ff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(px + cellW / 2, py + cellH / 2, Math.min(cellW, cellH) * 0.3, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(px + cellW / 2, py + cellH / 2, Math.min(cellW, cellH) * 0.15, 0, Math.PI * 2);
+                ctx.stroke();
+              } else if (val === 4) {
+                ctx.fillStyle = 'rgba(255, 200, 0, 0.15)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.fillStyle = '#ffc800';
+                ctx.fillRect(px + cellW * 0.3, py + cellH * 0.3, cellW * 0.4, cellH * 0.4);
+                ctx.strokeStyle = '#ffc800';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(px + cellW * 0.3, py + cellH * 0.3, cellW * 0.4, cellH * 0.4);
+              } else if (val === 5) {
+                ctx.fillStyle = 'rgba(180, 0, 255, 0.1)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.strokeStyle = '#b400ff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(px + 4, py + cellH / 2);
+                ctx.lineTo(px + cellW - 4, py + cellH / 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(px + cellW - 8, py + cellH * 0.3);
+                ctx.lineTo(px + cellW - 4, py + cellH / 2);
+                ctx.lineTo(px + cellW - 8, py + cellH * 0.7);
+                ctx.stroke();
+              } else if (val === 6) {
+                const wallKey = 'left_' + c + '_' + r;
+                const isOpen = state.switchState[wallKey];
+                if (!isOpen) {
+                  ctx.fillStyle = '#1b1e2e';
+                  ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                  ctx.strokeStyle = '#ffc800';
+                  ctx.lineWidth = 1.5;
+                  ctx.setLineDash([4, 4]);
+                  ctx.strokeRect(px + 4, py + 4, cellW - 8, cellH - 8);
+                  ctx.setLineDash([]);
+                } else {
+                  ctx.fillStyle = 'rgba(255, 200, 0, 0.08)';
+                  ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                }
+              }
+            }
+          }
+
+          /* Right Side (Reflective Domain) */
+          for (let r = 0; r < 6; r++) {
+            for (let c = 0; c < 6; c++) {
+              const val = levelData.rightGrid[r][c];
+              const absCol = c + 6;
+              const px = absCol * cellW;
+              const py = r * cellH;
+              if (val === 1) {
+                ctx.fillStyle = theme.wall;
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.strokeStyle = theme.wallStroke;
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(px + 4, py + 4, cellW - 8, cellH - 8);
+              } else if (val === 2) {
+                ctx.fillStyle = 'rgba(255, 51, 0, 0.2)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.fillStyle = '#ff3300';
+                ctx.beginPath();
+                ctx.arc(px + cellW / 2, py + cellH / 2, Math.min(cellW, cellH) * 0.15, 0, Math.PI * 2);
+                ctx.fill();
+              } else if (val === 3) {
+                ctx.fillStyle = 'rgba(0, 200, 255, 0.15)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.strokeStyle = '#00c8ff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(px + cellW / 2, py + cellH / 2, Math.min(cellW, cellH) * 0.3, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(px + cellW / 2, py + cellH / 2, Math.min(cellW, cellH) * 0.15, 0, Math.PI * 2);
+                ctx.stroke();
+              } else if (val === 4) {
+                ctx.fillStyle = 'rgba(255, 200, 0, 0.15)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.fillStyle = '#ffc800';
+                ctx.fillRect(px + cellW * 0.3, py + cellH * 0.3, cellW * 0.4, cellH * 0.4);
+                ctx.strokeStyle = '#ffc800';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(px + cellW * 0.3, py + cellH * 0.3, cellW * 0.4, cellH * 0.4);
+              } else if (val === 5) {
+                ctx.fillStyle = 'rgba(180, 0, 255, 0.1)';
+                ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                ctx.strokeStyle = '#b400ff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(px + 4, py + cellH / 2);
+                ctx.lineTo(px + cellW - 4, py + cellH / 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(px + 8, py + cellH * 0.3);
+                ctx.lineTo(px + 4, py + cellH / 2);
+                ctx.lineTo(px + 8, py + cellH * 0.7);
+                ctx.stroke();
+              } else if (val === 6) {
+                const wallKey = 'right_' + c + '_' + r;
+                const isOpen = state.switchState[wallKey];
+                if (!isOpen) {
+                  ctx.fillStyle = '#1b1e2e';
+                  ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                  ctx.strokeStyle = '#ffc800';
+                  ctx.lineWidth = 1.5;
+                  ctx.setLineDash([4, 4]);
+                  ctx.strokeRect(px + 4, py + 4, cellW - 8, cellH - 8);
+                  ctx.setLineDash([]);
+                } else {
+                  ctx.fillStyle = 'rgba(255, 200, 0, 0.08)';
+                  ctx.fillRect(px + 2, py + 2, cellW - 4, cellH - 4);
+                }
+              }
+            }
+          }
+
+          /* Target Gates */
+          const pulseScale = 1 + Math.sin(Date.now() * 0.005) * 0.08;
+          const rotAngle = Date.now() * 0.002;
+
+          /* Real Gate */
+          const gRealX = levelData.realGate.x * cellW + cellW / 2;
+          const gRealY = levelData.realGate.y * cellH + cellH / 2;
+          const radiusReal = Math.min(cellW, cellH) * 0.3 * pulseScale;
+          ctx.strokeStyle = theme.real;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(gRealX, gRealY, radiusReal, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.globalAlpha = 0.2;
+          ctx.strokeStyle = theme.real;
+          ctx.lineWidth = 6;
+          ctx.stroke();
+          ctx.globalAlpha = 1.0;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(gRealX, gRealY, radiusReal * 1.3, rotAngle, rotAngle + Math.PI * 0.6);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(gRealX, gRealY, radiusReal * 1.3, rotAngle + Math.PI, rotAngle + Math.PI * 1.6);
+          ctx.stroke();
+
+          /* Ref Gate */
+          const gRefX = levelData.refGate.x * cellW + cellW / 2;
+          const gRefY = levelData.refGate.y * cellH + cellH / 2;
+          const radiusRef = Math.min(cellW, cellH) * 0.3 * pulseScale;
+          ctx.strokeStyle = theme.ref;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(gRefX, gRefY, radiusRef, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.globalAlpha = 0.2;
+          ctx.strokeStyle = theme.ref;
+          ctx.lineWidth = 6;
+          ctx.stroke();
+          ctx.globalAlpha = 1.0;
+          ctx.strokeStyle = '#ff007f';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(gRefX, gRefY, radiusRef * 1.3, -rotAngle, -rotAngle + Math.PI * 0.6);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(gRefX, gRefY, radiusRef * 1.3, -rotAngle + Math.PI, -rotAngle + Math.PI * 1.6);
+          ctx.stroke();
+        }
+
+        /* Motion Trails Interpolation */
+        state.realVisual.x += (state.realPos.x - state.realVisual.x) * 0.25;
+        state.realVisual.y += (state.realPos.y - state.realVisual.y) * 0.25;
+        state.refVisual.x += (state.refPos.x - state.refVisual.x) * 0.25;
+        state.refVisual.y += (state.refPos.y - state.refVisual.y) * 0.25;
+
+        ctx.globalAlpha = 0.35;
+        state.realTrail.forEach((t, i) => {
+          ctx.fillStyle = theme.real;
+          ctx.beginPath();
+          ctx.arc(t.x * cellW + cellW / 2, t.y * cellH + cellH / 2, Math.min(cellW, cellH) * 0.15 * (i / 5), 0, Math.PI * 2);
+          ctx.fill();
+        });
+        state.refTrail.forEach((t, i) => {
+          ctx.fillStyle = theme.ref;
+          ctx.beginPath();
+          ctx.arc(t.x * cellW + cellW / 2, t.y * cellH + cellH / 2, Math.min(cellW, cellH) * 0.15 * (i / 5), 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1.0;
+
+        /* Real Avatar */
+        const avRealX = state.realVisual.x * cellW + cellW / 2;
+        const avRealY = state.realVisual.y * cellH + cellH / 2;
+        const avRad = Math.min(cellW, cellH) * 0.25;
+
+        ctx.fillStyle = '#090a0f';
+        ctx.beginPath();
+        ctx.arc(avRealX, avRealY, avRad, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = theme.real;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.shadowColor = theme.real;
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(avRealX, avRealY, avRad * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        /* Reflection Avatar */
+        const avRefX = state.refVisual.x * cellW + cellW / 2;
+        const avRefY = state.refVisual.y * cellH + cellH / 2;
+
+        ctx.fillStyle = '#090a0f';
+        ctx.beginPath();
+        ctx.arc(avRefX, avRefY, avRad, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = theme.ref;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.shadowColor = theme.ref;
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(avRefX, avRefY, avRad * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        /* Central Glow Axis Split Boundary */
+        const activeRuleColor = SYMMETRY_RULES[state.activeRuleIndex].color;
+        ctx.shadowColor = activeRuleColor;
+        ctx.shadowBlur = 15;
+        ctx.strokeStyle = activeRuleColor;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(w / 2, 0);
+        ctx.lineTo(w / 2, h);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        /* Visual Feedback Overlays */
+        if (state.gameState === 'demo') {
+          ctx.fillStyle = 'rgba(0,0,0,0.6)';
+          ctx.fillRect(0, 0, w, h);
+          ctx.fillStyle = '#00f3ff';
+          ctx.font = '14px "Courier New", Courier, monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('DEMO PLAYBACK: SHIFTING SEQUENCER', w / 2, h / 2);
+        }
+
+        /* Particle Effects */
+        updateParticles();
+        state.particles.forEach(p => {
+          const alpha = p.life / p.maxLife;
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1.0;
+
+        /* Level Transition Overlay */
+        if (state.transitionFrames > 0) {
+          const tAlpha = state.transitionFrames / 30;
+          ctx.fillStyle = '#0b0c16';
+          ctx.globalAlpha = tAlpha;
+          ctx.fillRect(0, 0, w, h);
+          ctx.globalAlpha = 1.0;
+          ctx.fillStyle = '#00f3ff';
+          ctx.font = 'bold 16px "Courier New", Courier, monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('LEVEL ' + (state.currentLevel + 1), w / 2, h / 2);
+          state.transitionFrames--;
+        }
+
+        ctx.restore();
+        requestAnimationFrame(draw);
+      }
+
+      /* ==========================================
+         VIRTUAL CONTROL MODULE DRAG LOGIC
+         ========================================== */
+      const dragContainer = elements.draggableControls;
+      let isDraggingControls = false;
+      let ctrlStartX, ctrlStartY;
+      let ctrlOrigLeft, ctrlOrigTop;
+
+      dragContainer.querySelector('.sk_drag_handle').addEventListener('mousedown', ctrlDragStart);
+      dragContainer.querySelector('.sk_drag_handle').addEventListener('touchstart', ctrlDragStart, {passive: false});
+
+      function ctrlDragStart(e) {
+        isDraggingControls = true;
+        const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+
+        ctrlStartX = clientX;
+        ctrlStartY = clientY;
+
+        const rect = dragContainer.getBoundingClientRect();
+        ctrlOrigLeft = rect.left;
+        ctrlOrigTop = rect.top;
+
+        document.addEventListener('mousemove', ctrlDragMove);
+        document.addEventListener('touchmove', ctrlDragMove, {passive: false});
+        document.addEventListener('mouseup', ctrlDragEnd);
+        document.addEventListener('touchend', ctrlDragEnd);
+        e.preventDefault();
+      }
+
+      function ctrlDragMove(e) {
+        if (!isDraggingControls) return;
+        const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+        const deltaX = clientX - ctrlStartX;
+        const deltaY = clientY - ctrlStartY;
+
+        const parentRect = elements.interactiveZone.getBoundingClientRect();
+
+        let newLeft = ctrlOrigLeft + deltaX - parentRect.left;
+        let newTop = ctrlOrigTop + deltaY - parentRect.top;
+
+        newLeft = Math.max(10, Math.min(newLeft, parentRect.width - dragContainer.offsetWidth - 10));
+        newTop = Math.max(-100, Math.min(newTop, parentRect.height + 100));
+
+        dragContainer.style.left = `${newLeft + dragContainer.offsetWidth / 2}px`;
+        dragContainer.style.top = `${newTop}px`;
+        dragContainer.style.bottom = 'auto';
+        e.preventDefault();
+      }
+
+      function ctrlDragEnd() {
+        isDraggingControls = false;
+        document.removeEventListener('mousemove', ctrlDragMove);
+        document.removeEventListener('touchmove', ctrlDragMove);
+        document.removeEventListener('mouseup', ctrlDragEnd);
+        document.removeEventListener('touchend', ctrlDragEnd);
+      }
+
+      /* ==========================================
+         ADVANCED TOUCH GESTURES, PAN & SWIPES
+         ========================================== */
+
+      /* Swiping gestures on canvas */
+      let swipeStartX = 0;
+      let swipeStartY = 0;
+      const SWIPE_THRESHOLD = 30;
+
+      elements.canvas.addEventListener('mousedown', (e) => {
+        const {gridX, gridY} = getGridCoordinates(e.clientX, e.clientY);
+        processGridDirectTap(gridX, gridY);
+      });
+
+      elements.canvas.addEventListener('mousemove', (e) => {
+        const {gridX, gridY} = getGridCoordinates(e.clientX, e.clientY);
+        state.hoverGrid = {x: gridX, y: gridY};
+      });
+
+      elements.canvas.addEventListener('mouseleave', () => {
+        state.hoverGrid = null;
+      });
+
+      /* Advanced Touch Interactivity System */
+      elements.canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          swipeStartX = touch.clientX;
+          swipeStartY = touch.clientY;
+
+          longPressTimeout = setTimeout(() => {
+            triggerUndo();
+          }, 600);
+        }
+      }, {passive: true});
+
+      elements.canvas.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          const dx = touch.clientX - swipeStartX;
+          const dy = touch.clientY - swipeStartY;
+          if (Math.hypot(dx, dy) > 10) {
+            clearTimeout(longPressTimeout);
+          }
+        }
+      }, {passive: true});
+
+      elements.canvas.addEventListener('touchend', (e) => {
+        clearTimeout(longPressTimeout);
+
+        if (e.changedTouches.length > 0) {
+          const touch = e.changedTouches[0];
+          const dx = touch.clientX - swipeStartX;
+          const dy = touch.clientY - swipeStartY;
+
+          if (Math.hypot(dx, dy) > SWIPE_THRESHOLD) {
+            if (Math.abs(dx) > Math.abs(dy)) {
+              if (dx > 0) handleDirectionalInput('right');
+              else handleDirectionalInput('left');
+            } else {
+              if (dy > 0) handleDirectionalInput('down');
+              else handleDirectionalInput('up');
+            }
+          } else {
+            const currentTime = Date.now();
+            const tapLength = currentTime - lastTapTime;
+            if (tapLength < 300 && tapLength > 0) {
+              clearTimeout(doubleTapTimeout);
+              triggerUndo();
+            } else {
+              doubleTapTimeout = setTimeout(() => {
+                const {gridX, gridY} = getGridCoordinates(touch.clientX, touch.clientY);
+                processGridDirectTap(gridX, gridY);
+              }, 300);
+            }
+            lastTapTime = currentTime;
+          }
+        }
+      }, {passive: true});
+
+      elements.canvas.addEventListener('touchcancel', () => {
+        clearTimeout(longPressTimeout);
+        clearTimeout(doubleTapTimeout);
+      });
+
+      /* Pathfind-free grid coordinate tap navigation assistance */
+      function processGridDirectTap(gridX, gridY) {
+        if (state.gameState !== 'playing') return;
+        const dx = gridX - state.realPos.x;
+        const dy = gridY - state.realPos.y;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx > 0) handleDirectionalInput('right');
+          else if (dx < 0) handleDirectionalInput('left');
+        } else {
+          if (dy > 0) handleDirectionalInput('down');
+          else if (dy < 0) handleDirectionalInput('up');
+        }
+      }
+
+      /* ==========================================
+         INPUT & EVENT LISTENERS
+         ========================================== */
+      function handleDirectionalInput(dir) {
+        let dx = 0, dy = 0;
+        if (dir === 'up') dy = -1;
+        if (dir === 'down') dy = 1;
+        if (dir === 'left') dx = -1;
+        if (dir === 'right') dx = 1;
+        attemptMove(dx, dy);
+      }
+
+      /* Keyboard controls */
+      window.addEventListener('keydown', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code) && (state.gameState === 'playing' || state.gameState === 'paused')) {
+          e.preventDefault();
+        }
+
+        if (state.gameState === 'playing') {
+          if (e.code === 'KeyW' || e.code === 'ArrowUp') handleDirectionalInput('up');
+          if (e.code === 'KeyS' || e.code === 'ArrowDown') handleDirectionalInput('down');
+          if (e.code === 'KeyA' || e.code === 'ArrowLeft') handleDirectionalInput('left');
+          if (e.code === 'KeyD' || e.code === 'ArrowRight') handleDirectionalInput('right');
+          if (e.code === 'KeyZ') triggerUndo();
+          if (e.code === 'KeyR') startLevel(state.currentLevel);
+          if (e.code === 'Space') togglePause();
+        } else if (state.gameState === 'paused') {
+          if (e.code === 'Space') togglePause();
+        } else if (state.gameState === 'menu' && e.code === 'Enter') {
+          startLevel(0);
+        } else if (state.gameState === 'lose' && e.code === 'Enter') {
+          startLevel(state.currentLevel);
+        } else if (state.gameState === 'win' && e.code === 'Enter') {
+          startLevel(state.currentLevel + 1);
+        } else if (state.gameState === 'victory' && e.code === 'Enter') {
+          startLevel(0);
+        }
+      });
+
+      /* UI Controls Menu Button Actions */
+      elements.btnPlay.addEventListener('click', () => startLevel(0));
+      elements.btnMenuLevels.addEventListener('click', () => showPopup(elements.popupLevels));
+
+      elements.btnLevels.addEventListener('click', () => {
+        buildLevelSelector();
+        showPopup(elements.popupLevels);
+      });
+      elements.btnSettings.addEventListener('click', () => showPopup(elements.popupSettings));
+      elements.btnInfo.addEventListener('click', () => showPopup(elements.popupInfo));
+      elements.btnScores.addEventListener('click', () => {
+        renderHighscores();
+        showPopup(elements.popupScores);
+      });
+      elements.btnPauseToggle.addEventListener('click', togglePause);
+      elements.btnRetry.addEventListener('click', () => startLevel(state.currentLevel));
+      elements.btnNextLevel.addEventListener('click', () => startLevel(state.currentLevel + 1));
+      elements.btnRestartGame.addEventListener('click', () => startLevel(0));
+      elements.btnResumeGame.addEventListener('click', () => togglePause());
+      document.getElementById('sk_btn_hud_restart').addEventListener('click', () => startLevel(state.currentLevel));
+
+      const closeButtons = document.querySelectorAll('.sk_close_popup');
+      closeButtons.forEach(btn => btn.addEventListener('click', closeAllPopups));
+
+      /* Toggle synthesizer audio */
+      elements.btnToggleAudio.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        elements.btnToggleAudio.innerText = soundEnabled ? 'ON' : 'OFF';
+        elements.btnToggleAudio.className = soundEnabled ? 'sk_btn sk_btn_active' : 'sk_btn';
+        if (soundEnabled) {
+          initAudio();
+          if (state.gameState === 'playing') startAmbient();
+        } else {
+          stopAmbient();
+        }
+      });
+
+      /* Grid assistance tool */
+      elements.btnToggleGridlines.addEventListener('click', () => {
+        state.showGridlines = !state.showGridlines;
+        elements.btnToggleGridlines.innerText = state.showGridlines ? 'ON' : 'OFF';
+        elements.btnToggleGridlines.className = state.showGridlines ? 'sk_btn sk_btn_active' : 'sk_btn';
+      });
+
+      /* Cross-Browser Fullscreen toggle support */
+      elements.btnFullscreen.addEventListener('click', () => {
+        const root = document.querySelector('.sk_game_suite_root');
+        if (!document.fullscreenElement) {
+          root.requestFullscreen().then(() => {
+            elements.btnFullscreen.innerText = "Exit Full";
+          }).catch(err => {
+            console.error("Fullscreen initiation error: ", err);
+          });
+        } else {
+          document.exitFullscreen().then(() => {
+            elements.btnFullscreen.innerText = "Full Screen";
+          });
+        }
+      });
+
+      /* Re-adjust fullscreen text labels automatically */
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+          elements.btnFullscreen.innerText = "Full Screen";
+        } else {
+          elements.btnFullscreen.innerText = "Exit Full";
+        }
+      });
+
+      /* Menu system escape navigation */
+      const exitMenuActions = [elements.btnLoseMenu, elements.btnWinMenu, elements.btnVictoryMenu, elements.btnPausedMenu];
+      exitMenuActions.forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.gameState = 'menu';
+          elements.screenLose.classList.add('sk_hidden');
+          elements.screenWin.classList.add('sk_hidden');
+          elements.screenVictory.classList.add('sk_hidden');
+          elements.screenPaused.classList.add('sk_hidden');
+          elements.screenMenu.classList.remove('sk_hidden');
+          stopAmbient();
+        });
+      });
+
+      /* Virtual Movement Controls bindings */
+      document.getElementById('sk_ctrl_up').addEventListener('click', () => handleDirectionalInput('up'));
+      document.getElementById('sk_ctrl_down').addEventListener('click', () => handleDirectionalInput('down'));
+      document.getElementById('sk_ctrl_left').addEventListener('click', () => handleDirectionalInput('left'));
+      document.getElementById('sk_ctrl_right').addEventListener('click', () => handleDirectionalInput('right'));
+      document.getElementById('sk_ctrl_undo').addEventListener('click', triggerUndo);
+
+      /* Window layout resizing dynamics */
+      window.addEventListener('resize', resizeCanvas);
+      const resizeObserver = new ResizeObserver(() => resizeCanvas());
+      resizeObserver.observe(elements.wrapper.parentNode);
+
+      /* ==========================================
+         INITIALIZATION & BOOTSTRAPPING
+         ========================================== */
+      loadSave();
+      fetchRemoteLevels();
+      resizeCanvas();
+      draw();
+
+    })();
+  </script>
+</body>
+
+</html>
