@@ -602,7 +602,7 @@
          LEVEL FETCHER FROM JSON
          ========================================== */
       function fetchRemoteLevels() {
-        const remoteUrl = "./levels.json";
+        const remoteUrl = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Chiral/levels.json";
 
         fetch(remoteUrl)
           .then(res => {

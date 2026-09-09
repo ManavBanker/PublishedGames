@@ -381,21 +381,38 @@ body {
 /* LEVEL GRID DISPLAY */
 .sk_level_grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
   margin-top: 15px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.sk_level_grid::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sk_level_grid::-webkit-scrollbar-track {
+  background: #111420;
+  border-radius: 3px;
+}
+
+.sk_level_grid::-webkit-scrollbar-thumb {
+  background: #00f3ff;
+  border-radius: 3px;
 }
 
 .sk_level_cell {
   background: #111420;
   border: 2px solid #222533;
   color: #a0aec0;
-  aspect-ratio: 1;
+  height: 48px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   border-radius: 6px;
@@ -553,7 +570,7 @@ body {
   }
 
   .sk_level_grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
   }
 
   .sk_controls_container {
