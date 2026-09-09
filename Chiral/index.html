@@ -22,7 +22,7 @@
       <div class="sk_top_buttons">
         <!-- Unified Dropdown Navigation Menu -->
         <div class="sk_nav_dropdown">
-          <button id="sk_btn_menu_toggle" class="sk_btn">â˜° Menu</button>
+          <button id="sk_btn_menu_toggle" class="sk_btn">&#9776; Menu</button>
           <div id="sk_dropdown_menu" class="sk_dropdown_content">
             <button id="sk_btn_levels">Levels</button>
             <button id="sk_btn_settings">Settings</button>
@@ -37,7 +37,7 @@
 
     <!-- POPUPS -->
     <!-- Loader Popup -->
-    <div id="sk_popup_loader" class="sk_popup">
+    <div id="sk_popup_loader" class="sk_popup sk_hidden">
       <div class="sk_popup_content">
         <p class="sk_popup_title">Initializing Neural Alignment</p>
         <p style="font-size: 13px; color: #a0aec0;" id="sk_loader_text">Fetching grid parameters...</p>
@@ -81,15 +81,15 @@
       <div class="sk_popup_content">
         <p class="sk_popup_title">How to Play</p>
         <div class="sk_popup_body">
-          <p>â€¢ You control the <b class="sk_neon_cyan">BLUE (Real) Node</b> directly using WASD, Arrows, or the virtual
+          <p>&#8226; You control the <b class="sk_neon_cyan">BLUE (Real) Node</b> directly using WASD, Arrows, or the virtual
             D-Pad.</p>
-          <p>â€¢ The <b class="sk_neon_pink">PINK (Reflection) Node</b> moves simultaneously based on the current <b
+          <p>&#8226; The <b class="sk_neon_pink">PINK (Reflection) Node</b> moves simultaneously based on the current <b
               class="sk_neon_green">Symmetry Rule</b>.</p>
-          <p>â€¢ The active Symmetry Rule <b>shifts every 5 moves</b>! Watch the indicator carefully.</p>
-          <p>â€¢ Navigate obstacles. Use walls strategically to get nodes in and out of sync.</p>
-          <p>â€¢ Land both nodes on their respective glowing <b class="sk_neon_cyan">Cyan</b> & <b
+          <p>&#8226; The active Symmetry Rule <b>shifts every 5 moves</b>! Watch the indicator carefully.</p>
+          <p>&#8226; Navigate obstacles. Use walls strategically to get nodes in and out of sync.</p>
+          <p>&#8226; Land both nodes on their respective glowing <b class="sk_neon_cyan">Cyan</b> & <b
               class="sk_neon_pink">Pink</b> <b>Symmetry Gates</b> on the exact same move to win.</p>
-           <p>â€¢ Touch a <b class="sk_neon_orange">Red Void Hazard</b> or exceed par, and the level resets. Use <b>Undo
+           <p>&#8226; Touch a <b class="sk_neon_orange">Red Void Hazard</b> or exceed par, and the level resets. Use <b>Undo
               (Z)</b> or Double Tap to experiment safely!</p>
         </div>
         <button class="sk_btn sk_close_popup">Got It</button>
@@ -178,17 +178,17 @@
 
     <!-- THIRD DIV: DRAGGABLE VIRTUAL CONTROLS -->
     <div class="sk_controls_container" id="sk_draggable_controls">
-      <div class="sk_drag_handle">â†• Drag Control Panel â†•</div>
+      <div class="sk_drag_handle">&#8597; Drag Control Panel &#8597;</div>
       <div class="sk_control_row">
-        <button id="sk_ctrl_up" class="sk_ctrl_btn">â–²</button>
+        <button id="sk_ctrl_up" class="sk_ctrl_btn">&#9650;</button>
       </div>
       <div class="sk_control_row">
-        <button id="sk_ctrl_left" class="sk_ctrl_btn">â—€</button>
+        <button id="sk_ctrl_left" class="sk_ctrl_btn">&#9664;</button>
         <button id="sk_ctrl_undo" class="sk_ctrl_btn_action">Undo (Z)</button>
-        <button id="sk_ctrl_right" class="sk_ctrl_btn">â–¶</button>
+        <button id="sk_ctrl_right" class="sk_ctrl_btn">&#9654;</button>
       </div>
       <div class="sk_control_row">
-        <button id="sk_ctrl_down" class="sk_ctrl_btn">â–¼</button>
+        <button id="sk_ctrl_down" class="sk_ctrl_btn">&#9660;</button>
       </div>
     </div>
 
@@ -280,47 +280,6 @@
           gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
           osc.start(now);
           osc.stop(now + 0.12);
-        }
-      }
-
-      /* Ambient Drone System */
-      let ambientOsc = null;
-      let ambientGain = null;
-      let ambientLfo = null;
-
-      function startAmbient() {
-        if (!soundEnabled || ambientOsc) return;
-        initAudio();
-        if (!audioCtx) return;
-        ambientOsc = audioCtx.createOscillator();
-        ambientGain = audioCtx.createGain();
-        ambientLfo = audioCtx.createOscillator();
-        const lfoGain = audioCtx.createGain();
-        ambientOsc.type = 'sine';
-        ambientOsc.frequency.setValueAtTime(110, audioCtx.currentTime);
-        ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
-        ambientGain.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 2);
-        ambientLfo.type = 'sine';
-        ambientLfo.frequency.setValueAtTime(0.1, audioCtx.currentTime);
-        lfoGain.gain.setValueAtTime(5, audioCtx.currentTime);
-        ambientLfo.connect(lfoGain);
-        lfoGain.connect(ambientOsc.frequency);
-        ambientOsc.connect(ambientGain);
-        ambientGain.connect(audioCtx.destination);
-        ambientOsc.start();
-        ambientLfo.start();
-      }
-
-      function stopAmbient() {
-        if (ambientOsc) {
-          ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
-          setTimeout(() => {
-            try { ambientOsc.stop(); } catch(e) {}
-            try { ambientLfo.stop(); } catch(e) {}
-            ambientOsc = null;
-            ambientGain = null;
-            ambientLfo = null;
-          }, 1200);
         }
       }
 
@@ -643,15 +602,7 @@
          LEVEL FETCHER FROM JSON
          ========================================== */
       function fetchRemoteLevels() {
-        const remoteUrl = "./Chiral.json";
-        let progress = 0;
-        const progressInterval = setInterval(() => {
-          if (progress < 85) {
-            progress += Math.floor(Math.random() * 10) + 5;
-            if (progress > 85) progress = 85;
-            document.getElementById('sk_loader_progress_bar').style.width = `${progress}%`;
-          }
-        }, 150);
+        const remoteUrl = "./levels.json";
 
         fetch(remoteUrl)
           .then(res => {
@@ -659,7 +610,6 @@
             return res.text();
           })
           .then(rawText => {
-            /* Strip comments clean and construct JSON representation */
             let cleaned = rawText.replace(/\/\/.*$/gm, '');
             cleaned = cleaned.replace(/\/\*[\s\S]*?\*\//g, '');
 
@@ -673,23 +623,15 @@
               );
               if (!valid) throw new Error("Level data validation failed");
               LEVELS = parsed;
-              document.getElementById('sk_loader_text').innerText = "Matrix synced successfully!";
+              buildLevelSelector();
+              console.log("Remote levels synced successfully.");
             } else {
               throw new Error("Invalid levels data sequence format");
             }
           })
           .catch(err => {
             console.warn("Fallback local structures initialized. Fetch failure: ", err);
-            document.getElementById('sk_loader_text').innerText = "Sync failure. Initializing local structures...";
             LEVELS = [...LOCAL_LEVELS];
-          })
-          .finally(() => {
-            clearInterval(progressInterval);
-            document.getElementById('sk_loader_progress_bar').style.width = "100%";
-            setTimeout(() => {
-              closeAllPopups();
-              buildLevelSelector();
-            }, 600);
           });
       }
 
@@ -728,7 +670,6 @@
         if (state.currentLevel === 0 && !localStorage.getItem('sk_chiral_tutorial_done')) {
           startTutorial();
         }
-        startAmbient();
       }
 
       /* Tutorial System */
@@ -1736,9 +1677,6 @@
         elements.btnToggleAudio.className = soundEnabled ? 'sk_btn sk_btn_active' : 'sk_btn';
         if (soundEnabled) {
           initAudio();
-          if (state.gameState === 'playing') startAmbient();
-        } else {
-          stopAmbient();
         }
       });
 
@@ -1784,7 +1722,6 @@
           elements.screenVictory.classList.add('sk_hidden');
           elements.screenPaused.classList.add('sk_hidden');
           elements.screenMenu.classList.remove('sk_hidden');
-          stopAmbient();
         });
       });
 
