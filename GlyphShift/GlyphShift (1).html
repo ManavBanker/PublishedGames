@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>GlyphShift - High-Fidelity Spatial Puzzle Game</title>
+    <style>
+        /* CSS resets and dynamic container sizing scoped inside root class prefix */
+        .sk_game_suite_root {
+            --sk-base-bg: #0d0b18;
+            --sk-panel-bg: #15112a;
+            --sk-panel-border: rgba(0, 240, 255, 0.3);
+            --sk-cyan: #00f0ff;
+            --sk-magenta: #ff007f;
+            --sk-green: #39ff14;
+            --sk-yellow: #ffeb3b;
+            --sk-text: #f0f0f5;
+            --sk-sub-text: #8b80b2;
+            --sk-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            min-height: 100%;
+            background-color: var(--sk-base-bg);
+            color: var(--sk-text);
+            font-family: var(--sk-font-family);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+        .sk_game_suite_root * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        /* Top Navigation Header Rules */
+        .sk_top_bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 14px;
+            background-color: var(--sk-panel-bg);
+            border-bottom: 2px solid var(--sk-cyan);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            flex-shrink: 0;
+            height: 52px;
+        }
+        .sk_logo_group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sk_logo_main {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--sk-cyan);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+        }
+        .sk_logo_sub {
+            color: var(--sk-magenta);
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.6);
+        }
+        .sk_top_score_badge {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--sk-yellow);
+            background: rgba(255, 235, 59, 0.12);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 235, 59, 0.3);
+            white-space: nowrap;
+        }
+        .sk_top_controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .sk_action_btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--sk-sub-text);
+            color: var(--sk-text);
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            touch-action: manipulation;
+        }
+        .sk_action_btn:active {
+            transform: scale(0.95);
+        }
+        .sk_action_btn:hover {
+            background: rgba(0, 240, 255, 0.15);
+            border-color: var(--sk-cyan);
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+        }
+        .sk_btn_high_alert {
+            background: rgba(255, 0, 127, 0.2);
+            border-color: var(--sk-magenta);
+        }
+        .sk_btn_high_alert:hover {
+            background: rgba(255, 0, 127, 0.35);
+            border-color: var(--sk-magenta);
+            box-shadow: 0 0 12px rgba(255, 0, 127, 0.6);
+        }
+        .sk_menu_toggle_btn {
+            background: rgba(0, 240, 255, 0.12);
+            border-color: var(--sk-cyan);
+            color: var(--sk-cyan);
+            font-weight: 800;
+        }
+        .sk_btn_active_state {
+            background: var(--sk-cyan) !important;
+            color: #000 !important;
+            font-weight: 900 !important;
+        }
+
+        /* Top Dropdown Drawer Menu */
+        .sk_nav_dropdown_drawer {
+            position: absolute;
+            top: 52px;
+            right: 10px;
+            background: var(--sk-panel-bg);
+            border: 2px solid var(--sk-cyan);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+            z-index: 150;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 210px;
+        }
+        .sk_nav_dropdown_drawer .sk_action_btn {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 8px 12px;
+        }
+
+        /* 1:1 Aspect Canvas Play Area Frame */
+        .sk_canvas_frame {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #1a1535 0%, #06050a 100%);
+            overflow: hidden;
+            width: 100%;
+            padding: 6px;
+            min-height: 0;
+        }
+        .sk_main_canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            aspect-ratio: 1 / 1;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            border: 2px solid rgba(0, 240, 255, 0.25);
+            border-radius: 8px;
+            background-color: #080612;
+            touch-action: none;
+            cursor: default;
+        }
+        .sk_main_canvas.sk_canvas_pan_active {
+            cursor: grab;
+        }
+        .sk_main_canvas.sk_canvas_panning {
+            cursor: grabbing;
+        }
+
+        /* Layout Overlays Rules */
+        .sk_game_overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 11, 24, 0.88);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 25;
+            transition: opacity 0.3s ease;
+            padding: 16px;
+            text-align: center;
+        }
+        .sk_overlay_inner {
+            background: var(--sk-panel-bg);
+            border: 2px solid var(--sk-cyan);
+            padding: 24px;
+            border-radius: 12px;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+        .sk_overlay_head {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--sk-magenta);
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+            letter-spacing: 1.5px;
+        }
+        .sk_overlay_desc {
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--sk-sub-text);
+        }
+        .sk_metric_line {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 260px;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 4px;
+        }
+
+        /* Level Loader Progress Dialog */
+        .sk_loader_progress_bar {
+            width: 100%;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--sk-cyan);
+            margin: 10px 0;
+            position: relative;
+        }
+        .sk_loader_fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--sk-magenta), var(--sk-cyan));
+            transition: width 0.3s ease;
+        }
+
+        /* Popup Modals */
+        .sk_modal_popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--sk-panel-bg);
+            border: 2px solid var(--sk-magenta);
+            border-radius: 12px;
+            padding: 20px;
+            width: 90%;
+            max-width: 440px;
+            max-height: 85vh;
+            overflow-y: auto;
+            z-index: 200;
+            box-shadow: 0 0 40px rgba(255, 0, 127, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .sk_modal_header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 0, 127, 0.3);
+            padding-bottom: 8px;
+        }
+        .sk_modal_title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--sk-cyan);
+        }
+        .sk_modal_close {
+            background: none;
+            border: none;
+            color: var(--sk-magenta);
+            font-size: 26px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .sk_setting_block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 13px;
+        }
+        .sk_level_selection_grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .sk_level_tile {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 6px;
+            padding: 10px 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .sk_level_tile:hover:not(.sk_locked_tile) {
+            border-color: var(--sk-green);
+            background: rgba(57, 255, 20, 0.12);
+        }
+        .sk_locked_tile {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Virtual Control Panel Container (Draggable) */
+        .sk_virtual_key_panel {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(21, 17, 42, 0.94);
+            border: 2px solid var(--sk-cyan);
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+            z-index: 30;
+            width: 280px;
+            touch-action: none;
+        }
+        .sk_panel_header_handle {
+            height: 18px;
+            background: rgba(0, 240, 255, 0.15);
+            border-radius: 4px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: move;
+            touch-action: none;
+        }
+        .sk_panel_header_handle::after {
+            content: "••• DRAG CONTROLS •••";
+            color: var(--sk-cyan);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+        .sk_virtual_tools_strip {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+        .sk_virtual_tools_strip button {
+            flex: 1;
+            padding: 6px 0;
+            font-size: 11px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--sk-sub-text);
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .sk_virtual_tools_strip button.sk_tool_active {
+            background: var(--sk-cyan);
+            color: #000;
+            font-weight: 900;
+        }
+        .sk_virtual_grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+        }
+        .sk_grid_button {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 0;
+            font-size: 14px;
+            font-weight: 800;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            touch-action: manipulation;
+        }
+        .sk_grid_button:active, .sk_grid_button.sk_pressed_key {
+            background: var(--sk-magenta);
+            border-color: #fff;
+            box-shadow: 0 0 10px var(--sk-magenta);
+            transform: scale(0.92);
+        }
+
+        /* Safe Layout Bottom Gutter */
+        .sk_bottom_safe_gutter {
+            height: 16px;
+            width: 100%;
+            background: transparent;
+            flex-shrink: 0;
+        }
+
+        /* Generic utilities */
+        .sk_hidden_node {
+            display: none !important;
+        }
+        .sk_landscape_force_btn {
+            background: var(--sk-magenta);
+            border-color: #fff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="sk_game_suite_root">
+        <!-- Structural tags matching constraints -->
+        <div class="sk_labels" data="Grid-based, Keyboard-controlled, Spatial Puzzle, Timing" style="display:none;"></div>
+        <meta class="sk_meta" description="Guide a perpetually moving energy core through a shifting grid by typing keys to rotate matching glyph tiles.">
+        
+        <!-- Top Div: Header bar with unified Drawer Navigation -->
+        <div class="sk_top_bar">
+            <div class="sk_logo_group">
+                <p class="sk_logo_main">GLYPH<span class="sk_logo_sub">SHIFT</span></p>
+                <div class="sk_top_score_badge" id="sk_display_score_header">SEC 1 | 0.0s</div>
+            </div>
+            <div class="sk_top_controls">
+                <button class="sk_action_btn" id="sk_btn_quick_pause">⏸ Pause</button>
+                <button class="sk_action_btn sk_landscape_force_btn" id="sk_btn_rotate_device">🔄 Flip</button>
+                <button class="sk_action_btn sk_btn_high_alert" id="sk_btn_fullscreen_mode">⛶</button>
+                <button class="sk_action_btn sk_menu_toggle_btn" id="sk_btn_drawer_menu">☰ Menu</button>
+            </div>
+
+            <!-- Top Dropdown Navigation Drawer -->
+            <div class="sk_nav_dropdown_drawer sk_hidden_node" id="sk_nav_drawer">
+                <button class="sk_action_btn" id="sk_btn_watch_demo">▶ Watch Auto-Demo</button>
+                <button class="sk_action_btn" id="sk_btn_select_level">🎮 Select Sector</button>
+                <button class="sk_action_btn" id="sk_btn_load_remote">🌐 Reload Git Sectors</button>
+                <button class="sk_action_btn" id="sk_btn_high_scores">🏆 Leaderboard</button>
+                <button class="sk_action_btn" id="sk_btn_open_settings">⚙ Settings</button>
+                <button class="sk_action_btn" id="sk_btn_how_to">📑 Game Rules</button>
+            </div>
+
+            <!-- Popup Modal: Settings -->
+            <div class="sk_modal_popup sk_hidden_node" id="sk_modal_settings">
+                <div class="sk_modal_header">
+                    <p class="sk_modal_title">Engine Parameters</p>
+                    <button class="sk_modal_close" id="sk_close_settings">×</button>
+                </div>
+                <div class="sk_setting_block">
+                    <span>Synthesizer Sounds</span>
+                    <button class="sk_action_btn" id="sk_toggle_audio_switch">Audio: ON</button>
+                </div>
+                <div class="sk_setting_block">
+                    <span>Core Flight Velocity</span>
+                    <button class="sk_action_btn" id="sk_toggle_simulation_speed">Speed: Normal</button>
+                </div>
+                <div class="sk_setting_block">
+                    <span>Reset Stored Data</span>
+                    <button class="sk_action_btn" id="sk_reset_local_records" style="background: rgba(255,0,0,0.2); border-color: #ff3333;">Clear Memory</button>
+                </div>
+            </div>
+
+            <!-- Popup Modal: Rules -->
+            <div class="sk_modal_popup sk_hidden_node" id="sk_modal_rules">
+                <div class="sk_modal_header">
+                    <p class="sk_modal_title">Systems Protocol</p>
+                    <button class="sk_modal_close" id="sk_close_rules">×</button>
+                </div>
+                <p class="sk_overlay_desc" style="text-align: left;">
+                    1. <strong>Energy Core</strong> moves continually along tracks.<br><br>
+                    2. Synchronize links: Press/Tap <strong>Q, W, E, R, A, S, D, F</strong> to rotate matching glyph tiles 90° clockwise.<br><br>
+                    3. <strong>Touch & View Controls:</strong><br>
+                    - Single Tap: Rotate Glyph or UI selection.<br>
+                    - Double Tap: Reset Zoom / Center View.<br>
+                    - 2-Finger Pinch: Zoom in & out.<br>
+                    - Hand Pan Tool / Drag: Scroll game view anytime (even during pause or game over).<br>
+                    - Keyboard: <kbd>Ctrl +</kbd> / <kbd>Ctrl -</kbd> to zoom, <kbd>Space</kbd> or <kbd>P</kbd> to pause.
+                </p>
+            </div>
+
+            <!-- Popup Modal: Leaderboard -->
+            <div class="sk_modal_popup sk_hidden_node" id="sk_modal_scores">
+                <div class="sk_modal_header">
+                    <p class="sk_modal_title">Sector Chronometer Records</p>
+                    <button class="sk_modal_close" id="sk_close_scores">×</button>
+                </div>
+                <div id="sk_container_scores_board" style="display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
+
+            <!-- Popup Modal: Levels Selection -->
+            <div class="sk_modal_popup sk_hidden_node" id="sk_modal_levels">
+                <div class="sk_modal_header">
+                    <p class="sk_modal_title">Choose Grid Core Sector</p>
+                    <button class="sk_modal_close" id="sk_close_levels">×</button>
+                </div>
+                <div class="sk_level_selection_grid" id="sk_container_level_grid"></div>
+            </div>
+        </div>
+
+        <!-- Second Div: Dynamic HTML5 Canvas rendering viewport (1:1 Ratio) -->
+        <div class="sk_canvas_frame" id="sk_canvas_parent_box">
+            <canvas class="sk_main_canvas" id="sk_game_rendering_canvas" width="900" height="900"></canvas>
+            
+            <!-- Progress Bar Popup Modal for Remote Git Sector Fetcher -->
+            <div class="sk_game_overlay sk_hidden_node" id="sk_overlay_fetch_loader">
+                <div class="sk_overlay_inner">
+                    <p class="sk_overlay_head" style="color:var(--sk-cyan); text-shadow:0 0 10px var(--sk-cyan);">SYNCING SECTOR DATA</p>
+                    <p class="sk_overlay_desc" id="sk_fetch_status_text">Connecting to Git repository...</p>
+                    <div class="sk_loader_progress_bar">
+                        <div class="sk_loader_fill" id="sk_fetch_progress_fill"></div>
+                    </div>
+                    <button class="sk_action_btn" id="sk_btn_skip_fetch">Continue with Built-in Sectors</button>
+                </div>
+            </div>
+
+            <!-- Play Screen Overlay -->
+            <div class="sk_game_overlay" id="sk_overlay_start_screen">
+                <div class="sk_overlay_inner">
+                    <p class="sk_overlay_head">GLYPHSHIFT</p>
+                    <p class="sk_overlay_desc">Guide a perpetually moving core through a shifting grid by activating letters. View pan and zoom work at any time.</p>
+                    <button class="sk_action_btn sk_btn_high_alert" id="sk_btn_trigger_play" style="padding: 12px 30px; font-size: 16px;">BOOT SYSTEM (Press Enter)</button>
+                </div>
+            </div>
+
+            <!-- Pause Screen Overlay -->
+            <div class="sk_game_overlay sk_hidden_node" id="sk_overlay_pause_screen">
+                <div class="sk_overlay_inner" style="border-color: var(--sk-yellow); box-shadow: 0 0 25px rgba(255,235,59,0.3);">
+                    <p class="sk_overlay_head" style="color: var(--sk-yellow);">SIMULATION PAUSED</p>
+                    <p class="sk_overlay_desc">Chronometer halted. You can pan, zoom, and inspect the grid.</p>
+                    <button class="sk_action_btn sk_btn_high_alert" id="sk_btn_trigger_resume" style="padding: 12px 30px; font-size: 16px;">RESUME SIMULATION</button>
+                </div>
+            </div>
+
+            <!-- Game Over Screen Overlay -->
+            <div class="sk_game_overlay sk_hidden_node" id="sk_overlay_failure_screen">
+                <div class="sk_overlay_inner" style="border-color: var(--sk-magenta); box-shadow: 0 0 30px rgba(255,0,127,0.35);">
+                    <p class="sk_overlay_head">SYSTEM COLLISION</p>
+                    <p class="sk_overlay_desc" id="sk_failure_details_text">The Energy Core collided with an empty sector or disconnected track.</p>
+                    <button class="sk_action_btn sk_btn_high_alert" id="sk_btn_trigger_retry" style="padding: 12px 30px; font-size: 15px;">REBOOT RUN</button>
+                </div>
+            </div>
+
+            <!-- Level Completed Overlay -->
+            <div class="sk_game_overlay sk_hidden_node" id="sk_overlay_victory_screen">
+                <div class="sk_overlay_inner" style="border-color: var(--sk-green); box-shadow: 0 0 30px rgba(57,255,20,0.35);">
+                    <p class="sk_overlay_head" style="color: var(--sk-green);">SECTOR SYNCHRONIZED</p>
+                    <div class="sk_metric_line"><span>Current Sector:</span><b id="sk_data_victory_level">1</b></div>
+                    <div class="sk_metric_line"><span>Input Rotations:</span><b id="sk_data_victory_keystrokes">0</b></div>
+                    <div class="sk_metric_line"><span>Completion Time:</span><b id="sk_data_victory_duration">0.0s</b></div>
+                    <div class="sk_metric_line"><span>Optimal Record:</span><b id="sk_data_victory_record">0.0s</b></div>
+                    <br>
+                    <button class="sk_action_btn sk_btn_high_alert" id="sk_btn_trigger_next_level" style="padding: 12px 30px; font-size: 15px;">ENGAGE NEXT SECTOR</button>
+                </div>
+            </div>
+
+            <!-- All Sectors Cleared Overlay -->
+            <div class="sk_game_overlay sk_hidden_node" id="sk_overlay_all_completed_screen">
+                <div class="sk_overlay_inner" style="border-color: var(--sk-yellow); box-shadow: 0 0 30px rgba(255,235,59,0.35);">
+                    <p class="sk_overlay_head" style="color: var(--sk-yellow);">ALL SECTORS ONLINE</p>
+                    <p class="sk_overlay_desc">Mastery achieved! You have synchronized all spatial calibration nodes.</p>
+                    <button class="sk_action_btn" id="sk_btn_return_start" style="padding: 12px 30px; font-size: 15px;">MAIN PANEL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Div: Draggable Virtual Control Panel with Zoom, Pan Hand, and Multi-touch Glyph buttons -->
+        <div class="sk_virtual_key_panel" id="sk_draggable_controls_panel">
+            <div class="sk_panel_header_handle" id="sk_draggable_drag_handle"></div>
+            
+            <!-- Virtual Navigation Tools Strip -->
+            <div class="sk_virtual_tools_strip">
+                <button id="sk_vbtn_zoom_in" title="Zoom In (Ctrl +)">🔍 +</button>
+                <button id="sk_vbtn_zoom_out" title="Zoom Out (Ctrl -)">🔍 -</button>
+                <button id="sk_vbtn_pan_tool" title="Toggle Pan Tool">✋ Pan</button>
+                <button id="sk_vbtn_reset_view" title="Reset View Scale">🎯 Reset</button>
+            </div>
+
+            <!-- Multi-touch Virtual Key Grid -->
+            <div class="sk_virtual_grid">
+                <button class="sk_grid_button" data-glyph="Q">Q</button>
+                <button class="sk_grid_button" data-glyph="W">W</button>
+                <button class="sk_grid_button" data-glyph="E">E</button>
+                <button class="sk_grid_button" data-glyph="R">R</button>
+                <button class="sk_grid_button" data-glyph="A">A</button>
+                <button class="sk_grid_button" data-glyph="S">S</button>
+                <button class="sk_grid_button" data-glyph="D">D</button>
+                <button class="sk_grid_button" data-glyph="F">F</button>
+            </div>
+        </div>
+
+        <!-- Safe Bottom Gutter for Mobile Virtual Home Indicators -->
+        <div class="sk_bottom_safe_gutter"></div>
+    </div>
+
+    <!-- SCRIPT LOGIC ENGINE -->
+    <script>
+        (function() {
+            /* Web Audio API Synthesizer Wrapper */
+            class WebAudioSynth {
+                constructor() {
+                    this.audioCtx = null;
+                    this.isMuted = false;
+                }
+                lazyInitialize() {
+                    if (!this.audioCtx) {
+                        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                        if (AudioCtxClass) {
+                            this.audioCtx = new AudioCtxClass();
+                        }
+                    }
+                    if (this.audioCtx && this.audioCtx.state === 'suspended') {
+                        this.audioCtx.resume();
+                    }
+                }
+                playRotateSound() {
+                    if (this.isMuted) return;
+                    this.lazyInitialize();
+                    if (!this.audioCtx) return;
+                    try {
+                        let osc = this.audioCtx.createOscillator();
+                        let gainNode = this.audioCtx.createGain();
+                        osc.connect(gainNode);
+                        gainNode.connect(this.audioCtx.destination);
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(350, this.audioCtx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(700, this.audioCtx.currentTime + 0.08);
+                        gainNode.gain.setValueAtTime(0.08, this.audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.08);
+                        osc.start();
+                        osc.stop(this.audioCtx.currentTime + 0.08);
+                    } catch(e) {}
+                }
+                playTickSound() {
+                    if (this.isMuted) return;
+                    this.lazyInitialize();
+                    if (!this.audioCtx) return;
+                    try {
+                        let osc = this.audioCtx.createOscillator();
+                        let gainNode = this.audioCtx.createGain();
+                        osc.connect(gainNode);
+                        gainNode.connect(this.audioCtx.destination);
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(900, this.audioCtx.currentTime);
+                        gainNode.gain.setValueAtTime(0.04, this.audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.04);
+                        osc.start();
+                        osc.stop(this.audioCtx.currentTime + 0.04);
+                    } catch(e) {}
+                }
+                playExplosionSound() {
+                    if (this.isMuted) return;
+                    this.lazyInitialize();
+                    if (!this.audioCtx) return;
+                    try {
+                        let osc = this.audioCtx.createOscillator();
+                        let gainNode = this.audioCtx.createGain();
+                        osc.connect(gainNode);
+                        gainNode.connect(this.audioCtx.destination);
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(180, this.audioCtx.currentTime);
+                        osc.frequency.linearRampToValueAtTime(30, this.audioCtx.currentTime + 0.5);
+                        gainNode.gain.setValueAtTime(0.25, this.audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.5);
+                        osc.start();
+                        osc.stop(this.audioCtx.currentTime + 0.5);
+                    } catch(e) {}
+                }
+                playWinSound() {
+                    if (this.isMuted) return;
+                    this.lazyInitialize();
+                    if (!this.audioCtx) return;
+                    try {
+                        const notes = [293.66, 349.23, 440.00, 523.25, 587.33];
+                        const now = this.audioCtx.currentTime;
+                        notes.forEach((freq, index) => {
+                            let osc = this.audioCtx.createOscillator();
+                            let gainNode = this.audioCtx.createGain();
+                            osc.connect(gainNode);
+                            gainNode.connect(this.audioCtx.destination);
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(freq, now + index * 0.07);
+                            gainNode.gain.setValueAtTime(0.07, now + index * 0.07);
+                            gainNode.gain.exponentialRampToValueAtTime(0.001, now + index * 0.07 + 0.22);
+                            osc.start(now + index * 0.07);
+                            osc.stop(now + index * 0.07 + 0.22);
+                        });
+                    } catch(e) {}
+                }
+            }
+
+            const SynthInstance = new WebAudioSynth();
+
+            /* Default mathematically solvable sector dictionary */
+            let SECTORS_DICTIONARY = [
+                {
+                    id: 1,
+                    name: "Inception Path",
+                    grid: [
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+                        ['ST', 'S:Q:1', 'C:W:2', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'S:Q:0', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'C:E:3', 'GL', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E']
+                    ],
+                    startPos: { x: 0, y: 1 },
+                    startDir: 1,
+                    demoInputs: [
+                        { delay: 250, key: 'Q' },
+                        { delay: 900, key: 'W' },
+                        { delay: 950, key: 'W' },
+                        { delay: 1000, key: 'W' },
+                        { delay: 1600, key: 'Q' },
+                        { delay: 1650, key: 'Q' },
+                        { delay: 1700, key: 'Q' },
+                        { delay: 2200, key: 'E' },
+                        { delay: 2250, key: 'E' },
+                        { delay: 2300, key: 'E' }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Synchronization Crossways",
+                    grid: [
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+                        ['ST', 'S:A:1', 'C:S:0', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'S:D:0', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'C:A:2', 'S:S:1', 'S:A:1', 'GL', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E']
+                    ],
+                    startPos: { x: 0, y: 1 },
+                    startDir: 1,
+                    demoInputs: [
+                        { delay: 350, key: 'A' },
+                        { delay: 1100, key: 'S' },
+                        { delay: 1800, key: 'D' }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Ascendant Calibration",
+                    grid: [
+                        ['E', 'E', 'C:W:1', 'S:Q:1', 'C:E:2', 'E', 'E', 'E'],
+                        ['E', 'E', 'S:A:0', 'E', 'S:S:0', 'E', 'E', 'E'],
+                        ['ST', 'S:R:1', 'C:A:3', 'E', 'C:W:0', 'S:E:1', 'GL', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E']
+                    ],
+                    startPos: { x: 0, y: 2 },
+                    startDir: 1,
+                    demoInputs: [
+                        { delay: 1000, key: 'A' },
+                        { delay: 1100, key: 'W' },
+                        { delay: 1800, key: 'Q' },
+                        { delay: 2500, key: 'E' },
+                        { delay: 2600, key: 'S' },
+                        { delay: 3300, key: 'W' },
+                        { delay: 4000, key: 'E' }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Temporal Pipeline",
+                    grid: [
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+                        ['ST', 'S:Q:1', 'C:S:0', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'C:A:3', 'S:D:0', 'C:F:1', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'S:Q:1', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'C:W:2', 'S:E:0', 'GL', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E']
+                    ],
+                    startPos: { x: 0, y: 1 },
+                    startDir: 1,
+                    demoInputs: [
+                        { delay: 300, key: 'Q' },
+                        { delay: 1050, key: 'S' },
+                        { delay: 1750, key: 'A' },
+                        { delay: 2450, key: 'D' },
+                        { delay: 3150, key: 'F' },
+                        { delay: 3850, key: 'Q' },
+                        { delay: 4550, key: 'W' },
+                        { delay: 5250, key: 'E' }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Cosmic Synchronization Engine",
+                    grid: [
+                        ['ST', 'S:Q:1', 'S:W:1', 'C:E:2', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'E', 'S:R:1', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'C:Q:0', 'C:A:3', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'S:S:1', 'E', 'E', 'E', 'E', 'E'],
+                        ['E', 'E', 'C:D:3', 'S:F:0', 'S:W:0', 'GL', 'E', 'E'],
+                        ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E']
+                    ],
+                    startPos: { x: 0, y: 0 },
+                    startDir: 1,
+                    demoInputs: [
+                        { delay: 800, key: 'E' },
+                        { delay: 1500, key: 'R' },
+                        { delay: 2200, key: 'A' },
+                        { delay: 2900, key: 'Q' },
+                        { delay: 3600, key: 'S' },
+                        { delay: 4300, key: 'D' },
+                        { delay: 5000, key: 'F' },
+                        { delay: 5700, key: 'W' }
+                    ]
+                }
+            ];
+
+            /* Global Game Engine State */
+            const EngineState = { 
+                activeView: 'start_screen', /* start_screen, playing, paused, failure_screen, victory_screen, all_completed_screen */
+                currentSectorIndex: 0,
+                levelsUnlocked: 1,
+                keystrokesCount: 0,
+                sectorStartTime: 0,
+                sectorElapsedTime: 0,
+                leaderboard: {},
+                levelGrid: [],
+                core: {
+                    gridX: 0,
+                    gridY: 0,
+                    renderX: 0,
+                    renderY: 0,
+                    direction: 1,
+                    interpolationProgress: 0.0,
+                    speedScale: 1.0
+                },
+                demoPlaying: false,
+                demoTimeouts: [],
+                /* Viewport Camera Transform (Zoom & Pan) */
+                camera: {
+                    zoom: 1.0,
+                    panX: 0,
+                    panY: 0,
+                    minZoom: 0.5,
+                    maxZoom: 2.8,
+                    isPanToolActive: false
+                }
+            };
+
+            const canvas = document.getElementById('sk_game_rendering_canvas');
+            const ctx = canvas.getContext('2d');
+            const CANVAS_DESIGN_SIZE = 900; /* 1:1 Aspect ratio */
+            const COLS = 8;
+            const ROWS = 6;
+            const BLOCK_SIZE = 100;
+
+            let drawBaseOffsetGridX = 0;
+            let drawBaseOffsetGridY = 0;
+
+            /* Remote Git Raw Level Parser & Fetcher */
+            function fetchRemoteLevels(autoStart) {
+                const loaderOverlay = document.getElementById('sk_overlay_fetch_loader');
+                const progressFill = document.getElementById('sk_fetch_progress_fill');
+                const statusText = document.getElementById('sk_fetch_status_text');
+                
+                loaderOverlay.classList.remove('sk_hidden_node');
+                progressFill.style.width = '15%';
+                statusText.innerText = 'Requesting sector data from Git raw stream...';
+
+                /* Simulated or live Git raw fallback */
+                const gitRawUrl = './GlyphShift.json';
+
+                setTimeout(() => {
+                    progressFill.style.width = '45%';
+                    statusText.innerText = 'Parsing stream & stripping block comments...';
+
+                    fetch(gitRawUrl, { cache: 'no-store' })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Remote HTTP fetch error');
+                            return res.text();
+                        })
+                        .then(rawContent => {
+                            progressFill.style.width = '85%';
+                            /* Clean out JavaScript & HTML block/single comments from retrieved string */
+                            let sanitized = rawContent
+                                .replace(/\/\*[\s\S]*?\*\//g, '')
+                                .replace(/<!--[\s\S]*?-->/g, '')
+                                .replace(/\/\/.*/g, '');
+
+                            /* Try to parse dynamic SECTORS JSON or use robust fallback array */
+                            try {
+                                if (sanitized.includes('SECTORS_DICTIONARY')) {
+                                    const jsonMatch = sanitized.match(/\[\s*\{[\s\S]*\}\s*\]/);
+                                    if (jsonMatch) {
+                                        const parsed = JSON.parse(jsonMatch[0]);
+                                        if (Array.isArray(parsed) && parsed.length > 0) {
+                                            SECTORS_DICTIONARY = parsed;
+                                        }
+                                    }
+                                }
+                            } catch(err) {
+                                /* Keep reliable fallback */
+                            }
+
+                            progressFill.style.width = '100%';
+                            statusText.innerText = 'Sectors validated successfully!';
+                            setTimeout(() => {
+                                loaderOverlay.classList.add('sk_hidden_node');
+                                rebuildLevelsGridUI();
+                                if (autoStart) {
+                                    clearViewOverlays();
+                                    EngineState.activeView = 'playing';
+                                    setupLevel(EngineState.currentSectorIndex);
+                                }
+                            }, 400);
+                        })
+                        .catch(() => {
+                            progressFill.style.width = '100%';
+                            statusText.innerText = 'Using embedded high-fidelity offline sectors.';
+                            setTimeout(() => {
+                                loaderOverlay.classList.add('sk_hidden_node');
+                                rebuildLevelsGridUI();
+                            }, 500);
+                        });
+                }, 300);
+            }
+
+            function retrieveStoredEngineData() {
+                try {
+                    const savedUnlock = localStorage.getItem('sk_sector_unlocked');
+                    if (savedUnlock) EngineState.levelsUnlocked = parseInt(savedUnlock, 10);
+                    const savedScores = localStorage.getItem('sk_leaderboard_data');
+                    if (savedScores) EngineState.leaderboard = JSON.parse(savedScores);
+                    const savedMute = localStorage.getItem('sk_synth_muted_pref');
+                    if (savedMute) SynthInstance.isMuted = (savedMute === 'true');
+                    const savedSpeed = localStorage.getItem('sk_sim_speed_pref');
+                    if (savedSpeed) EngineState.core.speedScale = parseFloat(savedSpeed);
+                } catch(e) {}
+            }
+
+            function storeEngineData() {
+                try {
+                    localStorage.setItem('sk_sector_unlocked', EngineState.levelsUnlocked);
+                    localStorage.setItem('sk_leaderboard_data', JSON.stringify(EngineState.leaderboard));
+                    localStorage.setItem('sk_synth_muted_pref', SynthInstance.isMuted);
+                    localStorage.setItem('sk_sim_speed_pref', EngineState.core.speedScale);
+                } catch(e) {}
+            }
+
+            function computeActiveTracks(type, rotationValue) {
+                let primaryDirections = [];
+                if (type === 'S') {
+                    primaryDirections = [1, 3];
+                } else if (type === 'C') {
+                    primaryDirections = [1, 2];
+                } else if (type === 'ST' || type === 'GL') {
+                    primaryDirections = [0, 1, 2, 3];
+                }
+                return primaryDirections.map(d => (d + rotationValue) % 4);
+            }
+
+            function computeDirectionDelta(dir) {
+                switch(dir) { 
+                    case 0: return { dx: 0, dy: -1 };
+                    case 1: return { dx: 1, dy: 0 };
+                    case 2: return { dx: 0, dy: 1 };
+                    case 3: return { dx: -1, dy: 0 };
+                }
+                return { dx: 0, dy: 0 };
+            }
+
+            function setupLevel(index) {
+                abortDemoMode();
+                if (index >= SECTORS_DICTIONARY.length) index = 0;
+                EngineState.currentSectorIndex = index;
+                const currentSector = SECTORS_DICTIONARY[index];
+                EngineState.levelGrid = [];
+                EngineState.keystrokesCount = 0;
+                EngineState.sectorStartTime = Date.now();
+                EngineState.sectorElapsedTime = 0;
+
+                for (let r = 0; r < ROWS; r++) {
+                    EngineState.levelGrid[r] = [];
+                    for (let c = 0; c < COLS; c++) {
+                        const cellCode = currentSector.grid[r] ? currentSector.grid[r][c] : 'E';
+                        if (!cellCode || cellCode === 'E') {
+                            EngineState.levelGrid[r][c] = { type: 'E' };
+                        } else if (cellCode === 'ST') {
+                            EngineState.levelGrid[r][c] = { type: 'ST', rot: 0, targetRot: 0, currentRenderRot: 0 };
+                        } else if (cellCode === 'GL') {
+                            EngineState.levelGrid[r][c] = { type: 'GL', rot: 0, targetRot: 0, currentRenderRot: 0 };
+                        } else {
+                            const components = cellCode.split(':');
+                            const initialRot = parseInt(components[2] || '0', 10);
+                            EngineState.levelGrid[r][c] = {
+                                type: components[0],
+                                letter: components[1],
+                                rot: initialRot,
+                                targetRot: initialRot,
+                                currentRenderRot: initialRot
+                            };
+                        }
+                    }
+                }
+
+                EngineState.core.gridX = currentSector.startPos.x;
+                EngineState.core.gridY = currentSector.startPos.y;
+                EngineState.core.renderX = currentSector.startPos.x * BLOCK_SIZE + BLOCK_SIZE / 2;
+                EngineState.core.renderY = currentSector.startPos.y * BLOCK_SIZE + BLOCK_SIZE / 2;
+                EngineState.core.direction = currentSector.startDir;
+                EngineState.core.interpolationProgress = 0.0;
+
+                drawBaseOffsetGridX = (CANVAS_DESIGN_SIZE - (COLS * BLOCK_SIZE)) / 2;
+                drawBaseOffsetGridY = (CANVAS_DESIGN_SIZE - (ROWS * BLOCK_SIZE)) / 2;
+                updateHeaderDisplay();
+            }
+
+            function handleKeystrokeInput(glyph) {
+                if (EngineState.activeView !== 'playing') return;
+                let isModified = false;
+
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const cell = EngineState.levelGrid[r][c];
+                        if (cell && cell.type !== 'E' && cell.letter === glyph) {
+                            cell.targetRot = (cell.targetRot + 1) % 4;
+                            cell.rot = cell.targetRot;
+                            isModified = true;
+                        }
+                    }
+                }
+
+                if (isModified) {
+                    EngineState.keystrokesCount++;
+                    SynthInstance.playRotateSound();
+                    animateVirtualKeyOnPress(glyph);
+                    updateHeaderDisplay();
+                }
+            }
+
+            function animateVirtualKeyOnPress(glyph) {
+                const buttonElement = document.querySelector(`.sk_grid_button[data-glyph="${glyph}"]`);
+                if (buttonElement) {
+                    buttonElement.classList.add('sk_pressed_key');
+                    setTimeout(() => buttonElement.classList.remove('sk_pressed_key'), 120);
+                }
+            }
+
+            function togglePauseSimulation() {
+                if (EngineState.activeView === 'playing') {
+                    EngineState.activeView = 'paused';
+                    document.getElementById('sk_btn_quick_pause').innerText = '▶ Resume';
+                    document.getElementById('sk_btn_quick_pause').classList.add('sk_btn_active_state');
+                    document.getElementById('sk_overlay_pause_screen').classList.remove('sk_hidden_node');
+                } else if (EngineState.activeView === 'paused') {
+                    EngineState.activeView = 'playing';
+                    EngineState.sectorStartTime = Date.now() - (EngineState.sectorElapsedTime * 1000);
+                    document.getElementById('sk_btn_quick_pause').innerText = '⏸ Pause';
+                    document.getElementById('sk_btn_quick_pause').classList.remove('sk_btn_active_state');
+                    document.getElementById('sk_overlay_pause_screen').classList.add('sk_hidden_node');
+                }
+            }
+
+            function updateHeaderDisplay() {
+                const badge = document.getElementById('sk_display_score_header');
+                if (badge) {
+                    badge.innerText = `SEC ${EngineState.currentSectorIndex + 1} | ${EngineState.sectorElapsedTime.toFixed(1)}s | ↻ ${EngineState.keystrokesCount}`;
+                }
+            }
+
+            /* Viewport Camera Scale & Pan Handlers */
+            function adjustCameraZoom(delta) {
+                const previousZoom = EngineState.camera.zoom;
+                EngineState.camera.zoom = Math.min(EngineState.camera.maxZoom, Math.max(EngineState.camera.minZoom, EngineState.camera.zoom + delta));
+                if (previousZoom !== EngineState.camera.zoom) {
+                    /* Clamp Pan boundaries */
+                    clampPanCoordinates();
+                }
+            }
+
+            function resetCameraTransform() {
+                EngineState.camera.zoom = 1.0;
+                EngineState.camera.panX = 0;
+                EngineState.camera.panY = 0;
+            }
+
+            function clampPanCoordinates() {
+                const maxPan = (CANVAS_DESIGN_SIZE * EngineState.camera.zoom) / 2;
+                EngineState.camera.panX = Math.max(-maxPan, Math.min(maxPan, EngineState.camera.panX));
+                EngineState.camera.panY = Math.max(-maxPan, Math.min(maxPan, EngineState.camera.panY));
+            }
+
+            /* Screen to Canvas Coordinates Converter (Supports Camera Transform) */
+            function getCanvasCoordinatesFromEvent(clientX, clientY) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const canvasPixelX = (clientX - rect.left) * scaleX;
+                const canvasPixelY = (clientY - rect.top) * scaleY;
+
+                /* Invert Camera Transform Matrix: Scale -> Translate Center -> Translate Pan */
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const transformedX = (canvasPixelX - centerX - EngineState.camera.panX) / EngineState.camera.zoom + centerX;
+                const transformedY = (canvasPixelY - centerY - EngineState.camera.panY) / EngineState.camera.zoom + centerY;
+
+                return { x: transformedX, y: transformedY };
+            }
+
+            function handleCanvasClickAtPoint(canvasX, canvasY) {
+                /* Detect clicked Grid Tile even when zoomed or panned */
+                const localX = canvasX - drawBaseOffsetGridX;
+                const localY = canvasY - drawBaseOffsetGridY;
+
+                const col = Math.floor(localX / BLOCK_SIZE);
+                const row = Math.floor(localY / BLOCK_SIZE);
+
+                if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+                    const cell = EngineState.levelGrid[row][col];
+                    if (cell && cell.letter) {
+                        handleKeystrokeInput(cell.letter);
+                    }
+                }
+            }
+
+            /* ADVANCED MOBILE TOUCH & MULTI-TOUCH ARCHITECTURE */
+            function setupAdvancedMobileTouchControls() {
+                let lastTapTime = 0;
+                let touchStartPos = { x: 0, y: 0 };
+                let isDraggingCanvas = false;
+                let activeTouchMap = new Map();
+                let initialPinchDistance = 0;
+                let initialPinchZoom = 1.0;
+                let longPressTimeout = null;
+
+                canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    for (let i = 0; i < e.changedTouches.length; i++) {
+                        const t = e.changedTouches[i];
+                        activeTouchMap.set(t.identifier, { x: t.clientX, y: t.clientY });
+                    }
+
+                    if (e.touches.length === 1) {
+                        const t = e.touches[0];
+                        touchStartPos = { x: t.clientX, y: t.clientY };
+                        isDraggingCanvas = false;
+
+                        /* Long Touch / Long Press timer (>500ms) */
+                        clearTimeout(longPressTimeout);
+                        longPressTimeout = setTimeout(() => {
+                            SynthInstance.playTickSound();
+                            adjustCameraZoom(0.25);
+                        }, 520);
+
+                    } else if (e.touches.length === 2) {
+                        clearTimeout(longPressTimeout);
+                        /* Two Finger Zoom Initialize */
+                        const t1 = e.touches[0];
+                        const t2 = e.touches[1];
+                        initialPinchDistance = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                        initialPinchZoom = EngineState.camera.zoom;
+                    }
+                }, { passive: false });
+
+                canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    if (e.touches.length === 1) {
+                        const t = e.touches[0];
+                        const dx = t.clientX - touchStartPos.x;
+                        const dy = t.clientY - touchStartPos.y;
+
+                        if (Math.hypot(dx, dy) > 8) {
+                            clearTimeout(longPressTimeout);
+                            isDraggingCanvas = true;
+                            if (EngineState.camera.isPanToolActive || EngineState.camera.zoom > 1.0 || EngineState.activeView === 'paused') {
+                                const rect = canvas.getBoundingClientRect();
+                                const ratio = CANVAS_DESIGN_SIZE / rect.width;
+                                EngineState.camera.panX += (t.clientX - (activeTouchMap.get(t.identifier)?.x || t.clientX)) * ratio;
+                                EngineState.camera.panY += (t.clientY - (activeTouchMap.get(t.identifier)?.y || t.clientY)) * ratio;
+                                clampPanCoordinates();
+                            }
+                        }
+                        activeTouchMap.set(t.identifier, { x: t.clientX, y: t.clientY });
+                    } else if (e.touches.length === 2) {
+                        clearTimeout(longPressTimeout);
+                        /* 2 Finger Pinch Zoom */
+                        const t1 = e.touches[0];
+                        const t2 = e.touches[1];
+                        const currentDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                        if (initialPinchDistance > 10) {
+                            const scaleFactor = currentDist / initialPinchDistance;
+                            EngineState.camera.zoom = Math.min(EngineState.camera.maxZoom, Math.max(EngineState.camera.minZoom, initialPinchZoom * scaleFactor));
+                            clampPanCoordinates();
+                        }
+                    }
+                }, { passive: false });
+
+                canvas.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    clearTimeout(longPressTimeout);
+                    
+                    for (let i = 0; i < e.changedTouches.length; i++) {
+                        const t = e.changedTouches[i];
+                        activeTouchMap.delete(t.identifier);
+                    }
+
+                    if (e.touches.length === 0 && !isDraggingCanvas) {
+                        const now = Date.now();
+                        const timeSinceLastTap = now - lastTapTime;
+                        const endTouch = e.changedTouches[0];
+                        const p = getCanvasCoordinatesFromEvent(endTouch.clientX, endTouch.clientY);
+
+                        /* Double Tap (<300ms): Reset camera view */
+                        if (timeSinceLastTap < 300) {
+                            resetCameraTransform();
+                            SynthInstance.playRotateSound();
+                        } else {
+                            /* Single Tap: Rotate matching glyph */
+                            handleCanvasClickAtPoint(p.x, p.y);
+                        }
+                        lastTapTime = now;
+                    }
+                }, { passive: false });
+
+                canvas.addEventListener('touchcancel', () => {
+                    clearTimeout(longPressTimeout);
+                    activeTouchMap.clear();
+                });
+
+                /* Canvas Mouse drag & Wheel zoom support */
+                let isMouseDown = false;
+                let mouseLast = { x: 0, y: 0 };
+                let mouseStart = { x: 0, y: 0 };
+
+                canvas.addEventListener('mousedown', (e) => {
+                    isMouseDown = true;
+                    mouseStart = { x: e.clientX, y: e.clientY };
+                    mouseLast = { x: e.clientX, y: e.clientY };
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    if (!isMouseDown) return;
+                    const dx = e.clientX - mouseLast.x;
+                    const dy = e.clientY - mouseLast.y;
+                    mouseLast = { x: e.clientX, y: e.clientY };
+
+                    if (EngineState.camera.isPanToolActive || EngineState.camera.zoom > 1.0 || EngineState.activeView === 'paused') {
+                        const rect = canvas.getBoundingClientRect();
+                        const ratio = CANVAS_DESIGN_SIZE / rect.width;
+                        EngineState.camera.panX += dx * ratio;
+                        EngineState.camera.panY += dy * ratio;
+                        clampPanCoordinates();
+                    }
+                });
+
+                window.addEventListener('mouseup', (e) => {
+                    if (!isMouseDown) return;
+                    isMouseDown = false;
+                    const totalDist = Math.hypot(e.clientX - mouseStart.x, e.clientY - mouseStart.y);
+                    if (totalDist < 6) {
+                        const p = getCanvasCoordinatesFromEvent(e.clientX, e.clientY);
+                        handleCanvasClickAtPoint(p.x, p.y);
+                    }
+                });
+
+                canvas.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const delta = e.deltaY < 0 ? 0.15 : -0.15;
+                    adjustCameraZoom(delta);
+                }, { passive: false });
+            }
+
+            /* Draggable Virtual Control Panel with Touch Coordinate tracking */
+            function registerDraggableVirtualController() {
+                const containerEl = document.getElementById('sk_draggable_controls_panel');
+                const dragHandleEl = document.getElementById('sk_draggable_drag_handle');
+                let isDragging = false;
+                let startX, startY, originX, originY;
+
+                const startDrag = (clientX, clientY) => {
+                    isDragging = true;
+                    startX = clientX;
+                    startY = clientY;
+                    originX = containerEl.offsetLeft;
+                    originY = containerEl.offsetTop;
+                };
+
+                const moveDrag = (clientX, clientY) => {
+                    if (!isDragging) return;
+                    const dx = clientX - startX;
+                    const dy = clientY - startY;
+                    const scopeElement = document.querySelector('.sk_game_suite_root');
+                    const horizontalLimit = scopeElement.clientWidth - containerEl.clientWidth;
+                    const verticalLimit = scopeElement.clientHeight - containerEl.clientHeight;
+                    let finalX = Math.max(0, Math.min(originX + dx, horizontalLimit));
+                    let finalY = Math.max(0, Math.min(originY + dy, verticalLimit));
+                    
+                    containerEl.style.left = `${finalX}px`;
+                    containerEl.style.top = `${finalY}px`;
+                    containerEl.style.bottom = 'auto';
+                    containerEl.style.right = 'auto';
+                };
+
+                const endDrag = () => {
+                    isDragging = false;
+                };
+
+                dragHandleEl.addEventListener('pointerdown', (e) => {
+                    startDrag(e.clientX, e.clientY);
+                    dragHandleEl.setPointerCapture(e.pointerId);
+                });
+
+                dragHandleEl.addEventListener('pointermove', (e) => {
+                    moveDrag(e.clientX, e.clientY);
+                });
+
+                dragHandleEl.addEventListener('pointerup', (e) => {
+                    endDrag();
+                    dragHandleEl.releasePointerCapture(e.pointerId);
+                });
+
+                dragHandleEl.addEventListener('pointercancel', endDrag);
+
+                /* Virtual Buttons Input Registry */
+                document.querySelectorAll('.sk_grid_button').forEach(b => {
+                    b.addEventListener('pointerdown', (e) => {
+                        e.preventDefault();
+                        const trackingGlyph = b.getAttribute('data-glyph');
+                        handleKeystrokeInput(trackingGlyph);
+                    });
+                });
+
+                /* Zoom and Pan Virtual Buttons */
+                document.getElementById('sk_vbtn_zoom_in').addEventListener('click', () => adjustCameraZoom(0.2));
+                document.getElementById('sk_vbtn_zoom_out').addEventListener('click', () => adjustCameraZoom(-0.2));
+                document.getElementById('sk_vbtn_reset_view').addEventListener('click', () => resetCameraTransform());
+
+                const panToolBtn = document.getElementById('sk_vbtn_pan_tool');
+                panToolBtn.addEventListener('click', () => {
+                    EngineState.camera.isPanToolActive = !EngineState.camera.isPanToolActive;
+                    panToolBtn.classList.toggle('sk_tool_active', EngineState.camera.isPanToolActive);
+                    canvas.classList.toggle('sk_canvas_pan_active', EngineState.camera.isPanToolActive);
+                });
+            }
+
+            function runEngineSimulationUpdate(dt) {
+                /* Smooth rotational interpolation */
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const cell = EngineState.levelGrid[r] ? EngineState.levelGrid[r][c] : null;
+                        if (cell && cell.type !== 'E' && cell.type !== 'ST' && cell.type !== 'GL') {
+                            let rDiff = cell.targetRot - cell.currentRenderRot;
+                            if (rDiff < -2) rDiff += 4;
+                            if (rDiff > 2) rDiff -= 4;
+                            cell.currentRenderRot += rDiff * 0.16;
+                        }
+                    } 
+                }
+
+                if (EngineState.activeView !== 'playing') return;
+
+                EngineState.sectorElapsedTime = (Date.now() - EngineState.sectorStartTime) / 1000;
+                updateHeaderDisplay();
+
+                /* Energy core movement interpolation */
+                const stepDuration = 600 * EngineState.core.speedScale;
+                const progressDelta = (dt / stepDuration);
+                EngineState.core.interpolationProgress += progressDelta;
+
+                const currX = EngineState.core.gridX;
+                const currY = EngineState.core.gridY;
+                const dirDelta = computeDirectionDelta(EngineState.core.direction);
+                const destinationX = currX + dirDelta.dx;
+                const destinationY = currY + dirDelta.dy;
+
+                const pixelOriginX = currX * BLOCK_SIZE + BLOCK_SIZE / 2;
+                const pixelOriginY = currY * BLOCK_SIZE + BLOCK_SIZE / 2;
+                const pixelDestX = destinationX * BLOCK_SIZE + BLOCK_SIZE / 2;
+                const pixelDestY = destinationY * BLOCK_SIZE + BLOCK_SIZE / 2;
+
+                EngineState.core.renderX = pixelOriginX + (pixelDestX - pixelOriginX) * Math.min(1.0, EngineState.core.interpolationProgress);
+                EngineState.core.renderY = pixelOriginY + (pixelDestY - pixelOriginY) * Math.min(1.0, EngineState.core.interpolationProgress);
+
+                if (EngineState.core.interpolationProgress >= 1.0) {
+                    EngineState.core.gridX = destinationX;
+                    EngineState.core.gridY = destinationY;
+                    EngineState.core.interpolationProgress = 0.0;
+                    SynthInstance.playTickSound();
+
+                    if (destinationX < 0 || destinationX >= COLS || destinationY < 0 || destinationY >= ROWS) {
+                        triggerSectorFailure("Core telemetry lost: exceeded perimeter bounds.");
+                        return;
+                    }
+
+                    const arrivedCell = EngineState.levelGrid[destinationY][destinationX];
+                    if (!arrivedCell || arrivedCell.type === 'E') {
+                        triggerSectorFailure("Core collapse: plummeted into void node.");
+                        return;
+                    }
+
+                    if (arrivedCell.type === 'GL') {
+                        triggerSectorVictory();
+                        return;
+                    }
+
+                    const inPort = (EngineState.core.direction + 2) % 4;
+                    const connectedPorts = computeActiveTracks(arrivedCell.type, arrivedCell.rot);
+
+                    if (!connectedPorts.includes(inPort)) {
+                        triggerSectorFailure("Structural impact: track misaligned.");
+                        return;
+                    }
+
+                    const outletPorts = connectedPorts.filter(p => p !== inPort);
+                    if (outletPorts.length === 0) {
+                        triggerSectorFailure("Terminal conduit dead-end reached.");
+                    } else {
+                        let nextDirection = outletPorts[0];
+                        for (let directionOption of outletPorts) {
+                            if (directionOption === EngineState.core.direction) {
+                                nextDirection = directionOption;
+                                break;
+                            }
+                        }
+                        EngineState.core.direction = nextDirection;
+                    }
+                }
+            }
+
+            function renderEngine() {
+                ctx.clearRect(0, 0, CANVAS_DESIGN_SIZE, CANVAS_DESIGN_SIZE);
+                ctx.save();
+
+                /* Apply Camera Zoom & Hand Pan around Canvas Center */
+                const centerX = CANVAS_DESIGN_SIZE / 2;
+                const centerY = CANVAS_DESIGN_SIZE / 2;
+                ctx.translate(centerX + EngineState.camera.panX, centerY + EngineState.camera.panY);
+                ctx.scale(EngineState.camera.zoom, EngineState.camera.zoom);
+                ctx.translate(-centerX, -centerY);
+
+                ctx.save();
+                ctx.translate(drawBaseOffsetGridX, drawBaseOffsetGridY);
+
+                /* Render Background Grid Mesh */
+                ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
+                ctx.lineWidth = 1;
+                for (let r = 0; r <= ROWS; r++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, r * BLOCK_SIZE);
+                    ctx.lineTo(COLS * BLOCK_SIZE, r * BLOCK_SIZE);
+                    ctx.stroke();
+                }
+                for (let c = 0; c <= COLS; c++) {
+                    ctx.beginPath();
+                    ctx.moveTo(c * BLOCK_SIZE, 0);
+                    ctx.lineTo(c * BLOCK_SIZE, ROWS * BLOCK_SIZE);
+                    ctx.stroke();
+                }
+
+                /* Render Game Tiles */
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const cell = EngineState.levelGrid[r] ? EngineState.levelGrid[r][c] : null;
+                        if (!cell || cell.type === 'E') continue;
+
+                        const renderX = c * BLOCK_SIZE;
+                        const renderY = r * BLOCK_SIZE;
+
+                        ctx.save();
+                        ctx.translate(renderX + BLOCK_SIZE / 2, renderY + BLOCK_SIZE / 2);
+
+                        if (cell.type === 'ST') {
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 30, 0, Math.PI * 2);
+                            ctx.fillStyle = 'rgba(57, 255, 20, 0.12)';
+                            ctx.fill();
+                            ctx.strokeStyle = '#39ff14';
+                            ctx.lineWidth = 2.5;
+                            ctx.stroke();
+
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 8, 0, Math.PI * 2);
+                            ctx.fillStyle = '#39ff14';
+                            ctx.fill();
+                        } else if (cell.type === 'GL') { 
+                            const scaleMultiplier = Math.sin(Date.now() * 0.006) * 3;
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 32 + scaleMultiplier, 0, Math.PI * 2);
+                            ctx.fillStyle = 'rgba(255, 0, 127, 0.15)';
+                            ctx.fill();
+                            ctx.strokeStyle = '#ff007f';
+                            ctx.lineWidth = 3.5;
+                            ctx.stroke();
+
+                            ctx.rotate((Date.now() * 0.0018) % (Math.PI * 2));
+                            ctx.beginPath();
+                            ctx.moveTo(-14, -14);
+                            ctx.lineTo(14, 14);
+                            ctx.moveTo(14, -14);
+                            ctx.lineTo(-14, 14);
+                            ctx.strokeStyle = '#fff';
+                            ctx.lineWidth = 1.5;
+                            ctx.stroke();
+                        } else {
+                            ctx.rotate(cell.currentRenderRot * Math.PI / 2);
+
+                            ctx.fillStyle = 'rgba(21, 17, 42, 0.85)';
+                            ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
+                            ctx.lineWidth = 1.5;
+                            ctx.beginPath();
+                            ctx.roundRect(-BLOCK_SIZE / 2 + 5, -BLOCK_SIZE / 2 + 5, BLOCK_SIZE - 10, BLOCK_SIZE - 10, 8);
+                            ctx.fill();
+                            ctx.stroke();
+
+                            ctx.strokeStyle = '#00f0ff';
+                            ctx.lineWidth = 7;
+                            ctx.lineCap = 'round';
+
+                            if (cell.type === 'S') {
+                                ctx.beginPath();
+                                ctx.moveTo(-BLOCK_SIZE / 2, 0);
+                                ctx.lineTo(BLOCK_SIZE / 2, 0);
+                                ctx.stroke();
+                            } else if (cell.type === 'C') {
+                                ctx.beginPath();
+                                ctx.arc(BLOCK_SIZE / 2, BLOCK_SIZE / 2, BLOCK_SIZE / 2, Math.PI, Math.PI * 1.5);
+                                ctx.stroke();
+                            }
+
+                            ctx.save();
+                            ctx.rotate(-cell.currentRenderRot * Math.PI / 2);
+                            ctx.fillStyle = '#0d0b18';
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 16, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.strokeStyle = '#ffeb3b';
+                            ctx.lineWidth = 1.5;
+                            ctx.stroke();
+
+                            ctx.fillStyle = '#fff';
+                            ctx.font = 'bold 15px sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(cell.letter, 0, 1);
+                            ctx.restore();
+                        }
+                        ctx.restore();
+                    }
+                }
+
+                /* Render Energy Core */
+                if (EngineState.activeView === 'playing' || EngineState.activeView === 'paused') {
+                    ctx.save();
+                    ctx.translate(EngineState.core.renderX, EngineState.core.renderY);
+
+                    const pulsateGlow = 14 + Math.sin(Date.now() * 0.009) * 4;
+                    const radialGradient = ctx.createRadialGradient(0, 0, 2, 0, 0, pulsateGlow);
+                    radialGradient.addColorStop(0, '#fff');
+                    radialGradient.addColorStop(0.3, '#39ff14');
+                    radialGradient.addColorStop(1, 'rgba(57, 255, 20, 0)');
+
+                    ctx.fillStyle = radialGradient;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, pulsateGlow, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                ctx.restore(); /* Restore Base offset */
+                ctx.restore(); /* Restore Camera Transform */
+            }
+
+            function triggerSectorFailure(message) {
+                EngineState.activeView = 'failure_screen';
+                SynthInstance.playExplosionSound();
+                document.getElementById('sk_failure_details_text').innerText = message;
+                document.getElementById('sk_overlay_failure_screen').classList.remove('sk_hidden_node');
+                abortDemoMode();
+            }
+
+            function triggerSectorVictory() {
+                EngineState.activeView = 'victory_screen';
+                SynthInstance.playWinSound();
+
+                const curSector = SECTORS_DICTIONARY[EngineState.currentSectorIndex];
+                const recKey = `sect_${curSector.id}`;
+                const bestRecord = EngineState.leaderboard[recKey];
+
+                if (!bestRecord || EngineState.sectorElapsedTime < bestRecord) {
+                    EngineState.leaderboard[recKey] = parseFloat(EngineState.sectorElapsedTime.toFixed(1));
+                }
+
+                if (EngineState.currentSectorIndex + 1 >= EngineState.levelsUnlocked && EngineState.levelsUnlocked < SECTORS_DICTIONARY.length) {
+                    EngineState.levelsUnlocked = EngineState.currentSectorIndex + 2;
+                }
+
+                storeEngineData();
+                rebuildLevelsGridUI();
+
+                document.getElementById('sk_data_victory_level').innerText = `${EngineState.currentSectorIndex + 1}`;
+                document.getElementById('sk_data_victory_keystrokes').innerText = `${EngineState.keystrokesCount}`;
+                document.getElementById('sk_data_victory_duration').innerText = `${EngineState.sectorElapsedTime.toFixed(1)}s`;
+                document.getElementById('sk_data_victory_record').innerText = `${EngineState.leaderboard[recKey]}s`;
+
+                document.getElementById('sk_overlay_victory_screen').classList.remove('sk_hidden_node');
+            }
+
+            function performAdvanceNextLevel() {
+                document.getElementById('sk_overlay_victory_screen').classList.add('sk_hidden_node');
+                if (EngineState.currentSectorIndex + 1 < SECTORS_DICTIONARY.length) {
+                    EngineState.currentSectorIndex++;
+                    EngineState.activeView = 'playing';
+                    setupLevel(EngineState.currentSectorIndex);
+                } else {
+                    EngineState.activeView = 'all_completed_screen';
+                    document.getElementById('sk_overlay_all_completed_screen').classList.remove('sk_hidden_node');
+                }
+            }
+
+            function beginCoreDemoMode() {
+                shutAllModals();
+                EngineState.demoPlaying = true;
+                EngineState.currentSectorIndex = 0;
+                EngineState.activeView = 'playing';
+                clearViewOverlays();
+                setupLevel(0);
+
+                const currentLvl = SECTORS_DICTIONARY[0];
+                if (currentLvl.demoInputs) {
+                    currentLvl.demoInputs.forEach(d => {
+                        const tid = setTimeout(() => {
+                            if (EngineState.demoPlaying && EngineState.activeView === 'playing') {
+                                handleKeystrokeInput(d.key);
+                            }
+                        }, d.delay);
+                        EngineState.demoTimeouts.push(tid);
+                    });
+                }
+            }
+
+            function abortDemoMode() {
+                EngineState.demoTimeouts.forEach(t => clearTimeout(t));
+                EngineState.demoTimeouts = [];
+                EngineState.demoPlaying = false;
+            }
+
+            function clearViewOverlays() {
+                document.getElementById('sk_overlay_start_screen').classList.add('sk_hidden_node');
+                document.getElementById('sk_overlay_pause_screen').classList.add('sk_hidden_node');
+                document.getElementById('sk_overlay_failure_screen').classList.add('sk_hidden_node');
+                document.getElementById('sk_overlay_victory_screen').classList.add('sk_hidden_node');
+                document.getElementById('sk_overlay_all_completed_screen').classList.add('sk_hidden_node');
+                document.getElementById('sk_nav_drawer').classList.add('sk_hidden_node');
+            }
+
+            function shutAllModals() {
+                document.getElementById('sk_modal_settings').classList.add('sk_hidden_node');
+                document.getElementById('sk_modal_rules').classList.add('sk_hidden_node');
+                document.getElementById('sk_modal_scores').classList.add('sk_hidden_node');
+                document.getElementById('sk_modal_levels').classList.add('sk_hidden_node');
+                document.getElementById('sk_nav_drawer').classList.add('sk_hidden_node');
+            }
+
+            function triggerPopupToggle(id) {
+                const el = document.getElementById(id);
+                const isCurrentlyHidden = el.classList.contains('sk_hidden_node');
+                shutAllModals();
+                if (isCurrentlyHidden) {
+                    el.classList.remove('sk_hidden_node');
+                    if (id === 'sk_modal_scores') populateChronometerRecords();
+                }
+            }
+
+            function rebuildLevelsGridUI() {
+                const targetContainer = document.getElementById('sk_container_level_grid');
+                targetContainer.innerHTML = '';
+
+                SECTORS_DICTIONARY.forEach((sector, idx) => {
+                    const tileBtn = document.createElement('div');
+                    tileBtn.classList.add('sk_level_tile');
+                    const sectorLocked = (idx + 1) > EngineState.levelsUnlocked;
+
+                    if (sectorLocked) {
+                        tileBtn.classList.add('sk_locked_tile');
+                        tileBtn.innerHTML = `<p style="font-weight:bold; font-size:12px;">Sector ${sector.id}</p><span style="font-size:10px; color:var(--sk-sub-text);">🔒 Locked</span>`;
+                    } else {
+                        tileBtn.innerHTML = `<p style="font-weight:bold; font-size:12px; color:var(--sk-cyan);">Sector ${sector.id}</p><span style="font-size:10px; color:var(--sk-text);">${sector.name}</span>`;
+                        tileBtn.addEventListener('click', () => {
+                            EngineState.currentSectorIndex = idx;
+                            shutAllModals();
+                            clearViewOverlays();
+                            EngineState.activeView = 'playing';
+                            setupLevel(idx);
+                        });
+                    }
+                    targetContainer.appendChild(tileBtn);
+                });
+            }
+
+            function populateChronometerRecords() {
+                const leaderboardEl = document.getElementById('sk_container_scores_board');
+                leaderboardEl.innerHTML = '';
+                SECTORS_DICTIONARY.forEach(sec => {
+                    const high = EngineState.leaderboard[`sect_${sec.id}`];
+                    const row = document.createElement('div');
+                    row.classList.add('sk_setting_block');
+                    row.innerHTML = `<span style="color:#fff;">Sector ${sec.id}: ${sec.name}</span><b>${high ? high + 's' : '---'}</b>`;
+                    leaderboardEl.appendChild(row);
+                });
+            }
+
+            function bindInputAndClickListeners() {
+                /* Keyboard Controls including Ctrl + / Ctrl - for Zoom & Space/P for Pause */
+                window.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey || e.metaKey) {
+                        if (e.key === '=' || e.key === '+') {
+                            e.preventDefault();
+                            adjustCameraZoom(0.2);
+                            return;
+                        } else if (e.key === '-' || e.key === '_') {
+                            e.preventDefault();
+                            adjustCameraZoom(-0.2);
+                            return;
+                        } else if (e.key === '0') {
+                            e.preventDefault();
+                            resetCameraTransform();
+                            return;
+                        }
+                    }
+
+                    if (e.key === ' ' || e.key === 'p' || e.key === 'P') {
+                        if (EngineState.activeView === 'playing' || EngineState.activeView === 'paused') {
+                            e.preventDefault();
+                            togglePauseSimulation();
+                            return;
+                        }
+                    }
+
+                    if (e.key === 'Enter') {
+                        if (EngineState.activeView === 'start_screen') {
+                            clearViewOverlays();
+                            EngineState.activeView = 'playing';
+                            setupLevel(EngineState.currentSectorIndex);
+                        }
+                    }
+
+                    const uppercaseChar = e.key.toUpperCase();
+                    if (['Q', 'W', 'E', 'R', 'A', 'S', 'D', 'F'].includes(uppercaseChar)) {
+                        handleKeystrokeInput(uppercaseChar);
+                    }
+                });
+
+                /* Navigation & Drawer Buttons */
+                document.getElementById('sk_btn_drawer_menu').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.getElementById('sk_nav_drawer').classList.toggle('sk_hidden_node');
+                });
+
+                document.getElementById('sk_btn_quick_pause').addEventListener('click', () => {
+                    togglePauseSimulation();
+                });
+
+                document.getElementById('sk_btn_trigger_resume').addEventListener('click', () => {
+                    togglePauseSimulation();
+                });
+
+                document.getElementById('sk_btn_trigger_play').addEventListener('click', () => {
+                    clearViewOverlays();
+                    EngineState.activeView = 'playing';
+                    setupLevel(EngineState.currentSectorIndex);
+                });
+
+                document.getElementById('sk_btn_trigger_retry').addEventListener('click', () => {
+                    clearViewOverlays();
+                    EngineState.activeView = 'playing';
+                    setupLevel(EngineState.currentSectorIndex);
+                });
+
+                document.getElementById('sk_btn_trigger_next_level').addEventListener('click', () => {
+                    performAdvanceNextLevel();
+                });
+
+                document.getElementById('sk_btn_return_start').addEventListener('click', () => {
+                    clearViewOverlays();
+                    document.getElementById('sk_overlay_start_screen').classList.remove('sk_hidden_node');
+                    EngineState.activeView = 'start_screen';
+                });
+
+                document.getElementById('sk_btn_watch_demo').addEventListener('click', () => {
+                    beginCoreDemoMode();
+                });
+
+                document.getElementById('sk_btn_select_level').addEventListener('click', () => {
+                    triggerPopupToggle('sk_modal_levels');
+                });
+
+                document.getElementById('sk_btn_load_remote').addEventListener('click', () => {
+                    shutAllModals();
+                    fetchRemoteLevels(false);
+                });
+
+                document.getElementById('sk_btn_high_scores').addEventListener('click', () => {
+                    triggerPopupToggle('sk_modal_scores');
+                });
+
+                document.getElementById('sk_btn_open_settings').addEventListener('click', () => {
+                    triggerPopupToggle('sk_modal_settings');
+                });
+
+                document.getElementById('sk_btn_how_to').addEventListener('click', () => {
+                    triggerPopupToggle('sk_modal_rules');
+                });
+
+                document.getElementById('sk_btn_skip_fetch').addEventListener('click', () => {
+                    document.getElementById('sk_overlay_fetch_loader').classList.add('sk_hidden_node');
+                });
+
+                document.getElementById('sk_close_settings').addEventListener('click', () => shutAllModals());
+                document.getElementById('sk_close_rules').addEventListener('click', () => shutAllModals());
+                document.getElementById('sk_close_scores').addEventListener('click', () => shutAllModals());
+                document.getElementById('sk_close_levels').addEventListener('click', () => shutAllModals());
+
+                const toggleSoundBtn = document.getElementById('sk_toggle_audio_switch');
+                toggleSoundBtn.addEventListener('click', () => { 
+                    SynthInstance.isMuted = !SynthInstance.isMuted;
+                    toggleSoundBtn.innerText = `Audio: ${SynthInstance.isMuted ? 'OFF' : 'ON'}`;
+                    storeEngineData();
+                });
+                toggleSoundBtn.innerText = `Audio: ${SynthInstance.isMuted ? 'OFF' : 'ON'}`;
+
+                const toggleSimSpeedBtn = document.getElementById('sk_toggle_simulation_speed');
+                toggleSimSpeedBtn.addEventListener('click', () => { 
+                    if (EngineState.core.speedScale === 1.0) {
+                        EngineState.core.speedScale = 0.6;
+                        toggleSimSpeedBtn.innerText = "Speed: Rapid";
+                    } else if (EngineState.core.speedScale === 0.6) {
+                        EngineState.core.speedScale = 1.5;
+                        toggleSimSpeedBtn.innerText = "Speed: Relaxed";
+                    } else {
+                        EngineState.core.speedScale = 1.0;
+                        toggleSimSpeedBtn.innerText = "Speed: Normal";
+                    }
+                    storeEngineData();
+                });
+
+                document.getElementById('sk_reset_local_records').addEventListener('click', () => {
+                    if (confirm("Reset current unlock state and records?")) {
+                        localStorage.clear();
+                        EngineState.levelsUnlocked = 1;
+                        EngineState.leaderboard = {};
+                        rebuildLevelsGridUI();
+                        alert("Engine memory flushed.");
+                    }
+                });
+
+                document.getElementById('sk_btn_fullscreen_mode').addEventListener('click', () => {
+                    const hostRoot = document.querySelector('.sk_game_suite_root');
+                    if (!document.fullscreenElement) {
+                        if (hostRoot.requestFullscreen) {
+                            hostRoot.requestFullscreen().catch(() => {});
+                        } else if (hostRoot.webkitRequestFullscreen) {
+                            hostRoot.webkitRequestFullscreen();
+                        }
+                    } else {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen().catch(() => {});
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        }
+                    }
+                });
+
+                document.getElementById('sk_btn_rotate_device').addEventListener('click', () => {
+                    try {
+                        if (screen.orientation && screen.orientation.lock) {
+                            screen.orientation.lock('landscape').catch(() => {
+                                alert("Flip device manually or enable fullscreen first.");
+                            });
+                        } else {
+                            alert("Auto-orientation locked on this browser.");
+                        }
+                    } catch (e) {
+                        alert("Device orientation adjust unavailable.");
+                    }
+                });
+
+                /* Close Drawer when clicking outside */
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#sk_nav_drawer') && !e.target.closest('#sk_btn_drawer_menu')) {
+                        document.getElementById('sk_nav_drawer').classList.add('sk_hidden_node');
+                    }
+                });
+
+                window.addEventListener('resize', calibrateLayoutDPI);
+            }
+
+            /* Responsive 1:1 Aspect Canvas Sizing */
+            function calibrateLayoutDPI() {
+                const frameBox = document.getElementById('sk_canvas_parent_box');
+                if (!frameBox) return;
+                const containerW = frameBox.clientWidth - 12;
+                const containerH = frameBox.clientHeight - 12;
+                const minSide = Math.min(containerW, containerH);
+
+                canvas.style.width = `${minSide}px`;
+                canvas.style.height = `${minSide}px`;
+            }
+
+            let initialFrameTime = performance.now();
+            function centralLoop(timestamp) {
+                const dt = timestamp - initialFrameTime;
+                initialFrameTime = timestamp;
+
+                runEngineSimulationUpdate(dt);
+                renderEngine();
+
+                requestAnimationFrame(centralLoop);
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                retrieveStoredEngineData();
+                setupLevel(EngineState.currentSectorIndex);
+                bindInputAndClickListeners();
+                registerDraggableVirtualController();
+                setupAdvancedMobileTouchControls();
+                rebuildLevelsGridUI();
+                calibrateLayoutDPI();
+
+                const resizeObserver = new ResizeObserver(() => calibrateLayoutDPI());
+                resizeObserver.observe(document.getElementById('sk_canvas_parent_box'));
+
+                /* Show initial sector load modal */
+                fetchRemoteLevels(false);
+                requestAnimationFrame(centralLoop);
+            });
+        })();
+    </script>
+</body>
+</html>

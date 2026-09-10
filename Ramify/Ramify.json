@@ -1,0 +1,1018 @@
+[
+  {
+    "target": 22,
+    "time": 70,
+    "speed": 0.026,
+    "spawnInterval": 2300,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 6, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 6 }
+    ]
+  },
+  {
+    "target": 24,
+    "time": 70,
+    "speed": 0.027,
+    "spawnInterval": 2200,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "yellow" },
+      { "x": 7, "y": 5, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 26,
+    "time": 72,
+    "speed": 0.028,
+    "spawnInterval": 2100,
+    "sources": [
+      { "x": 0, "y": 0, "color": "magenta" },
+      { "x": 0, "y": 7, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 0, "color": "magenta" },
+      { "x": 7, "y": 7, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 },
+      { "x": 3, "y": 4 }
+    ]
+  },
+  {
+    "target": 28,
+    "time": 75,
+    "speed": 0.029,
+    "spawnInterval": 2000,
+    "sources": [
+      { "x": 0, "y": 3, "color": "yellow" },
+      { "x": 0, "y": 4, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "magenta" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 3 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 30,
+    "time": 75,
+    "speed": 0.03,
+    "spawnInterval": 1900,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 4, "color": "yellow" },
+      { "x": 0, "y": 6, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "magenta" },
+      { "x": 7, "y": 4, "color": "yellow" },
+      { "x": 7, "y": 6, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 32,
+    "time": 80,
+    "speed": 0.03,
+    "spawnInterval": 1850,
+    "sources": [
+      { "x": 0, "y": 2, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "cyan" },
+      { "x": 7, "y": 5, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 34,
+    "time": 80,
+    "speed": 0.031,
+    "spawnInterval": 1800,
+    "sources": [
+      { "x": 0, "y": 0, "color": "yellow" },
+      { "x": 0, "y": 7, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "yellow" },
+      { "x": 7, "y": 4, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 0 },
+      { "x": 3, "y": 7 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 35,
+    "time": 82,
+    "speed": 0.032,
+    "spawnInterval": 1750,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "cyan" },
+      { "x": 7, "y": 3, "color": "magenta" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 36,
+    "time": 82,
+    "speed": 0.032,
+    "spawnInterval": 1700,
+    "sources": [
+      { "x": 0, "y": 2, "color": "magenta" },
+      { "x": 0, "y": 4, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "magenta" },
+      { "x": 7, "y": 5, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 1, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 5, "y": 3 },
+      { "x": 6, "y": 3 }
+    ]
+  },
+  {
+    "target": 38,
+    "time": 85,
+    "speed": 0.033,
+    "spawnInterval": 1650,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 6, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "yellow" },
+      { "x": 7, "y": 6, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 6 },
+      { "x": 5, "y": 1 },
+      { "x": 5, "y": 6 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 40,
+    "time": 85,
+    "speed": 0.034,
+    "spawnInterval": 1600,
+    "sources": [
+      { "x": 0, "y": 3, "color": "cyan" },
+      { "x": 0, "y": 4, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 0, "color": "cyan" },
+      { "x": 7, "y": 7, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 5 },
+      { "x": 3, "y": 3 }
+    ]
+  },
+  {
+    "target": 42,
+    "time": 88,
+    "speed": 0.035,
+    "spawnInterval": 1550,
+    "sources": [
+      { "x": 0, "y": 2, "color": "yellow" },
+      { "x": 0, "y": 5, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "yellow" },
+      { "x": 7, "y": 5, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 1, "y": 1 },
+      { "x": 1, "y": 6 },
+      { "x": 6, "y": 1 },
+      { "x": 6, "y": 6 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 44,
+    "time": 88,
+    "speed": 0.035,
+    "spawnInterval": 1500,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 6, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "cyan" },
+      { "x": 7, "y": 4, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 6 }
+    ]
+  },
+  {
+    "target": 45,
+    "time": 90,
+    "speed": 0.036,
+    "spawnInterval": 1450,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 3, "color": "cyan" },
+      { "x": 0, "y": 5, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "yellow" },
+      { "x": 7, "y": 4, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 1 }
+    ]
+  },
+  {
+    "target": 46,
+    "time": 90,
+    "speed": 0.036,
+    "spawnInterval": 1400,
+    "sources": [
+      { "x": 0, "y": 0, "color": "magenta" },
+      { "x": 0, "y": 4, "color": "cyan" },
+      { "x": 0, "y": 7, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 0, "color": "magenta" },
+      { "x": 7, "y": 4, "color": "cyan" },
+      { "x": 7, "y": 7, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 6 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 48,
+    "time": 92,
+    "speed": 0.037,
+    "spawnInterval": 1380,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 5, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "magenta" },
+      { "x": 7, "y": 6, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 5, "y": 4 }
+    ]
+  },
+  {
+    "target": 50,
+    "time": 92,
+    "speed": 0.038,
+    "spawnInterval": 1350,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 6, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "yellow" },
+      { "x": 7, "y": 4, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 4, "y": 1 },
+      { "x": 4, "y": 6 },
+      { "x": 3, "y": 4 }
+    ]
+  },
+  {
+    "target": 52,
+    "time": 95,
+    "speed": 0.038,
+    "spawnInterval": 1320,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "cyan" },
+      { "x": 7, "y": 3, "color": "magenta" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 6 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 54,
+    "time": 95,
+    "speed": 0.039,
+    "spawnInterval": 1300,
+    "sources": [
+      { "x": 0, "y": 0, "color": "magenta" },
+      { "x": 0, "y": 3, "color": "yellow" },
+      { "x": 0, "y": 6, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "yellow" },
+      { "x": 7, "y": 4, "color": "cyan" },
+      { "x": 7, "y": 7, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 3 },
+      { "x": 5, "y": 4 }
+    ]
+  },
+  {
+    "target": 55,
+    "time": 100,
+    "speed": 0.04,
+    "spawnInterval": 1280,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 4, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "magenta" },
+      { "x": 7, "y": 4, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 5 },
+      { "x": 6, "y": 6 }
+    ]
+  },
+  {
+    "target": 56,
+    "time": 100,
+    "speed": 0.04,
+    "spawnInterval": 1250,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 5, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 58,
+    "time": 102,
+    "speed": 0.041,
+    "spawnInterval": 1220,
+    "sources": [
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 4, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "magenta" },
+      { "x": 7, "y": 6, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 60,
+    "time": 102,
+    "speed": 0.042,
+    "spawnInterval": 1200,
+    "sources": [
+      { "x": 0, "y": 2, "color": "yellow" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "yellow" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 4 }
+    ]
+  },
+  {
+    "target": 62,
+    "time": 105,
+    "speed": 0.042,
+    "spawnInterval": 1180,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 6, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "yellow" },
+      { "x": 7, "y": 3, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 64,
+    "time": 105,
+    "speed": 0.043,
+    "spawnInterval": 1150,
+    "sources": [
+      { "x": 0, "y": 0, "color": "cyan" },
+      { "x": 0, "y": 7, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "cyan" },
+      { "x": 7, "y": 4, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 },
+      { "x": 6, "y": 6 }
+    ]
+  },
+  {
+    "target": 65,
+    "time": 108,
+    "speed": 0.044,
+    "spawnInterval": 1120,
+    "sources": [
+      { "x": 0, "y": 2, "color": "yellow" },
+      { "x": 0, "y": 4, "color": "magenta" },
+      { "x": 0, "y": 6, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "yellow" },
+      { "x": 7, "y": 4, "color": "magenta" },
+      { "x": 7, "y": 6, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 5 },
+      { "x": 5, "y": 1 }
+    ]
+  },
+  {
+    "target": 66,
+    "time": 108,
+    "speed": 0.044,
+    "spawnInterval": 1100,
+    "sources": [
+      { "x": 0, "y": 1, "color": "magenta" },
+      { "x": 0, "y": 6, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "magenta" },
+      { "x": 7, "y": 6, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 0 },
+      { "x": 3, "y": 7 },
+      { "x": 4, "y": 1 },
+      { "x": 4, "y": 6 }
+    ]
+  },
+  {
+    "target": 68,
+    "time": 110,
+    "speed": 0.045,
+    "spawnInterval": 1080,
+    "sources": [
+      { "x": 0, "y": 3, "color": "cyan" },
+      { "x": 0, "y": 4, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "cyan" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 3 },
+      { "x": 5, "y": 4 }
+    ]
+  },
+  {
+    "target": 70,
+    "time": 110,
+    "speed": 0.045,
+    "spawnInterval": 1050,
+    "sources": [
+      { "x": 0, "y": 2, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 72,
+    "time": 112,
+    "speed": 0.046,
+    "spawnInterval": 1020,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 4, "color": "cyan" },
+      { "x": 0, "y": 6, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "cyan" },
+      { "x": 7, "y": 4, "color": "magenta" },
+      { "x": 7, "y": 6, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 }
+    ]
+  },
+  {
+    "target": 74,
+    "time": 112,
+    "speed": 0.046,
+    "spawnInterval": 1000,
+    "sources": [
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 4, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 0, "color": "magenta" },
+      { "x": 7, "y": 7, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 0 },
+      { "x": 5, "y": 7 }
+    ]
+  },
+  {
+    "target": 75,
+    "time": 115,
+    "speed": 0.047,
+    "spawnInterval": 980,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "yellow" },
+      { "x": 7, "y": 4, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 6 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 76,
+    "time": 115,
+    "speed": 0.047,
+    "spawnInterval": 950,
+    "sources": [
+      { "x": 0, "y": 1, "color": "magenta" },
+      { "x": 0, "y": 3, "color": "yellow" },
+      { "x": 0, "y": 5, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "magenta" },
+      { "x": 7, "y": 3, "color": "yellow" },
+      { "x": 7, "y": 5, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 78,
+    "time": 118,
+    "speed": 0.048,
+    "spawnInterval": 920,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 5, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "cyan" },
+      { "x": 7, "y": 5, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 1, "y": 2 },
+      { "x": 1, "y": 5 },
+      { "x": 6, "y": 2 },
+      { "x": 6, "y": 5 }
+    ]
+  },
+  {
+    "target": 80,
+    "time": 118,
+    "speed": 0.048,
+    "spawnInterval": 900,
+    "sources": [
+      { "x": 0, "y": 3, "color": "yellow" },
+      { "x": 0, "y": 4, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "magenta" },
+      { "x": 7, "y": 6, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 82,
+    "time": 120,
+    "speed": 0.049,
+    "spawnInterval": 880,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 6, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "cyan" },
+      { "x": 7, "y": 4, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 6 },
+      { "x": 5, "y": 3 },
+      { "x": 5, "y": 4 }
+    ]
+  },
+  {
+    "target": 84,
+    "time": 120,
+    "speed": 0.049,
+    "spawnInterval": 850,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "magenta" },
+      { "x": 7, "y": 4, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 }
+    ]
+  },
+  {
+    "target": 85,
+    "time": 125,
+    "speed": 0.05,
+    "spawnInterval": 820,
+    "sources": [
+      { "x": 0, "y": 0, "color": "cyan" },
+      { "x": 0, "y": 7, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "cyan" },
+      { "x": 7, "y": 4, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 0 },
+      { "x": 3, "y": 7 },
+      { "x": 4, "y": 1 },
+      { "x": 4, "y": 6 }
+    ]
+  },
+  {
+    "target": 86,
+    "time": 125,
+    "speed": 0.05,
+    "spawnInterval": 800,
+    "sources": [
+      { "x": 0, "y": 2, "color": "yellow" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "yellow" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 88,
+    "time": 128,
+    "speed": 0.051,
+    "spawnInterval": 780,
+    "sources": [
+      { "x": 0, "y": 1, "color": "magenta" },
+      { "x": 0, "y": 4, "color": "cyan" },
+      { "x": 0, "y": 6, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "magenta" },
+      { "x": 7, "y": 4, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 90,
+    "time": 130,
+    "speed": 0.052,
+    "spawnInterval": 750,
+    "sources": [
+      { "x": 0, "y": 3, "color": "cyan" },
+      { "x": 0, "y": 4, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 0, "color": "cyan" },
+      { "x": 7, "y": 7, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 92,
+    "time": 130,
+    "speed": 0.052,
+    "spawnInterval": 730,
+    "sources": [
+      { "x": 0, "y": 2, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "yellow" },
+      { "x": 7, "y": 5, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 6 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 94,
+    "time": 132,
+    "speed": 0.053,
+    "spawnInterval": 700,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 6, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "yellow" },
+      { "x": 7, "y": 3, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 95,
+    "time": 135,
+    "speed": 0.054,
+    "spawnInterval": 680,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 5, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 96,
+    "time": 135,
+    "speed": 0.054,
+    "spawnInterval": 650,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 6, "color": "magenta" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "magenta" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 }
+    ]
+  },
+  {
+    "target": 98,
+    "time": 138,
+    "speed": 0.055,
+    "spawnInterval": 630,
+    "sources": [
+      { "x": 0, "y": 2, "color": "cyan" },
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "cyan" },
+      { "x": 7, "y": 3, "color": "magenta" },
+      { "x": 7, "y": 5, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 4 }
+    ]
+  },
+  {
+    "target": 100,
+    "time": 140,
+    "speed": 0.056,
+    "spawnInterval": 600,
+    "sources": [
+      { "x": 0, "y": 1, "color": "yellow" },
+      { "x": 0, "y": 6, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "yellow" },
+      { "x": 7, "y": 4, "color": "yellow" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 6 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 5 }
+    ]
+  },
+  {
+    "target": 102,
+    "time": 140,
+    "speed": 0.056,
+    "spawnInterval": 580,
+    "sources": [
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 4, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 1, "color": "cyan" },
+      { "x": 7, "y": 6, "color": "magenta" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  },
+  {
+    "target": 104,
+    "time": 145,
+    "speed": 0.057,
+    "spawnInterval": 550,
+    "sources": [
+      { "x": 0, "y": 1, "color": "cyan" },
+      { "x": 0, "y": 3, "color": "magenta" },
+      { "x": 0, "y": 5, "color": "yellow" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 2, "color": "magenta" },
+      { "x": 7, "y": 4, "color": "yellow" },
+      { "x": 7, "y": 6, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 }
+    ]
+  },
+  {
+    "target": 105,
+    "time": 150,
+    "speed": 0.058,
+    "spawnInterval": 500,
+    "sources": [
+      { "x": 0, "y": 0, "color": "magenta" },
+      { "x": 0, "y": 7, "color": "cyan" }
+    ],
+    "sinks": [
+      { "x": 7, "y": 3, "color": "magenta" },
+      { "x": 7, "y": 4, "color": "cyan" }
+    ],
+    "fragmented": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ]
+  }
+]
