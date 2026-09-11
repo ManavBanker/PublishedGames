@@ -39,14 +39,17 @@
       padding: 0;
     }
 
-    /* Top Bar Styling - Optimized and responsive */
+    /* Top Bar Styling - Modern sleek frosted glass */
     .sk_top_bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: var(--sk-bg-panel);
-      padding: 10px 15px;
+      background: linear-gradient(180deg, rgba(13, 19, 38, 0.95) 0%, rgba(9, 13, 27, 0.98) 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 10px 18px;
       border-bottom: 2px solid var(--sk-neon-cyan);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       z-index: 100;
       height: 60px;
       flex-shrink: 0;
@@ -55,83 +58,95 @@
     .sk_logo_group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .sk_game_title {
-      font-size: 20px;
-      font-weight: bold;
+      font-size: 22px;
+      font-weight: 800;
       color: var(--sk-neon-cyan);
-      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
-      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+      letter-spacing: 3px;
     }
 
     .sk_top_controls {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .sk_score_display {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--sk-neon-green);
       font-weight: bold;
-      border: 1px solid var(--sk-neon-green);
-      padding: 4px 8px;
-      background: rgba(57, 255, 20, 0.1);
+      border: 1px solid rgba(57, 255, 20, 0.4);
+      border-radius: 4px;
+      padding: 5px 10px;
+      background: rgba(57, 255, 20, 0.08);
+      box-shadow: inset 0 0 8px rgba(57, 255, 20, 0.15);
     }
 
     .sk_btn {
-      background: var(--sk-bg-accent);
+      background: linear-gradient(135deg, #172242 0%, #0d1326 100%);
       color: var(--sk-text-light);
-      border: 1px solid var(--sk-text-dim);
-      padding: 6px 12px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 4px;
+      padding: 7px 14px;
       cursor: pointer;
       font-family: var(--sk-font-family);
       font-size: 12px;
-      transition: all 0.2s ease;
+      font-weight: 700;
+      transition: all 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .sk_btn:hover {
       background: var(--sk-neon-cyan);
       color: var(--sk-bg-dark);
       border-color: var(--sk-neon-cyan);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .sk_btn:active {
+      transform: translateY(1px);
     }
 
     .sk_btn_active {
       background: var(--sk-neon-magenta) !important;
       color: var(--sk-text-light) !important;
       border-color: var(--sk-neon-magenta) !important;
-      box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
     }
 
     /* Combined Responsive Navigation Drawer Menu */
     .sk_hamburger {
       font-size: 18px;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
+      border-radius: 4px;
     }
 
     .sk_menu_drawer {
       position: absolute;
       top: 60px;
-      right: -280px;
-      width: 260px;
+      right: -300px;
+      width: 280px;
       height: calc(100% - 60px);
-      background: rgba(13, 19, 38, 0.98);
+      background: rgba(10, 15, 30, 0.98);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-left: 2px solid var(--sk-neon-cyan);
-      box-shadow: -10px 0 20px rgba(0,0,0,0.5);
+      box-shadow: -15px 0 30px rgba(0,0,0,0.7);
       z-index: 95;
       display: flex;
       flex-direction: column;
-      padding: 20px 15px;
+      padding: 24px 18px;
       gap: 12px;
-      transition: right 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+      transition: right 0.35s cubic-bezier(0.1, 0.9, 0.2, 1);
     }
 
     .sk_menu_drawer.sk_menu_open {
@@ -140,10 +155,12 @@
 
     .sk_menu_drawer .sk_btn {
       width: 100%;
-      padding: 12px;
+      padding: 13px 16px;
       font-size: 13px;
       text-align: left;
       justify-content: flex-start;
+      border-left: 3px solid var(--sk-neon-cyan);
+      border-radius: 0 4px 4px 0;
     }
 
     /* Main Container Split */
@@ -170,8 +187,10 @@
     }
 
     .sk_canvas_viewport {
-      width: min(70vh, 85vw);
-      height: min(70vh, 85vw);
+      width: min(65vh, 85vw);
+      height: min(65vh, 85vw);
+      max-height: calc(100vh - 160px);
+      max-width: calc(100vw - 20px);
       aspect-ratio: 1 / 1;
       position: relative;
       border: 2px solid var(--sk-neon-cyan);
@@ -192,9 +211,9 @@
     /* HUD overlay on Canvas */
     .sk_hud_overlay {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
+      top: 6px;
+      left: 6px;
+      right: 6px;
       display: flex;
       justify-content: space-between;
       pointer-events: none;
@@ -202,30 +221,30 @@
     }
 
     .sk_hud_item {
-      background: rgba(13, 19, 38, 0.85);
+      background: rgba(13, 19, 38, 0.9);
       border: 1px solid var(--sk-neon-cyan);
-      padding: 6px 12px;
+      padding: 4px 8px;
       pointer-events: auto;
     }
 
     .sk_hud_label {
-      font-size: 9px;
+      font-size: 8px;
       color: var(--sk-text-dim);
       text-transform: uppercase;
     }
 
     .sk_hud_val {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: bold;
       color: var(--sk-neon-green);
     }
 
     .sk_volatility_bar_container {
-      width: 90px;
-      height: 8px;
+      width: 70px;
+      height: 6px;
       background: #111;
       border: 1px solid var(--sk-text-dim);
-      margin-top: 4px;
+      margin-top: 2px;
       position: relative;
     }
 
@@ -243,9 +262,9 @@
       right: 10px;
       background: rgba(13, 19, 38, 0.95);
       border: 2px solid var(--sk-neon-magenta);
-      padding: 10px;
+      padding: 8px;
       z-index: 90;
-      width: 230px;
+      width: 210px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       touch-action: none;
     }
@@ -253,11 +272,11 @@
     .sk_drag_header {
       background: var(--sk-bg-accent);
       color: var(--sk-text-light);
-      padding: 6px;
-      font-size: 11px;
+      padding: 5px;
+      font-size: 10px;
       text-align: center;
       cursor: move;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       border-bottom: 1px solid var(--sk-neon-magenta);
       font-weight: bold;
     }
@@ -265,19 +284,25 @@
     .sk_dpad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-      margin-bottom: 10px;
+      gap: 4px;
+      margin-bottom: 8px;
     }
 
     .sk_dpad_btn {
       background: var(--sk-bg-accent);
       color: var(--sk-text-light);
       border: 1px solid var(--sk-text-dim);
-      padding: 10px;
+      padding: 8px;
+      min-height: 36px;
+      min-width: 36px;
       text-align: center;
       cursor: pointer;
       font-weight: bold;
       font-family: var(--sk-font-family);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .sk_dpad_btn:hover {
@@ -288,12 +313,13 @@
     .sk_action_row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      margin-bottom: 10px;
+      gap: 4px;
+      margin-bottom: 4px;
     }
 
     .sk_action_btn {
-      padding: 10px;
+      padding: 8px;
+      min-height: 36px;
       border: 1px solid var(--sk-neon-cyan);
       background: var(--sk-bg-dark);
       color: var(--sk-neon-cyan);
@@ -306,6 +332,48 @@
     .sk_action_btn:hover {
       background: var(--sk-neon-cyan);
       color: #000;
+    }
+
+    /* Media query for smaller mobile devices */
+    @media (max-width: 600px) {
+      .sk_game_title {
+        font-size: 15px;
+        letter-spacing: 1px;
+      }
+      .sk_top_bar {
+        padding: 6px 10px;
+        height: 50px;
+      }
+      .sk_main_body {
+        height: calc(100% - 50px);
+      }
+      .sk_score_display {
+        font-size: 11px;
+        padding: 2px 6px;
+      }
+      .sk_btn {
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+      .sk_draggable_controls {
+        width: 175px;
+        padding: 6px;
+      }
+      .sk_dpad_btn {
+        padding: 6px;
+        min-height: 32px;
+        min-width: 32px;
+        font-size: 10px;
+      }
+      .sk_action_btn {
+        font-size: 10px;
+        padding: 6px;
+        min-height: 32px;
+      }
+      .sk_canvas_viewport {
+        width: min(58vh, 94vw);
+        height: min(58vh, 94vw);
+      }
     }
 
     /* Screen Overlay Popups */
@@ -1089,8 +1157,16 @@
         if (!isDragging) return;
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
-        dom.ctrlPanel.style.left = `${panelStartX + dx}px`;
-        dom.ctrlPanel.style.top = `${panelStartY + dy}px`;
+        let newLeft = panelStartX + dx;
+        let newTop = panelStartY + dy;
+
+        const maxLeft = window.innerWidth - dom.ctrlPanel.offsetWidth - 10;
+        const maxTop = window.innerHeight - dom.ctrlPanel.offsetHeight - 10;
+        newLeft = Math.max(10, Math.min(maxLeft, newLeft));
+        newTop = Math.max(65, Math.min(maxTop, newTop));
+
+        dom.ctrlPanel.style.left = `${newLeft}px`;
+        dom.ctrlPanel.style.top = `${newTop}px`;
         dom.ctrlPanel.style.right = 'auto';
         dom.ctrlPanel.style.bottom = 'auto';
       });
@@ -1100,8 +1176,16 @@
         const touch = e.touches[0];
         const dx = touch.clientX - dragStartX;
         const dy = touch.clientY - dragStartY;
-        dom.ctrlPanel.style.left = `${panelStartX + dx}px`;
-        dom.ctrlPanel.style.top = `${panelStartY + dy}px`;
+        let newLeft = panelStartX + dx;
+        let newTop = panelStartY + dy;
+
+        const maxLeft = window.innerWidth - dom.ctrlPanel.offsetWidth - 10;
+        const maxTop = window.innerHeight - dom.ctrlPanel.offsetHeight - 10;
+        newLeft = Math.max(10, Math.min(maxLeft, newLeft));
+        newTop = Math.max(65, Math.min(maxTop, newTop));
+
+        dom.ctrlPanel.style.left = `${newLeft}px`;
+        dom.ctrlPanel.style.top = `${newTop}px`;
         dom.ctrlPanel.style.right = 'auto';
         dom.ctrlPanel.style.bottom = 'auto';
       }, { passive: false });
