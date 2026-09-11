@@ -1,1930 +1,1999 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Newton's Grid - Extended Edition</title>
-<link rel="stylesheet" href="css/framework.css"></head>
-<body style="margin:0; padding:0; background-color:#121214; font-family:system-ui, -apple-system, sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh;">
+  <link rel="stylesheet" href="css/framework.css">
+</head>
 
-<div class="sk_game_suite_root">
-  <div class="sk_labels" data="Sokoban, Spatial-Puzzle, Minimalist, Brain-Teaser"></div>
-  <meta class="sk_meta" description="A mind-bending puzzle game where every step you take shifts the entire row or column in the opposite direction, turning simple navigation into a Rubik's-style spatial challenge.">
+<body
+  style="margin:0; padding:0; background-color:#121214; font-family:system-ui, -apple-system, sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh;">
 
-  <!-- EMBEDDED SCOPED CSS -->
-  <style>
-    .sk_game_suite_root {
-      --bg-color: #f4f1ea;
-      --panel-bg: #eae6db;
-      --primary-color: #2c3e50;
-      --accent-gold: #d4af37;
-      --accent-teal: #16a085;
-      --accent-crimson: #c0392b;
-      --text-color: #2c3e50;
-      --text-light: #7f8c8d;
-      --border-radius: 12px;
-      --transition-speed: 0.2s;
+  <div class="sk_game_suite_root">
+    <div class="sk_labels" data="Sokoban, Spatial-Puzzle, Minimalist, Brain-Teaser"></div>
+    <meta class="sk_meta"
+      description="A mind-bending puzzle game where every step you take shifts the entire row or column in the opposite direction, turning simple navigation into a Rubik's-style spatial challenge.">
 
-      position: relative;
-      width: 100vw;
-      max-width: 600px;
-      height: 100vh;
-      max-height: 920px;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      border-radius: var(--border-radius);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-sizing: border-box;
-      user-select: none;
-    }
-
-    @media (max-width: 600px) {
+    <!-- EMBEDDED SCOPED CSS -->
+    <style>
       .sk_game_suite_root {
-        width: 100% !important;
-        height: 100% !important;
-        max-height: none !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-      }
-      .sk_canvas_container {
-        width: min(85vw, 360px) !important;
-        height: min(85vw, 360px) !important;
-      }
-      .sk_controller_zone {
-        bottom: 15px !important;
-        padding: 6px !important;
-      }
-      .sk_ctrl_btn {
-        width: 38px !important;
-        height: 38px !important;
-        font-size: 0.95rem !important;
-      }
-      .sk_zoom_panel {
-        display: none !important; /* Hide zoom panel on very small screens to keep UI clean, rely on touch pinch/double tap */
-      }
-    }
+        --bg-color: #f4f1ea;
+        --panel-bg: #eae6db;
+        --primary-color: #2c3e50;
+        --accent-gold: #d4af37;
+        --accent-teal: #16a085;
+        --accent-crimson: #c0392b;
+        --text-color: #2c3e50;
+        --text-light: #7f8c8d;
+        --border-radius: 12px;
+        --transition-speed: 0.2s;
 
-    @media (max-height: 700px) and (orientation: landscape) {
-      .sk_game_suite_root {
-        flex-direction: row;
-        flex-wrap: wrap;
-        max-width: 900px;
+        position: relative;
+        width: 100vw;
+        max-width: 600px;
         height: 100vh;
-      }
-      .sk_top_bar {
-        width: 100%;
-      }
-      .sk_game_panel {
-        flex: 1;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-        padding: 5px;
-      }
-      .sk_canvas_container {
-        width: 50vh !important;
-        height: 50vh !important;
-        max-width: 300px !important;
-        max-height: 300px !important;
-      }
-      .sk_hud {
-        max-width: 200px;
+        max-height: 920px;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        border-radius: var(--border-radius);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        display: flex;
         flex-direction: column;
+        overflow: hidden;
+        box-sizing: border-box;
+        user-select: none;
+      }
+
+      @media (max-width: 600px) {
+        .sk_game_suite_root {
+          width: 100% !important;
+          height: 100% !important;
+          max-height: none !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+        }
+
+        .sk_canvas_container {
+          width: min(85vw, 360px) !important;
+          height: min(85vw, 360px) !important;
+        }
+
+        .sk_controller_zone {
+          bottom: 15px !important;
+          padding: 6px !important;
+        }
+
+        .sk_ctrl_btn {
+          width: 38px !important;
+          height: 38px !important;
+          font-size: 0.95rem !important;
+        }
+
+        .sk_zoom_panel {
+          display: none !important;
+          /* Hide zoom panel on very small screens to keep UI clean, rely on touch pinch/double tap */
+        }
+      }
+
+      @media (max-height: 700px) and (orientation: landscape) {
+        .sk_game_suite_root {
+          flex-direction: row;
+          flex-wrap: wrap;
+          max-width: 900px;
+          height: 100vh;
+        }
+
+        .sk_top_bar {
+          width: 100%;
+        }
+
+        .sk_game_panel {
+          flex: 1;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          gap: 15px;
+          padding: 5px;
+        }
+
+        .sk_canvas_container {
+          width: 50vh !important;
+          height: 50vh !important;
+          max-width: 300px !important;
+          max-height: 300px !important;
+        }
+
+        .sk_hud {
+          max-width: 200px;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .sk_controller_zone {
+          position: relative !important;
+          bottom: auto !important;
+          left: auto !important;
+          transform: none !important;
+          margin-top: 5px;
+        }
+
+        .sk_zoom_panel {
+          display: none !important;
+        }
+      }
+
+      /* TOP BAR & MENU SYSTEM */
+      .sk_top_bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 15px;
+        background-color: var(--panel-bg);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        z-index: 110;
+      }
+
+      .sk_title_area {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .sk_game_title {
+        font-size: 1.2rem;
+        color: var(--primary-color);
+        letter-spacing: 0.5px;
+      }
+
+      .sk_top_buttons {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .sk_btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: background-color var(--transition-speed);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 4px;
       }
-      .sk_controller_zone {
-        position: relative !important;
-        bottom: auto !important;
-        left: auto !important;
-        transform: none !important;
+
+      .sk_btn i {
+        font-style: normal;
+        font-weight: bold;
+      }
+
+      .sk_btn:hover {
+        background-color: var(--accent-teal);
+      }
+
+      .sk_btn_pause {
+        background-color: #2980b9;
+      }
+
+      .sk_btn_pause.sk_paused_state {
+        background-color: #d35400;
+      }
+
+      /* DROPDOWN NAVIGATION MENU */
+      .sk_menu_container {
+        position: relative;
+      }
+
+      .sk_dropdown_menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: white;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        padding: 6px 0;
+        z-index: 200;
+        min-width: 150px;
+      }
+
+      .sk_dropdown_menu.sk_show {
+        display: block;
+      }
+
+      .sk_dropdown_item {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        color: var(--primary-color);
+        cursor: pointer;
+        transition: background-color var(--transition-speed);
+        text-align: left;
+      }
+
+      .sk_dropdown_item:hover {
+        background-color: #f0ede4;
+        color: var(--accent-teal);
+      }
+
+      /* GAME PANEL & CANVAS CONTAINER */
+      .sk_game_panel {
+        position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .sk_canvas_outer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-top: 5px;
       }
+
+      .sk_canvas_container {
+        position: relative;
+        width: 90vw;
+        height: 90vw;
+        max-width: 420px;
+        max-height: 420px;
+        aspect-ratio: 1/1;
+        background: var(--panel-bg);
+        border-radius: var(--border-radius);
+        box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.08), 0 4px 15px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        touch-action: none;
+        /* Block browser pinch/pan entirely inside canvas area */
+      }
+
+      #sk_canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: grab;
+      }
+
+      #sk_canvas:active {
+        cursor: grabbing;
+      }
+
+      /* POPUPS, OVERLAYS & PROGRESS BAR */
+      .sk_popup,
+      .sk_screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(244, 241, 234, 0.98);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-speed) ease;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      .sk_popup.sk_active,
+      .sk_screen.sk_active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .sk_popup_content {
+        background: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        max-width: 95%;
+        width: 380px;
+        max-height: 85%;
+        overflow-y: auto;
+      }
+
+      .sk_popup_title,
+      .sk_screen_title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        margin-top: 0;
+      }
+
+      .sk_screen_desc {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 20px;
+        line-height: 1.4;
+      }
+
+      .sk_menu_btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 6px 0;
+        width: 100%;
+        max-width: 250px;
+        transition: transform 0.1s, background-color var(--transition-speed);
+      }
+
+      .sk_menu_btn:hover {
+        background-color: var(--accent-teal);
+        transform: translateY(-2px);
+      }
+
+      .sk_menu_btn:active {
+        transform: translateY(1px);
+      }
+
+      .sk_close_btn {
+        background-color: var(--text-light);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 15px;
+        font-weight: bold;
+      }
+
+      .sk_close_btn:hover {
+        background-color: var(--primary-color);
+      }
+
+      /* LEVEL GRID */
+      .sk_level_grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin: 15px 0;
+      }
+
+      .sk_level_btn {
+        background-color: var(--panel-bg);
+        border: 2px solid transparent;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: bold;
+        cursor: pointer;
+        color: var(--primary-color);
+        transition: all var(--transition-speed);
+      }
+
+      .sk_level_btn.sk_unlocked:hover {
+        border-color: var(--accent-teal);
+        background-color: white;
+        transform: scale(1.05);
+      }
+
+      .sk_level_btn.sk_locked {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background-color: #e0ded7;
+      }
+
+      /* PROGRESS BAR FOR LEVEL FETCHING */
+      .sk_progress_container {
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 15px 0;
+        height: 16px;
+      }
+
+      .sk_progress_bar {
+        width: 0%;
+        height: 100%;
+        background-color: var(--accent-teal);
+        transition: width 0.3s ease;
+      }
+
+      /* HUD */
+      .sk_hud {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        max-width: 420px;
+        background-color: var(--panel-bg);
+        padding: 8px;
+        border-radius: 8px;
+        margin-top: 8px;
+        font-size: 0.85rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .sk_hud span {
+        color: var(--text-light);
+      }
+
+      .sk_hud b {
+        color: var(--primary-color);
+      }
+
+      /* ZOOM/PAN UTILITY CONTROLS */
       .sk_zoom_panel {
-        display: none !important;
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        width: 100%;
+        max-width: 420px;
+        justify-content: center;
       }
-    }
 
-    /* TOP BAR & MENU SYSTEM */
-    .sk_top_bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 15px;
-      background-color: var(--panel-bg);
-      border-bottom: 2px solid rgba(0,0,0,0.05);
-      z-index: 110;
-    }
-    .sk_title_area {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .sk_game_title {
-      font-size: 1.2rem;
-      color: var(--primary-color);
-      letter-spacing: 0.5px;
-    }
-    .sk_top_buttons {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .sk_btn {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: background-color var(--transition-speed);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-    .sk_btn i {
-      font-style: normal;
-      font-weight: bold;
-    }
-    .sk_btn:hover {
-      background-color: var(--accent-teal);
-    }
-    .sk_btn_pause {
-      background-color: #2980b9;
-    }
-    .sk_btn_pause.sk_paused_state {
-      background-color: #d35400;
-    }
+      .sk_zoom_btn {
+        background-color: var(--panel-bg);
+        color: var(--primary-color);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: background-color var(--transition-speed);
+      }
 
-    /* DROPDOWN NAVIGATION MENU */
-    .sk_menu_container {
-      position: relative;
-    }
-    .sk_dropdown_menu {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 100%;
-      background-color: white;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      border-radius: 8px;
-      padding: 6px 0;
-      z-index: 200;
-      min-width: 150px;
-    }
-    .sk_dropdown_menu.sk_show {
-      display: block;
-    }
-    .sk_dropdown_item {
-      padding: 10px 16px;
-      font-size: 0.85rem;
-      color: var(--primary-color);
-      cursor: pointer;
-      transition: background-color var(--transition-speed);
-      text-align: left;
-    }
-    .sk_dropdown_item:hover {
-      background-color: #f0ede4;
-      color: var(--accent-teal);
-    }
+      .sk_zoom_btn.sk_active_tool {
+        background-color: var(--accent-teal);
+        color: white;
+      }
 
-    /* GAME PANEL & CANVAS CONTAINER */
-    .sk_game_panel {
-      position: relative;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 10px;
-      box-sizing: border-box;
-      overflow: hidden;
-    }
+      /* CONTROLS ZONE (BOTTOM) - EXTENDED AND SPACIOUS */
+      .sk_bottom_spacing {
+        margin-top: auto;
+        padding-bottom: 80px;
+        /* Extra bottom breathing room for virtual D-pad and mobile home bars */
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
 
-    .sk_canvas_outer {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 5px;
-    }
+      .sk_controller_zone {
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(234, 230, 219, 0.95);
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(5px);
+        border-radius: var(--border-radius);
+        padding: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: grab;
+        z-index: 105;
+        touch-action: none;
+      }
 
-    .sk_canvas_container {
-      position: relative;
-      width: 90vw;
-      height: 90vw;
-      max-width: 420px;
-      max-height: 420px;
-      aspect-ratio: 1/1;
-      background: var(--panel-bg);
-      border-radius: var(--border-radius);
-      box-shadow: inset 0 4px 10px rgba(0,0,0,0.08), 0 4px 15px rgba(0,0,0,0.05);
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      touch-action: none; /* Block browser pinch/pan entirely inside canvas area */
-    }
-    #sk_canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-      cursor: grab;
-    }
-    #sk_canvas:active {
-      cursor: grabbing;
-    }
+      .sk_controller_zone:active {
+        cursor: grabbing;
+      }
 
-    /* POPUPS, OVERLAYS & PROGRESS BAR */
-    .sk_popup, .sk_screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(244, 241, 234, 0.98);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition-speed) ease;
-      padding: 20px;
-      box-sizing: border-box;
-      text-align: center;
-    }
-    .sk_popup.sk_active, .sk_screen.sk_active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .sk_popup_content {
-      background: white;
-      padding: 20px;
-      border-radius: var(--border-radius);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      max-width: 95%;
-      width: 380px;
-      max-height: 85%;
-      overflow-y: auto;
-    }
-    .sk_popup_title, .sk_screen_title {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--primary-color);
-      margin-bottom: 12px;
-      margin-top: 0;
-    }
-    .sk_screen_desc {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      margin-bottom: 20px;
-      line-height: 1.4;
-    }
-    .sk_menu_btn {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 6px 0;
-      width: 100%;
-      max-width: 250px;
-      transition: transform 0.1s, background-color var(--transition-speed);
-    }
-    .sk_menu_btn:hover {
-      background-color: var(--accent-teal);
-      transform: translateY(-2px);
-    }
-    .sk_menu_btn:active {
-      transform: translateY(1px);
-    }
-    .sk_close_btn {
-      background-color: var(--text-light);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    .sk_close_btn:hover {
-      background-color: var(--primary-color);
-    }
+      .sk_controller_header {
+        font-size: 0.7rem;
+        color: var(--text-light);
+        margin-bottom: 6px;
+        pointer-events: none;
+      }
 
-    /* LEVEL GRID */
-    .sk_level_grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin: 15px 0;
-    }
-    .sk_level_btn {
-      background-color: var(--panel-bg);
-      border: 2px solid transparent;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      cursor: pointer;
-      color: var(--primary-color);
-      transition: all var(--transition-speed);
-    }
-    .sk_level_btn.sk_unlocked:hover {
-      border-color: var(--accent-teal);
-      background-color: white;
-      transform: scale(1.05);
-    }
-    .sk_level_btn.sk_locked {
-      opacity: 0.4;
-      cursor: not-allowed;
-      background-color: #e0ded7;
-    }
+      .sk_dpad {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
 
-    /* PROGRESS BAR FOR LEVEL FETCHING */
-    .sk_progress_container {
-      width: 100%;
-      background-color: #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      margin: 15px 0;
-      height: 16px;
-    }
-    .sk_progress_bar {
-      width: 0%;
-      height: 100%;
-      background-color: var(--accent-teal);
-      transition: width 0.3s ease;
-    }
+      .sk_dpad_row {
+        display: flex;
+        gap: 4px;
+      }
 
-    /* HUD */
-    .sk_hud {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      max-width: 420px;
-      background-color: var(--panel-bg);
-      padding: 8px;
-      border-radius: 8px;
-      margin-top: 8px;
-      font-size: 0.85rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    .sk_hud span {
-      color: var(--text-light);
-    }
-    .sk_hud b {
-      color: var(--primary-color);
-    }
+      .sk_ctrl_btn {
+        width: 44px;
+        height: 44px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.1s, transform 0.1s;
+      }
 
-    /* ZOOM/PAN UTILITY CONTROLS */
-    .sk_zoom_panel {
-      display: flex;
-      gap: 6px;
-      margin-top: 8px;
-      width: 100%;
-      max-width: 420px;
-      justify-content: center;
-    }
-    .sk_zoom_btn {
-      background-color: var(--panel-bg);
-      color: var(--primary-color);
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: background-color var(--transition-speed);
-    }
-    .sk_zoom_btn.sk_active_tool {
-      background-color: var(--accent-teal);
-      color: white;
-    }
+      .sk_ctrl_btn:active {
+        background-color: var(--accent-teal);
+        transform: scale(0.9);
+      }
 
-    /* CONTROLS ZONE (BOTTOM) - EXTENDED AND SPACIOUS */
-    .sk_bottom_spacing {
-      margin-top: auto;
-      padding-bottom: 80px; /* Extra bottom breathing room for virtual D-pad and mobile home bars */
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
+      /* SETTINGS COMPONENT */
+      .sk_toggle_btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
 
-    .sk_controller_zone {
-      position: absolute;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(234, 230, 219, 0.95);
-      border: 1px solid rgba(0,0,0,0.15);
-      backdrop-filter: blur(5px);
-      border-radius: var(--border-radius);
-      padding: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: grab;
-      z-index: 105;
-      touch-action: none;
-    }
-    .sk_controller_zone:active {
-      cursor: grabbing;
-    }
-    .sk_controller_header {
-      font-size: 0.7rem;
-      color: var(--text-light);
-      margin-bottom: 6px;
-      pointer-events: none;
-    }
-    .sk_dpad {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .sk_dpad_row {
-      display: flex;
-      gap: 4px;
-    }
-    .sk_ctrl_btn {
-      width: 44px;
-      height: 44px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.1s, transform 0.1s;
-    }
-    .sk_ctrl_btn:active {
-      background-color: var(--accent-teal);
-      transform: scale(0.9);
-    }
+      .sk_toggle_btn.sk_off {
+        background-color: var(--accent-crimson);
+      }
 
-    /* SETTINGS COMPONENT */
-    .sk_toggle_btn {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .sk_toggle_btn.sk_off {
-      background-color: var(--accent-crimson);
-    }
+      .sk_win_color {
+        color: var(--accent-teal);
+      }
 
-    .sk_win_color { color: var(--accent-teal); }
-    .sk_lose_color { color: var(--accent-crimson); }
+      .sk_lose_color {
+        color: var(--accent-crimson);
+      }
 
-    .sk_info_text {
-      text-align: left;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      color: var(--text-color);
-    }
+      .sk_info_text {
+        text-align: left;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        color: var(--text-color);
+      }
 
-    .sk_scores_container {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin: 15px 0;
-      text-align: left;
-    }
-    .sk_score_row {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px dashed var(--text-light);
-      padding-bottom: 4px;
-    }
+      .sk_scores_container {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin: 15px 0;
+        text-align: left;
+      }
 
-    #sk_btn_orient {
-      background-color: var(--accent-gold);
-    }
-  </style>
+      .sk_score_row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dashed var(--text-light);
+        padding-bottom: 4px;
+      }
 
-  <!-- TOP BAR (Div 1) -->
-  <div class="sk_top_bar">
-    <div class="sk_title_area">
-      <b class="sk_game_title">Newton's Grid</b>
+      #sk_btn_orient {
+        background-color: var(--accent-gold);
+      }
+    </style>
+
+    <!-- TOP BAR (Div 1) -->
+    <div class="sk_top_bar">
+      <div class="sk_title_area">
+        <b class="sk_game_title">Newton's Grid</b>
+      </div>
+      <div class="sk_top_buttons">
+        <button class="sk_btn sk_btn_pause" id="sk_btn_pause"><i>Pause</i></button>
+        <button class="sk_btn" id="sk_btn_fullscreen"><i>Fullscreen</i></button>
+
+        <!-- MENU DROPDOWN -->
+        <div class="sk_menu_container">
+          <button class="sk_btn" id="sk_btn_menu_trigger"><i>Menu &#9662;</i></button>
+          <div class="sk_dropdown_menu" id="sk_dropdown_menu">
+            <div class="sk_dropdown_item" id="sk_drop_levels">Levels</div>
+            <div class="sk_dropdown_item" id="sk_drop_settings">Settings</div>
+            <div class="sk_dropdown_item" id="sk_drop_scores">Scores</div>
+            <div class="sk_dropdown_item" id="sk_drop_info">How to Play</div>
+            <div class="sk_dropdown_item" id="sk_drop_demo">Watch Demo</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="sk_top_buttons">
-      <button class="sk_btn sk_btn_pause" id="sk_btn_pause"><i>Pause</i></button>
-      <button class="sk_btn" id="sk_btn_fullscreen"><i>Fullscreen</i></button>
-      
-      <!-- MENU DROPDOWN -->
-      <div class="sk_menu_container">
-        <button class="sk_btn" id="sk_btn_menu_trigger"><i>Menu &#9662;</i></button>
-        <div class="sk_dropdown_menu" id="sk_dropdown_menu">
-          <div class="sk_dropdown_item" id="sk_drop_levels">Levels</div>
-          <div class="sk_dropdown_item" id="sk_drop_settings">Settings</div>
-          <div class="sk_dropdown_item" id="sk_drop_scores">Scores</div>
-          <div class="sk_dropdown_item" id="sk_drop_info">How to Play</div>
-          <div class="sk_dropdown_item" id="sk_drop_demo">Watch Demo</div>
+
+    <!-- GAME PANEL (Div 2) -->
+    <div class="sk_game_panel">
+
+      <!-- Level Loading Progress Bar Popup -->
+      <div class="sk_popup sk_active" id="sk_popup_loader">
+        <div class="sk_popup_content">
+          <p class="sk_popup_title">Fetching Real-time Levels</p>
+          <p class="sk_screen_desc">Retrieving highly optimized, solved stage data from secure content registry...</p>
+          <div class="sk_progress_container">
+            <div class="sk_progress_bar" id="sk_loader_progress"></div>
+          </div>
+          <p id="sk_loader_status" style="font-size:0.8rem; color:var(--text-light);">Contacting server...</p>
+          <button class="sk_menu_btn" id="sk_btn_skip_loader" style="display:none; margin-top: 10px;">Proceed
+            Offline</button>
+        </div>
+      </div>
+
+      <!-- Main Render Canvas Outer Container for Aspect Control -->
+      <div class="sk_canvas_outer">
+        <div class="sk_canvas_container" id="sk_canvas_container">
+          <canvas id="sk_canvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Zoom & Pan Utility Controls -->
+      <div class="sk_zoom_panel">
+        <button class="sk_zoom_btn" id="sk_zoom_in">&#128269; +</button>
+        <button class="sk_zoom_btn" id="sk_zoom_out">&#128269; -</button>
+        <button class="sk_zoom_btn" id="sk_zoom_reset">&#8634; Reset</button>
+        <button class="sk_zoom_btn" id="sk_pan_tool">&#9995; Drag Pan</button>
+      </div>
+
+      <!-- Start / Main Menu Screen -->
+      <div class="sk_screen" id="sk_screen_main">
+        <p class="sk_screen_title">Newton's Grid</p>
+        <p class="sk_screen_desc">A spatial puzzle of equal and opposite reactions. Every step you take shifts the grid
+          behind you.</p>
+        <button class="sk_menu_btn" id="sk_btn_play">Play Game (Enter)</button>
+        <button class="sk_menu_btn" id="sk_btn_demo_main">Watch Demo</button>
+        <button class="sk_menu_btn" id="sk_btn_orient">Rotate View</button>
+      </div>
+
+      <!-- Level Selector Popup -->
+      <div class="sk_popup" id="sk_popup_levels">
+        <div class="sk_popup_content">
+          <p class="sk_popup_title">Select Level</p>
+          <div class="sk_level_grid" id="sk_level_grid"></div>
+          <button class="sk_close_btn" id="sk_close_levels">Close</button>
+        </div>
+      </div>
+
+      <!-- Settings Popup -->
+      <div class="sk_popup" id="sk_popup_settings">
+        <div class="sk_popup_content">
+          <p class="sk_popup_title">Settings</p>
+          <p>Sound FX: <button class="sk_toggle_btn" id="sk_toggle_sound">ON</button></p>
+          <p>Difficulty: <button class="sk_toggle_btn" id="sk_toggle_diff">Normal</button></p>
+          <p>Control Sensitivity: <button class="sk_toggle_btn" id="sk_toggle_sens">High</button></p>
+          <button class="sk_close_btn" id="sk_close_settings">Close</button>
+        </div>
+      </div>
+
+      <!-- High Scores Popup -->
+      <div class="sk_popup" id="sk_popup_scores">
+        <div class="sk_popup_content">
+          <p class="sk_popup_title">Personal Best</p>
+          <div class="sk_scores_container" id="sk_scores_list"></div>
+          <button class="sk_close_btn" id="sk_close_scores">Close</button>
+        </div>
+      </div>
+
+      <!-- How to Play Info Popup -->
+      <div class="sk_popup" id="sk_popup_info">
+        <div class="sk_popup_content">
+          <p class="sk_popup_title">How to Play</p>
+          <div class="sk_info_text">
+            Navigate your <b>Gold Spherical Probe</b> to the <b>Indigo Core Portal</b>.<br><br>
+            <b>The Dynamic Grid Mechanic:</b><br>
+            - Moving <b>UP</b> shifts your vacated column <b>DOWN</b>.<br>
+            - Moving <b>DOWN</b> shifts your vacated column <b>UP</b>.<br>
+            - Moving <b>LEFT</b> shifts your vacated row <b>RIGHT</b>.<br>
+            - Moving <b>RIGHT</b> shifts your vacated row <b>LEFT</b>.<br><br>
+            Avoid falling into the <b>Crimson Voids</b>. Push <b>Terracotta Crates</b> to block pathways or sacrifice
+            them into voids to clear a safe path.
+          </div>
+          <button class="sk_close_btn" id="sk_close_info">Close</button>
+        </div>
+      </div>
+
+      <!-- Game HUD -->
+      <div class="sk_hud">
+        <span>Level: <b id="sk_hud_level">1</b></span>
+        <span>Moves: <b id="sk_hud_moves">0</b>/<b id="sk_hud_max_moves">20</b></span>
+        <span>Score: <b id="sk_hud_score">0</b></span>
+      </div>
+
+      <!-- Pause Screen Overlay -->
+      <div class="sk_screen" id="sk_screen_pause">
+        <p class="sk_screen_title">Game Paused</p>
+        <p class="sk_screen_desc">You can zoom or pan around to inspect the grid layout safely.</p>
+        <button class="sk_menu_btn" id="sk_btn_resume">Resume Playing</button>
+        <button class="sk_menu_btn sk_btn_back_menu">Main Menu</button>
+      </div>
+
+      <!-- Game Over Screen -->
+      <div class="sk_screen" id="sk_screen_gameover">
+        <p class="sk_screen_title sk_lose_color">Grid Collapsed</p>
+        <p class="sk_screen_desc" id="sk_fail_reason">You fell into the void!</p>
+        <button class="sk_menu_btn" id="sk_btn_retry">Try Again</button>
+        <button class="sk_menu_btn sk_btn_back_menu">Main Menu</button>
+      </div>
+
+      <!-- Level Victory Screen -->
+      <div class="sk_screen" id="sk_screen_victory">
+        <p class="sk_screen_title sk_win_color">Target Reached!</p>
+        <p class="sk_screen_desc">You navigated the reaction fields successfully.</p>
+        <p>Moves taken: <b id="sk_vic_moves">0</b></p>
+        <p>Score: <b id="sk_vic_score">0</b></p>
+        <br>
+        <button class="sk_menu_btn" id="sk_btn_next_level">Next Level</button>
+        <button class="sk_menu_btn sk_btn_back_menu">Main Menu</button>
+      </div>
+
+      <div class="sk_bottom_spacing"></div>
+    </div>
+
+    <!-- VIRTUAL CONTROLLER (Div 3) - DRAGGABLE -->
+    <div class="sk_controller_zone" id="sk_virtual_controller">
+      <div class="sk_controller_header" id="sk_controller_drag_handle">&#8597; Drag D-Pad</div>
+      <div class="sk_dpad">
+        <div class="sk_dpad_row">
+          <button class="sk_ctrl_btn" id="sk_ctrl_up">&#9650;</button>
+        </div>
+        <div class="sk_dpad_row">
+          <button class="sk_ctrl_btn" id="sk_ctrl_left">&#9664;</button>
+          <button class="sk_ctrl_btn" id="sk_ctrl_down">&#9660;</button>
+          <button class="sk_ctrl_btn" id="sk_ctrl_right">&#9654;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- GAME PANEL (Div 2) -->
-  <div class="sk_game_panel">
-    
-    <!-- Level Loading Progress Bar Popup -->
-    <div class="sk_popup sk_active" id="sk_popup_loader">
-      <div class="sk_popup_content">
-        <p class="sk_popup_title">Fetching Real-time Levels</p>
-        <p class="sk_screen_desc">Retrieving highly optimized, solved stage data from secure content registry...</p>
-        <div class="sk_progress_container">
-          <div class="sk_progress_bar" id="sk_loader_progress"></div>
-        </div>
-        <p id="sk_loader_status" style="font-size:0.8rem; color:var(--text-light);">Contacting server...</p>
-        <button class="sk_menu_btn" id="sk_btn_skip_loader" style="display:none; margin-top: 10px;">Proceed Offline</button>
-      </div>
-    </div>
-
-    <!-- Main Render Canvas Outer Container for Aspect Control -->
-    <div class="sk_canvas_outer">
-      <div class="sk_canvas_container" id="sk_canvas_container">
-        <canvas id="sk_canvas"></canvas>
-      </div>
-    </div>
-
-    <!-- Zoom & Pan Utility Controls -->
-    <div class="sk_zoom_panel">
-      <button class="sk_zoom_btn" id="sk_zoom_in">&#128269; +</button>
-      <button class="sk_zoom_btn" id="sk_zoom_out">&#128269; -</button>
-      <button class="sk_zoom_btn" id="sk_zoom_reset">&#8634; Reset</button>
-      <button class="sk_zoom_btn" id="sk_pan_tool">&#9995; Drag Pan</button>
-    </div>
-
-    <!-- Start / Main Menu Screen -->
-    <div class="sk_screen" id="sk_screen_main">
-      <p class="sk_screen_title">Newton's Grid</p>
-      <p class="sk_screen_desc">A spatial puzzle of equal and opposite reactions. Every step you take shifts the grid behind you.</p>
-      <button class="sk_menu_btn" id="sk_btn_play">Play Game (Enter)</button>
-      <button class="sk_menu_btn" id="sk_btn_demo_main">Watch Demo</button>
-      <button class="sk_menu_btn" id="sk_btn_orient">Rotate View</button>
-    </div>
-
-    <!-- Level Selector Popup -->
-    <div class="sk_popup" id="sk_popup_levels">
-      <div class="sk_popup_content">
-        <p class="sk_popup_title">Select Level</p>
-        <div class="sk_level_grid" id="sk_level_grid"></div>
-        <button class="sk_close_btn" id="sk_close_levels">Close</button>
-      </div>
-    </div>
-
-    <!-- Settings Popup -->
-    <div class="sk_popup" id="sk_popup_settings">
-      <div class="sk_popup_content">
-        <p class="sk_popup_title">Settings</p>
-        <p>Sound FX: <button class="sk_toggle_btn" id="sk_toggle_sound">ON</button></p>
-        <p>Difficulty: <button class="sk_toggle_btn" id="sk_toggle_diff">Normal</button></p>
-        <p>Control Sensitivity: <button class="sk_toggle_btn" id="sk_toggle_sens">High</button></p>
-        <button class="sk_close_btn" id="sk_close_settings">Close</button>
-      </div>
-    </div>
-
-    <!-- High Scores Popup -->
-    <div class="sk_popup" id="sk_popup_scores">
-      <div class="sk_popup_content">
-        <p class="sk_popup_title">Personal Best</p>
-        <div class="sk_scores_container" id="sk_scores_list"></div>
-        <button class="sk_close_btn" id="sk_close_scores">Close</button>
-      </div>
-    </div>
-
-    <!-- How to Play Info Popup -->
-    <div class="sk_popup" id="sk_popup_info">
-      <div class="sk_popup_content">
-        <p class="sk_popup_title">How to Play</p>
-        <div class="sk_info_text">
-          Navigate your <b>Gold Spherical Probe</b> to the <b>Indigo Core Portal</b>.<br><br>
-          <b>The Dynamic Grid Mechanic:</b><br>
-          - Moving <b>UP</b> shifts your vacated column <b>DOWN</b>.<br>
-          - Moving <b>DOWN</b> shifts your vacated column <b>UP</b>.<br>
-          - Moving <b>LEFT</b> shifts your vacated row <b>RIGHT</b>.<br>
-          - Moving <b>RIGHT</b> shifts your vacated row <b>LEFT</b>.<br><br>
-          Avoid falling into the <b>Crimson Voids</b>. Push <b>Terracotta Crates</b> to block pathways or sacrifice them into voids to clear a safe path.
-        </div>
-        <button class="sk_close_btn" id="sk_close_info">Close</button>
-      </div>
-    </div>
-
-    <!-- Game HUD -->
-    <div class="sk_hud">
-      <span>Level: <b id="sk_hud_level">1</b></span>
-      <span>Moves: <b id="sk_hud_moves">0</b>/<b id="sk_hud_max_moves">20</b></span>
-      <span>Score: <b id="sk_hud_score">0</b></span>
-    </div>
-
-    <!-- Pause Screen Overlay -->
-    <div class="sk_screen" id="sk_screen_pause">
-      <p class="sk_screen_title">Game Paused</p>
-      <p class="sk_screen_desc">You can zoom or pan around to inspect the grid layout safely.</p>
-      <button class="sk_menu_btn" id="sk_btn_resume">Resume Playing</button>
-      <button class="sk_menu_btn sk_btn_back_menu">Main Menu</button>
-    </div>
-
-    <!-- Game Over Screen -->
-    <div class="sk_screen" id="sk_screen_gameover">
-      <p class="sk_screen_title sk_lose_color">Grid Collapsed</p>
-      <p class="sk_screen_desc" id="sk_fail_reason">You fell into the void!</p>
-      <button class="sk_menu_btn" id="sk_btn_retry">Try Again</button>
-      <button class="sk_menu_btn sk_btn_back_menu">Main Menu</button>
-    </div>
-
-    <!-- Level Victory Screen -->
-    <div class="sk_screen" id="sk_screen_victory">
-      <p class="sk_screen_title sk_win_color">Target Reached!</p>
-      <p class="sk_screen_desc">You navigated the reaction fields successfully.</p>
-      <p>Moves taken: <b id="sk_vic_moves">0</b></p>
-      <p>Score: <b id="sk_vic_score">0</b></p>
-      <br>
-      <button class="sk_menu_btn" id="sk_btn_next_level">Next Level</button>
-      <button class="sk_menu_btn sk_btn_back_menu">Main Menu</button>
-    </div>
-
-    <div class="sk_bottom_spacing"></div>
-  </div>
-
-  <!-- VIRTUAL CONTROLLER (Div 3) - DRAGGABLE -->
-  <div class="sk_controller_zone" id="sk_virtual_controller">
-    <div class="sk_controller_header" id="sk_controller_drag_handle">&#8597; Drag D-Pad</div>
-    <div class="sk_dpad">
-      <div class="sk_dpad_row">
-        <button class="sk_ctrl_btn" id="sk_ctrl_up">&#9650;</button>
-      </div>
-      <div class="sk_dpad_row">
-        <button class="sk_ctrl_btn" id="sk_ctrl_left">&#9664;</button>
-        <button class="sk_ctrl_btn" id="sk_ctrl_down">&#9660;</button>
-        <button class="sk_ctrl_btn" id="sk_ctrl_right">&#9654;</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- EMBEDDED JAVASCRIPT GAME ENGINE -->
-<script>
-(function() {
-  /* Audio Engine Synthesizer (Web Audio API) */
-  class AudioEngine {
-    constructor() {
-      this.ctx = null;
-      this.enabled = true;
-    }
-    init() {
-      if (!this.ctx) {
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-    playMove() {
-      if (!this.enabled) return;
-      this.init();
-      let osc = this.ctx.createOscillator();
-      let gain = this.ctx.createGain();
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(350, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(500, this.ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.08);
-    }
-    playCrate() {
-      if (!this.enabled) return;
-      this.init();
-      let osc = this.ctx.createOscillator();
-      let gain = this.ctx.createGain();
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(120, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.15);
-    }
-    playCrateVoid() {
-      if (!this.enabled) return;
-      this.init();
-      let osc = this.ctx.createOscillator();
-      let gain = this.ctx.createGain();
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(80, this.ctx.currentTime);
-      osc.frequency.linearRampToValueAtTime(30, this.ctx.currentTime + 0.4);
-      gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.4);
-    }
-    playError() {
-      if (!this.enabled) return;
-      this.init();
-      let osc = this.ctx.createOscillator();
-      let gain = this.ctx.createGain();
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(100, this.ctx.currentTime);
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.1);
-    }
-    playWin() {
-      if (!this.enabled) return;
-      this.init();
-      let now = this.ctx.currentTime;
-      let notes = [261.63, 329.63, 392.00, 523.25]; /* C4, E4, G4, C5 */
-      notes.forEach((freq, idx) => {
-        let osc = this.ctx.createOscillator();
-        let gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.1);
-        gain.gain.setValueAtTime(0.15, now + idx * 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.2);
-        osc.start(now + idx * 0.1);
-        osc.stop(now + idx * 0.1 + 0.2);
-      });
-    }
-    playLose() {
-      if (!this.enabled) return;
-      this.init();
-      let now = this.ctx.currentTime;
-      let notes = [196.00, 174.61, 146.83, 110.00]; /* Descending */
-      notes.forEach((freq, idx) => {
-        let osc = this.ctx.createOscillator();
-        let gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
-        gain.gain.setValueAtTime(0.15, now + idx * 0.12);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.25);
-        osc.start(now + idx * 0.12);
-        osc.stop(now + idx * 0.12 + 0.25);
-      });
-    }
-  }
-
-  const audio = new AudioEngine();
-
-  /* Local Fallback Levels list in case GitHub fetch fails or is slow */
-  const localLevels = [
-    {
-      /* Level 1: First Steps */
-      player: { x: 2, y: 2 },
-      maxMoves: 15,
-      grid: [
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,2,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0]
-      ]
-    },
-    {
-      /* Level 2: Void Crossing */
-      player: { x: 1, y: 1 },
-      maxMoves: 22,
-      grid: [
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,3,3,0,0,0],
-        [0,0,0,3,3,0,0,0],
-        [0,0,0,0,0,0,2,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0]
-      ]
-    },
-    {
-      /* Level 3: Blockades & Walls */
-      player: { x: 2, y: 4 },
-      maxMoves: 25,
-      grid: [
-        [0,0,0,1,1,0,0,0],
-        [0,0,0,1,1,0,0,0],
-        [0,0,0,1,1,0,0,0],
-        [0,0,0,1,1,0,0,0],
-        [0,0,0,0,0,2,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0]
-      ]
-    },
-    {
-      /* Level 4: Sokoban Sacrifices */
-      player: { x: 1, y: 1 },
-      maxMoves: 30,
-      grid: [
-        [1,1,1,1,1,1,1,1],
-        [1,0,0,4,3,2,0,1],
-        [1,0,1,1,1,1,0,1],
-        [1,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1]
-      ]
-    },
-    {
-      /* Level 5: The Alignment Maze */
-      player: { x: 3, y: 3 },
-      maxMoves: 35,
-      grid: [
-        [1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,1],
-        [1,0,1,1,0,1,0,1],
-        [1,0,1,0,0,1,0,1],
-        [1,0,1,0,2,1,0,1],
-        [1,0,1,1,1,1,0,1],
-        [1,0,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1]
-      ]
-    },
-    {
-      /* Level 6: Master Grid Paradox */
-      player: { x: 1, y: 4 },
-      maxMoves: 40,
-      grid: [
-        [1,1,1,1,1,1,1,1],
-        [1,0,3,3,3,3,0,1],
-        [1,0,3,2,0,3,0,1],
-        [1,0,3,0,4,3,0,1],
-        [1,0,3,3,3,3,0,1],
-        [1,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1]
-      ]
-    }
-  ];
-
-  let levels = [...localLevels];
-
-  /* Game Engine State */
-  const gameState = {
-    status: 'loading', /* loading, menu, playing, paused, gameover, victory, demo */
-    currentLevel: 0,
-    moves: 0,
-    maxMoves: 20,
-    score: 0,
-    isLandscape: false,
-    demoStep: 0,
-    demoTimer: null,
-    grid: [],
-    player: { x: 0, y: 0 },
-    unlockedLevel: 0,
-    highScores: {}
-  };
-
-  /* Camera zoom / pan mechanics */
-  const camera = {
-    zoom: 1.0,
-    panX: 0,
-    panY: 0,
-    minZoom: 0.5,
-    maxZoom: 3.5,
-    isPanningMode: false,
-    isDragging: false,
-    startX: 0,
-    startY: 0
-  };
-
-  /* Visual Shifting Offsets */
-  const visualOffsets = {
-    rows: [0, 0, 0, 0, 0, 0, 0, 0],
-    cols: [0, 0, 0, 0, 0, 0, 0, 0]
-  };
-
-  let particles = [];
-
-  /* DOM Selectors */
-  const root = document.querySelector('.sk_game_suite_root');
-  const canvas = root.querySelector('#sk_canvas');
-  const ctx = canvas.getContext('2d');
-
-  /* Screens & Modals */
-  const screenMain = root.querySelector('#sk_screen_main');
-  const screenGameOver = root.querySelector('#sk_screen_gameover');
-  const screenVictory = root.querySelector('#sk_screen_victory');
-  const screenPause = root.querySelector('#sk_screen_pause');
-  const popupLevels = root.querySelector('#sk_popup_levels');
-  const popupSettings = root.querySelector('#sk_popup_settings');
-  const popupScores = root.querySelector('#sk_popup_scores');
-  const popupInfo = root.querySelector('#sk_popup_info');
-  const popupLoader = root.querySelector('#sk_popup_loader');
-
-  /* HUD */
-  const hudLevel = root.querySelector('#sk_hud_level');
-  const hudMoves = root.querySelector('#sk_hud_moves');
-  const hudMaxMoves = root.querySelector('#sk_hud_max_moves');
-  const hudScore = root.querySelector('#sk_hud_score');
-
-  /* Menu Dropdown Elements */
-  const menuTrigger = root.querySelector('#sk_btn_menu_trigger');
-  const dropDownMenu = root.querySelector('#sk_dropdown_menu');
-  const btnPause = root.querySelector('#sk_btn_pause');
-
-  /* Loader elements */
-  const loaderBar = root.querySelector('#sk_loader_progress');
-  const loaderStatus = root.querySelector('#sk_loader_status');
-  const btnSkipLoader = root.querySelector('#sk_btn_skip_loader');
-
-  /* GitHub levels configuration url (containing lines, block comments, JSON structure) */
-  const GITHUB_LEVELS_RAW_URL = "./Newton's Grid.json";
-
-  /* Remote Levels Fetcher Logic */
-  async function fetchRemoteLevels() {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress = Math.min(progress + 15, 85);
-      loaderBar.style.width = progress + '%';
-    }, 150);
-
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4000); /* 4-second timeout max */
-
-      const response = await fetch(GITHUB_LEVELS_RAW_URL, { signal: controller.signal });
-      clearTimeout(timeoutId);
-
-      if (!response.ok) throw new Error("HTTP connection issues");
-
-      const rawText = await response.text();
-      
-      /* Sanitize slashes comments, block comments, trailing commas safely */
-      let cleanText = rawText
-        .replace(/\/\*[\s\S]*?\*\//g, "") /* block comments */
-        .replace(/\/\/.*/g, "")           /* line comments */
-        .replace(/,\s*([\]}])/g, "$1");   /* trailing commas */
-
-      const remoteData = JSON.parse(cleanText);
-      if (Array.isArray(remoteData) && remoteData.length > 0) {
-        levels = remoteData;
-        loaderStatus.innerText = "Level registry parsed successfully!";
-        clearInterval(interval);
-        loaderBar.style.width = "100%";
-        setTimeout(completeLoader, 600);
-        return;
-      }
-      throw new Error("Invalid structure");
-    } catch (err) {
-      console.warn("Loading remote levels failed: ", err.message, "Using local production stages.");
-      loaderStatus.innerText = "Offline mode. Loaded local core levels.";
-      clearInterval(interval);
-      loaderBar.style.width = "100%";
-      setTimeout(completeLoader, 800);
-    }
-  }
-
-  function completeLoader() {
-    popupLoader.classList.remove('sk_active');
-    gameState.status = 'menu';
-    showScreen(screenMain);
-  }
-
-  btnSkipLoader.addEventListener('click', completeLoader);
-  setTimeout(() => { btnSkipLoader.style.display = "block"; }, 2000);
-
-  /* Start loader on startup */
-  fetchRemoteLevels();
-
-  /* Local Storage Loader */
-  function loadProgress() {
-    try {
-      const unlocked = localStorage.getItem('sk_newton_unlocked');
-      if (unlocked !== null) {
-        gameState.unlockedLevel = parseInt(unlocked, 10);
-      }
-      const scores = localStorage.getItem('sk_newton_scores');
-      if (scores !== null) {
-        gameState.highScores = JSON.parse(scores);
-      }
-    } catch (e) {
-      console.warn("Storage access restricted.");
-    }
-  }
-
-  function saveProgress() {
-    try {
-      localStorage.setItem('sk_newton_unlocked', gameState.unlockedLevel);
-      localStorage.setItem('sk_newton_scores', JSON.stringify(gameState.highScores));
-    } catch (e) {
-      console.warn("Could not save progress.");
-    }
-  }
-
-  /* Screen Display Routing */
-  function showScreen(screen) {
-    [screenMain, screenGameOver, screenVictory, screenPause, popupLevels, popupSettings, popupScores, popupInfo].forEach(s => {
-      s.classList.remove('sk_active');
-    });
-    if (screen) screen.classList.add('sk_active');
-    
-    /* Toggle Pause button state text based on status */
-    if (gameState.status === 'paused') {
-      btnPause.innerText = "Resume";
-      btnPause.classList.add('sk_paused_state');
-    } else {
-      btnPause.innerText = "Pause";
-      btnPause.classList.remove('sk_paused_state');
-    }
-  }
-
-  /* Load level structure */
-  function initLevel(lvlIdx) {
-    gameState.currentLevel = lvlIdx;
-    const template = levels[lvlIdx] || localLevels[0];
-    gameState.player = { ...template.player };
-    gameState.maxMoves = template.maxMoves;
-    gameState.moves = 0;
-    gameState.grid = template.grid.map(row => [...row]);
-    
-    visualOffsets.rows.fill(0);
-    visualOffsets.cols.fill(0);
-    particles = [];
-    resetCamera();
-    updateHUD();
-  }
-
-  function updateHUD() {
-    hudLevel.innerText = gameState.currentLevel + 1;
-    hudMoves.innerText = gameState.moves;
-    hudMaxMoves.innerText = gameState.maxMoves;
-    hudScore.innerText = gameState.score;
-  }
-
-  /* Grid reaction shifts */
-  function shiftColumn(colIdx, dir) {
-    visualOffsets.cols[colIdx] = -dir;
-    const colData = [];
-    for (let y = 0; y < 8; y++) {
-      colData.push(gameState.grid[y][colIdx]);
-    }
-    for (let y = 0; y < 8; y++) {
-      const targetY = (y + dir + 8) % 8;
-      gameState.grid[targetY][colIdx] = colData[y];
-    }
-  }
-
-  function shiftRow(rowIdx, dir) {
-    visualOffsets.rows[rowIdx] = -dir;
-    const rowData = [...gameState.grid[rowIdx]];
-    for (let x = 0; x < 8; x++) {
-      const targetX = (x + dir + 8) % 8;
-      gameState.grid[rowIdx][targetX] = rowData[x];
-    }
-  }
-
-  /* Player moves */
-  function movePlayer(dx, dy) {
-    if (gameState.status !== 'playing' && gameState.status !== 'demo') return;
-
-    let nx = gameState.player.x + dx;
-    let ny = gameState.player.y + dy;
-
-    if (nx < 0 || nx > 7 || ny < 0 || ny > 7) {
-      audio.playError();
-      triggerScreenShake();
-      return;
-    }
-
-    let destTile = gameState.grid[ny][nx];
-
-    if (destTile === 1) {
-      audio.playError();
-      triggerScreenShake();
-      return;
-    }
-
-    if (destTile === 4) {
-      let cx = nx + dx;
-      let cy = ny + dy;
-
-      if (cx < 0 || cx > 7 || cy < 0 || cy > 7) {
-        audio.playError();
-        return;
-      }
-
-      let crateDest = gameState.grid[cy][cx];
-      if (crateDest === 1 || crateDest === 4) {
-        audio.playError();
-        return;
-      }
-
-      if (crateDest === 3) {
-        gameState.grid[ny][nx] = 0;
-        gameState.grid[cy][cx] = 0;
-        audio.playCrateVoid();
-        spawnCrateParticles(cx, cy, '#c0392b');
-      } else {
-        gameState.grid[ny][nx] = 0;
-        gameState.grid[cy][cx] = 4;
-        audio.playCrate();
-        spawnCrateParticles(cx, cy, '#d35400');
-      }
-    }
-
-    let ox = gameState.player.x;
-    let oy = gameState.player.y;
-    gameState.player.x = nx;
-    gameState.player.y = ny;
-
-    if (dy !== 0) {
-      shiftColumn(ox, -dy);
-    } else if (dx !== 0) {
-      shiftRow(oy, -dx);
-    }
-
-    gameState.moves++;
-    audio.playMove();
-
-    setTimeout(() => {
-      checkGameRules();
-    }, 100);
-  }
-
-  function checkGameRules() {
-    let px = gameState.player.x;
-    let py = gameState.player.y;
-    let currentTile = gameState.grid[py][px];
-
-    if (currentTile === 2) {
-      handleLevelWin();
-      return;
-    }
-
-    if (currentTile === 3) {
-      handleLevelLose("You collapsed into the crimson void!");
-      return;
-    }
-
-    if (gameState.moves >= gameState.maxMoves) {
-      handleLevelLose("Reaction steps depleted!");
-      return;
-    }
-
-    updateHUD();
-  }
-
-  function handleLevelWin() {
-    audio.playWin();
-    spawnCrateParticles(gameState.player.x, gameState.player.y, '#16a085', 30);
-    const bonus = Math.max(0, (gameState.maxMoves - gameState.moves) * 100);
-    gameState.score += 500 + bonus;
-
-    if (gameState.status === 'demo') {
-      stopDemo();
-      gameState.status = 'menu';
-      showScreen(screenMain);
-      return;
-    }
-
-    if (gameState.currentLevel === gameState.unlockedLevel && gameState.unlockedLevel < levels.length - 1) {
-      gameState.unlockedLevel++;
-    }
-
-    const prevBest = gameState.highScores[gameState.currentLevel] || Infinity;
-    if (gameState.moves < prevBest) {
-      gameState.highScores[gameState.currentLevel] = gameState.moves;
-    }
-    saveProgress();
-
-    gameState.status = 'victory';
-    root.querySelector('#sk_vic_moves').innerText = gameState.moves;
-    root.querySelector('#sk_vic_score').innerText = gameState.score;
-    showScreen(screenVictory);
-  }
-
-  function handleLevelLose(reason) {
-    audio.playLose();
-    spawnCrateParticles(gameState.player.x, gameState.player.y, '#c0392b', 40);
-
-    if (gameState.status === 'demo') {
-      stopDemo();
-      gameState.status = 'menu';
-      showScreen(screenMain);
-      return;
-    }
-
-    gameState.status = 'gameover';
-    root.querySelector('#sk_fail_reason').innerText = reason;
-    showScreen(screenGameOver);
-  }
-
-  /* Particles Engine */
-  function spawnCrateParticles(gx, gy, color, count = 15) {
-    const cellSize = canvas.width / 8;
-    const px = gx * cellSize + cellSize / 2;
-    const py = gy * cellSize + cellSize / 2;
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: px,
-        y: py,
-        vx: (Math.random() - 0.5) * 6,
-        vy: (Math.random() - 0.5) * 6,
-        alpha: 1,
-        color: color,
-        size: Math.random() * 4 + 2
-      });
-    }
-  }
-
-  let shakeOffset = 0;
-  function triggerScreenShake() {
-    shakeOffset = 10;
-  }
-
-  /* Camera Zoom & Pan Methods */
-  function zoomIn() {
-    camera.zoom = Math.min(camera.maxZoom, camera.zoom + 0.15);
-  }
-
-  function zoomOut() {
-    camera.zoom = Math.max(camera.minZoom, camera.zoom - 0.15);
-  }
-
-  function resetCamera() {
-    camera.zoom = 1.0;
-    camera.panX = 0;
-    camera.panY = 0;
-  }
-
-  /* Coordinate map from screen client pixels to grid index (accounting for Zoom & Pan) */
-  function getGridCoords(clientX, clientY) {
-    const rect = canvas.getBoundingClientRect();
-    const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
-    const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
-    
-    /* Reverse transform stack: Center -> Scale -> Pan */
-    const x = ((canvasX - canvas.width / 2) / camera.zoom) + canvas.width / 2 - camera.panX;
-    const y = ((canvasY - canvas.height / 2) / camera.zoom) + canvas.height / 2 - camera.panY;
-    
-    const cellSize = canvas.width / 8;
-    const gridX = Math.floor(x / cellSize);
-    const gridY = Math.floor(y / cellSize);
-    return { gridX, gridY };
-  }
-
-  /* Render Draw Frame */
-  function draw() {
-    const width = canvas.width;
-    const height = canvas.height;
-    const cellSize = width / 8;
-
-    ctx.clearRect(0, 0, width, height);
-
-    ctx.save();
-
-    /* Apply Zoom & Pan from center */
-    ctx.translate(width / 2, height / 2);
-    ctx.scale(camera.zoom, camera.zoom);
-    ctx.translate(-width / 2 + camera.panX, -height / 2 + camera.panY);
-
-    /* Screen shake offset */
-    if (shakeOffset > 0) {
-      const sx = (Math.random() - 0.5) * shakeOffset;
-      const sy = (Math.random() - 0.5) * shakeOffset;
-      ctx.translate(sx, sy);
-      shakeOffset *= 0.85;
-      if (shakeOffset < 0.5) shakeOffset = 0;
-    }
-
-    /* Grid Board Floor */
-    ctx.fillStyle = '#f7f5f0';
-    ctx.fillRect(0, 0, width, height);
-
-    /* Dynamic visual shifting offsets animation decay */
-    for (let i = 0; i < 8; i++) {
-      if (Math.abs(visualOffsets.rows[i]) > 0.01) {
-        visualOffsets.rows[i] *= 0.8;
-      } else visualOffsets.rows[i] = 0;
-
-      if (Math.abs(visualOffsets.cols[i]) > 0.01) {
-        visualOffsets.cols[i] *= 0.8;
-      } else visualOffsets.cols[i] = 0;
-    }
-
-    function renderTile(type, x, y, ox, oy) {
-      let vx = x + ox;
-      let vy = y + oy;
-
-      const drawSingle = (drawX, drawY) => {
-        const cx = drawX * cellSize;
-        const cy = drawY * cellSize;
-
-        if (type === 1) { /* Wall */
-          ctx.fillStyle = '#2c3e50';
-          ctx.beginPath();
-          ctx.roundRect(cx + 2, cy + 2, cellSize - 4, cellSize - 4, 6);
-          ctx.fill();
-        } 
-        else if (type === 2) { /* Portal */
-          const centerX = cx + cellSize/2;
-          const centerY = cy + cellSize/2;
-          const radius = cellSize/2.5;
-          const pulse = Math.sin(Date.now() / 150) * 3;
-          ctx.fillStyle = '#2980b9';
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius + pulse, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#16a085';
-          ctx.lineWidth = 3;
-          ctx.stroke();
-        } 
-        else if (type === 3) { /* Void */
-          const centerX = cx + cellSize/2;
-          const centerY = cy + cellSize/2;
-          const radius = cellSize/2.2;
-          ctx.fillStyle = '#c0392b';
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#000000';
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius * 0.6, 0, Math.PI * 2);
-          ctx.fill();
-        } 
-        else if (type === 4) { /* Crate */
-          ctx.fillStyle = '#d35400';
-          ctx.beginPath();
-          ctx.roundRect(cx + 4, cy + 4, cellSize - 8, cellSize - 8, 4);
-          ctx.fill();
-          ctx.strokeStyle = '#a04000';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.moveTo(cx + 8, cy + 8);
-          ctx.lineTo(cx + cellSize - 8, cy + cellSize - 8);
-          ctx.moveTo(cx + cellSize - 8, cy + 8);
-          ctx.lineTo(cx + 8, cy + cellSize - 8);
-          ctx.stroke();
+  <!-- EMBEDDED JAVASCRIPT GAME ENGINE -->
+  <script>
+    (function () {
+      /* Audio Engine Synthesizer (Web Audio API) */
+      class AudioEngine {
+        constructor() {
+          this.ctx = null;
+          this.enabled = true;
         }
-      };
-
-      drawSingle(vx, vy);
-      if (vx < 0) drawSingle(vx + 8, vy);
-      if (vx > 7) drawSingle(vx - 8, vy);
-      if (vy < 0) drawSingle(vx, vy + 8);
-      if (vy > 7) drawSingle(vx, vy - 8);
-    }
-
-    for (let y = 0; y < 8; y++) {
-      for (let x = 0; x < 8; x++) {
-        const type = gameState.grid[y] ? gameState.grid[y][x] : 0;
-        const ox = visualOffsets.rows[y] || 0;
-        const oy = visualOffsets.cols[x] || 0;
-        renderTile(type, x, y, ox, oy);
-      }
-    }
-
-    /* Grid Outline Lines */
-    ctx.strokeStyle = '#e2dfd5';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 8; i++) {
-      ctx.beginPath();
-      ctx.moveTo(i * cellSize, 0);
-      ctx.lineTo(i * cellSize, height);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(0, i * cellSize);
-      ctx.lineTo(width, i * cellSize);
-      ctx.stroke();
-    }
-
-    /* Player Rendering */
-    const pX = gameState.player.x * cellSize + cellSize / 2;
-    const pY = gameState.player.y * cellSize + cellSize / 2;
-    ctx.fillStyle = '#f1c40f';
-    ctx.beginPath();
-    ctx.arc(pX, pY, cellSize / 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#d68910';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-
-    /* Glow highlights */
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(pX - 4, pY - 4, 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    /* Particles overlay update */
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.alpha;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fill();
-      p.x += p.vx;
-      p.y += p.vy;
-      p.alpha -= 0.03;
-      if (p.alpha <= 0) {
-        particles.splice(i, 1);
-      }
-    }
-    ctx.globalAlpha = 1.0;
-
-    ctx.restore();
-    requestAnimationFrame(draw);
-  }
-
-  /* Setup Resize observer for 1:1 gameplay ratio canvas sizing */
-  const resizeObserver = new ResizeObserver(entries => {
-    for (let entry of entries) {
-      const rect = entry.contentRect;
-      const size = Math.min(rect.width, rect.height, 420);
-      canvas.width = size;
-      canvas.height = size;
-    }
-  });
-  resizeObserver.observe(root.querySelector('#sk_canvas_container'));
-
-  /* Core Inputs Translation */
-  function handleInput(direction) {
-    if (gameState.status !== 'playing') return;
-    if (direction === 'up') movePlayer(0, -1);
-    if (direction === 'down') movePlayer(0, 1);
-    if (direction === 'left') movePlayer(-1, 0);
-    if (direction === 'right') movePlayer(1, 0);
-  }
-
-  /* Physical Keyboard controls */
-  window.addEventListener('keydown', e => {
-    /* Enter key shortcuts */
-    if (e.key === 'Enter') {
-      if (gameState.status === 'menu' || gameState.status === 'gameover' || gameState.status === 'victory') {
-        startGame(gameState.currentLevel);
-      }
-    }
-    
-    /* Arrow key layout movement mapping */
-    if (['ArrowUp', 'w', 'W'].includes(e.key)) handleInput('up');
-    if (['ArrowDown', 's', 'S'].includes(e.key)) handleInput('down');
-    if (['ArrowLeft', 'a', 'A'].includes(e.key)) handleInput('left');
-    if (['ArrowRight', 'd', 'D'].includes(e.key)) handleInput('right');
-
-    /* Zoom keyboard hotkeys: CTRL + and CTRL - */
-    if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
-      e.preventDefault();
-      zoomIn();
-    }
-    if (e.ctrlKey && (e.key === '-' || e.key === '_')) {
-      e.preventDefault();
-      zoomOut();
-    }
-    if (e.ctrlKey && e.key === '0') {
-      e.preventDefault();
-      resetCamera();
-    }
-  });
-
-  /* MOUSE DRAG AND DRAG PANNING CAPABILITIES */
-  canvas.addEventListener('mousedown', e => {
-    if (camera.isPanningMode) {
-      camera.isDragging = true;
-      camera.startX = e.clientX - camera.panX;
-      camera.startY = e.clientY - camera.panY;
-    } else {
-      /* Direct Grid Click movement pathfinder interaction */
-      const grid = getGridCoords(e.clientX, e.clientY);
-      const dx = grid.gridX - gameState.player.x;
-      const dy = grid.gridY - gameState.player.y;
-      if (Math.abs(dx) + Math.abs(dy) === 1) {
-        if (dx === 1) handleInput('right');
-        if (dx === -1) handleInput('left');
-        if (dy === 1) handleInput('down');
-        if (dy === -1) handleInput('up');
-      }
-    }
-  });
-
-  window.addEventListener('mousemove', e => {
-    if (camera.isPanningMode && camera.isDragging) {
-      camera.panX = e.clientX - camera.startX;
-      camera.panY = e.clientY - camera.startY;
-    }
-  });
-
-  window.addEventListener('mouseup', () => {
-    camera.isDragging = false;
-  });
-
-  /* ADVANCED MOBILE TOUCH CONTROL ARCHITECTURE (Touch registry, Single/Double Tap, Multi-touch Zoom/Pan) */
-  const activeTouches = {};
-  let lastTapTime = 0;
-  let startPinchDist = 0;
-  let startPinchZoom = 1.0;
-  let startPinchPanX = 0, startPinchPanY = 0;
-  let startPinchMidX = 0, startPinchMidY = 0;
-  let longTouchTimer = null;
-
-  canvas.addEventListener('touchstart', e => {
-    /* Multi-touch active register mapping */
-    for (let i = 0; i < e.changedTouches.length; i++) {
-      const touch = e.changedTouches[i];
-      activeTouches[touch.identifier] = {
-        startX: touch.clientX,
-        startY: touch.clientY,
-        time: Date.now()
-      };
-    }
-
-    if (e.targetTouches.length === 1) {
-      const touch = e.targetTouches[0];
-      
-      /* Single click coordinates */
-      const singleTouchObj = activeTouches[touch.identifier];
-      
-      /* Long press/hold setup (>500ms) */
-      longTouchTimer = setTimeout(() => {
-        /* Automatically switch into hand panning mode during long hold */
-        togglePanTool(true);
-      }, 500);
-
-    } else if (e.targetTouches.length === 2) {
-      /* Dual finger pinch to zoom & drag pan initialization */
-      if (longTouchTimer) clearTimeout(longTouchTimer);
-      const t1 = e.targetTouches[0];
-      const t2 = e.targetTouches[1];
-      startPinchDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
-      startPinchZoom = camera.zoom;
-      startPinchMidX = (t1.clientX + t2.clientX) / 2;
-      startPinchMidY = (t1.clientY + t2.clientY) / 2;
-      startPinchPanX = camera.panX;
-      startPinchPanY = camera.panY;
-    }
-  }, { passive: true });
-
-  canvas.addEventListener('touchmove', e => {
-    if (e.targetTouches.length === 1 && (camera.isPanningMode)) {
-      /* Single finger dragging when Pan Mode is enabled */
-      const touch = e.targetTouches[0];
-      const data = activeTouches[touch.identifier];
-      if (data) {
-        camera.panX = touch.clientX - data.startX;
-        camera.panY = touch.clientY - data.startY;
-      }
-    } else if (e.targetTouches.length === 2) {
-      /* Dual finger active pinch/zoom mathematics processing */
-      const t1 = e.targetTouches[0];
-      const t2 = e.targetTouches[1];
-      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
-      const midX = (t1.clientX + t2.clientX) / 2;
-      const midY = (t1.clientY + t2.clientY) / 2;
-
-      /* Update zoom factor */
-      const scale = dist / startPinchDist;
-      camera.zoom = Math.max(camera.minZoom, Math.min(camera.maxZoom, startPinchZoom * scale));
-
-      /* Update pan translation offsets relative to midpoint delta */
-      camera.panX = startPinchPanX + (midX - startPinchMidX);
-      camera.panY = startPinchPanY + (midY - startPinchMidY);
-    }
-  }, { passive: true });
-
-  canvas.addEventListener('touchend', e => {
-    if (longTouchTimer) clearTimeout(longTouchTimer);
-
-    /* Process individual touch release for taps, double taps, and grid swipes */
-    for (let i = 0; i < e.changedTouches.length; i++) {
-      const touch = e.changedTouches[i];
-      const data = activeTouches[touch.identifier];
-      if (data) {
-        const deltaX = touch.clientX - data.startX;
-        const deltaY = touch.clientY - data.startY;
-        const duration = Date.now() - data.time;
-
-        /* Is it a quick release click/tap? */
-        if (Math.abs(deltaX) < 15 && Math.abs(deltaY) < 15 && duration < 300) {
-          const now = Date.now();
-          if (now - lastTapTime < 300) {
-            /* Double tap: Reset layout scale and center view ports */
-            resetCamera();
-          } else {
-            /* Single tap processing: Trigger character auto move directly to tapped square */
-            const grid = getGridCoords(touch.clientX, touch.clientY);
-            const dx = grid.gridX - gameState.player.x;
-            const dy = grid.gridY - gameState.player.y;
-            if (Math.abs(dx) + Math.abs(dy) === 1) {
-              if (dx === 1) handleInput('right');
-              if (dx === -1) handleInput('left');
-              if (dy === 1) handleInput('down');
-              if (dy === -1) handleInput('up');
-            }
-          }
-          lastTapTime = now;
-        } else if (!camera.isPanningMode && duration < 400) {
-          /* Quick Swipe directional movement translations */
-          if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (Math.abs(deltaX) > 30) {
-              if (deltaX > 0) handleInput('right');
-              else handleInput('left');
-            }
-          } else {
-            if (Math.abs(deltaY) > 30) {
-              if (deltaY > 0) handleInput('down');
-              else handleInput('up');
-            }
+        init() {
+          if (!this.ctx) {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
           }
         }
-        delete activeTouches[touch.identifier];
+        playMove() {
+          if (!this.enabled) return;
+          this.init();
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(350, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(500, this.ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.08);
+        }
+        playCrate() {
+          if (!this.enabled) return;
+          this.init();
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(120, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.15);
+        }
+        playCrateVoid() {
+          if (!this.enabled) return;
+          this.init();
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(80, this.ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(30, this.ctx.currentTime + 0.4);
+          gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.4);
+        }
+        playError() {
+          if (!this.enabled) return;
+          this.init();
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.1);
+        }
+        playWin() {
+          if (!this.enabled) return;
+          this.init();
+          let now = this.ctx.currentTime;
+          let notes = [261.63, 329.63, 392.00, 523.25]; /* C4, E4, G4, C5 */
+          notes.forEach((freq, idx) => {
+            let osc = this.ctx.createOscillator();
+            let gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+            gain.gain.setValueAtTime(0.15, now + idx * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.2);
+            osc.start(now + idx * 0.1);
+            osc.stop(now + idx * 0.1 + 0.2);
+          });
+        }
+        playLose() {
+          if (!this.enabled) return;
+          this.init();
+          let now = this.ctx.currentTime;
+          let notes = [196.00, 174.61, 146.83, 110.00]; /* Descending */
+          notes.forEach((freq, idx) => {
+            let osc = this.ctx.createOscillator();
+            let gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+            gain.gain.setValueAtTime(0.15, now + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.25);
+            osc.start(now + idx * 0.12);
+            osc.stop(now + idx * 0.12 + 0.25);
+          });
+        }
       }
-    }
-  }, { passive: true });
 
-  canvas.addEventListener('touchcancel', e => {
-    if (longTouchTimer) clearTimeout(longTouchTimer);
-    for (let i = 0; i < e.changedTouches.length; i++) {
-      delete activeTouches[e.changedTouches[i].identifier];
-    }
-  }, { passive: true });
+      const audio = new AudioEngine();
 
-  /* Draggable D-Pad Controller Wrapper */
-  const handle = root.querySelector('#sk_controller_drag_handle');
-  const controller = root.querySelector('#sk_virtual_controller');
-  let isDraggingController = false;
-  let dragOffsetX = 0, dragOffsetY = 0;
+      /* Local Fallback Levels list in case GitHub fetch fails or is slow */
+      const localLevels = [
+        {
+          /* Level 1: First Steps */
+          player: {x: 2, y: 2},
+          maxMoves: 15,
+          grid: [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 2, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+          ]
+        },
+        {
+          /* Level 2: Void Crossing */
+          player: {x: 1, y: 1},
+          maxMoves: 22,
+          grid: [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 3, 3, 0, 0, 0],
+            [0, 0, 0, 3, 3, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+          ]
+        },
+        {
+          /* Level 3: Blockades & Walls */
+          player: {x: 2, y: 4},
+          maxMoves: 25,
+          grid: [
+            [0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 2, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+          ]
+        },
+        {
+          /* Level 4: Sokoban Sacrifices */
+          player: {x: 1, y: 1},
+          maxMoves: 30,
+          grid: [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 4, 3, 2, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1]
+          ]
+        },
+        {
+          /* Level 5: The Alignment Maze */
+          player: {x: 3, y: 3},
+          maxMoves: 35,
+          grid: [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 0, 1, 0, 1],
+            [1, 0, 1, 0, 0, 1, 0, 1],
+            [1, 0, 1, 0, 2, 1, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1]
+          ]
+        },
+        {
+          /* Level 6: Master Grid Paradox */
+          player: {x: 1, y: 4},
+          maxMoves: 40,
+          grid: [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 3, 3, 3, 3, 0, 1],
+            [1, 0, 3, 2, 0, 3, 0, 1],
+            [1, 0, 3, 0, 4, 3, 0, 1],
+            [1, 0, 3, 3, 3, 3, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1]
+          ]
+        }
+      ];
 
-  handle.addEventListener('mousedown', startDrag);
-  handle.addEventListener('touchstart', startDrag, { passive: true });
+      let levels = [...localLevels];
 
-  function startDrag(e) {
-    isDraggingController = true;
-    const clientX = e.clientX || e.touches[0].clientX;
-    const clientY = e.clientY || e.touches[0].clientY;
-    dragOffsetX = clientX - controller.offsetLeft;
-    dragOffsetY = clientY - controller.offsetTop;
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', endDrag);
-    document.addEventListener('touchmove', drag, { passive: false });
-    document.addEventListener('touchend', endDrag);
-  }
+      /* Game Engine State */
+      const gameState = {
+        status: 'loading', /* loading, menu, playing, paused, gameover, victory, demo */
+        currentLevel: 0,
+        moves: 0,
+        maxMoves: 20,
+        score: 0,
+        isLandscape: false,
+        demoStep: 0,
+        demoTimer: null,
+        grid: [],
+        player: {x: 0, y: 0},
+        unlockedLevel: 0,
+        highScores: {}
+      };
 
-  function drag(e) {
-    if (!isDraggingController) return;
-    const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-    const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-    let x = clientX - dragOffsetX;
-    let y = clientY - dragOffsetY;
+      /* Camera zoom / pan mechanics */
+      const camera = {
+        zoom: 1.0,
+        panX: 0,
+        panY: 0,
+        minZoom: 0.5,
+        maxZoom: 3.5,
+        isPanningMode: false,
+        isDragging: false,
+        startX: 0,
+        startY: 0
+      };
 
-    const rootRect = root.getBoundingClientRect();
-    const ctrlRect = controller.getBoundingClientRect();
-    if (x < 0) x = 0;
-    if (x + ctrlRect.width > rootRect.width) x = rootRect.width - ctrlRect.width;
-    if (y < 0) y = 0;
-    if (y + ctrlRect.height > rootRect.height) y = rootRect.height - ctrlRect.height;
+      /* Visual Shifting Offsets */
+      const visualOffsets = {
+        rows: [0, 0, 0, 0, 0, 0, 0, 0],
+        cols: [0, 0, 0, 0, 0, 0, 0, 0]
+      };
 
-    controller.style.left = x + 'px';
-    controller.style.top = y + 'px';
-    controller.style.bottom = 'auto';
-  }
+      let particles = [];
 
-  function endDrag() {
-    isDraggingController = false;
-    document.removeEventListener('mousemove', drag);
-    document.removeEventListener('mouseup', endDrag);
-    document.removeEventListener('touchmove', drag);
-    document.removeEventListener('touchend', endDrag);
-  }
+      /* DOM Selectors */
+      const root = document.querySelector('.sk_game_suite_root');
+      const canvas = root.querySelector('#sk_canvas');
+      const ctx = canvas.getContext('2d');
 
-  /* Core UI Button Interactivity and Event Bindings */
-  root.querySelector('#sk_ctrl_up').addEventListener('click', () => handleInput('up'));
-  root.querySelector('#sk_ctrl_down').addEventListener('click', () => handleInput('down'));
-  root.querySelector('#sk_ctrl_left').addEventListener('click', () => handleInput('left'));
-  root.querySelector('#sk_ctrl_right').addEventListener('click', () => handleInput('right'));
+      /* Screens & Modals */
+      const screenMain = root.querySelector('#sk_screen_main');
+      const screenGameOver = root.querySelector('#sk_screen_gameover');
+      const screenVictory = root.querySelector('#sk_screen_victory');
+      const screenPause = root.querySelector('#sk_screen_pause');
+      const popupLevels = root.querySelector('#sk_popup_levels');
+      const popupSettings = root.querySelector('#sk_popup_settings');
+      const popupScores = root.querySelector('#sk_popup_scores');
+      const popupInfo = root.querySelector('#sk_popup_info');
+      const popupLoader = root.querySelector('#sk_popup_loader');
 
-  /* Zoom controls trigger bindings */
-  root.querySelector('#sk_zoom_in').addEventListener('click', zoomIn);
-  root.querySelector('#sk_zoom_out').addEventListener('click', zoomOut);
-  root.querySelector('#sk_zoom_reset').addEventListener('click', resetCamera);
-  
-  const panToolBtn = root.querySelector('#sk_pan_tool');
-  panToolBtn.addEventListener('click', () => togglePanTool());
+      /* HUD */
+      const hudLevel = root.querySelector('#sk_hud_level');
+      const hudMoves = root.querySelector('#sk_hud_moves');
+      const hudMaxMoves = root.querySelector('#sk_hud_max_moves');
+      const hudScore = root.querySelector('#sk_hud_score');
 
-  function togglePanTool(forceState) {
-    camera.isPanningMode = (forceState !== undefined) ? forceState : !camera.isPanningMode;
-    if (camera.isPanningMode) {
-      panToolBtn.classList.add('sk_active_tool');
-    } else {
-      panToolBtn.classList.remove('sk_active_tool');
-    }
-  }
+      /* Menu Dropdown Elements */
+      const menuTrigger = root.querySelector('#sk_btn_menu_trigger');
+      const dropDownMenu = root.querySelector('#sk_dropdown_menu');
+      const btnPause = root.querySelector('#sk_btn_pause');
 
-  /* Top Dropdown Menu navigation trigger */
-  menuTrigger.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropDownMenu.classList.toggle('sk_show');
-  });
+      /* Loader elements */
+      const loaderBar = root.querySelector('#sk_loader_progress');
+      const loaderStatus = root.querySelector('#sk_loader_status');
+      const btnSkipLoader = root.querySelector('#sk_btn_skip_loader');
 
-  document.addEventListener('click', () => {
-    dropDownMenu.classList.remove('sk_show');
-  });
+      /* GitHub levels configuration url (containing lines, block comments, JSON structure) */
+      const GITHUB_LEVELS_RAW_URL = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/NewtonsGrid/levels.json";
 
-  /* Dropdown action routes */
-  root.querySelector('#sk_drop_levels').addEventListener('click', () => {
-    buildLevelsGrid();
-    showScreen(popupLevels);
-  });
-  root.querySelector('#sk_drop_settings').addEventListener('click', () => showScreen(popupSettings));
-  root.querySelector('#sk_drop_scores').addEventListener('click', openScoresTab);
-  root.querySelector('#sk_drop_info').addEventListener('click', () => showScreen(popupInfo));
-  root.querySelector('#sk_drop_demo').addEventListener('click', startDemo);
+      /* Remote Levels Fetcher Logic */
+      async function fetchRemoteLevels() {
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress = Math.min(progress + 15, 85);
+          loaderBar.style.width = progress + '%';
+        }, 150);
 
-  /* Start Level Play */
-  function startGame(lvlIdx) {
-    stopDemo();
-    gameState.status = 'playing';
-    initLevel(lvlIdx);
-    showScreen(null);
-  }
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 4000); /* 4-second timeout max */
 
-  /* Pause / Resume action controller methods */
-  btnPause.addEventListener('click', () => {
-    if (gameState.status === 'playing') {
-      gameState.status = 'paused';
-      showScreen(screenPause);
-    } else if (gameState.status === 'paused') {
-      gameState.status = 'playing';
-      showScreen(null);
-    }
-  });
+          const response = await fetch(GITHUB_LEVELS_RAW_URL, {signal: controller.signal});
+          clearTimeout(timeoutId);
 
-  root.querySelector('#sk_btn_resume').addEventListener('click', () => {
-    gameState.status = 'playing';
-    showScreen(null);
-  });
+          if (!response.ok) throw new Error("HTTP connection issues");
 
-  /* Trigger Demo Auto-Play Mode */
-  function startDemo() {
-    stopDemo();
-    gameState.status = 'demo';
-    initLevel(0);
-    showScreen(null);
-    gameState.demoStep = 0;
+          const rawText = await response.text();
 
-    const demoMoves = ['right', 'right', 'down', 'down', 'left', 'up', 'right'];
-    gameState.demoTimer = setInterval(() => {
-      if (gameState.status !== 'demo') {
-        stopDemo();
-        return;
+          /* Sanitize slashes comments, block comments, trailing commas safely */
+          let cleanText = rawText
+            .replace(/\/\*[\s\S]*?\*\//g, "") /* block comments */
+            .replace(/\/\/.*/g, "")           /* line comments */
+            .replace(/,\s*([\]}])/g, "$1");   /* trailing commas */
+
+          const remoteData = JSON.parse(cleanText);
+          if (Array.isArray(remoteData) && remoteData.length > 0) {
+            levels = remoteData;
+            loaderStatus.innerText = "Level registry parsed successfully!";
+            clearInterval(interval);
+            loaderBar.style.width = "100%";
+            setTimeout(completeLoader, 600);
+            return;
+          }
+          throw new Error("Invalid structure");
+        } catch (err) {
+          console.warn("Loading remote levels failed: ", err.message, "Using local production stages.");
+          loaderStatus.innerText = "Offline mode. Loaded local core levels.";
+          clearInterval(interval);
+          loaderBar.style.width = "100%";
+          setTimeout(completeLoader, 800);
+        }
       }
-      const dir = demoMoves[gameState.demoStep];
-      if (dir === 'up') movePlayer(0, -1);
-      if (dir === 'down') movePlayer(0, 1);
-      if (dir === 'left') movePlayer(-1, 0);
-      if (dir === 'right') movePlayer(1, 0);
 
-      gameState.demoStep++;
-      if (gameState.demoStep >= demoMoves.length) {
-        stopDemo();
+      function completeLoader() {
+        popupLoader.classList.remove('sk_active');
         gameState.status = 'menu';
         showScreen(screenMain);
       }
-    }, 1300);
-  }
 
-  function stopDemo() {
-    if (gameState.demoTimer) {
-      clearInterval(gameState.demoTimer);
-      gameState.demoTimer = null;
-    }
-  }
+      btnSkipLoader.addEventListener('click', completeLoader);
+      setTimeout(() => {btnSkipLoader.style.display = "block";}, 2000);
 
-  /* Load level grid buttons */
-  function buildLevelsGrid() {
-    const gridEl = root.querySelector('#sk_level_grid');
-    gridEl.innerHTML = '';
-    for (let i = 0; i < levels.length; i++) {
-      const btn = document.createElement('button');
-      btn.className = `sk_level_btn ${i <= gameState.unlockedLevel ? 'sk_unlocked' : 'sk_locked'}`;
-      btn.innerText = i + 1;
-      if (i <= gameState.unlockedLevel) {
-        btn.addEventListener('click', () => {
-          startGame(i);
-        });
+      /* Start loader on startup */
+      fetchRemoteLevels();
+
+      /* Local Storage Loader */
+      function loadProgress() {
+        try {
+          const unlocked = localStorage.getItem('sk_newton_unlocked');
+          if (unlocked !== null) {
+            gameState.unlockedLevel = parseInt(unlocked, 10);
+          }
+          const scores = localStorage.getItem('sk_newton_scores');
+          if (scores !== null) {
+            gameState.highScores = JSON.parse(scores);
+          }
+        } catch (e) {
+          console.warn("Storage access restricted.");
+        }
       }
-      gridEl.appendChild(btn);
-    }
-  }
 
-  function openScoresTab() {
-    const list = root.querySelector('#sk_scores_list');
-    list.innerHTML = '';
-    for (let i = 0; i < levels.length; i++) {
-      const row = document.createElement('div');
-      row.className = 'sk_score_row';
-      const best = gameState.highScores[i] !== undefined ? `${gameState.highScores[i]} moves` : 'No score';
-      row.innerHTML = `<span>Level ${i+1}</span> <b>${best}</b>`;
-      list.appendChild(row);
-    }
-    showScreen(popupScores);
-  }
+      function saveProgress() {
+        try {
+          localStorage.setItem('sk_newton_unlocked', gameState.unlockedLevel);
+          localStorage.setItem('sk_newton_scores', JSON.stringify(gameState.highScores));
+        } catch (e) {
+          console.warn("Could not save progress.");
+        }
+      }
 
-  /* Settings Actions logic */
-  const soundBtn = root.querySelector('#sk_toggle_sound');
-  soundBtn.addEventListener('click', () => {
-    audio.enabled = !audio.enabled;
-    soundBtn.innerText = audio.enabled ? 'ON' : 'OFF';
-    soundBtn.className = `sk_toggle_btn ${audio.enabled ? '' : 'sk_off'}`;
-  });
+      /* Screen Display Routing */
+      function showScreen(screen) {
+        [screenMain, screenGameOver, screenVictory, screenPause, popupLevels, popupSettings, popupScores, popupInfo].forEach(s => {
+          s.classList.remove('sk_active');
+        });
+        if (screen) screen.classList.add('sk_active');
 
-  /* Fullscreen functionality API integration */
-  root.querySelector('#sk_btn_fullscreen').addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      root.requestFullscreen().catch(err => {
-        console.warn(`Error enabling fullscreen: ${err.message}`);
+        /* Toggle Pause button state text based on status */
+        if (gameState.status === 'paused') {
+          btnPause.innerText = "Resume";
+          btnPause.classList.add('sk_paused_state');
+        } else {
+          btnPause.innerText = "Pause";
+          btnPause.classList.remove('sk_paused_state');
+        }
+      }
+
+      /* Load level structure */
+      function initLevel(lvlIdx) {
+        gameState.currentLevel = lvlIdx;
+        const template = levels[lvlIdx] || localLevels[0];
+        gameState.player = {...template.player};
+        gameState.maxMoves = template.maxMoves;
+        gameState.moves = 0;
+        gameState.grid = template.grid.map(row => [...row]);
+
+        visualOffsets.rows.fill(0);
+        visualOffsets.cols.fill(0);
+        particles = [];
+        resetCamera();
+        updateHUD();
+      }
+
+      function updateHUD() {
+        hudLevel.innerText = gameState.currentLevel + 1;
+        hudMoves.innerText = gameState.moves;
+        hudMaxMoves.innerText = gameState.maxMoves;
+        hudScore.innerText = gameState.score;
+      }
+
+      /* Grid reaction shifts */
+      function shiftColumn(colIdx, dir) {
+        visualOffsets.cols[colIdx] = -dir;
+        const colData = [];
+        for (let y = 0; y < 8; y++) {
+          colData.push(gameState.grid[y][colIdx]);
+        }
+        for (let y = 0; y < 8; y++) {
+          const targetY = (y + dir + 8) % 8;
+          gameState.grid[targetY][colIdx] = colData[y];
+        }
+      }
+
+      function shiftRow(rowIdx, dir) {
+        visualOffsets.rows[rowIdx] = -dir;
+        const rowData = [...gameState.grid[rowIdx]];
+        for (let x = 0; x < 8; x++) {
+          const targetX = (x + dir + 8) % 8;
+          gameState.grid[rowIdx][targetX] = rowData[x];
+        }
+      }
+
+      /* Player moves */
+      function movePlayer(dx, dy) {
+        if (gameState.status !== 'playing' && gameState.status !== 'demo') return;
+
+        let nx = gameState.player.x + dx;
+        let ny = gameState.player.y + dy;
+
+        if (nx < 0 || nx > 7 || ny < 0 || ny > 7) {
+          audio.playError();
+          triggerScreenShake();
+          return;
+        }
+
+        let destTile = gameState.grid[ny][nx];
+
+        if (destTile === 1) {
+          audio.playError();
+          triggerScreenShake();
+          return;
+        }
+
+        if (destTile === 4) {
+          let cx = nx + dx;
+          let cy = ny + dy;
+
+          if (cx < 0 || cx > 7 || cy < 0 || cy > 7) {
+            audio.playError();
+            return;
+          }
+
+          let crateDest = gameState.grid[cy][cx];
+          if (crateDest === 1 || crateDest === 4) {
+            audio.playError();
+            return;
+          }
+
+          if (crateDest === 3) {
+            gameState.grid[ny][nx] = 0;
+            gameState.grid[cy][cx] = 0;
+            audio.playCrateVoid();
+            spawnCrateParticles(cx, cy, '#c0392b');
+          } else {
+            gameState.grid[ny][nx] = 0;
+            gameState.grid[cy][cx] = 4;
+            audio.playCrate();
+            spawnCrateParticles(cx, cy, '#d35400');
+          }
+        }
+
+        let ox = gameState.player.x;
+        let oy = gameState.player.y;
+        gameState.player.x = nx;
+        gameState.player.y = ny;
+
+        if (dy !== 0) {
+          shiftColumn(ox, -dy);
+        } else if (dx !== 0) {
+          shiftRow(oy, -dx);
+        }
+
+        gameState.moves++;
+        audio.playMove();
+
+        setTimeout(() => {
+          checkGameRules();
+        }, 100);
+      }
+
+      function checkGameRules() {
+        let px = gameState.player.x;
+        let py = gameState.player.y;
+        let currentTile = gameState.grid[py][px];
+
+        if (currentTile === 2) {
+          handleLevelWin();
+          return;
+        }
+
+        if (currentTile === 3) {
+          handleLevelLose("You collapsed into the crimson void!");
+          return;
+        }
+
+        if (gameState.moves >= gameState.maxMoves) {
+          handleLevelLose("Reaction steps depleted!");
+          return;
+        }
+
+        updateHUD();
+      }
+
+      function handleLevelWin() {
+        audio.playWin();
+        spawnCrateParticles(gameState.player.x, gameState.player.y, '#16a085', 30);
+        const bonus = Math.max(0, (gameState.maxMoves - gameState.moves) * 100);
+        gameState.score += 500 + bonus;
+
+        if (gameState.status === 'demo') {
+          stopDemo();
+          gameState.status = 'menu';
+          showScreen(screenMain);
+          return;
+        }
+
+        if (gameState.currentLevel === gameState.unlockedLevel && gameState.unlockedLevel < levels.length - 1) {
+          gameState.unlockedLevel++;
+        }
+
+        const prevBest = gameState.highScores[gameState.currentLevel] || Infinity;
+        if (gameState.moves < prevBest) {
+          gameState.highScores[gameState.currentLevel] = gameState.moves;
+        }
+        saveProgress();
+
+        gameState.status = 'victory';
+        root.querySelector('#sk_vic_moves').innerText = gameState.moves;
+        root.querySelector('#sk_vic_score').innerText = gameState.score;
+        showScreen(screenVictory);
+      }
+
+      function handleLevelLose(reason) {
+        audio.playLose();
+        spawnCrateParticles(gameState.player.x, gameState.player.y, '#c0392b', 40);
+
+        if (gameState.status === 'demo') {
+          stopDemo();
+          gameState.status = 'menu';
+          showScreen(screenMain);
+          return;
+        }
+
+        gameState.status = 'gameover';
+        root.querySelector('#sk_fail_reason').innerText = reason;
+        showScreen(screenGameOver);
+      }
+
+      /* Particles Engine */
+      function spawnCrateParticles(gx, gy, color, count = 15) {
+        const cellSize = canvas.width / 8;
+        const px = gx * cellSize + cellSize / 2;
+        const py = gy * cellSize + cellSize / 2;
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: px,
+            y: py,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
+            alpha: 1,
+            color: color,
+            size: Math.random() * 4 + 2
+          });
+        }
+      }
+
+      let shakeOffset = 0;
+      function triggerScreenShake() {
+        shakeOffset = 10;
+      }
+
+      /* Camera Zoom & Pan Methods */
+      function zoomIn() {
+        camera.zoom = Math.min(camera.maxZoom, camera.zoom + 0.15);
+      }
+
+      function zoomOut() {
+        camera.zoom = Math.max(camera.minZoom, camera.zoom - 0.15);
+      }
+
+      function resetCamera() {
+        camera.zoom = 1.0;
+        camera.panX = 0;
+        camera.panY = 0;
+      }
+
+      /* Coordinate map from screen client pixels to grid index (accounting for Zoom & Pan) */
+      function getGridCoords(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
+        const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
+
+        /* Reverse transform stack: Center -> Scale -> Pan */
+        const x = ((canvasX - canvas.width / 2) / camera.zoom) + canvas.width / 2 - camera.panX;
+        const y = ((canvasY - canvas.height / 2) / camera.zoom) + canvas.height / 2 - camera.panY;
+
+        const cellSize = canvas.width / 8;
+        const gridX = Math.floor(x / cellSize);
+        const gridY = Math.floor(y / cellSize);
+        return {gridX, gridY};
+      }
+
+      /* Render Draw Frame */
+      function draw() {
+        const width = canvas.width;
+        const height = canvas.height;
+        const cellSize = width / 8;
+
+        ctx.clearRect(0, 0, width, height);
+
+        ctx.save();
+
+        /* Apply Zoom & Pan from center */
+        ctx.translate(width / 2, height / 2);
+        ctx.scale(camera.zoom, camera.zoom);
+        ctx.translate(-width / 2 + camera.panX, -height / 2 + camera.panY);
+
+        /* Screen shake offset */
+        if (shakeOffset > 0) {
+          const sx = (Math.random() - 0.5) * shakeOffset;
+          const sy = (Math.random() - 0.5) * shakeOffset;
+          ctx.translate(sx, sy);
+          shakeOffset *= 0.85;
+          if (shakeOffset < 0.5) shakeOffset = 0;
+        }
+
+        /* Grid Board Floor */
+        ctx.fillStyle = '#f7f5f0';
+        ctx.fillRect(0, 0, width, height);
+
+        /* Dynamic visual shifting offsets animation decay */
+        for (let i = 0; i < 8; i++) {
+          if (Math.abs(visualOffsets.rows[i]) > 0.01) {
+            visualOffsets.rows[i] *= 0.8;
+          } else visualOffsets.rows[i] = 0;
+
+          if (Math.abs(visualOffsets.cols[i]) > 0.01) {
+            visualOffsets.cols[i] *= 0.8;
+          } else visualOffsets.cols[i] = 0;
+        }
+
+        function renderTile(type, x, y, ox, oy) {
+          let vx = x + ox;
+          let vy = y + oy;
+
+          const drawSingle = (drawX, drawY) => {
+            const cx = drawX * cellSize;
+            const cy = drawY * cellSize;
+
+            if (type === 1) { /* Wall */
+              ctx.fillStyle = '#2c3e50';
+              ctx.beginPath();
+              ctx.roundRect(cx + 2, cy + 2, cellSize - 4, cellSize - 4, 6);
+              ctx.fill();
+            }
+            else if (type === 2) { /* Portal */
+              const centerX = cx + cellSize / 2;
+              const centerY = cy + cellSize / 2;
+              const radius = cellSize / 2.5;
+              const pulse = Math.sin(Date.now() / 150) * 3;
+              ctx.fillStyle = '#2980b9';
+              ctx.beginPath();
+              ctx.arc(centerX, centerY, radius + pulse, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.strokeStyle = '#16a085';
+              ctx.lineWidth = 3;
+              ctx.stroke();
+            }
+            else if (type === 3) { /* Void */
+              const centerX = cx + cellSize / 2;
+              const centerY = cy + cellSize / 2;
+              const radius = cellSize / 2.2;
+              ctx.fillStyle = '#c0392b';
+              ctx.beginPath();
+              ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = '#000000';
+              ctx.beginPath();
+              ctx.arc(centerX, centerY, radius * 0.6, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            else if (type === 4) { /* Crate */
+              ctx.fillStyle = '#d35400';
+              ctx.beginPath();
+              ctx.roundRect(cx + 4, cy + 4, cellSize - 8, cellSize - 8, 4);
+              ctx.fill();
+              ctx.strokeStyle = '#a04000';
+              ctx.lineWidth = 3;
+              ctx.beginPath();
+              ctx.moveTo(cx + 8, cy + 8);
+              ctx.lineTo(cx + cellSize - 8, cy + cellSize - 8);
+              ctx.moveTo(cx + cellSize - 8, cy + 8);
+              ctx.lineTo(cx + 8, cy + cellSize - 8);
+              ctx.stroke();
+            }
+          };
+
+          drawSingle(vx, vy);
+          if (vx < 0) drawSingle(vx + 8, vy);
+          if (vx > 7) drawSingle(vx - 8, vy);
+          if (vy < 0) drawSingle(vx, vy + 8);
+          if (vy > 7) drawSingle(vx, vy - 8);
+        }
+
+        for (let y = 0; y < 8; y++) {
+          for (let x = 0; x < 8; x++) {
+            const type = gameState.grid[y] ? gameState.grid[y][x] : 0;
+            const ox = visualOffsets.rows[y] || 0;
+            const oy = visualOffsets.cols[x] || 0;
+            renderTile(type, x, y, ox, oy);
+          }
+        }
+
+        /* Grid Outline Lines */
+        ctx.strokeStyle = '#e2dfd5';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 8; i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * cellSize, 0);
+          ctx.lineTo(i * cellSize, height);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(0, i * cellSize);
+          ctx.lineTo(width, i * cellSize);
+          ctx.stroke();
+        }
+
+        /* Player Rendering */
+        const pX = gameState.player.x * cellSize + cellSize / 2;
+        const pY = gameState.player.y * cellSize + cellSize / 2;
+        ctx.fillStyle = '#f1c40f';
+        ctx.beginPath();
+        ctx.arc(pX, pY, cellSize / 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#d68910';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        /* Glow highlights */
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(pX - 4, pY - 4, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* Particles overlay update */
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.03;
+          if (p.alpha <= 0) {
+            particles.splice(i, 1);
+          }
+        }
+        ctx.globalAlpha = 1.0;
+
+        ctx.restore();
+        requestAnimationFrame(draw);
+      }
+
+      /* Setup Resize observer for 1:1 gameplay ratio canvas sizing */
+      const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          const rect = entry.contentRect;
+          const size = Math.min(rect.width, rect.height, 420);
+          canvas.width = size;
+          canvas.height = size;
+        }
       });
-    } else {
-      document.exitFullscreen();
-    }
-  });
+      resizeObserver.observe(root.querySelector('#sk_canvas_container'));
 
-  /* UI Screen Navigation controls */
-  root.querySelector('#sk_btn_play').addEventListener('click', () => {
-    startGame(gameState.unlockedLevel);
-  });
+      /* Core Inputs Translation */
+      function handleInput(direction) {
+        if (gameState.status !== 'playing') return;
+        if (direction === 'up') movePlayer(0, -1);
+        if (direction === 'down') movePlayer(0, 1);
+        if (direction === 'left') movePlayer(-1, 0);
+        if (direction === 'right') movePlayer(1, 0);
+      }
 
-  root.querySelector('#sk_btn_demo_main').addEventListener('click', () => {
-    startDemo();
-  });
+      /* Physical Keyboard controls */
+      window.addEventListener('keydown', e => {
+        /* Enter key shortcuts */
+        if (e.key === 'Enter') {
+          if (gameState.status === 'menu' || gameState.status === 'gameover' || gameState.status === 'victory') {
+            startGame(gameState.currentLevel);
+          }
+        }
 
-  root.querySelector('#sk_btn_orient').addEventListener('click', () => {
-    gameState.isLandscape = !gameState.isLandscape;
-    if (gameState.isLandscape) {
-      root.style.transform = 'rotate(-90deg)';
-      root.style.transformOrigin = 'center';
-    } else {
-      root.style.transform = 'none';
-    }
-  });
+        /* Arrow key layout movement mapping */
+        if (['ArrowUp', 'w', 'W'].includes(e.key)) handleInput('up');
+        if (['ArrowDown', 's', 'S'].includes(e.key)) handleInput('down');
+        if (['ArrowLeft', 'a', 'A'].includes(e.key)) handleInput('left');
+        if (['ArrowRight', 'd', 'D'].includes(e.key)) handleInput('right');
 
-  root.querySelectorAll('.sk_close_btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      showScreen(gameState.status === 'playing' ? null : screenMain);
-    });
-  });
+        /* Zoom keyboard hotkeys: CTRL + and CTRL - */
+        if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
+          e.preventDefault();
+          zoomIn();
+        }
+        if (e.ctrlKey && (e.key === '-' || e.key === '_')) {
+          e.preventDefault();
+          zoomOut();
+        }
+        if (e.ctrlKey && e.key === '0') {
+          e.preventDefault();
+          resetCamera();
+        }
+      });
 
-  root.querySelector('#sk_btn_retry').addEventListener('click', () => {
-    startGame(gameState.currentLevel);
-  });
+      /* MOUSE DRAG AND DRAG PANNING CAPABILITIES */
+      canvas.addEventListener('mousedown', e => {
+        if (camera.isPanningMode) {
+          camera.isDragging = true;
+          camera.startX = e.clientX - camera.panX;
+          camera.startY = e.clientY - camera.panY;
+        } else {
+          /* Direct Grid Click movement pathfinder interaction */
+          const grid = getGridCoords(e.clientX, e.clientY);
+          const dx = grid.gridX - gameState.player.x;
+          const dy = grid.gridY - gameState.player.y;
+          if (Math.abs(dx) + Math.abs(dy) === 1) {
+            if (dx === 1) handleInput('right');
+            if (dx === -1) handleInput('left');
+            if (dy === 1) handleInput('down');
+            if (dy === -1) handleInput('up');
+          }
+        }
+      });
 
-  root.querySelectorAll('.sk_btn_back_menu').forEach(btn => {
-    btn.addEventListener('click', () => {
-      gameState.status = 'menu';
-      showScreen(screenMain);
-    });
-  });
+      window.addEventListener('mousemove', e => {
+        if (camera.isPanningMode && camera.isDragging) {
+          camera.panX = e.clientX - camera.startX;
+          camera.panY = e.clientY - camera.startY;
+        }
+      });
 
-  root.querySelector('#sk_btn_next_level').addEventListener('click', () => {
-    const next = gameState.currentLevel + 1;
-    if (next < levels.length) {
-      startGame(next);
-    } else {
-      gameState.status = 'menu';
-      showScreen(screenMain);
-    }
-  });
+      window.addEventListener('mouseup', () => {
+        camera.isDragging = false;
+      });
 
-  /* Load progress & initialize draw loop cycle */
-  loadProgress();
-  draw();
-})();
-</script>
-<script src="js/framework.js"></script>
+      /* ADVANCED MOBILE TOUCH CONTROL ARCHITECTURE (Touch registry, Single/Double Tap, Multi-touch Zoom/Pan) */
+      const activeTouches = {};
+      let lastTapTime = 0;
+      let startPinchDist = 0;
+      let startPinchZoom = 1.0;
+      let startPinchPanX = 0, startPinchPanY = 0;
+      let startPinchMidX = 0, startPinchMidY = 0;
+      let longTouchTimer = null;
+
+      canvas.addEventListener('touchstart', e => {
+        /* Multi-touch active register mapping */
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const touch = e.changedTouches[i];
+          activeTouches[touch.identifier] = {
+            startX: touch.clientX,
+            startY: touch.clientY,
+            time: Date.now()
+          };
+        }
+
+        if (e.targetTouches.length === 1) {
+          const touch = e.targetTouches[0];
+
+          /* Single click coordinates */
+          const singleTouchObj = activeTouches[touch.identifier];
+
+          /* Long press/hold setup (>500ms) */
+          longTouchTimer = setTimeout(() => {
+            /* Automatically switch into hand panning mode during long hold */
+            togglePanTool(true);
+          }, 500);
+
+        } else if (e.targetTouches.length === 2) {
+          /* Dual finger pinch to zoom & drag pan initialization */
+          if (longTouchTimer) clearTimeout(longTouchTimer);
+          const t1 = e.targetTouches[0];
+          const t2 = e.targetTouches[1];
+          startPinchDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+          startPinchZoom = camera.zoom;
+          startPinchMidX = (t1.clientX + t2.clientX) / 2;
+          startPinchMidY = (t1.clientY + t2.clientY) / 2;
+          startPinchPanX = camera.panX;
+          startPinchPanY = camera.panY;
+        }
+      }, {passive: true});
+
+      canvas.addEventListener('touchmove', e => {
+        if (e.targetTouches.length === 1 && (camera.isPanningMode)) {
+          /* Single finger dragging when Pan Mode is enabled */
+          const touch = e.targetTouches[0];
+          const data = activeTouches[touch.identifier];
+          if (data) {
+            camera.panX = touch.clientX - data.startX;
+            camera.panY = touch.clientY - data.startY;
+          }
+        } else if (e.targetTouches.length === 2) {
+          /* Dual finger active pinch/zoom mathematics processing */
+          const t1 = e.targetTouches[0];
+          const t2 = e.targetTouches[1];
+          const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+          const midX = (t1.clientX + t2.clientX) / 2;
+          const midY = (t1.clientY + t2.clientY) / 2;
+
+          /* Update zoom factor */
+          const scale = dist / startPinchDist;
+          camera.zoom = Math.max(camera.minZoom, Math.min(camera.maxZoom, startPinchZoom * scale));
+
+          /* Update pan translation offsets relative to midpoint delta */
+          camera.panX = startPinchPanX + (midX - startPinchMidX);
+          camera.panY = startPinchPanY + (midY - startPinchMidY);
+        }
+      }, {passive: true});
+
+      canvas.addEventListener('touchend', e => {
+        if (longTouchTimer) clearTimeout(longTouchTimer);
+
+        /* Process individual touch release for taps, double taps, and grid swipes */
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const touch = e.changedTouches[i];
+          const data = activeTouches[touch.identifier];
+          if (data) {
+            const deltaX = touch.clientX - data.startX;
+            const deltaY = touch.clientY - data.startY;
+            const duration = Date.now() - data.time;
+
+            /* Is it a quick release click/tap? */
+            if (Math.abs(deltaX) < 15 && Math.abs(deltaY) < 15 && duration < 300) {
+              const now = Date.now();
+              if (now - lastTapTime < 300) {
+                /* Double tap: Reset layout scale and center view ports */
+                resetCamera();
+              } else {
+                /* Single tap processing: Trigger character auto move directly to tapped square */
+                const grid = getGridCoords(touch.clientX, touch.clientY);
+                const dx = grid.gridX - gameState.player.x;
+                const dy = grid.gridY - gameState.player.y;
+                if (Math.abs(dx) + Math.abs(dy) === 1) {
+                  if (dx === 1) handleInput('right');
+                  if (dx === -1) handleInput('left');
+                  if (dy === 1) handleInput('down');
+                  if (dy === -1) handleInput('up');
+                }
+              }
+              lastTapTime = now;
+            } else if (!camera.isPanningMode && duration < 400) {
+              /* Quick Swipe directional movement translations */
+              if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (Math.abs(deltaX) > 30) {
+                  if (deltaX > 0) handleInput('right');
+                  else handleInput('left');
+                }
+              } else {
+                if (Math.abs(deltaY) > 30) {
+                  if (deltaY > 0) handleInput('down');
+                  else handleInput('up');
+                }
+              }
+            }
+            delete activeTouches[touch.identifier];
+          }
+        }
+      }, {passive: true});
+
+      canvas.addEventListener('touchcancel', e => {
+        if (longTouchTimer) clearTimeout(longTouchTimer);
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          delete activeTouches[e.changedTouches[i].identifier];
+        }
+      }, {passive: true});
+
+      /* Draggable D-Pad Controller Wrapper */
+      const handle = root.querySelector('#sk_controller_drag_handle');
+      const controller = root.querySelector('#sk_virtual_controller');
+      let isDraggingController = false;
+      let dragOffsetX = 0, dragOffsetY = 0;
+
+      handle.addEventListener('mousedown', startDrag);
+      handle.addEventListener('touchstart', startDrag, {passive: true});
+
+      function startDrag(e) {
+        isDraggingController = true;
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+        dragOffsetX = clientX - controller.offsetLeft;
+        dragOffsetY = clientY - controller.offsetTop;
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchmove', drag, {passive: false});
+        document.addEventListener('touchend', endDrag);
+      }
+
+      function drag(e) {
+        if (!isDraggingController) return;
+        const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+        const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+        let x = clientX - dragOffsetX;
+        let y = clientY - dragOffsetY;
+
+        const rootRect = root.getBoundingClientRect();
+        const ctrlRect = controller.getBoundingClientRect();
+        if (x < 0) x = 0;
+        if (x + ctrlRect.width > rootRect.width) x = rootRect.width - ctrlRect.width;
+        if (y < 0) y = 0;
+        if (y + ctrlRect.height > rootRect.height) y = rootRect.height - ctrlRect.height;
+
+        controller.style.left = x + 'px';
+        controller.style.top = y + 'px';
+        controller.style.bottom = 'auto';
+      }
+
+      function endDrag() {
+        isDraggingController = false;
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', endDrag);
+        document.removeEventListener('touchmove', drag);
+        document.removeEventListener('touchend', endDrag);
+      }
+
+      /* Core UI Button Interactivity and Event Bindings */
+      root.querySelector('#sk_ctrl_up').addEventListener('click', () => handleInput('up'));
+      root.querySelector('#sk_ctrl_down').addEventListener('click', () => handleInput('down'));
+      root.querySelector('#sk_ctrl_left').addEventListener('click', () => handleInput('left'));
+      root.querySelector('#sk_ctrl_right').addEventListener('click', () => handleInput('right'));
+
+      /* Zoom controls trigger bindings */
+      root.querySelector('#sk_zoom_in').addEventListener('click', zoomIn);
+      root.querySelector('#sk_zoom_out').addEventListener('click', zoomOut);
+      root.querySelector('#sk_zoom_reset').addEventListener('click', resetCamera);
+
+      const panToolBtn = root.querySelector('#sk_pan_tool');
+      panToolBtn.addEventListener('click', () => togglePanTool());
+
+      function togglePanTool(forceState) {
+        camera.isPanningMode = (forceState !== undefined) ? forceState : !camera.isPanningMode;
+        if (camera.isPanningMode) {
+          panToolBtn.classList.add('sk_active_tool');
+        } else {
+          panToolBtn.classList.remove('sk_active_tool');
+        }
+      }
+
+      /* Top Dropdown Menu navigation trigger */
+      menuTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropDownMenu.classList.toggle('sk_show');
+      });
+
+      document.addEventListener('click', () => {
+        dropDownMenu.classList.remove('sk_show');
+      });
+
+      /* Dropdown action routes */
+      root.querySelector('#sk_drop_levels').addEventListener('click', () => {
+        buildLevelsGrid();
+        showScreen(popupLevels);
+      });
+      root.querySelector('#sk_drop_settings').addEventListener('click', () => showScreen(popupSettings));
+      root.querySelector('#sk_drop_scores').addEventListener('click', openScoresTab);
+      root.querySelector('#sk_drop_info').addEventListener('click', () => showScreen(popupInfo));
+      root.querySelector('#sk_drop_demo').addEventListener('click', startDemo);
+
+      /* Start Level Play */
+      function startGame(lvlIdx) {
+        stopDemo();
+        gameState.status = 'playing';
+        initLevel(lvlIdx);
+        showScreen(null);
+      }
+
+      /* Pause / Resume action controller methods */
+      btnPause.addEventListener('click', () => {
+        if (gameState.status === 'playing') {
+          gameState.status = 'paused';
+          showScreen(screenPause);
+        } else if (gameState.status === 'paused') {
+          gameState.status = 'playing';
+          showScreen(null);
+        }
+      });
+
+      root.querySelector('#sk_btn_resume').addEventListener('click', () => {
+        gameState.status = 'playing';
+        showScreen(null);
+      });
+
+      /* Trigger Demo Auto-Play Mode */
+      function startDemo() {
+        stopDemo();
+        gameState.status = 'demo';
+        initLevel(0);
+        showScreen(null);
+        gameState.demoStep = 0;
+
+        const demoMoves = ['right', 'right', 'down', 'down', 'left', 'up', 'right'];
+        gameState.demoTimer = setInterval(() => {
+          if (gameState.status !== 'demo') {
+            stopDemo();
+            return;
+          }
+          const dir = demoMoves[gameState.demoStep];
+          if (dir === 'up') movePlayer(0, -1);
+          if (dir === 'down') movePlayer(0, 1);
+          if (dir === 'left') movePlayer(-1, 0);
+          if (dir === 'right') movePlayer(1, 0);
+
+          gameState.demoStep++;
+          if (gameState.demoStep >= demoMoves.length) {
+            stopDemo();
+            gameState.status = 'menu';
+            showScreen(screenMain);
+          }
+        }, 1300);
+      }
+
+      function stopDemo() {
+        if (gameState.demoTimer) {
+          clearInterval(gameState.demoTimer);
+          gameState.demoTimer = null;
+        }
+      }
+
+      /* Load level grid buttons */
+      function buildLevelsGrid() {
+        const gridEl = root.querySelector('#sk_level_grid');
+        gridEl.innerHTML = '';
+        for (let i = 0; i < levels.length; i++) {
+          const btn = document.createElement('button');
+          btn.className = `sk_level_btn ${i <= gameState.unlockedLevel ? 'sk_unlocked' : 'sk_locked'}`;
+          btn.innerText = i + 1;
+          if (i <= gameState.unlockedLevel) {
+            btn.addEventListener('click', () => {
+              startGame(i);
+            });
+          }
+          gridEl.appendChild(btn);
+        }
+      }
+
+      function openScoresTab() {
+        const list = root.querySelector('#sk_scores_list');
+        list.innerHTML = '';
+        for (let i = 0; i < levels.length; i++) {
+          const row = document.createElement('div');
+          row.className = 'sk_score_row';
+          const best = gameState.highScores[i] !== undefined ? `${gameState.highScores[i]} moves` : 'No score';
+          row.innerHTML = `<span>Level ${i + 1}</span> <b>${best}</b>`;
+          list.appendChild(row);
+        }
+        showScreen(popupScores);
+      }
+
+      /* Settings Actions logic */
+      const soundBtn = root.querySelector('#sk_toggle_sound');
+      soundBtn.addEventListener('click', () => {
+        audio.enabled = !audio.enabled;
+        soundBtn.innerText = audio.enabled ? 'ON' : 'OFF';
+        soundBtn.className = `sk_toggle_btn ${audio.enabled ? '' : 'sk_off'}`;
+      });
+
+      /* Fullscreen functionality API integration */
+      root.querySelector('#sk_btn_fullscreen').addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          root.requestFullscreen().catch(err => {
+            console.warn(`Error enabling fullscreen: ${err.message}`);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      /* UI Screen Navigation controls */
+      root.querySelector('#sk_btn_play').addEventListener('click', () => {
+        startGame(gameState.unlockedLevel);
+      });
+
+      root.querySelector('#sk_btn_demo_main').addEventListener('click', () => {
+        startDemo();
+      });
+
+      root.querySelector('#sk_btn_orient').addEventListener('click', () => {
+        gameState.isLandscape = !gameState.isLandscape;
+        if (gameState.isLandscape) {
+          root.style.transform = 'rotate(-90deg)';
+          root.style.transformOrigin = 'center';
+        } else {
+          root.style.transform = 'none';
+        }
+      });
+
+      root.querySelectorAll('.sk_close_btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          showScreen(gameState.status === 'playing' ? null : screenMain);
+        });
+      });
+
+      root.querySelector('#sk_btn_retry').addEventListener('click', () => {
+        startGame(gameState.currentLevel);
+      });
+
+      root.querySelectorAll('.sk_btn_back_menu').forEach(btn => {
+        btn.addEventListener('click', () => {
+          gameState.status = 'menu';
+          showScreen(screenMain);
+        });
+      });
+
+      root.querySelector('#sk_btn_next_level').addEventListener('click', () => {
+        const next = gameState.currentLevel + 1;
+        if (next < levels.length) {
+          startGame(next);
+        } else {
+          gameState.status = 'menu';
+          showScreen(screenMain);
+        }
+      });
+
+      /* Load progress & initialize draw loop cycle */
+      loadProgress();
+      draw();
+    })();
+  </script>
+  <script src="js/framework.js"></script>
 </body>
+
 </html>
