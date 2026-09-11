@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Newton's Grid - Extended Edition</title>
-<link rel="stylesheet" href="css/framework.css">`n</head>
+<link rel="stylesheet" href="css/framework.css"></head>
 <body style="margin:0; padding:0; background-color:#121214; font-family:system-ui, -apple-system, sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh;">
 
 <div class="sk_game_suite_root">
@@ -26,9 +26,9 @@
       --transition-speed: 0.2s;
 
       position: relative;
-      width: 100%;
+      width: 100vw;
       max-width: 600px;
-      height: 98vh;
+      height: 100vh;
       max-height: 920px;
       background-color: var(--bg-color);
       color: var(--text-color);
@@ -39,6 +39,73 @@
       overflow: hidden;
       box-sizing: border-box;
       user-select: none;
+    }
+
+    @media (max-width: 600px) {
+      .sk_game_suite_root {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      .sk_canvas_container {
+        width: min(85vw, 360px) !important;
+        height: min(85vw, 360px) !important;
+      }
+      .sk_controller_zone {
+        bottom: 15px !important;
+        padding: 6px !important;
+      }
+      .sk_ctrl_btn {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 0.95rem !important;
+      }
+      .sk_zoom_panel {
+        display: none !important; /* Hide zoom panel on very small screens to keep UI clean, rely on touch pinch/double tap */
+      }
+    }
+
+    @media (max-height: 700px) and (orientation: landscape) {
+      .sk_game_suite_root {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-width: 900px;
+        height: 100vh;
+      }
+      .sk_top_bar {
+        width: 100%;
+      }
+      .sk_game_panel {
+        flex: 1;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 5px;
+      }
+      .sk_canvas_container {
+        width: 50vh !important;
+        height: 50vh !important;
+        max-width: 300px !important;
+        max-height: 300px !important;
+      }
+      .sk_hud {
+        max-width: 200px;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .sk_controller_zone {
+        position: relative !important;
+        bottom: auto !important;
+        left: auto !important;
+        transform: none !important;
+        margin-top: 5px;
+      }
+      .sk_zoom_panel {
+        display: none !important;
+      }
     }
 
     /* TOP BAR & MENU SYSTEM */
@@ -468,7 +535,7 @@
       
       <!-- MENU DROPDOWN -->
       <div class="sk_menu_container">
-        <button class="sk_btn" id="sk_btn_menu_trigger"><i>Menu â–¾</i></button>
+        <button class="sk_btn" id="sk_btn_menu_trigger"><i>Menu &#9662;</i></button>
         <div class="sk_dropdown_menu" id="sk_dropdown_menu">
           <div class="sk_dropdown_item" id="sk_drop_levels">Levels</div>
           <div class="sk_dropdown_item" id="sk_drop_settings">Settings</div>
@@ -505,10 +572,10 @@
 
     <!-- Zoom & Pan Utility Controls -->
     <div class="sk_zoom_panel">
-      <button class="sk_zoom_btn" id="sk_zoom_in">ðŸ” +</button>
-      <button class="sk_zoom_btn" id="sk_zoom_out">ðŸ” -</button>
-      <button class="sk_zoom_btn" id="sk_zoom_reset">âŸ² Reset</button>
-      <button class="sk_zoom_btn" id="sk_pan_tool">âœ‹ Drag Pan</button>
+      <button class="sk_zoom_btn" id="sk_zoom_in">&#128269; +</button>
+      <button class="sk_zoom_btn" id="sk_zoom_out">&#128269; -</button>
+      <button class="sk_zoom_btn" id="sk_zoom_reset">&#8634; Reset</button>
+      <button class="sk_zoom_btn" id="sk_pan_tool">&#9995; Drag Pan</button>
     </div>
 
     <!-- Start / Main Menu Screen -->
@@ -605,15 +672,15 @@
 
   <!-- VIRTUAL CONTROLLER (Div 3) - DRAGGABLE -->
   <div class="sk_controller_zone" id="sk_virtual_controller">
-    <div class="sk_controller_header" id="sk_controller_drag_handle">â†• Drag D-Pad</div>
+    <div class="sk_controller_header" id="sk_controller_drag_handle">&#8597; Drag D-Pad</div>
     <div class="sk_dpad">
       <div class="sk_dpad_row">
-        <button class="sk_ctrl_btn" id="sk_ctrl_up">â–²</button>
+        <button class="sk_ctrl_btn" id="sk_ctrl_up">&#9650;</button>
       </div>
       <div class="sk_dpad_row">
-        <button class="sk_ctrl_btn" id="sk_ctrl_left">â—€</button>
-        <button class="sk_ctrl_btn" id="sk_ctrl_down">â–¼</button>
-        <button class="sk_ctrl_btn" id="sk_ctrl_right">â–¶</button>
+        <button class="sk_ctrl_btn" id="sk_ctrl_left">&#9664;</button>
+        <button class="sk_ctrl_btn" id="sk_ctrl_down">&#9660;</button>
+        <button class="sk_ctrl_btn" id="sk_ctrl_right">&#9654;</button>
       </div>
     </div>
   </div>
@@ -1858,5 +1925,6 @@
   draw();
 })();
 </script>
-<script src="js/framework.js"></script>`n</body>
+<script src="js/framework.js"></script>
+</body>
 </html>
