@@ -845,9 +845,16 @@
     }
 
     /* Level fetcher */
-    async function fetchRemoteLevels(remoteUrl = "https://github.com/ManavBanker/PublishedGames/blob/main/Ouromath/levels.json") {
+    async function fetchRemoteLevels(remoteUrl = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Ouromath/levels.json") {
       try {
-        const resp = await fetch(remoteUrl);
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 6000);
+        let resp;
+        try {
+          resp = await fetch(remoteUrl, {signal: controller.signal});
+        } finally {
+          clearTimeout(timer);
+        }
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const rawText = await resp.text();
 

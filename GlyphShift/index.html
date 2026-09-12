@@ -557,6 +557,7 @@
                     <div class="sk_metric_line"><span>Input Rotations:</span><b id="sk_data_victory_keystrokes">0</b></div>
                     <div class="sk_metric_line"><span>Completion Time:</span><b id="sk_data_victory_duration">0.0s</b></div>
                     <div class="sk_metric_line"><span>Optimal Record:</span><b id="sk_data_victory_record">0.0s</b></div>
+                    <div class="sk_metric_line"><span>Sync Rating:</span><b id="sk_data_victory_stars">☆☆☆</b></div>
                     <br>
                     <button class="sk_action_btn sk_btn_high_alert" id="sk_btn_trigger_next_level" style="padding: 12px 30px; font-size: 15px;">ENGAGE NEXT SECTOR</button>
                 </div>
@@ -828,6 +829,8 @@
                 sectorStartTime: 0,
                 sectorElapsedTime: 0,
                 leaderboard: {},
+                starsEarned: {},
+                modalPauseFlag: false,
                 levelGrid: [],
                 core: {
                     gridX: 0,
@@ -866,67 +869,96 @@
                 const loaderOverlay = document.getElementById('sk_overlay_fetch_loader');
                 const progressFill = document.getElementById('sk_fetch_progress_fill');
                 const statusText = document.getElementById('sk_fetch_status_text');
-                
-                loaderOverlay.classList.remove('sk_hidden_node');
-                progressFill.style.width = '15%';
-                statusText.innerText = 'Requesting sector data from Git raw stream...';
 
-                /* Simulated or live Git raw fallback */
-                const gitRawUrl = './GlyphShift.json';
+                const sources = [
+                    'https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/GlyphShift/levels.json'
+                ];
 
-                setTimeout(() => {
-                    progressFill.style.width = '45%';
-                    statusText.innerText = 'Parsing stream & stripping block comments...';
+                function validateSectors(list) {
+                    if (!Array.isArray(list) || list.length === 0) return false;
+                    for (let i = 0; i < list.length; i++) {
+                        const sec = list[i];
+                        if (!sec || !sec.grid || !Array.isArray(sec.grid) || sec.grid.length !== ROWS) return false;
+                        for (let r = 0; r < ROWS; r++) {
+                            if (!Array.isArray(sec.grid[r]) || sec.grid[r].length !== COLS) return false;
+                        }
+                    }
+                    return true;
+                }
 
-                    fetch(gitRawUrl, { cache: 'no-store' })
+                function decompose(content) {
+                    let sanitized = content.replace(/\/\*[\s\S]*?\*\//g, '').replace(/<!--[\s\S]*?-->/g, '').replace(/\/\/.*/g, '');
+                    if (sanitized.includes('SECTORS_DICTIONARY')) {
+                        const jsonMatch = sanitized.match(/\[\s*\{[\s\S]*\}\s*\]/);
+                        if (jsonMatch) return JSON.parse(jsonMatch[0]);
+                        return null;
+                    }
+                    const trimmed = sanitized.trim();
+                    if (trimmed.startsWith('[')) return JSON.parse(trimmed);
+                    return null;
+                }
+
+                function adoptSectors(parsed) {
+                    parsed.forEach((sec, idx) => { sec.id = idx + 1; });
+                    SECTORS_DICTIONARY = parsed;
+                    rebuildLevelsGridUI();
+                    if (autoStart) {
+                        clearViewOverlays();
+                        EngineState.activeView = 'playing';
+                        setupLevel(EngineState.currentSectorIndex);
+                    }
+                }
+
+                function attemptSource(sourceIndex) {
+                    if (sourceIndex >= sources.length) {
+                        progressFill.style.width = '100%';
+                        statusText.innerText = 'Using embedded high-fidelity offline sectors.';
+                        setTimeout(() => {
+                            loaderOverlay.classList.add('sk_hidden_node');
+                            rebuildLevelsGridUI();
+                        }, 500);
+                        return;
+                    }
+
+                    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+                    const timer = controller ? setTimeout(() => controller.abort(), 4500) : null;
+                    progressFill.style.width = `${40 + sourceIndex * 15}%`;
+                    statusText.innerText = `Requesting sector data from source ${sourceIndex + 1}...`;
+
+                    fetch(sources[sourceIndex], { cache: 'no-store', signal: controller ? controller.signal : undefined })
                         .then(res => {
                             if (!res.ok) throw new Error('Remote HTTP fetch error');
                             return res.text();
                         })
                         .then(rawContent => {
+                            if (timer) clearTimeout(timer);
                             progressFill.style.width = '85%';
-                            /* Clean out JavaScript & HTML block/single comments from retrieved string */
-                            let sanitized = rawContent
-                                .replace(/\/\*[\s\S]*?\*\//g, '')
-                                .replace(/<!--[\s\S]*?-->/g, '')
-                                .replace(/\/\/.*/g, '');
-
-                            /* Try to parse dynamic SECTORS JSON or use robust fallback array */
                             try {
-                                if (sanitized.includes('SECTORS_DICTIONARY')) {
-                                    const jsonMatch = sanitized.match(/\[\s*\{[\s\S]*\}\s*\]/);
-                                    if (jsonMatch) {
-                                        const parsed = JSON.parse(jsonMatch[0]);
-                                        if (Array.isArray(parsed) && parsed.length > 0) {
-                                            SECTORS_DICTIONARY = parsed;
-                                        }
-                                    }
+                                const parsed = decompose(rawContent);
+                                if (validateSectors(parsed)) {
+                                    progressFill.style.width = '100%';
+                                    statusText.innerText = 'Sectors validated successfully!';
+                                    setTimeout(() => {
+                                        loaderOverlay.classList.add('sk_hidden_node');
+                                        adoptSectors(parsed);
+                                    }, 350);
+                                    return;
                                 }
                             } catch(err) {
-                                /* Keep reliable fallback */
+                                /* Fall through to next source */
                             }
-
-                            progressFill.style.width = '100%';
-                            statusText.innerText = 'Sectors validated successfully!';
-                            setTimeout(() => {
-                                loaderOverlay.classList.add('sk_hidden_node');
-                                rebuildLevelsGridUI();
-                                if (autoStart) {
-                                    clearViewOverlays();
-                                    EngineState.activeView = 'playing';
-                                    setupLevel(EngineState.currentSectorIndex);
-                                }
-                            }, 400);
+                            attemptSource(sourceIndex + 1);
                         })
                         .catch(() => {
-                            progressFill.style.width = '100%';
-                            statusText.innerText = 'Using embedded high-fidelity offline sectors.';
-                            setTimeout(() => {
-                                loaderOverlay.classList.add('sk_hidden_node');
-                                rebuildLevelsGridUI();
-                            }, 500);
+                            if (timer) clearTimeout(timer);
+                            attemptSource(sourceIndex + 1);
                         });
-                }, 300);
+                }
+
+                loaderOverlay.classList.remove('sk_hidden_node');
+                progressFill.style.width = '15%';
+                statusText.innerText = 'Initializing sector data request...';
+                setTimeout(() => attemptSource(0), 250);
             }
 
             function retrieveStoredEngineData() {
@@ -935,6 +967,8 @@
                     if (savedUnlock) EngineState.levelsUnlocked = parseInt(savedUnlock, 10);
                     const savedScores = localStorage.getItem('sk_leaderboard_data');
                     if (savedScores) EngineState.leaderboard = JSON.parse(savedScores);
+                    const savedStars = localStorage.getItem('sk_gs_stars');
+                    if (savedStars) EngineState.starsEarned = JSON.parse(savedStars);
                     const savedMute = localStorage.getItem('sk_synth_muted_pref');
                     if (savedMute) SynthInstance.isMuted = (savedMute === 'true');
                     const savedSpeed = localStorage.getItem('sk_sim_speed_pref');
@@ -946,9 +980,19 @@
                 try {
                     localStorage.setItem('sk_sector_unlocked', EngineState.levelsUnlocked);
                     localStorage.setItem('sk_leaderboard_data', JSON.stringify(EngineState.leaderboard));
+                    localStorage.setItem('sk_gs_stars', JSON.stringify(EngineState.starsEarned));
                     localStorage.setItem('sk_synth_muted_pref', SynthInstance.isMuted);
                     localStorage.setItem('sk_sim_speed_pref', EngineState.core.speedScale);
                 } catch(e) {}
+            }
+
+            function computeSectorStarRating(curSector, elapsedTime, keystrokes) {
+                const totalTiles = curSector.grid.flat().filter(c => c !== 'E' && c !== 'ST' && c !== 'GL').length;
+                const maxK = Math.max(4, Math.ceil(totalTiles * 3));
+                const timeCap = Math.max(30, totalTiles * (600 * EngineState.core.speedScale * 0.001 + 1.4));
+                if (elapsedTime <= timeCap && keystrokes <= maxK) return 3;
+                if (elapsedTime <= timeCap * 2.6 && keystrokes <= maxK * 2.4) return 2;
+                return 1;
             }
 
             function computeActiveTracks(type, rotationValue) {
@@ -1068,7 +1112,9 @@
             function updateHeaderDisplay() {
                 const badge = document.getElementById('sk_display_score_header');
                 if (badge) {
-                    badge.innerText = `SEC ${EngineState.currentSectorIndex + 1} | ${EngineState.sectorElapsedTime.toFixed(1)}s | ↻ ${EngineState.keystrokesCount}`;
+                    let totalStars = 0;
+                    Object.keys(EngineState.starsEarned).forEach(k => { totalStars += EngineState.starsEarned[k] || 0; });
+                    badge.innerText = `SEC ${EngineState.currentSectorIndex + 1} | ${EngineState.sectorElapsedTime.toFixed(1)}s | ↻ ${EngineState.keystrokesCount} | ★ ${totalStars}`;
                 }
             }
 
@@ -1599,6 +1645,10 @@
                     EngineState.leaderboard[recKey] = parseFloat(EngineState.sectorElapsedTime.toFixed(1));
                 }
 
+                const earnedStars = computeSectorStarRating(curSector, EngineState.sectorElapsedTime, EngineState.keystrokesCount);
+                const prevStars = EngineState.starsEarned[recKey] || 0;
+                EngineState.starsEarned[recKey] = Math.max(prevStars, earnedStars);
+
                 if (EngineState.currentSectorIndex + 1 >= EngineState.levelsUnlocked && EngineState.levelsUnlocked < SECTORS_DICTIONARY.length) {
                     EngineState.levelsUnlocked = EngineState.currentSectorIndex + 2;
                 }
@@ -1610,6 +1660,8 @@
                 document.getElementById('sk_data_victory_keystrokes').innerText = `${EngineState.keystrokesCount}`;
                 document.getElementById('sk_data_victory_duration').innerText = `${EngineState.sectorElapsedTime.toFixed(1)}s`;
                 document.getElementById('sk_data_victory_record').innerText = `${EngineState.leaderboard[recKey]}s`;
+                document.getElementById('sk_data_victory_stars').innerText = '★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars);
+                document.getElementById('sk_data_victory_stars').style.color = earnedStars === 3 ? 'var(--sk-yellow)' : (earnedStars === 2 ? 'var(--sk-cyan)' : 'var(--sk-green)');
 
                 document.getElementById('sk_overlay_victory_screen').classList.remove('sk_hidden_node');
             }
@@ -1668,15 +1720,35 @@
                 document.getElementById('sk_modal_scores').classList.add('sk_hidden_node');
                 document.getElementById('sk_modal_levels').classList.add('sk_hidden_node');
                 document.getElementById('sk_nav_drawer').classList.add('sk_hidden_node');
+                if (EngineState.modalPauseFlag && EngineState.activeView === 'paused') {
+                    EngineState.modalPauseFlag = false;
+                    EngineState.activeView = 'playing';
+                    EngineState.sectorStartTime = Date.now() - (EngineState.sectorElapsedTime * 1000);
+                    const pauseBtn = document.getElementById('sk_btn_quick_pause');
+                    pauseBtn.innerText = '⏸ Pause';
+                    pauseBtn.classList.remove('sk_btn_active_state');
+                    document.getElementById('sk_overlay_pause_screen').classList.add('sk_hidden_node');
+                }
             }
 
             function triggerPopupToggle(id) {
                 const el = document.getElementById(id);
                 const isCurrentlyHidden = el.classList.contains('sk_hidden_node');
+                const wasPlaying = EngineState.activeView === 'playing';
                 shutAllModals();
                 if (isCurrentlyHidden) {
                     el.classList.remove('sk_hidden_node');
                     if (id === 'sk_modal_scores') populateChronometerRecords();
+                    if (wasPlaying) {
+                        EngineState.modalPauseFlag = true;
+                        EngineState.activeView = 'paused';
+                        EngineState.sectorStartTime = Date.now() - (EngineState.sectorElapsedTime * 1000);
+                        const pauseBtn = document.getElementById('sk_btn_quick_pause');
+                        pauseBtn.innerText = '▶ Resume';
+                        pauseBtn.classList.add('sk_btn_active_state');
+                    }
+                } else {
+                    EngineState.modalPauseFlag = false;
                 }
             }
 
@@ -1688,12 +1760,13 @@
                     const tileBtn = document.createElement('div');
                     tileBtn.classList.add('sk_level_tile');
                     const sectorLocked = (idx + 1) > EngineState.levelsUnlocked;
+                    const starCount = EngineState.starsEarned[`sect_${sector.id}`] || 0;
 
                     if (sectorLocked) {
                         tileBtn.classList.add('sk_locked_tile');
                         tileBtn.innerHTML = `<p style="font-weight:bold; font-size:12px;">Sector ${sector.id}</p><span style="font-size:10px; color:var(--sk-sub-text);">🔒 Locked</span>`;
                     } else {
-                        tileBtn.innerHTML = `<p style="font-weight:bold; font-size:12px; color:var(--sk-cyan);">Sector ${sector.id}</p><span style="font-size:10px; color:var(--sk-text);">${sector.name}</span>`;
+                        tileBtn.innerHTML = `<p style="font-weight:bold; font-size:12px; color:var(--sk-cyan);">Sector ${sector.id}</p><span style="font-size:10px; color:var(--sk-text);">${sector.name}</span><span style="font-size:12px; color:var(--sk-yellow);">${'★'.repeat(starCount)}${'☆'.repeat(3 - starCount)}</span>`;
                         tileBtn.addEventListener('click', () => {
                             EngineState.currentSectorIndex = idx;
                             shutAllModals();
@@ -1711,9 +1784,10 @@
                 leaderboardEl.innerHTML = '';
                 SECTORS_DICTIONARY.forEach(sec => {
                     const high = EngineState.leaderboard[`sect_${sec.id}`];
+                    const starCount = EngineState.starsEarned[`sect_${sec.id}`] || 0;
                     const row = document.createElement('div');
                     row.classList.add('sk_setting_block');
-                    row.innerHTML = `<span style="color:#fff;">Sector ${sec.id}: ${sec.name}</span><b>${high ? high + 's' : '---'}</b>`;
+                    row.innerHTML = `<span style="color:#fff;">Sector ${sec.id}: ${sec.name} <span style="color:var(--sk-yellow); font-size:11px;">${'★'.repeat(starCount)}${'☆'.repeat(3 - starCount)}</span></span><b>${high ? high + 's' : '---'}</b>`;
                     leaderboardEl.appendChild(row);
                 });
             }
@@ -1853,13 +1927,12 @@
                 });
 
                 document.getElementById('sk_reset_local_records').addEventListener('click', () => {
-                    if (confirm("Reset current unlock state and records?")) {
-                        localStorage.clear();
-                        EngineState.levelsUnlocked = 1;
-                        EngineState.leaderboard = {};
-                        rebuildLevelsGridUI();
-                        alert("Engine memory flushed.");
-                    }
+                    ['sk_sector_unlocked', 'sk_leaderboard_data', 'sk_synth_muted_pref', 'sk_sim_speed_pref', 'sk_gs_stars'].forEach(k => localStorage.removeItem(k));
+                    EngineState.levelsUnlocked = 1;
+                    EngineState.leaderboard = {};
+                    EngineState.starsEarned = {};
+                    rebuildLevelsGridUI();
+                    populateChronometerRecords();
                 });
 
                 document.getElementById('sk_btn_fullscreen_mode').addEventListener('click', () => {

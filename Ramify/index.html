@@ -1,10 +1,19 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Ramify - Cyberpunk RAM Routing Puzzle</title>
   <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
     /* Scope all styles within .sk_game_suite_root to prevent leakage */
     .sk_game_suite_root {
       --sk-bg-dark: #070a13;
@@ -17,13 +26,36 @@
       --sk-neon-red: #ff3333;
       --sk-text-light: #f0f4fc;
       --sk-text-dim: #7a8fa9;
-      --sk-font-family: 'Courier New', Courier, monospace, system-ui;
-      
+      --sk-font-family: 'Courier New', Courier, monospace;
+
+      /* Layout dimensions */
+      --sk-topbar-h: 60px;
+      --sk-bottom-h: 70px;
+      --sk-viewport-size: min(65vh, 85vw);
+
+      /* Derived surfaces (kept in sync with palette above) */
+      --sk-surface: rgba(13, 19, 38, 0.95);
+      --sk-surface-solid: rgba(13, 19, 38, 1);
+      --sk-surface-soft: rgba(13, 19, 38, 0.5);
+      --sk-surface-dark: rgba(10, 15, 30, 0.98);
+      --sk-hud-bg: rgba(13, 19, 38, 0.9);
+      --sk-grid-bg: #050810;
+      --sk-inset-bg: #111;
+      --sk-glow-cyan: rgba(0, 240, 255, 0.6);
+      --sk-glow-cyan-soft: rgba(0, 240, 255, 0.15);
+      --sk-glow-magenta: rgba(255, 0, 127, 0.6);
+      --sk-glow-green: rgba(57, 255, 20, 0.4);
+      --sk-glow-green-soft: rgba(57, 255, 20, 0.15);
+      --sk-glow-green-faint: rgba(57, 255, 20, 0.08);
+      --sk-border-cyan: rgba(0, 240, 255, 0.3);
+      --sk-border-green: rgba(57, 255, 20, 0.4);
+
       font-family: var(--sk-font-family);
       background-color: var(--sk-bg-dark);
       color: var(--sk-text-light);
-      width: 100vw;
+      width: 100%;
       height: 100vh;
+      height: 100dvh;
       box-sizing: border-box;
       position: relative;
       overflow: hidden;
@@ -31,6 +63,8 @@
       flex-direction: column;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
     }
 
     .sk_game_suite_root * {
@@ -39,19 +73,24 @@
       padding: 0;
     }
 
+    button:focus-visible {
+      outline: 2px solid var(--sk-neon-yellow);
+      outline-offset: 2px;
+    }
+
     /* Top Bar Styling - Modern sleek frosted glass */
     .sk_top_bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(180deg, rgba(13, 19, 38, 0.95) 0%, rgba(9, 13, 27, 0.98) 100%);
+      background: linear-gradient(180deg, var(--sk-surface) 0%, rgba(9, 13, 27, 0.98) 100%);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       padding: 10px 18px;
       border-bottom: 2px solid var(--sk-neon-cyan);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       z-index: 100;
-      height: 60px;
+      height: var(--sk-topbar-h);
       flex-shrink: 0;
     }
 
@@ -65,7 +104,7 @@
       font-size: 22px;
       font-weight: 800;
       color: var(--sk-neon-cyan);
-      text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+      text-shadow: 0 0 10px var(--sk-glow-cyan);
       letter-spacing: 3px;
     }
 
@@ -79,17 +118,17 @@
       font-size: 13px;
       color: var(--sk-neon-green);
       font-weight: bold;
-      border: 1px solid rgba(57, 255, 20, 0.4);
+      border: 1px solid var(--sk-border-green);
       border-radius: 4px;
       padding: 5px 10px;
-      background: rgba(57, 255, 20, 0.08);
-      box-shadow: inset 0 0 8px rgba(57, 255, 20, 0.15);
+      background: var(--sk-glow-green-faint);
+      box-shadow: inset 0 0 8px var(--sk-glow-green-soft);
     }
 
     .sk_btn {
-      background: linear-gradient(135deg, #172242 0%, #0d1326 100%);
+      background: linear-gradient(135deg, var(--sk-bg-accent) 0%, var(--sk-bg-panel) 100%);
       color: var(--sk-text-light);
-      border: 1px solid rgba(0, 240, 255, 0.3);
+      border: 1px solid var(--sk-border-cyan);
       border-radius: 4px;
       padding: 7px 14px;
       cursor: pointer;
@@ -101,13 +140,14 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      line-height: 1.2;
     }
 
     .sk_btn:hover {
       background: var(--sk-neon-cyan);
       color: var(--sk-bg-dark);
       border-color: var(--sk-neon-cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+      box-shadow: 0 0 15px var(--sk-glow-cyan);
       transform: translateY(-1px);
     }
 
@@ -119,7 +159,41 @@
       background: var(--sk-neon-magenta) !important;
       color: var(--sk-text-light) !important;
       border-color: var(--sk-neon-magenta) !important;
-      box-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+      box-shadow: 0 0 15px var(--sk-glow-magenta);
+    }
+
+    /* Button modifier classes (replaces previously inline styles) */
+    .sk_btn--wide {
+      width: 100%;
+    }
+
+    .sk_btn--primary {
+      width: 100%;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .sk_btn--success,
+    .sk_btn--success:hover {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 8px;
+      font-weight: bold;
+      background: var(--sk-neon-green);
+      color: #000;
+      border-color: var(--sk-neon-green);
+      box-shadow: 0 0 15px var(--sk-glow-green);
+    }
+
+    .sk_btn--crash,
+    .sk_btn--crash:hover {
+      background: #fff;
+      color: #0000aa;
+      border: 1px solid #fff;
+      padding: 10px 20px;
+      font-weight: bold;
+      box-shadow: none;
     }
 
     /* Combined Responsive Navigation Drawer Menu */
@@ -132,15 +206,15 @@
 
     .sk_menu_drawer {
       position: absolute;
-      top: 60px;
+      top: var(--sk-topbar-h);
       right: -300px;
       width: 280px;
-      height: calc(100% - 60px);
-      background: rgba(10, 15, 30, 0.98);
+      height: calc(100% - var(--sk-topbar-h));
+      background: var(--sk-surface-dark);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-left: 2px solid var(--sk-neon-cyan);
-      box-shadow: -15px 0 30px rgba(0,0,0,0.7);
+      box-shadow: -15px 0 30px rgba(0, 0, 0, 0.7);
       z-index: 95;
       display: flex;
       flex-direction: column;
@@ -166,16 +240,17 @@
     /* Main Container Split */
     .sk_main_body {
       flex: 1;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       position: relative;
-      height: calc(100% - 60px);
       overflow: hidden;
     }
 
     /* Canvas Grid Container - Enforces 1:1 Aspect Ratio on Any Screen */
     .sk_canvas_container {
       flex: 1;
+      min-height: 0;
       position: relative;
       display: flex;
       justify-content: center;
@@ -183,20 +258,33 @@
       padding: 10px;
       background-color: var(--sk-bg-dark);
       overflow: hidden;
-      touch-action: none; /* Block default system panning and zooming */
+      touch-action: none;
+      /* Block default system panning and zooming */
     }
 
     .sk_canvas_viewport {
-      width: min(65vh, 85vw);
-      height: min(65vh, 85vw);
-      max-height: calc(100vh - 160px);
+      width: var(--sk-viewport-size);
+      height: var(--sk-viewport-size);
+      max-height: calc(100vh - var(--sk-topbar-h) - var(--sk-bottom-h) - 20px);
       max-width: calc(100vw - 20px);
       aspect-ratio: 1 / 1;
       position: relative;
       border: 2px solid var(--sk-neon-cyan);
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
-      background-color: #050810;
+      box-shadow: 0 0 20px var(--sk-glow-cyan-soft);
+      background-color: var(--sk-grid-bg);
       overflow: hidden;
+    }
+
+    /* Modern browsers: fit the board to available space, never larger than the fallback footprint */
+    @supports (container-type: size) {
+      .sk_canvas_container {
+        container-type: size;
+      }
+
+      .sk_canvas_viewport {
+        width: min(100cqmin, var(--sk-viewport-size));
+        height: min(100cqmin, var(--sk-viewport-size));
+      }
     }
 
     .sk_main_canvas {
@@ -205,7 +293,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      transform-origin: 0 0; /* Necessary for manual pan & zoom manipulation */
+      transform-origin: 0 0;
+      /* Necessary for manual pan & zoom manipulation */
     }
 
     /* HUD overlay on Canvas */
@@ -221,10 +310,15 @@
     }
 
     .sk_hud_item {
-      background: rgba(13, 19, 38, 0.9);
+      background: var(--sk-hud-bg);
       border: 1px solid var(--sk-neon-cyan);
       padding: 4px 8px;
       pointer-events: auto;
+      text-align: left;
+    }
+
+    .sk_hud_item--right {
+      text-align: right;
     }
 
     .sk_hud_label {
@@ -239,10 +333,14 @@
       color: var(--sk-neon-green);
     }
 
+    .sk_hud_timer {
+      color: var(--sk-neon-yellow);
+    }
+
     .sk_volatility_bar_container {
       width: 70px;
       height: 6px;
-      background: #111;
+      background: var(--sk-inset-bg);
       border: 1px solid var(--sk-text-dim);
       margin-top: 2px;
       position: relative;
@@ -251,8 +349,37 @@
     .sk_volatility_bar_fill {
       height: 100%;
       width: 0%;
+      background: var(--sk-neon-green);
+      transition: width 0.2s ease, background 0.3s ease;
+    }
+
+    .sk_volatility_bar_fill.sk_vol_mid {
+      background: var(--sk-neon-yellow);
+    }
+
+    .sk_volatility_bar_fill.sk_vol_crit {
       background: var(--sk-neon-red);
-      transition: width 0.2s ease;
+      animation: sk_vol_flash 0.6s infinite alternate;
+    }
+
+    @keyframes sk_vol_flash {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0.4;
+      }
+    }
+
+    /* Shared interactive base for game-control buttons */
+    .sk_btn,
+    .sk_dpad_btn,
+    .sk_action_btn {
+      cursor: pointer;
+      font-family: var(--sk-font-family);
+      font-weight: bold;
+      transition: all 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
     }
 
     /* Floating Draggable Controls Zone */
@@ -260,12 +387,12 @@
       position: absolute;
       bottom: 10px;
       right: 10px;
-      background: rgba(13, 19, 38, 0.95);
+      background: var(--sk-surface);
       border: 2px solid var(--sk-neon-magenta);
       padding: 8px;
       z-index: 90;
       width: 210px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       touch-action: none;
     }
 
@@ -296,9 +423,6 @@
       min-height: 36px;
       min-width: 36px;
       text-align: center;
-      cursor: pointer;
-      font-weight: bold;
-      font-family: var(--sk-font-family);
       font-size: 12px;
       display: flex;
       align-items: center;
@@ -308,6 +432,24 @@
     .sk_dpad_btn:hover {
       background: var(--sk-neon-magenta);
       color: #fff;
+    }
+
+    /* D-pad modifier buttons (previously styled inline) */
+    .sk_dpad_btn--cyan {
+      color: var(--sk-neon-cyan);
+    }
+
+    .sk_dpad_btn--yellow,
+    .sk_dpad_btn--reset {
+      font-size: 10px;
+    }
+
+    .sk_dpad_btn--yellow {
+      color: var(--sk-neon-yellow);
+    }
+
+    .sk_dpad_btn--reset {
+      color: var(--sk-neon-cyan);
     }
 
     .sk_action_row {
@@ -323,9 +465,6 @@
       border: 1px solid var(--sk-neon-cyan);
       background: var(--sk-bg-dark);
       color: var(--sk-neon-cyan);
-      font-weight: bold;
-      cursor: pointer;
-      font-family: var(--sk-font-family);
       font-size: 11px;
     }
 
@@ -334,45 +473,81 @@
       color: #000;
     }
 
+    .sk_action_btn--danger {
+      border-color: var(--sk-neon-red);
+      color: var(--sk-neon-red);
+    }
+
     /* Media query for smaller mobile devices */
     @media (max-width: 600px) {
+      .sk_game_suite_root {
+        --sk-topbar-h: 50px;
+        --sk-viewport-size: min(58vh, 94vw);
+      }
+
       .sk_game_title {
         font-size: 15px;
         letter-spacing: 1px;
       }
+
       .sk_top_bar {
         padding: 6px 10px;
-        height: 50px;
       }
-      .sk_main_body {
-        height: calc(100% - 50px);
-      }
+
       .sk_score_display {
         font-size: 11px;
         padding: 2px 6px;
       }
+
       .sk_btn {
         padding: 5px 8px;
         font-size: 11px;
       }
+
       .sk_draggable_controls {
         width: 175px;
         padding: 6px;
       }
+
       .sk_dpad_btn {
         padding: 6px;
         min-height: 32px;
         min-width: 32px;
         font-size: 10px;
       }
+
       .sk_action_btn {
         font-size: 10px;
         padding: 6px;
         min-height: 32px;
       }
-      .sk_canvas_viewport {
-        width: min(58vh, 94vw);
-        height: min(58vh, 94vw);
+    }
+
+    /* Short landscape phones: compact chrome so the board stays visible */
+    @media (max-height: 520px) and (orientation: landscape) {
+      .sk_game_suite_root {
+        --sk-bottom-h: 40px;
+      }
+
+      .sk_bottom_safe_zone {
+        height: var(--sk-bottom-h);
+        padding: 4px 10px;
+      }
+
+      .sk_bottom_safe_zone .sk_status_text {
+        display: none;
+      }
+
+      .sk_hud_item {
+        padding: 2px 5px;
+      }
+
+      .sk_volatility_bar_container {
+        width: 50px;
+      }
+
+      .sk_draggable_controls {
+        width: 150px;
       }
     }
 
@@ -402,6 +577,11 @@
       overflow-y: auto;
     }
 
+    .sk_modal_content--victory {
+      border-color: var(--sk-neon-green);
+      box-shadow: 0 0 30px var(--sk-glow-green);
+    }
+
     .sk_modal_title {
       font-size: 18px;
       color: var(--sk-neon-cyan);
@@ -412,6 +592,11 @@
       text-transform: uppercase;
     }
 
+    .sk_modal_title--success {
+      color: var(--sk-neon-green);
+      border-color: var(--sk-neon-green);
+    }
+
     .sk_modal_body {
       font-size: 13px;
       line-height: 1.5;
@@ -419,11 +604,69 @@
       color: var(--sk-text-light);
     }
 
+    .sk_modal_body--center {
+      text-align: center;
+    }
+
+    .sk_modal_body--scroll {
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
     .sk_grid_levels {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-top: 15px;
+    }
+
+    .sk_grid_levels .sk_btn {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .sk_grid_levels .sk_btn .sk_lvl_sub {
+      font-size: 9px;
+      color: var(--sk-text-dim);
+      letter-spacing: 1px;
+    }
+
+    .sk_grid_levels .sk_btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+      border-color: var(--sk-text-dim);
+      background: var(--sk-surface-soft);
+      box-shadow: none;
+    }
+
+    .sk_grid_levels .sk_btn:disabled:hover {
+      background: var(--sk-surface-soft);
+      color: var(--sk-text-light);
+      border-color: var(--sk-text-dim);
+      transform: none;
+    }
+
+    .sk_stars_display span {
+      text-shadow: 0 0 10px rgba(255, 221, 0, 0.6);
+    }
+
+    .sk_stars_display--big {
+      margin-top: 12px;
+      font-size: 26px;
+      letter-spacing: 6px;
+    }
+
+    .sk_success_text {
+      font-size: 24px;
+      color: var(--sk-neon-green);
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .sk_highlight_cyan {
+      color: var(--sk-neon-cyan);
     }
 
     /* Blue Screen Crash Stylings */
@@ -465,7 +708,7 @@
     }
 
     .sk_key_hint {
-      background: #111;
+      background: var(--sk-inset-bg);
       padding: 2px 5px;
       border-radius: 3px;
       border: 1px solid #444;
@@ -474,7 +717,7 @@
 
     /* Bottom spacing buffer zone */
     .sk_bottom_safe_zone {
-      height: 70px;
+      height: var(--sk-bottom-h);
       width: 100%;
       background: var(--sk-bg-panel);
       border-top: 1px solid var(--sk-bg-accent);
@@ -487,18 +730,30 @@
       z-index: 80;
     }
 
+    .sk_status_text {
+      font-size: 10px;
+      color: var(--sk-text-dim);
+    }
+
+    .sk_text_small {
+      font-size: 11px;
+      color: var(--sk-text-dim);
+    }
+
     /* CSS Loader Bar Setup */
     .sk_loader_modal {
       text-align: center;
     }
+
     .sk_progress_container {
       width: 100%;
       height: 20px;
-      background: #111;
+      background: var(--sk-inset-bg);
       border: 1px solid var(--sk-neon-cyan);
       margin-top: 15px;
       position: relative;
     }
+
     .sk_progress_bar {
       height: 100%;
       width: 0%;
@@ -523,44 +778,71 @@
       padding: 20px;
     }
 
-    @media (max-width: 600px) {
-      .sk_game_title {
-        font-size: 16px;
+    .sk_landscape_title {
+      color: var(--sk-neon-cyan);
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .sk_landscape_hint {
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    /* Desktop: collapse the mobile safe-zone gutter so it doesn't waste space */
+    @media (pointer: fine) and (min-width: 601px) {
+      .sk_game_suite_root {
+        --sk-bottom-h: 0px;
       }
-      .sk_draggable_controls {
-        width: 180px;
-        padding: 6px;
+
+      .sk_bottom_safe_zone {
+        height: var(--sk-bottom-h);
+        padding: 0;
+        border: none;
       }
-      .sk_action_btn {
-        font-size: 10px;
-        padding: 6px;
+    }
+
+    /* Reduced motion: disable flashes and unnecessary transitions */
+    @media (prefers-reduced-motion: reduce) {
+      .sk_volatility_bar_fill.sk_vol_crit {
+        animation: none;
       }
-      .sk_dpad_btn {
-        padding: 6px;
-        font-size: 11px;
+
+      .sk_btn,
+      .sk_dpad_btn,
+      .sk_action_btn,
+      .sk_volatility_bar_fill {
+        transition: none;
+      }
+
+      .sk_menu_drawer {
+        transition: none;
       }
     }
   </style>
-<link rel="stylesheet" href="css/framework.css">`n</head>
+</head>
+
 <body>
 
   <!-- Parent root game suite container -->
   <div class="sk_game_suite_root">
-    
+
     <div class="sk_labels" data="Minimalist,Real-time,Puzzle,Cyberpunk"></div>
-    <meta class="sk_meta" description="Manage a rapidly overloading memory grid by routing volatile data streams to matching garbage collectors before nodes leak and trigger a fatal system crash.">
+    <meta class="sk_meta"
+      description="Manage a rapidly overloading memory grid by routing volatile data streams to matching garbage collectors before nodes leak and trigger a fatal system crash.">
 
     <!-- Top UI Bar Controls -->
     <div class="sk_top_bar">
       <div class="sk_logo_group">
         <span class="sk_game_title">RAMIFY</span>
       </div>
-      
+
       <div class="sk_top_controls">
         <div class="sk_score_display">LEVEL: <span id="sk_top_lvl">1</span></div>
         <button class="sk_btn" id="sk_btn_pause">PAUSE</button>
         <button class="sk_btn" id="sk_btn_fullscreen">FULLSCREEN</button>
-        <button class="sk_btn sk_hamburger" id="sk_btn_menu">â˜°</button>
+        <button class="sk_btn sk_hamburger" id="sk_btn_menu">☰</button>
       </div>
     </div>
 
@@ -576,12 +858,12 @@
 
     <!-- Main Game Canvas and Interactive body section -->
     <div class="sk_main_body">
-      
+
       <!-- Canvas Wrapper -->
       <div class="sk_canvas_container" id="sk_canvas_wrap">
         <div class="sk_canvas_viewport" id="sk_canvas_viewport">
           <canvas class="sk_main_canvas" id="sk_game_canvas" width="800" height="800"></canvas>
-          
+
           <!-- Live HUD Overlay -->
           <div class="sk_hud_overlay">
             <div class="sk_hud_item">
@@ -591,10 +873,10 @@
                 <div class="sk_volatility_bar_fill" id="sk_hud_vol_fill"></div>
               </div>
             </div>
-            <div class="sk_hud_item" style="text-align: right;">
+            <div class="sk_hud_item sk_hud_item--right">
               <p class="sk_hud_label">Routed / Target</p>
               <p class="sk_hud_val"><span id="sk_hud_routed">0</span> / <span id="sk_hud_target">30</span></p>
-              <p class="sk_hud_label">Time: <span id="sk_hud_timer" style="color: var(--sk-neon-yellow)">60s</span></p>
+              <p class="sk_hud_label">Time: <span id="sk_hud_timer" class="sk_hud_timer">60s</span></p>
             </div>
           </div>
         </div>
@@ -602,21 +884,21 @@
 
       <!-- Draggable Virtual Controller Zone (Can be dragged anywhere inside .sk_main_body) -->
       <div class="sk_draggable_controls" id="sk_ctrl_panel">
-        <div class="sk_drag_header" id="sk_ctrl_drag">âš¡ CONTROL DECK âš¡</div>
+        <div class="sk_drag_header" id="sk_ctrl_drag">⚡ CONTROL DECK ⚡</div>
         <div class="sk_dpad">
-          <button class="sk_dpad_btn" id="sk_pad_zoom_in" style="color: var(--sk-neon-cyan);">+</button>
-          <button class="sk_dpad_btn" id="sk_pad_up">â–²</button>
-          <button class="sk_dpad_btn" id="sk_pad_zoom_out" style="color: var(--sk-neon-cyan);">-</button>
-          <button class="sk_dpad_btn" id="sk_pad_left">â—€</button>
+          <button class="sk_dpad_btn sk_dpad_btn--cyan" id="sk_pad_zoom_in">+</button>
+          <button class="sk_dpad_btn" id="sk_pad_up">▲</button>
+          <button class="sk_dpad_btn sk_dpad_btn--cyan" id="sk_pad_zoom_out">-</button>
+          <button class="sk_dpad_btn" id="sk_pad_left">◀</button>
           <button class="sk_dpad_btn" id="sk_pad_ok">OK</button>
-          <button class="sk_dpad_btn" id="sk_pad_right">â–¶</button>
-          <button class="sk_dpad_btn" id="sk_pad_pan_tool" style="color: var(--sk-neon-yellow); font-size:10px;">PAN</button>
-          <button class="sk_dpad_btn" id="sk_pad_down">â–¼</button>
-          <button class="sk_dpad_btn" id="sk_pad_zoom_reset" style="color: var(--sk-neon-cyan); font-size:10px;">1:1</button>
+          <button class="sk_dpad_btn" id="sk_pad_right">▶</button>
+          <button class="sk_dpad_btn sk_dpad_btn--yellow" id="sk_pad_pan_tool">PAN</button>
+          <button class="sk_dpad_btn" id="sk_pad_down">▼</button>
+          <button class="sk_dpad_btn sk_dpad_btn--reset" id="sk_pad_zoom_reset">1:1</button>
         </div>
         <div class="sk_action_row">
           <button class="sk_action_btn" id="sk_act_rotate">ROTATE</button>
-          <button class="sk_action_btn" id="sk_act_purge" style="border-color: var(--sk-neon-red); color: var(--sk-neon-red);">PURGE</button>
+          <button class="sk_action_btn sk_action_btn--danger" id="sk_act_purge">PURGE</button>
         </div>
       </div>
 
@@ -638,20 +920,24 @@
         <div class="sk_modal_content">
           <div class="sk_modal_title">RAMIFY INTERFACE v1.0.5</div>
           <div class="sk_modal_body">
-            <p>Welcome Operator. Volatile data streams are overloading the RAM chip nodes. You must route packets to matching Garbage Collector sinks before grid capacity fails.</p>
+            <p>Welcome Operator. Volatile data streams are overloading the RAM chip nodes. You must route packets to
+              matching Garbage Collector sinks before grid capacity fails.</p>
             <br>
             <p><b>HOW TO ROUTE:</b></p>
-            <p>â€¢ Left-Click/Tap a node to rotate output direction 90Â° clockwise.</p>
-            <p>â€¢ Double-click or select & press Purge to clean overloaded nodes.</p>
-            <p>â€¢ Pinch-to-zoom / 2-finger drag to pan the gameplay arena. Tap the "PAN" button to toggle 1-finger hand pan tool!</p>
+            <p>• Left-Click/Tap a node to rotate output direction 90° clockwise.</p>
+            <p>• Double-click or select & press Purge to clean overloaded nodes.</p>
+            <p>• Pinch-to-zoom / 2-finger drag to pan the gameplay arena. Tap the "PAN" button to toggle 1-finger hand
+              pan tool!</p>
             <br>
             <p><b>KEYBOARD SHORTCUTS:</b></p>
-            <p>â€¢ <span class="sk_key_hint">W/A/S/D</span> / <span class="sk_key_hint">Arrow Keys</span> to navigate selection</p>
+            <p>â€¢ <span class="sk_key_hint">W/A/S/D</span> / <span class="sk_key_hint">Arrow Keys</span> to navigate
+              selection</p>
             <p>â€¢ <span class="sk_key_hint">Enter</span> / <span class="sk_key_hint">Space</span> to rotate</p>
             <p>â€¢ <span class="sk_key_hint">Shift</span> to Purge</p>
-            <p>â€¢ <span class="sk_key_hint">Ctrl + KeyUp</span> / <span class="sk_key_hint">Ctrl + KeyDown</span> to Zoom In / Zoom Out</p>
+            <p>â€¢ <span class="sk_key_hint">Ctrl + KeyUp</span> / <span class="sk_key_hint">Ctrl + KeyDown</span> to
+              Zoom In / Zoom Out</p>
           </div>
-          <button class="sk_btn" id="sk_btn_start_play" style="width: 100%; padding: 15px; font-weight: bold; font-size: 16px;">LOAD PROTOCOLS (PLAY)</button>
+          <button class="sk_btn sk_btn--primary" id="sk_btn_start_play">LOAD PROTOCOLS (PLAY)</button>
         </div>
       </div>
 
@@ -665,7 +951,7 @@
               <!-- JS builds levels -->
             </div>
           </div>
-          <button class="sk_btn" id="sk_btn_close_levels" style="width: 100%;">CLOSE</button>
+          <button class="sk_btn sk_btn--wide" id="sk_btn_close_levels">CLOSE</button>
         </div>
       </div>
 
@@ -684,9 +970,10 @@
               <button class="sk_btn" id="sk_toggle_diff">NORMAL</button>
             </div>
             <br>
-            <p style="font-size: 11px; color: var(--sk-text-dim);">Audio is generated via standard Native HTML5 Oscillator APIs.</p>
+            <p class="sk_text_small">Audio is generated via standard Native HTML5
+              Oscillator APIs.</p>
           </div>
-          <button class="sk_btn" id="sk_btn_close_settings" style="width: 100%;">CLOSE</button>
+          <button class="sk_btn sk_btn--wide" id="sk_btn_close_settings">CLOSE</button>
         </div>
       </div>
 
@@ -697,7 +984,7 @@
           <div class="sk_modal_body" id="sk_high_scores_list">
             <!-- Filled dynamically -->
           </div>
-          <button class="sk_btn" id="sk_btn_close_scores" style="width: 100%;">CLOSE</button>
+          <button class="sk_btn sk_btn--wide" id="sk_btn_close_scores">CLOSE</button>
         </div>
       </div>
 
@@ -705,48 +992,56 @@
       <div class="sk_screen_overlay sk_hidden" id="sk_overlay_info">
         <div class="sk_modal_content">
           <div class="sk_modal_title">INTERFACE REFERENCE MANUAL</div>
-          <div class="sk_modal_body" style="max-height: 250px; overflow-y: auto;">
+          <div class="sk_modal_body sk_modal_body--scroll">
             <p><b>THE VOLATILITY RISK</b></p>
             <p>Every time a packet flows through a grid node, RAM utilization increases by 15%.</p>
             <br>
             <p><b>MEMORY LEAK CRASH</b></p>
-            <p>When any node reaches 100% capacity, it enters a locked LEAKING state (solid flashing Red). Locked nodes cannot rotate or be purged, and begin ejecting toxic data particles.</p>
+            <p>When any node reaches 100% capacity, it enters a locked LEAKING state (solid flashing Red). Locked nodes
+              cannot rotate or be purged, and begin ejecting toxic data particles.</p>
             <br>
             <p><b>THE PURGE MECHANIC</b></p>
-            <p>Double-click/Long-press (or Shift key) to instantly release RAM usage back to 0%. WARNING: Running a purge spikes the global system volatility meter (+8%).</p>
+            <p>Double-click/Long-press (or Shift key) to instantly release RAM usage back to 0%. WARNING: Running a
+              purge spikes the global system volatility meter (+8%).</p>
           </div>
-          <button class="sk_btn" id="sk_btn_close_info" style="width: 100%;">CLOSE</button>
+          <button class="sk_btn sk_btn--wide" id="sk_btn_close_info">CLOSE</button>
         </div>
       </div>
 
       <!-- SYSTEM CRASH (GAME OVER BLUE SCREEN) -->
       <div class="sk_screen_overlay sk_hidden sk_screen_crash" id="sk_overlay_crash">
         <p class="sk_crash_title">*** SYSTEM_CRASH_DETECTED ***</p>
-        <p>A fatal exception MEMORY_LIMIT_EXCEEDED has occurred at system core RAMIFY. The current active process was terminated to prevent hardware degradation.</p>
+        <p>A fatal exception MEMORY_LIMIT_EXCEEDED has occurred at system core RAMIFY. The current active process was
+          terminated to prevent hardware degradation.</p>
         <br>
         <p>Error details: VOLATILITY_RATIO >= 1.00 (Critical Leak Failure)</p>
         <br>
-        <button class="sk_btn" id="sk_btn_restart_crash" style="background: #fff; color: #0000aa; border: 1px solid #fff; padding: 10px 20px; font-weight: bold;">REBOOT CHIP (RETRY)</button>
+        <button class="sk_btn sk_btn--crash" id="sk_btn_restart_crash">REBOOT
+          CHIP (RETRY)</button>
       </div>
 
       <!-- VICTORY SCREEN -->
       <div class="sk_screen_overlay sk_hidden" id="sk_overlay_victory">
-        <div class="sk_modal_content" style="border-color: var(--sk-neon-green); box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);">
-          <div class="sk_modal_title" style="color: var(--sk-neon-green); border-color: var(--sk-neon-green);">ROUTINES UNLOCKED</div>
-          <div class="sk_modal_body" style="text-align: center;">
-            <p style="font-size: 24px; color: var(--sk-neon-green); font-weight: bold; margin-bottom: 15px;">âœ“ SUCCESS âœ“</p>
+        <div class="sk_modal_content sk_modal_content--victory">
+          <div class="sk_modal_title sk_modal_title--success">ROUTINES
+            UNLOCKED</div>
+          <div class="sk_modal_body sk_modal_body--center">
+            <p class="sk_success_text">✓ SUCCESS ✓</p>
             <p>Grid status: OPTIMIZED</p>
-            <p>Total packets routed: <b id="sk_vic_packets" style="color: var(--sk-neon-cyan)">0</b></p>
+            <p>Total packets routed: <b id="sk_vic_packets" class="sk_highlight_cyan">0</b></p>
+            <p class="sk_stars_display sk_stars_display--big" id="sk_vic_stars"></p>
           </div>
-          <button class="sk_btn" id="sk_btn_vic_next" style="width: 100%; padding: 12px; margin-bottom: 8px; font-weight: bold; background: var(--sk-neon-green); color: #000; border-color: var(--sk-neon-green);">PROCEED TO NEXT SECTOR</button>
-          <button class="sk_btn" id="sk_btn_vic_retry" style="width: 100%;">REPLAY LEVEL</button>
+          <button class="sk_btn sk_btn--success" id="sk_btn_vic_next">PROCEED
+            TO NEXT SECTOR</button>
+          <button class="sk_btn sk_btn--wide" id="sk_btn_vic_retry">REPLAY LEVEL</button>
         </div>
       </div>
 
       <!-- ROTATE MOBILE PROMPT -->
       <div class="sk_landscape_prompt sk_hidden" id="sk_prompt_landscape">
-        <p style="color: var(--sk-neon-cyan); font-size: 18px; font-weight: bold; margin-bottom: 15px;">DEVICE ROTATION REQUIRED</p>
-        <p style="font-size: 14px; margin-bottom: 25px;">Please switch your tablet/mobile device to Landscape orientation for terminal routing optimization.</p>
+        <p class="sk_landscape_title">DEVICE ROTATION REQUIRED</p>
+        <p class="sk_landscape_hint">Please switch your tablet/mobile device to Landscape
+          orientation for terminal routing optimization.</p>
         <button class="sk_btn" id="sk_btn_force_landscape">FORCE INTERFACE START</button>
       </div>
 
@@ -754,14 +1049,14 @@
 
     <!-- Bottom Spacing Buffer Zone for Responsive Mobile Layouts -->
     <div class="sk_bottom_safe_zone">
-      <span style="font-size:10px; color:var(--sk-text-dim);">SYSTEM_SECURE_MODE: ACTIVE</span>
-      <span style="font-size:10px; color:var(--sk-text-dim);">SECTOR: COLD_CORE</span>
+      <span class="sk_status_text">SYSTEM_SECURE_MODE: ACTIVE</span>
+      <span class="sk_status_text">SECTOR: COLD_CORE</span>
     </div>
   </div>
 
   <!-- COMPLETE LOGICAL CONTROLLER JAVASCRIPT -->
   <script>
-    (function() {
+    (function () {
       /* Configuration & State Storage */
       const GAME = {
         state: 'START', /* START, PLAYING, PAUSED, GAMEOVER, VICTORY, DEMO */
@@ -772,7 +1067,7 @@
         difficulty: 'NORMAL', /* NORMAL, HARD, EXPERT */
         audioEnabled: true,
         gridSize: 8,
-        selectedCell: { x: 0, y: 0 },
+        selectedCell: {x: 0, y: 0},
         isDemo: false,
         nodes: [],
         packets: [],
@@ -782,10 +1077,10 @@
         gameLoopId: null,
         tickTimer: null,
         soundCtx: null,
+        unlockedLevel: 1,
+        overlayPaused: false,
         highscores: [
-          { level: 1, score: 10 },
-          { level: 2, score: 20 },
-          { level: 3, score: 30 }
+          {level: 1, score: 10, stars: 1}
         ]
       };
 
@@ -867,8 +1162,8 @@
           time: 60,
           speed: 0.02,
           spawnInterval: 2500,
-          sources: [{ x: 0, y: 3, color: 'cyan' }],
-          sinks: [{ x: 7, y: 3, color: 'cyan' }],
+          sources: [{x: 0, y: 3, color: 'cyan'}],
+          sinks: [{x: 7, y: 3, color: 'cyan'}],
           fragmented: []
         },
         {
@@ -877,12 +1172,12 @@
           speed: 0.025,
           spawnInterval: 2200,
           sources: [
-            { x: 0, y: 2, color: 'cyan' },
-            { x: 0, y: 5, color: 'magenta' }
+            {x: 0, y: 2, color: 'cyan'},
+            {x: 0, y: 5, color: 'magenta'}
           ],
           sinks: [
-            { x: 7, y: 2, color: 'cyan' },
-            { x: 7, y: 5, color: 'magenta' }
+            {x: 7, y: 2, color: 'cyan'},
+            {x: 7, y: 5, color: 'magenta'}
           ],
           fragmented: []
         },
@@ -892,14 +1187,14 @@
           speed: 0.025,
           spawnInterval: 2000,
           sources: [
-            { x: 0, y: 1, color: 'cyan' },
-            { x: 0, y: 6, color: 'magenta' }
+            {x: 0, y: 1, color: 'cyan'},
+            {x: 0, y: 6, color: 'magenta'}
           ],
           sinks: [
-            { x: 7, y: 1, color: 'cyan' },
-            { x: 7, y: 6, color: 'magenta' }
+            {x: 7, y: 1, color: 'cyan'},
+            {x: 7, y: 6, color: 'magenta'}
           ],
-          fragmented: [{ x: 3, y: 3 }, { x: 4, y: 4 }]
+          fragmented: [{x: 3, y: 3}, {x: 4, y: 4}]
         },
         {
           target: 40,
@@ -907,16 +1202,16 @@
           speed: 0.03,
           spawnInterval: 1800,
           sources: [
-            { x: 0, y: 1, color: 'cyan' },
-            { x: 0, y: 4, color: 'yellow' },
-            { x: 0, y: 6, color: 'magenta' }
+            {x: 0, y: 1, color: 'cyan'},
+            {x: 0, y: 4, color: 'yellow'},
+            {x: 0, y: 6, color: 'magenta'}
           ],
           sinks: [
-            { x: 7, y: 1, color: 'cyan' },
-            { x: 7, y: 4, color: 'yellow' },
-            { x: 7, y: 6, color: 'magenta' }
+            {x: 7, y: 1, color: 'cyan'},
+            {x: 7, y: 4, color: 'yellow'},
+            {x: 7, y: 6, color: 'magenta'}
           ],
-          fragmented: [{ x: 2, y: 3 }, { x: 5, y: 3 }, { x: 3, y: 5 }]
+          fragmented: [{x: 2, y: 3}, {x: 5, y: 3}, {x: 3, y: 5}]
         },
         {
           target: 50,
@@ -924,16 +1219,16 @@
           speed: 0.035,
           spawnInterval: 1500,
           sources: [
-            { x: 0, y: 0, color: 'cyan' },
-            { x: 0, y: 3, color: 'yellow' },
-            { x: 0, y: 7, color: 'magenta' }
+            {x: 0, y: 0, color: 'cyan'},
+            {x: 0, y: 3, color: 'yellow'},
+            {x: 0, y: 7, color: 'magenta'}
           ],
           sinks: [
-            { x: 7, y: 0, color: 'cyan' },
-            { x: 7, y: 3, color: 'yellow' },
-            { x: 7, y: 7, color: 'magenta' }
+            {x: 7, y: 0, color: 'cyan'},
+            {x: 7, y: 3, color: 'yellow'},
+            {x: 7, y: 7, color: 'magenta'}
           ],
-          fragmented: [{ x: 2, y: 2 }, { x: 5, y: 5 }, { x: 3, y: 3 }, { x: 4, y: 3 }]
+          fragmented: [{x: 2, y: 2}, {x: 5, y: 5}, {x: 3, y: 3}, {x: 4, y: 3}]
         }
       ];
 
@@ -943,7 +1238,7 @@
         canvas: document.getElementById('sk_game_canvas'),
         canvasWrap: document.getElementById('sk_canvas_wrap'),
         canvasViewport: document.getElementById('sk_canvas_viewport'),
-        
+
         btnPlay: document.getElementById('sk_btn_play'),
         btnDemo: document.getElementById('sk_btn_demo'),
         btnLevels: document.getElementById('sk_btn_levels'),
@@ -954,7 +1249,7 @@
         btnPause: document.getElementById('sk_btn_pause'),
         btnMenu: document.getElementById('sk_btn_menu'),
         menuDrawer: document.getElementById('sk_menu_drawer'),
-        
+
         hudVol: document.getElementById('sk_hud_volatility_val'),
         hudVolFill: document.getElementById('sk_hud_vol_fill'),
         hudRouted: document.getElementById('sk_hud_routed'),
@@ -983,12 +1278,13 @@
         btnVicNext: document.getElementById('sk_btn_vic_next'),
         btnVicRetry: document.getElementById('sk_btn_vic_retry'),
         btnForceLandscape: document.getElementById('sk_btn_force_landscape'),
-        
+
         levelsGrid: document.getElementById('sk_levels_grid'),
         highscoresList: document.getElementById('sk_high_scores_list'),
         toggleAudio: document.getElementById('sk_toggle_audio'),
         toggleDiff: document.getElementById('sk_toggle_diff'),
         vicPackets: document.getElementById('sk_vic_packets'),
+        vicStars: document.getElementById('sk_vic_stars'),
 
         /* Virtual Control Handles */
         ctrlPanel: document.getElementById('sk_ctrl_panel'),
@@ -998,7 +1294,7 @@
         padOk: document.getElementById('sk_pad_ok'),
         padRight: document.getElementById('sk_pad_right'),
         padDown: document.getElementById('sk_pad_down'),
-        
+
         padZoomIn: document.getElementById('sk_pad_zoom_in'),
         padZoomOut: document.getElementById('sk_pad_zoom_out'),
         padZoomReset: document.getElementById('sk_pad_zoom_reset'),
@@ -1017,6 +1313,7 @@
           try {
             const parsed = JSON.parse(saved);
             if (parsed.highscores) GAME.highscores = parsed.highscores;
+            if (parsed.unlockedLevel) GAME.unlockedLevel = parsed.unlockedLevel;
             if (parsed.audioEnabled !== undefined) GAME.audioEnabled = parsed.audioEnabled;
             if (parsed.difficulty) GAME.difficulty = parsed.difficulty;
             updateSettingsUI();
@@ -1029,6 +1326,7 @@
       function saveData() {
         const stateToSave = {
           highscores: GAME.highscores,
+          unlockedLevel: GAME.unlockedLevel,
           audioEnabled: GAME.audioEnabled,
           difficulty: GAME.difficulty
         };
@@ -1051,11 +1349,19 @@
         dom.levelsGrid.innerHTML = '';
         LEVELS_DATA.forEach((lvl, index) => {
           const btn = document.createElement('button');
+          const levelNo = index + 1;
+          const isUnlocked = levelNo <= GAME.unlockedLevel;
           btn.className = 'sk_btn';
-          btn.style.padding = '15px';
-          btn.innerText = `Sector ${index + 1}`;
+          btn.style.padding = '12px';
+          btn.disabled = !isUnlocked;
+          const record = GAME.highscores.find(h => h.level === levelNo);
+          const starText = record ? '★'.repeat(record.stars || 1) : '';
+          btn.innerHTML = `
+            <span>SECTOR ${levelNo}</span>
+            <span class="sk_lvl_sub">TARGET ${lvl.target}</span>
+            <span class="sk_lvl_sub" style="color: var(--sk-neon-yellow);">${starText || (isUnlocked ? 'READY' : '🔒 LOCKED')}</span>`;
           btn.addEventListener('click', () => {
-            GAME.level = index + 1;
+            GAME.level = levelNo;
             hideAllOverlays();
             startGame();
           });
@@ -1092,7 +1398,16 @@
         });
       });
 
-      /* Multi-fetch levels from GitHub Raw Link with progress bar simulation */
+      /* Close drawer when clicking outside it */
+      document.addEventListener('click', (e) => {
+        if (dom.menuDrawer.classList.contains('sk_menu_open') &&
+          !dom.menuDrawer.contains(e.target) &&
+          !dom.btnMenu.contains(e.target)) {
+          dom.menuDrawer.classList.remove('sk_menu_open');
+        }
+      });
+
+      /* Multi-fetch levels from bundled pack or GitHub Raw Link with progress bar simulation */
       function fetchRemoteLevels() {
         showOverlay(dom.overlayLoader);
         let progress = 0;
@@ -1102,23 +1417,6 @@
           dom.progressFill.style.width = `${progress}%`;
         }, 80);
 
-        /* Emulating Raw github level list fetch */
-        fetch('./Ramify.json')
-          .then(res => res.text())
-          .then(data => {
-            /* Safely sanitizing block comments, slashes and whitespace */
-            const sanitized = data.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '');
-            const parsed = JSON.parse(sanitized);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              LEVELS_DATA = parsed;
-            }
-            endLoader();
-          })
-          .catch(err => {
-            console.warn("Using fallback local layout structures:", err);
-            setTimeout(endLoader, 1600);
-          });
-
         function endLoader() {
           clearInterval(progressTimer);
           dom.progressFill.style.width = '100%';
@@ -1127,6 +1425,60 @@
             showOverlay(dom.overlayStart);
           }, 400);
         }
+
+        function applyLevelPack(parsed) {
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            LEVELS_DATA = parsed;
+            if (GAME.unlockedLevel > LEVELS_DATA.length) {
+              GAME.unlockedLevel = LEVELS_DATA.length;
+            }
+            saveData();
+            return true;
+          }
+          return false;
+        }
+
+        function sanitizeParse(text) {
+          const sanitized = text.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '');
+          return JSON.parse(sanitized);
+        }
+
+        async function tryFetch(url, ms) {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), ms);
+          try {
+            const res = await fetch(url, {cache: 'no-store', signal: controller.signal});
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return await res.text();
+          } finally {
+            clearTimeout(timer);
+          }
+        }
+
+        const REMOTE_URL = 'https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Ramify/levels.json';
+
+        (async () => {
+          let text = null;
+          try {
+            text = await tryFetch(REMOTE_URL, 6000);
+            console.warn('Loaded level pack from GitHub.');
+          } catch (e2) {
+            console.warn('GitHub fetch unavailable, using embedded levels:', e2);
+            setTimeout(endLoader, 1200);
+            return;
+          }
+          try {
+            const parsed = sanitizeParse(text);
+            if (applyLevelPack(parsed)) {
+              if (!dom.overlayLevels.classList.contains('sk_hidden')) generateLevelsGrid();
+            } else {
+              setTimeout(endLoader, 1200);
+            }
+          } catch (err) {
+            console.warn('Level pack parse failed, using embedded levels:', err);
+            setTimeout(endLoader, 1200);
+          }
+        })();
       }
 
       /* Draggable Controls Deck Mechanism */
@@ -1188,7 +1540,7 @@
         dom.ctrlPanel.style.top = `${newTop}px`;
         dom.ctrlPanel.style.right = 'auto';
         dom.ctrlPanel.style.bottom = 'auto';
-      }, { passive: false });
+      }, {passive: false});
 
       document.addEventListener('mouseup', () => isDragging = false);
       document.addEventListener('touchend', () => isDragging = false);
@@ -1221,15 +1573,18 @@
       /* Level Initialization */
       function initLevel() {
         const lvlConf = LEVELS_DATA[GAME.level - 1] || LEVELS_DATA[0];
+        const diffMult = GAME.difficulty === 'HARD' ? {time: 0.9, spawn: 0.85}
+          : GAME.difficulty === 'EXPERT' ? {time: 0.8, spawn: 0.7}
+            : {time: 1, spawn: 1};
         GAME.volatility = 0;
         GAME.routed = 0;
-        GAME.timeRemaining = lvlConf.time;
+        GAME.timeRemaining = Math.max(10, Math.round(lvlConf.time * diffMult.time));
         GAME.lastSpawnTime = 0;
-        GAME.spawnInterval = lvlConf.spawnInterval;
+        GAME.spawnInterval = Math.max(300, Math.round(lvlConf.spawnInterval * diffMult.spawn));
         GAME.packets = [];
         GAME.particles = [];
         dom.topLvl.innerText = GAME.level;
-        
+
         /* Build Nodes Grid */
         GAME.nodes = [];
         for (let y = 0; y < GAME.gridSize; y++) {
@@ -1270,7 +1625,7 @@
           node.type = 'fragmented';
         });
 
-        GAME.selectedCell = { x: 2, y: 3 };
+        GAME.selectedCell = {x: 2, y: 3};
         updateHUD();
       }
 
@@ -1284,10 +1639,15 @@
 
         if (GAME.volatility >= 75) {
           dom.hudVol.style.color = 'var(--sk-neon-red)';
+          dom.hudVolFill.classList.add('sk_vol_crit');
+          dom.hudVolFill.classList.remove('sk_vol_mid');
         } else if (GAME.volatility >= 45) {
           dom.hudVol.style.color = 'var(--sk-neon-yellow)';
+          dom.hudVolFill.classList.add('sk_vol_mid');
+          dom.hudVolFill.classList.remove('sk_vol_crit');
         } else {
           dom.hudVol.style.color = 'var(--sk-neon-green)';
+          dom.hudVolFill.classList.remove('sk_vol_mid', 'sk_vol_crit');
         }
       }
 
@@ -1296,7 +1656,7 @@
         if (GAME.state === 'PAUSED') return;
         const node = GAME.nodes[y][x];
         if (node.type === 'sink' || node.type === 'fragmented' || node.locked) return;
-        
+
         node.direction = (node.direction + 1) % 4;
         node.ram = Math.min(100, node.ram + 5);
         if (node.ram >= 100) triggerLeak(node);
@@ -1337,15 +1697,31 @@
       }
 
       function triggerVictory() {
+        const lvlConf = LEVELS_DATA[GAME.level - 1] || LEVELS_DATA[0];
         GAME.state = 'VICTORY';
         dom.vicPackets.innerText = GAME.routed;
+
+        /* Star rating: clean + fast wins are rated higher */
+        let earnedStars = 1;
+        if (GAME.volatility <= 65) earnedStars = 2;
+        if (GAME.volatility <= 35 && GAME.timeRemaining > 0) earnedStars = 3;
+        dom.vicStars.innerHTML = '★'.repeat(earnedStars) + '<span style="opacity:0.25;">' + '★'.repeat(3 - earnedStars) + '</span>';
+
+        const lastLevel = GAME.level >= LEVELS_DATA.length;
+        dom.btnVicNext.innerText = lastLevel ? 'ALL SECTORS COMPLETE — RETURN TO MENU' : 'PROCEED TO NEXT SECTOR';
+        dom.btnVicNext.style.display = '';
+
         showOverlay(dom.overlayVictory);
-        
+
         const existing = GAME.highscores.find(h => h.level === GAME.level);
         if (existing) {
           if (GAME.routed > existing.score) existing.score = GAME.routed;
+          if (earnedStars > (existing.stars || 1)) existing.stars = earnedStars;
         } else {
-          GAME.highscores.push({ level: GAME.level, score: GAME.routed });
+          GAME.highscores.push({level: GAME.level, score: GAME.routed, stars: earnedStars});
+        }
+        if (GAME.unlockedLevel < GAME.level + 1 && !lastLevel) {
+          GAME.unlockedLevel = GAME.level + 1;
         }
         saveData();
 
@@ -1360,14 +1736,14 @@
         else if (direction === 1) tx++; /* Right */
         else if (direction === 2) ty++; /* Down */
         else if (direction === 3) tx--; /* Left */
-        return { x: tx, y: ty };
+        return {x: tx, y: ty};
       }
 
       function createSparks(gridX, gridY, color, count = 8) {
         const cellSize = 800 / GAME.gridSize;
         const cx = gridX * cellSize + cellSize / 2;
         const cy = gridY * cellSize + cellSize / 2;
-        
+
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
           const speed = 2 + Math.random() * 4;
@@ -1388,12 +1764,13 @@
         initLevel();
         GAME.state = 'PLAYING';
         GAME.isDemo = false;
+        GAME.overlayPaused = false;
         dom.btnPause.innerText = 'PAUSE';
         hideAllOverlays();
-        
+
         if (GAME.gameLoopId) cancelAnimationFrame(GAME.gameLoopId);
         if (GAME.tickTimer) clearInterval(GAME.tickTimer);
-        
+
         GAME.gameLoopId = requestAnimationFrame(gameLoop);
         GAME.tickTimer = setInterval(tickProcess, 1000);
       }
@@ -1401,6 +1778,7 @@
       function startDemo() {
         initAudio();
         GAME.level = 1;
+        GAME.overlayPaused = false;
         initLevel();
         GAME.state = 'DEMO';
         GAME.isDemo = true;
@@ -1416,13 +1794,31 @@
       function togglePause() {
         if (GAME.state === 'PLAYING') {
           GAME.state = 'PAUSED';
+          GAME.overlayPaused = false;
           dom.btnPause.innerText = 'RESUME';
           clearInterval(GAME.tickTimer);
         } else if (GAME.state === 'PAUSED') {
           GAME.state = 'PLAYING';
+          GAME.overlayPaused = false;
           dom.btnPause.innerText = 'PAUSE';
           GAME.tickTimer = setInterval(tickProcess, 1000);
           GAME.gameLoopId = requestAnimationFrame(gameLoop);
+        }
+      }
+
+      /* Opening menu overlays automatically suspends the running simulation */
+      function pauseForOverlay() {
+        if (GAME.state === 'PLAYING') {
+          GAME.overlayPaused = true;
+          GAME.state = 'PAUSED';
+          dom.btnPause.innerText = 'RESUME';
+          clearInterval(GAME.tickTimer);
+        }
+      }
+
+      function resumeFromOverlay() {
+        if (GAME.overlayPaused && GAME.state === 'PAUSED') {
+          togglePause();
         }
       }
 
@@ -1443,7 +1839,7 @@
         for (let y = 0; y < GAME.gridSize; y++) {
           for (let x = 0; x < GAME.gridSize; x++) {
             const node = GAME.nodes[y][x];
-            
+
             if (node.locked) {
               node.lockTimer--;
               if (node.lockTimer <= 0) {
@@ -1529,19 +1925,19 @@
         const cellSize = 800 / GAME.gridSize;
         for (let i = GAME.packets.length - 1; i >= 0; i--) {
           const pkt = GAME.packets[i];
-          
+
           if (pkt.lerpProgress >= 1.0) {
             pkt.gridX = pkt.nextGridX;
             pkt.gridY = pkt.nextGridY;
-            
+
             const currNode = GAME.nodes[pkt.gridY][pkt.gridX];
-            
+
             if (currNode.type === 'sink') {
               if (currNode.color === pkt.color) {
                 GAME.routed++;
                 playSound('score');
                 createSparks(pkt.gridX, pkt.gridY, getHexColor(pkt.color), 15);
-                
+
                 if (GAME.routed >= lvlConf.target) {
                   triggerVictory();
                   return;
@@ -1568,7 +1964,7 @@
             }
 
             const nextCoords = getNextCellCoords(pkt.gridX, pkt.gridY, currNode.direction);
-            
+
             if (nextCoords.x < 0 || nextCoords.x >= GAME.gridSize || nextCoords.y < 0 || nextCoords.y >= GAME.gridSize) {
               GAME.volatility = Math.min(100, GAME.volatility + 10);
               playSound('leak');
@@ -1588,12 +1984,12 @@
           }
 
           pkt.lerpProgress += lvlConf.speed;
-          
+
           const startX = pkt.gridX * cellSize + cellSize / 2;
           const startY = pkt.gridY * cellSize + cellSize / 2;
           const targetX = pkt.nextGridX * cellSize + cellSize / 2;
           const targetY = pkt.nextGridY * cellSize + cellSize / 2;
-          
+
           pkt.x = startX + (targetX - startX) * pkt.lerpProgress;
           pkt.y = startY + (targetY - startY) * pkt.lerpProgress;
         }
@@ -1643,10 +2039,10 @@
             const cy = y * cellSize + cellSize / 2;
 
             if (GAME.selectedCell.x === x && GAME.selectedCell.y === y && GAME.state !== 'DEMO') {
-              ctx.strokeStyle = 'var(--sk-neon-green)';
+              ctx.strokeStyle = '#39ff14';
               ctx.lineWidth = 3;
               ctx.strokeRect(x * cellSize + 4, y * cellSize + 4, cellSize - 8, cellSize - 8);
-              ctx.shadowColor = 'var(--sk-neon-green)';
+              ctx.shadowColor = '#39ff14';
               ctx.shadowBlur = 8;
             } else {
               ctx.shadowBlur = 0;
@@ -1674,14 +2070,14 @@
               ctx.save();
               ctx.translate(cx, cy);
               ctx.rotate(rot);
-              
+
               ctx.strokeStyle = getHexColor(node.color);
               ctx.lineWidth = 2;
               ctx.setLineDash([5, 5]);
               ctx.beginPath();
               ctx.arc(0, 0, cellSize / 2.8, 0, Math.PI * 2);
               ctx.stroke();
-              
+
               ctx.restore();
               ctx.setLineDash([]);
 
@@ -1699,7 +2095,7 @@
             } else if (node.type === 'fragmented') {
               ctx.fillStyle = '#172242';
               ctx.fillRect(x * cellSize + 8, y * cellSize + 8, cellSize - 16, cellSize - 16);
-              
+
               ctx.strokeStyle = '#39ff14';
               ctx.lineWidth = 1;
               ctx.beginPath();
@@ -1721,14 +2117,14 @@
               ctx.stroke();
 
               if (node.ram > 0) {
-                ctx.strokeStyle = node.locked ? 'var(--sk-neon-red)' : 'var(--sk-neon-cyan)';
+                ctx.strokeStyle = node.locked ? '#ff3333' : '#00f0ff';
                 ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.arc(cx, cy, cellSize / 3.2, -Math.PI / 2, (-Math.PI / 2) + (Math.PI * 2) * (node.ram / 100));
                 ctx.stroke();
               }
 
-              ctx.fillStyle = node.locked ? 'var(--sk-neon-red)' : '#121b30';
+              ctx.fillStyle = node.locked ? '#ff3333' : '#121b30';
               ctx.beginPath();
               ctx.arc(cx, cy, cellSize / 8, 0, Math.PI * 2);
               ctx.fill();
@@ -1737,8 +2133,8 @@
                 ctx.save();
                 ctx.translate(cx, cy);
                 ctx.rotate(node.direction * (Math.PI / 2));
-                
-                ctx.fillStyle = node.ram > 70 ? 'var(--sk-neon-yellow)' : 'var(--sk-neon-cyan)';
+
+                ctx.fillStyle = node.ram > 70 ? '#ffdd00' : '#00f0ff';
                 ctx.beginPath();
                 ctx.moveTo(0, -cellSize / 5);
                 ctx.lineTo(-cellSize / 12, -cellSize / 12);
@@ -1779,18 +2175,17 @@
       /* Translate UI click space with Pan and Zoom mapping matrix applied */
       function getTransformedCoords(clientX, clientY) {
         const rect = dom.canvas.getBoundingClientRect();
-        
-        /* Map viewport elements relatively to CSS scale dimensions */
-        const cssX = clientX - rect.left;
-        const cssY = clientY - rect.top;
-        
-        const internalWidth = 800;
-        const internalHeight = 800;
-        
-        const scaleX = internalWidth / rect.width;
-        const scaleY = internalHeight / rect.height;
-        
-        /* Return accurate relative positions inside canvas structure */
+        const w = rect.width || 1;
+        const h = rect.height || 1;
+
+        /* Invert the css transform: canvas element is scaled by zoomScale
+           and translated by (panOffsetX, panOffsetY) with origin at 0,0. */
+        const cssX = (clientX - rect.left) / zoomScale;
+        const cssY = (clientY - rect.top) / zoomScale;
+
+        const scaleX = 800 * zoomScale / w;
+        const scaleY = 800 * zoomScale / h;
+
         return {
           x: cssX * scaleX,
           y: cssY * scaleY
@@ -1804,7 +2199,7 @@
         const gridY = Math.floor(coords.y / (800 / GAME.gridSize));
 
         if (gridX >= 0 && gridX < GAME.gridSize && gridY >= 0 && gridY < GAME.gridSize) {
-          GAME.selectedCell = { x: gridX, y: gridY };
+          GAME.selectedCell = {x: gridX, y: gridY};
           rotateNode(gridX, gridY);
         }
       }
@@ -1845,7 +2240,7 @@
       /* Touch Gestures mapping on main playing viewports */
       dom.canvasViewport.addEventListener('touchstart', (e) => {
         const now = Date.now();
-        
+
         /* Double Tap detection */
         if (e.touches.length === 1) {
           const delta = now - lastTouchTime;
@@ -1886,7 +2281,7 @@
         if (e.touches.length === 2) {
           const dx = e.touches[0].clientX - e.touches[1].clientX;
           const dy = e.touches[0].clientY - e.touches[1].clientY;
-          touchStartDist = Math.sqrt(dx*dx + dy*dy);
+          touchStartDist = Math.sqrt(dx * dx + dy * dy);
           startPanX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - panOffsetX;
           startPanY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - panOffsetY;
           isPanning = true;
@@ -1901,7 +2296,7 @@
         if (e.touches.length === 2 && isPanning) {
           const dx = e.touches[0].clientX - e.touches[1].clientX;
           const dy = e.touches[0].clientY - e.touches[1].clientY;
-          const dist = Math.sqrt(dx*dx + dy*dy);
+          const dist = Math.sqrt(dx * dx + dy * dy);
           if (touchStartDist > 0) {
             const factor = dist / touchStartDist;
             touchStartDist = dist;
@@ -1917,7 +2312,7 @@
           applyTransform();
           e.preventDefault();
         }
-      }, { passive: false });
+      }, {passive: false});
 
       dom.canvasViewport.addEventListener('touchend', (e) => {
         isPanning = false;
@@ -2025,7 +2420,7 @@
       dom.padLeft.addEventListener('click', () => moveSelector(-1, 0));
       dom.padRight.addEventListener('click', () => moveSelector(1, 0));
       dom.padOk.addEventListener('click', () => rotateNode(GAME.selectedCell.x, GAME.selectedCell.y));
-      
+
       dom.padZoomIn.addEventListener('click', () => applyZoom(1.2));
       dom.padZoomOut.addEventListener('click', () => applyZoom(0.8));
       dom.padZoomReset.addEventListener('click', resetZoomPan);
@@ -2056,10 +2451,12 @@
 
       dom.btnLevels.addEventListener('click', () => {
         generateLevelsGrid();
+        pauseForOverlay();
         showOverlay(dom.overlayLevels);
       });
 
       dom.btnSettings.addEventListener('click', () => {
+        pauseForOverlay();
         showOverlay(dom.overlaySettings);
       });
 
@@ -2068,13 +2465,14 @@
         GAME.highscores.forEach(score => {
           const p = document.createElement('p');
           p.style.fontSize = '15px';
-          p.innerHTML = `âš™ Sector ${score.level} ... Maximum Routed: <b style="color:var(--sk-neon-cyan)">${score.score}</b>`;
+          p.innerHTML = `▸ Sector ${score.level} ... Maximum Routed: <b style="color:var(--sk-neon-cyan)">${score.score}</b><span style="color:var(--sk-neon-yellow);margin-left:8px;">${'★'.repeat(score.stars || 1)}</span>`;
           dom.highscoresList.appendChild(p);
         });
         showOverlay(dom.overlayScores);
       });
 
       dom.btnInfo.addEventListener('click', () => {
+        pauseForOverlay();
         showOverlay(dom.overlayInfo);
       });
 
@@ -2092,10 +2490,10 @@
 
       /* Modals Navigation trigger assignments */
       dom.btnStartPlay.addEventListener('click', startGame);
-      dom.btnCloseLevels.addEventListener('click', hideAllOverlays);
-      dom.btnCloseSettings.addEventListener('click', hideAllOverlays);
-      dom.btnCloseScores.addEventListener('click', hideAllOverlays);
-      dom.btnCloseInfo.addEventListener('click', hideAllOverlays);
+      dom.btnCloseLevels.addEventListener('click', () => {resumeFromOverlay(); hideAllOverlays();});
+      dom.btnCloseSettings.addEventListener('click', () => {resumeFromOverlay(); hideAllOverlays();});
+      dom.btnCloseScores.addEventListener('click', () => {resumeFromOverlay(); hideAllOverlays();});
+      dom.btnCloseInfo.addEventListener('click', () => {resumeFromOverlay(); hideAllOverlays();});
       dom.btnRestartCrash.addEventListener('click', startGame);
       dom.btnVicRetry.addEventListener('click', startGame);
 
@@ -2104,8 +2502,8 @@
           GAME.level++;
           startGame();
         } else {
-          alert("All operational sector files routed successfully!");
           hideAllOverlays();
+          showOverlay(dom.overlayStart);
         }
       });
 
@@ -2144,5 +2542,6 @@
 
     })();
   </script>
-<script src="js/framework.js"></script>`n</body>
+</body>
+
 </html>

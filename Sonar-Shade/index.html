@@ -2074,7 +2074,7 @@
       showScreen('sk_screen_progress');
       document.getElementById('sk_progress_status').innerText = "Connecting to Git Remote Repository...";
       document.getElementById('sk_progress_fill').style.width = "40%";
-      const gitRawUrl = "./Sonar-Shade.json";
+      const gitRawUrl = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Sonar-Shade/Sonar-Shade.json";
       const res = await fetchLevelsFromGit(gitRawUrl);
       document.getElementById('sk_progress_fill').style.width = "100%";
       if (res.success) {
