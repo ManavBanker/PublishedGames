@@ -1,0 +1,827 @@
+[
+    {
+        "name": "The Core",
+        "desc": "A simple exercise in spatial wrapping. Navigate to the right and swallow the essence.",
+        "moves": 30,
+        "loop": [
+            {"x": 2, "y": 4}, {"x": 3, "y": 4}, {"x": 4, "y": 4},
+            {"x": 4, "y": 5}, {"x": 4, "y": 6}, {"x": 3, "y": 6},
+            {"x": 2, "y": 6}, {"x": 2, "y": 5}
+        ],
+        "essences": [{"x": 10, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 7, "y": 3}, {"x": 7, "y": 7}
+        ]
+    },
+    {
+        "name": "First Squeeze",
+        "desc": "Squeeze through a narrow vertical gateway. The loop must deform to pass.",
+        "moves": 35,
+        "loop": [
+            {"x": 2, "y": 4}, {"x": 3, "y": 4}, {"x": 4, "y": 4},
+            {"x": 4, "y": 5}, {"x": 4, "y": 6}, {"x": 3, "y": 6},
+            {"x": 2, "y": 6}, {"x": 2, "y": 5}
+        ],
+        "essences": [{"x": 11, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 7, "y": 1}, {"x": 7, "y": 2}, {"x": 7, "y": 3}, {"x": 7, "y": 4},
+            {"x": 7, "y": 6}, {"x": 7, "y": 7}, {"x": 7, "y": 8}, {"x": 7, "y": 9}
+        ]
+    },
+    {
+        "name": "Topological Shift",
+        "desc": "A single barrier forces you to roll around the outer perimeter.",
+        "moves": 40,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 12, "y": 8}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 4}, {"x": 7, "y": 4}, {"x": 8, "y": 4}, {"x": 9, "y": 4},
+            {"x": 6, "y": 5}, {"x": 9, "y": 5}
+        ]
+    },
+    {
+        "name": "Double Feed",
+        "desc": "Enclose two split essences. You must roll back and forth carefully.",
+        "moves": 45,
+        "loop": [
+            {"x": 6, "y": 5}, {"x": 7, "y": 5}, {"x": 8, "y": 5},
+            {"x": 8, "y": 6}, {"x": 8, "y": 7}, {"x": 7, "y": 7},
+            {"x": 6, "y": 7}, {"x": 6, "y": 6}
+        ],
+        "essences": [{"x": 2, "y": 3}, {"x": 13, "y": 8}],
+        "parasites": [],
+        "voids": [
+            {"x": 4, "y": 6}, {"x": 10, "y": 6}
+        ]
+    },
+    {
+        "name": "The Watcher",
+        "desc": "Avoid the slow moving parasite guarding the vertical gap.",
+        "moves": 45,
+        "loop": [
+            {"x": 1, "y": 4}, {"x": 2, "y": 4}, {"x": 3, "y": 4},
+            {"x": 3, "y": 5}, {"x": 3, "y": 6}, {"x": 2, "y": 6},
+            {"x": 1, "y": 6}, {"x": 1, "y": 5}
+        ],
+        "essences": [{"x": 12, "y": 5}],
+        "parasites": [{"x": 7, "y": 2, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 9}],
+        "voids": [
+            {"x": 6, "y": 0}, {"x": 6, "y": 1}, {"x": 6, "y": 10}, {"x": 6, "y": 11},
+            {"x": 8, "y": 0}, {"x": 8, "y": 1}, {"x": 8, "y": 10}, {"x": 8, "y": 11}
+        ]
+    },
+    {
+        "name": "Chamber Split",
+        "desc": "Two chambers connected by a single tile tunnel.",
+        "moves": 50,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 13, "y": 9}],
+        "parasites": [],
+        "voids": [
+            {"x": 8, "y": 0}, {"x": 8, "y": 1}, {"x": 8, "y": 2}, {"x": 8, "y": 3},
+            {"x": 8, "y": 4}, {"x": 8, "y": 6}, {"x": 8, "y": 7}, {"x": 8, "y": 8},
+            {"x": 8, "y": 9}, {"x": 8, "y": 10}, {"x": 8, "y": 11}
+        ]
+    },
+    {
+        "name": "Dual Orbit",
+        "desc": "Collect essences surrounding a central structural void pillar.",
+        "moves": 48,
+        "loop": [
+            {"x": 7, "y": 1}, {"x": 8, "y": 1}, {"x": 9, "y": 1},
+            {"x": 9, "y": 2}, {"x": 9, "y": 3}, {"x": 8, "y": 3},
+            {"x": 7, "y": 3}, {"x": 7, "y": 2}
+        ],
+        "essences": [{"x": 3, "y": 5}, {"x": 12, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 7, "y": 5}, {"x": 7, "y": 6}, {"x": 8, "y": 5}, {"x": 8, "y": 6}
+        ]
+    },
+    {
+        "name": "Narrow Passage",
+        "desc": "Be careful not to snap while translating through the central horizontal split.",
+        "moves": 42,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 13, "y": 2}],
+        "parasites": [],
+        "voids": [
+            {"x": 0, "y": 6}, {"x": 1, "y": 6}, {"x": 2, "y": 6}, {"x": 3, "y": 6},
+            {"x": 4, "y": 6}, {"x": 5, "y": 6}, {"x": 6, "y": 6}, {"x": 7, "y": 6},
+            {"x": 9, "y": 6}, {"x": 10, "y": 6}, {"x": 11, "y": 6}, {"x": 12, "y": 6},
+            {"x": 13, "y": 6}, {"x": 14, "y": 6}, {"x": 15, "y": 6}
+        ]
+    },
+    {
+        "name": "Parasite Patrol",
+        "desc": "A parasite moves horizontally across your path. Time your loop stretch.",
+        "moves": 52,
+        "loop": [
+            {"x": 2, "y": 8}, {"x": 3, "y": 8}, {"x": 4, "y": 8},
+            {"x": 4, "y": 9}, {"x": 4, "y": 10}, {"x": 3, "y": 10},
+            {"x": 2, "y": 10}, {"x": 2, "y": 9}
+        ],
+        "essences": [{"x": 13, "y": 2}],
+        "parasites": [{"x": 8, "y": 5, "dx": 1, "dy": 0, "minLimit": 5, "maxLimit": 11}],
+        "voids": [
+            {"x": 6, "y": 4}, {"x": 6, "y": 5}, {"x": 6, "y": 6},
+            {"x": 10, "y": 4}, {"x": 10, "y": 5}, {"x": 10, "y": 6}
+        ]
+    },
+    {
+        "name": "Corner Trap",
+        "desc": "A tight spot holds the target essence. Enter and reverse carefully.",
+        "moves": 36,
+        "loop": [
+            {"x": 3, "y": 3}, {"x": 4, "y": 3}, {"x": 5, "y": 3},
+            {"x": 5, "y": 4}, {"x": 5, "y": 5}, {"x": 4, "y": 5},
+            {"x": 3, "y": 5}, {"x": 3, "y": 4}
+        ],
+        "essences": [{"x": 14, "y": 1}],
+        "parasites": [],
+        "voids": [
+            {"x": 12, "y": 0}, {"x": 12, "y": 2}, {"x": 12, "y": 3},
+            {"x": 13, "y": 3}, {"x": 14, "y": 3}, {"x": 15, "y": 3}
+        ]
+    },
+    {
+        "name": "Alternator",
+        "desc": "Two obstacles require winding moves. Plan your loop's dynamic curve.",
+        "moves": 48,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 13, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 5, "y": 1}, {"x": 5, "y": 2}, {"x": 5, "y": 3}, {"x": 5, "y": 4}, {"x": 5, "y": 5},
+            {"x": 9, "y": 6}, {"x": 9, "y": 7}, {"x": 9, "y": 8}, {"x": 9, "y": 9}, {"x": 9, "y": 10}
+        ]
+    },
+    {
+        "name": "The Guard Dog",
+        "desc": "The parasite sweeps the only safe entry channel. Sync your cycle.",
+        "moves": 55,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 12, "y": 5}],
+        "parasites": [{"x": 8, "y": 5, "dx": 0, "dy": 1, "minLimit": 3, "maxLimit": 8}],
+        "voids": [
+            {"x": 7, "y": 2}, {"x": 7, "y": 3}, {"x": 7, "y": 4},
+            {"x": 9, "y": 6}, {"x": 9, "y": 7}, {"x": 9, "y": 8}
+        ]
+    },
+    {
+        "name": "T-Crossing",
+        "desc": "Navigate the tricky intersections to consume dual essences.",
+        "moves": 60,
+        "loop": [
+            {"x": 6, "y": 8}, {"x": 7, "y": 8}, {"x": 8, "y": 8},
+            {"x": 8, "y": 9}, {"x": 8, "y": 10}, {"x": 7, "y": 10},
+            {"x": 6, "y": 10}, {"x": 6, "y": 9}
+        ],
+        "essences": [{"x": 2, "y": 2}, {"x": 13, "y": 2}],
+        "parasites": [],
+        "voids": [
+            {"x": 4, "y": 4}, {"x": 4, "y": 5}, {"x": 4, "y": 6},
+            {"x": 11, "y": 4}, {"x": 11, "y": 5}, {"x": 11, "y": 6},
+            {"x": 5, "y": 4}, {"x": 6, "y": 4}, {"x": 9, "y": 4}, {"x": 10, "y": 4}
+        ]
+    },
+    {
+        "name": "Split Gateways",
+        "desc": "Choose between the upper or lower path. One is safer, one is faster.",
+        "moves": 45,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 14, "y": 6}],
+        "parasites": [{"x": 7, "y": 2, "dx": 1, "dy": 0, "minLimit": 5, "maxLimit": 10}],
+        "voids": [
+            {"x": 7, "y": 4}, {"x": 7, "y": 5}, {"x": 7, "y": 6}, {"x": 7, "y": 7},
+            {"x": 8, "y": 4}, {"x": 8, "y": 5}, {"x": 8, "y": 6}, {"x": 8, "y": 7}
+        ]
+    },
+    {
+        "name": "Islands of Trust",
+        "desc": "Warp your layout across small platform blocks without breaking symmetry.",
+        "moves": 50,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 13, "y": 2}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 2}, {"x": 6, "y": 8},
+            {"x": 9, "y": 4}, {"x": 9, "y": 6}
+        ]
+    },
+    {
+        "name": "The Vertical Wave",
+        "desc": "A continuous wall forces a series of sharp up-and-down maneuvers.",
+        "moves": 65,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 14, "y": 2}],
+        "parasites": [],
+        "voids": [
+            {"x": 4, "y": 0}, {"x": 4, "y": 1}, {"x": 4, "y": 2}, {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 4, "y": 5}, {"x": 4, "y": 6}, {"x": 4, "y": 7},
+            {"x": 8, "y": 4}, {"x": 8, "y": 5}, {"x": 8, "y": 6}, {"x": 8, "y": 7}, {"x": 8, "y": 8}, {"x": 8, "y": 9}, {"x": 8, "y": 10}, {"x": 8, "y": 11},
+            {"x": 12, "y": 0}, {"x": 12, "y": 1}, {"x": 12, "y": 2}, {"x": 12, "y": 3}, {"x": 12, "y": 4}, {"x": 12, "y": 5}, {"x": 12, "y": 6}, {"x": 12, "y": 7}
+        ]
+    },
+    {
+        "name": "Double Trouble",
+        "desc": "Two patrolling bugs cross paths. Find the safe temporal window.",
+        "moves": 58,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 13, "y": 6}],
+        "parasites": [
+            {"x": 6, "y": 3, "dx": 0, "dy": 1, "minLimit": 2, "maxLimit": 8},
+            {"x": 10, "y": 8, "dx": 0, "dy": -1, "minLimit": 3, "maxLimit": 9}
+        ],
+        "voids": [
+            {"x": 8, "y": 5}, {"x": 8, "y": 6}
+        ]
+    },
+    {
+        "name": "Topological Lock",
+        "desc": "The essence is protected inside an incomplete ring of voids.",
+        "moves": 52,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 11, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 10, "y": 3}, {"x": 11, "y": 3}, {"x": 12, "y": 3},
+            {"x": 10, "y": 4}, {"x": 10, "y": 5}, {"x": 10, "y": 6},
+            {"x": 10, "y": 7}, {"x": 11, "y": 7}, {"x": 12, "y": 7}
+        ]
+    },
+    {
+        "name": "Symmetric Vault",
+        "desc": "A puzzle requiring balanced moves left and right.",
+        "moves": 64,
+        "loop": [
+            {"x": 7, "y": 8}, {"x": 8, "y": 8}, {"x": 9, "y": 8},
+            {"x": 9, "y": 9}, {"x": 9, "y": 10}, {"x": 8, "y": 10},
+            {"x": 7, "y": 10}, {"x": 7, "y": 9}
+        ],
+        "essences": [{"x": 2, "y": 2}, {"x": 13, "y": 2}],
+        "parasites": [],
+        "voids": [
+            {"x": 5, "y": 3}, {"x": 6, "y": 3}, {"x": 7, "y": 3},
+            {"x": 8, "y": 3}, {"x": 9, "y": 3}, {"x": 10, "y": 3}
+        ]
+    },
+    {
+        "name": "Spiral Inward",
+        "desc": "Wind your way inside a winding spiral corridor to collect the essence.",
+        "moves": 70,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 8, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 5, "y": 2}, {"x": 6, "y": 2}, {"x": 7, "y": 2}, {"x": 8, "y": 2}, {"x": 9, "y": 2}, {"x": 10, "y": 2}, {"x": 11, "y": 2},
+            {"x": 11, "y": 3}, {"x": 11, "y": 4}, {"x": 11, "y": 5}, {"x": 11, "y": 6}, {"x": 11, "y": 7}, {"x": 11, "y": 8},
+            {"x": 5, "y": 8}, {"x": 6, "y": 8}, {"x": 7, "y": 8}, {"x": 8, "y": 8}, {"x": 9, "y": 8}, {"x": 10, "y": 8},
+            {"x": 5, "y": 3}, {"x": 5, "y": 4}, {"x": 5, "y": 5}, {"x": 5, "y": 6}, {"x": 5, "y": 7}
+        ]
+    },
+    {
+        "name": "Speed Traps",
+        "desc": "Quickly slip past fast, localized parasites.",
+        "moves": 48,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 12, "y": 2}],
+        "parasites": [
+            {"x": 7, "y": 2, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 4},
+            {"x": 9, "y": 7, "dx": 0, "dy": -1, "minLimit": 6, "maxLimit": 9}
+        ],
+        "voids": [
+            {"x": 8, "y": 1}, {"x": 8, "y": 2}, {"x": 8, "y": 3},
+            {"x": 8, "y": 7}, {"x": 8, "y": 8}, {"x": 8, "y": 9}
+        ]
+    },
+    {
+        "name": "Bifurcation",
+        "desc": "Split decision. Ensure your loop tail is clear of hazards.",
+        "moves": 50,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 13, "y": 1}, {"x": 13, "y": 10}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 5}, {"x": 7, "y": 5}, {"x": 8, "y": 5}, {"x": 9, "y": 5}, {"x": 10, "y": 5}
+        ]
+    },
+    {
+        "name": "The Gridiron",
+        "desc": "A rigid checkerboard of voids. Deform step-by-step.",
+        "moves": 65,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 9}],
+        "parasites": [],
+        "voids": [
+            {"x": 5, "y": 2}, {"x": 5, "y": 6}, {"x": 5, "y": 10},
+            {"x": 9, "y": 1}, {"x": 9, "y": 5}, {"x": 9, "y": 9},
+            {"x": 13, "y": 3}, {"x": 13, "y": 7}
+        ]
+    },
+    {
+        "name": "Slalom Run",
+        "desc": "Zigzag horizontally to reach the dual nodes at the right boundary.",
+        "moves": 60,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 14, "y": 4}, {"x": 14, "y": 8}],
+        "parasites": [],
+        "voids": [
+            {"x": 5, "y": 0}, {"x": 5, "y": 1}, {"x": 5, "y": 2}, {"x": 5, "y": 3}, {"x": 5, "y": 4}, {"x": 5, "y": 5},
+            {"x": 9, "y": 6}, {"x": 9, "y": 7}, {"x": 9, "y": 8}, {"x": 9, "y": 9}, {"x": 9, "y": 10}, {"x": 9, "y": 11}
+        ]
+    },
+    {
+        "name": "Weave and Bob",
+        "desc": "A moving parasite coordinates with tight columns.",
+        "moves": 58,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 12, "y": 9}],
+        "parasites": [{"x": 8, "y": 4, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 10}],
+        "voids": [
+            {"x": 6, "y": 0}, {"x": 6, "y": 1}, {"x": 6, "y": 2}, {"x": 6, "y": 3},
+            {"x": 10, "y": 8}, {"x": 10, "y": 9}, {"x": 10, "y": 10}, {"x": 10, "y": 11}
+        ]
+    },
+    {
+        "name": "Pressure Chamber",
+        "desc": "Small spaces mean high self-intersection probability.",
+        "moves": 44,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 2}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 0}, {"x": 6, "y": 1}, {"x": 6, "y": 2}, {"x": 6, "y": 3}, {"x": 6, "y": 4},
+            {"x": 10, "y": 4}, {"x": 10, "y": 5}, {"x": 10, "y": 6}, {"x": 10, "y": 7}, {"x": 10, "y": 11}
+        ]
+    },
+    {
+        "name": "Central Core Blockade",
+        "desc": "A massive block sits in the center. Swing around it cleanly.",
+        "moves": 50,
+        "loop": [
+            {"x": 3, "y": 1}, {"x": 4, "y": 1}, {"x": 5, "y": 1},
+            {"x": 5, "y": 2}, {"x": 5, "y": 3}, {"x": 4, "y": 3},
+            {"x": 3, "y": 3}, {"x": 3, "y": 2}
+        ],
+        "essences": [{"x": 12, "y": 10}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 4}, {"x": 7, "y": 4}, {"x": 8, "y": 4}, {"x": 9, "y": 4},
+            {"x": 6, "y": 5}, {"x": 7, "y": 5}, {"x": 8, "y": 5}, {"x": 9, "y": 5},
+            {"x": 6, "y": 6}, {"x": 7, "y": 6}, {"x": 8, "y": 6}, {"x": 9, "y": 6}
+        ]
+    },
+    {
+        "name": "Syncopation",
+        "desc": "Synchronize loop contractions with two moving patrol phases.",
+        "moves": 65,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 13, "y": 5}],
+        "parasites": [
+            {"x": 6, "y": 2, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 6},
+            {"x": 10, "y": 9, "dx": 0, "dy": -1, "minLimit": 5, "maxLimit": 10}
+        ],
+        "voids": [
+            {"x": 8, "y": 0}, {"x": 8, "y": 1}, {"x": 8, "y": 2},
+            {"x": 8, "y": 9}, {"x": 8, "y": 10}, {"x": 8, "y": 11}
+        ]
+    },
+    {
+        "name": "The Hook",
+        "desc": "A hook-shaped corridor traps your front end if you rush.",
+        "moves": 46,
+        "loop": [
+            {"x": 2, "y": 8}, {"x": 3, "y": 8}, {"x": 4, "y": 8},
+            {"x": 4, "y": 9}, {"x": 4, "y": 10}, {"x": 3, "y": 10},
+            {"x": 2, "y": 10}, {"x": 2, "y": 9}
+        ],
+        "essences": [{"x": 11, "y": 2}],
+        "parasites": [],
+        "voids": [
+            {"x": 9, "y": 1}, {"x": 10, "y": 1}, {"x": 11, "y": 1}, {"x": 12, "y": 1},
+            {"x": 9, "y": 2}, {"x": 9, "y": 3}, {"x": 9, "y": 4},
+            {"x": 12, "y": 2}, {"x": 12, "y": 3}
+        ]
+    },
+    {
+        "name": "Crossover Alley",
+        "desc": "Two parasites sweep horizontally across the map grid.",
+        "moves": 60,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 9}],
+        "parasites": [
+            {"x": 4, "y": 5, "dx": 1, "dy": 0, "minLimit": 2, "maxLimit": 12},
+            {"x": 12, "y": 7, "dx": -1, "dy": 0, "minLimit": 2, "maxLimit": 12}
+        ],
+        "voids": []
+    },
+    {
+        "name": "Topological Prism",
+        "desc": "Three essences in highly isolated outer pocket sectors.",
+        "moves": 75,
+        "loop": [
+            {"x": 7, "y": 5}, {"x": 8, "y": 5}, {"x": 9, "y": 5},
+            {"x": 9, "y": 6}, {"x": 9, "y": 7}, {"x": 8, "y": 7},
+            {"x": 7, "y": 7}, {"x": 7, "y": 6}
+        ],
+        "essences": [{"x": 1, "y": 1}, {"x": 14, "y": 1}, {"x": 8, "y": 10}],
+        "parasites": [],
+        "voids": [
+            {"x": 4, "y": 4}, {"x": 5, "y": 4},
+            {"x": 11, "y": 4}, {"x": 10, "y": 4}
+        ]
+    },
+    {
+        "name": "Gatekeeper",
+        "desc": "A single parasite blocks the inner sanctum. Bait and switch.",
+        "moves": 50,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 2}],
+        "parasites": [{"x": 9, "y": 2, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 4}],
+        "voids": [
+            {"x": 7, "y": 0}, {"x": 7, "y": 1}, {"x": 7, "y": 2}, {"x": 7, "y": 3}, {"x": 7, "y": 4}, {"x": 7, "y": 5},
+            {"x": 11, "y": 1}, {"x": 11, "y": 2}, {"x": 11, "y": 3}, {"x": 11, "y": 4}, {"x": 11, "y": 5}
+        ]
+    },
+    {
+        "name": "Checker Clash",
+        "desc": "Navigate checkerboard blocks while an active parasite intercepts tracks.",
+        "moves": 65,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 14, "y": 2}],
+        "parasites": [{"x": 9, "y": 6, "dx": 0, "dy": 1, "minLimit": 3, "maxLimit": 9}],
+        "voids": [
+            {"x": 6, "y": 2}, {"x": 8, "y": 4}, {"x": 10, "y": 2}, {"x": 12, "y": 4}
+        ]
+    },
+    {
+        "name": "Hourglass Corridor",
+        "desc": "A very tight choke point. You must align your nodes perfectly linearly.",
+        "moves": 45,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 14, "y": 6}],
+        "parasites": [],
+        "voids": [
+            {"x": 8, "y": 0}, {"x": 8, "y": 1}, {"x": 8, "y": 2}, {"x": 8, "y": 3}, {"x": 8, "y": 4},
+            {"x": 8, "y": 8}, {"x": 8, "y": 9}, {"x": 8, "y": 10}, {"x": 8, "y": 11},
+            {"x": 7, "y": 4}, {"x": 9, "y": 4}, {"x": 7, "y": 8}, {"x": 9, "y": 8}
+        ]
+    },
+    {
+        "name": "Threading the Needle",
+        "desc": "Avoid touch blocks that leave exactly one node space of breathing room.",
+        "moves": 58,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 13, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 0}, {"x": 6, "y": 4}, {"x": 6, "y": 5}, {"x": 6, "y": 6}, {"x": 6, "y": 7}, {"x": 6, "y": 11},
+            {"x": 10, "y": 0}, {"x": 10, "y": 1}, {"x": 10, "y": 2}, {"x": 10, "y": 3}, {"x": 10, "y": 7}, {"x": 10, "y": 8}
+        ]
+    },
+    {
+        "name": "Side Winder",
+        "desc": "A horizontal snake course with a parasite tracking the curves.",
+        "moves": 65,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 13, "y": 2}],
+        "parasites": [{"x": 8, "y": 5, "dx": 1, "dy": 0, "minLimit": 6, "maxLimit": 11}],
+        "voids": [
+            {"x": 0, "y": 6}, {"x": 1, "y": 6}, {"x": 2, "y": 6}, {"x": 3, "y": 6}, {"x": 4, "y": 6}, {"x": 5, "y": 6},
+            {"x": 8, "y": 0}, {"x": 8, "y": 1}, {"x": 8, "y": 2}, {"x": 8, "y": 3}
+        ]
+    },
+    {
+        "name": "Gridiron Split",
+        "desc": "Split walls segmenting four separate essence targets.",
+        "moves": 80,
+        "loop": [
+            {"x": 7, "y": 5}, {"x": 8, "y": 5}, {"x": 9, "y": 5},
+            {"x": 9, "y": 6}, {"x": 9, "y": 7}, {"x": 8, "y": 7},
+            {"x": 7, "y": 7}, {"x": 7, "y": 6}
+        ],
+        "essences": [{"x": 2, "y": 2}, {"x": 13, "y": 2}, {"x": 2, "y": 9}, {"x": 13, "y": 9}],
+        "parasites": [],
+        "voids": [
+            {"x": 8, "y": 3}, {"x": 8, "y": 4}, {"x": 8, "y": 8}, {"x": 8, "y": 9}
+        ]
+    },
+    {
+        "name": "The Centipede",
+        "desc": "A long parasite snake blocks central lanes. Move defensively.",
+        "moves": 70,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 13, "y": 9}],
+        "parasites": [
+            {"x": 8, "y": 5, "dx": 0, "dy": 1, "minLimit": 2, "maxLimit": 9},
+            {"x": 10, "y": 6, "dx": 0, "dy": -1, "minLimit": 2, "maxLimit": 9}
+        ],
+        "voids": [
+            {"x": 6, "y": 5}, {"x": 12, "y": 5}
+        ]
+    },
+    {
+        "name": "The Outer Rim",
+        "desc": "Outer edges are clear, but central paths are blocked by voids.",
+        "moves": 55,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 14, "y": 10}],
+        "parasites": [],
+        "voids": [
+            {"x": 4, "y": 4}, {"x": 5, "y": 4}, {"x": 6, "y": 4}, {"x": 7, "y": 4}, {"x": 8, "y": 4}, {"x": 9, "y": 4}, {"x": 10, "y": 4}, {"x": 11, "y": 4},
+            {"x": 4, "y": 7}, {"x": 5, "y": 7}, {"x": 6, "y": 7}, {"x": 7, "y": 7}, {"x": 8, "y": 7}, {"x": 9, "y": 7}, {"x": 10, "y": 7}, {"x": 11, "y": 7}
+        ]
+    },
+    {
+        "name": "Subway System",
+        "desc": "Parallel channels with alternating direction patrols.",
+        "moves": 72,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 1}, {"x": 13, "y": 10}],
+        "parasites": [
+            {"x": 6, "y": 3, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 5},
+            {"x": 10, "y": 8, "dx": 0, "dy": -1, "minLimit": 6, "maxLimit": 10}
+        ],
+        "voids": [
+            {"x": 5, "y": 0}, {"x": 5, "y": 1}, {"x": 5, "y": 2}, {"x": 5, "y": 3}, {"x": 5, "y": 4}, {"x": 5, "y": 5},
+            {"x": 9, "y": 6}, {"x": 9, "y": 7}, {"x": 9, "y": 8}, {"x": 9, "y": 9}, {"x": 9, "y": 10}, {"x": 9, "y": 11}
+        ]
+    },
+    {
+        "name": "Helix Chamber",
+        "desc": "An elaborate double helix track with narrow bypass points.",
+        "moves": 78,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 13, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 3}, {"x": 7, "y": 3}, {"x": 8, "y": 3},
+            {"x": 7, "y": 7}, {"x": 8, "y": 7}, {"x": 9, "y": 7},
+            {"x": 10, "y": 4}, {"x": 11, "y": 4}, {"x": 12, "y": 4}
+        ]
+    },
+    {
+        "name": "The gauntlet",
+        "desc": "A long straight line populated by four rapid vertical patrols.",
+        "moves": 80,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 14, "y": 6}],
+        "parasites": [
+            {"x": 5, "y": 2, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 10},
+            {"x": 7, "y": 9, "dx": 0, "dy": -1, "minLimit": 1, "maxLimit": 10},
+            {"x": 9, "y": 2, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 10},
+            {"x": 11, "y": 9, "dx": 0, "dy": -1, "minLimit": 1, "maxLimit": 10}
+        ],
+        "voids": []
+    },
+    {
+        "name": "Enclosure Lockout",
+        "desc": "Targets require capturing other objects concurrently to hit the count.",
+        "moves": 62,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 2}],
+        "parasites": [{"x": 13, "y": 8, "dx": 0, "dy": -1, "minLimit": 5, "maxLimit": 10}],
+        "voids": [
+            {"x": 6, "y": 4}, {"x": 7, "y": 4}, {"x": 8, "y": 4}
+        ]
+    },
+    {
+        "name": "The Sieve",
+        "desc": "An extremely porous wall forces the loop to break into multiple thin tracks.",
+        "moves": 66,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 12, "y": 2}, {"x": 12, "y": 9}],
+        "parasites": [],
+        "voids": [
+            {"x": 8, "y": 0}, {"x": 8, "y": 2}, {"x": 8, "y": 4}, {"x": 8, "y": 6}, {"x": 8, "y": 8}, {"x": 8, "y": 10}
+        ]
+    },
+    {
+        "name": "Cross Check",
+        "desc": "A grid matrix with horizontal and vertical guards sliding past each other.",
+        "moves": 70,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 10}],
+        "parasites": [
+            {"x": 6, "y": 4, "dx": 0, "dy": 1, "minLimit": 2, "maxLimit": 9},
+            {"x": 9, "y": 6, "dx": -1, "dy": 0, "minLimit": 4, "maxLimit": 11}
+        ],
+        "voids": []
+    },
+    {
+        "name": "Decompression",
+        "desc": "Move into massive spaces but construct loops small enough to avoid obstacles.",
+        "moves": 58,
+        "loop": [
+            {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2},
+            {"x": 4, "y": 3}, {"x": 4, "y": 4}, {"x": 3, "y": 4},
+            {"x": 2, "y": 4}, {"x": 2, "y": 3}
+        ],
+        "essences": [{"x": 12, "y": 5}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 5}, {"x": 7, "y": 4}, {"x": 7, "y": 6}, {"x": 8, "y": 5}
+        ]
+    },
+    {
+        "name": "Spike Runner",
+        "desc": "A speed-run horizontal track inside highly dangerous spikes.",
+        "moves": 45,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 14, "y": 6}],
+        "parasites": [
+            {"x": 6, "y": 3, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 10},
+            {"x": 10, "y": 8, "dx": 0, "dy": -1, "minLimit": 1, "maxLimit": 10}
+        ],
+        "voids": [
+            {"x": 4, "y": 1}, {"x": 4, "y": 2}, {"x": 4, "y": 9}, {"x": 4, "y": 10},
+            {"x": 12, "y": 1}, {"x": 12, "y": 2}, {"x": 12, "y": 9}, {"x": 12, "y": 10}
+        ]
+    },
+    {
+        "name": "The Trident",
+        "desc": "Three separate long narrow corridors. You must stretch to reach them.",
+        "moves": 85,
+        "loop": [
+            {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5},
+            {"x": 3, "y": 6}, {"x": 3, "y": 7}, {"x": 2, "y": 7},
+            {"x": 1, "y": 7}, {"x": 1, "y": 6}
+        ],
+        "essences": [{"x": 13, "y": 1}, {"x": 13, "y": 5}, {"x": 13, "y": 10}],
+        "parasites": [],
+        "voids": [
+            {"x": 6, "y": 3}, {"x": 7, "y": 3}, {"x": 8, "y": 3}, {"x": 9, "y": 3}, {"x": 10, "y": 3}, {"x": 11, "y": 3},
+            {"x": 6, "y": 8}, {"x": 7, "y": 8}, {"x": 8, "y": 8}, {"x": 9, "y": 8}, {"x": 10, "y": 8}, {"x": 11, "y": 8}
+        ]
+    },
+    {
+        "name": "Mirror Match",
+        "desc": "Perfect spatial mirroring required to hit targets on both poles simultaneously.",
+        "moves": 65,
+        "loop": [
+            {"x": 7, "y": 5}, {"x": 8, "y": 5}, {"x": 9, "y": 5},
+            {"x": 9, "y": 6}, {"x": 9, "y": 7}, {"x": 8, "y": 7},
+            {"x": 7, "y": 7}, {"x": 7, "y": 6}
+        ],
+        "essences": [{"x": 8, "y": 1}, {"x": 8, "y": 10}],
+        "parasites": [],
+        "voids": [
+            {"x": 4, "y": 5}, {"x": 5, "y": 5}, {"x": 10, "y": 5}, {"x": 11, "y": 5}
+        ]
+    },
+    {
+        "name": "Ouroboros Mastery",
+        "desc": "The ultimate test. Tight pathways, hyper fast patrols, extreme coordination.",
+        "moves": 95,
+        "loop": [
+            {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1},
+            {"x": 3, "y": 2}, {"x": 3, "y": 3}, {"x": 2, "y": 3},
+            {"x": 1, "y": 3}, {"x": 1, "y": 2}
+        ],
+        "essences": [{"x": 13, "y": 1}, {"x": 13, "y": 10}, {"x": 14, "y": 5}],
+        "parasites": [
+            {"x": 5, "y": 2, "dx": 0, "dy": 1, "minLimit": 1, "maxLimit": 10},
+            {"x": 9, "y": 9, "dx": 0, "dy": -1, "minLimit": 1, "maxLimit": 10},
+            {"x": 11, "y": 5, "dx": 1, "dy": 0, "minLimit": 10, "maxLimit": 14}
+        ],
+        "voids": [
+            {"x": 7, "y": 0}, {"x": 7, "y": 1}, {"x": 7, "y": 2}, {"x": 7, "y": 3}, {"x": 7, "y": 4},
+            {"x": 7, "y": 7}, {"x": 7, "y": 8}, {"x": 7, "y": 9}, {"x": 7, "y": 10}, {"x": 7, "y": 11}
+        ]
+    }
+]

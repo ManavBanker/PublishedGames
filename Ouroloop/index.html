@@ -1,0 +1,2119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ouroloop - Elastic Spatial Puzzle</title>
+</head>
+
+<body
+    style="margin:0; padding:0; background-color:#121214; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; overflow:hidden; touch-action:none;">
+
+    <div class="sk_game_suite_root">
+        <!-- Meta and Labels for SEO and integration -->
+        <div class="sk_labels" data="Grid-based, Minimalist, Spatial, Brain-teaser"></div>
+
+        <!-- Top UI Control Bar -->
+        <div class="sk_top_panel">
+            <div class="sk_brand_zone">
+                <span class="sk_logo_icon">⌾</span>
+                <span class="sk_game_title">OUROLOOP</span>
+            </div>
+            <div class="sk_stats_bar">
+                <div class="sk_stat_item"><b>LVL:</b> <span id="sk_val_level">1</span></div>
+                <div class="sk_stat_item"><b>MOVES:</b> <span id="sk_val_moves">0/30</span></div>
+                <div class="sk_stat_item"><b>SCORE:</b> <span id="sk_val_score">0</span></div>
+            </div>
+            <div class="sk_action_buttons">
+                <!-- Consolidating utility controls into a single dropdown menu to clean up top-bar estate -->
+                <div class="sk_menu_dropdown">
+                    <button class="sk_btn_icon" id="sk_btn_menu_toggle" title="Menu"><i>☰</i></button>
+                    <div class="sk_dropdown_content sk_hidden" id="sk_dropdown_menu">
+                        <button class="sk_drop_item" id="sk_btn_help"><i>?</i> Instructions</button>
+                        <button class="sk_drop_item" id="sk_btn_levels"><i>☰</i> Level List</button>
+                        <button class="sk_drop_item" id="sk_btn_settings"><i>⚙</i> Game Settings</button>
+                        <button class="sk_drop_item" id="sk_btn_scores"><i>🏆</i> Leaderboard</button>
+                        <button class="sk_drop_item" id="sk_btn_demo_menu"><i>▶</i> Play Demo</button>
+                    </div>
+                </div>
+                <button class="sk_btn_icon" id="sk_btn_pause" title="Pause Game"><i>⏸</i></button>
+                <button class="sk_btn_icon" id="sk_btn_fullscreen" title="Toggle Fullscreen"><i>⛶</i></button>
+            </div>
+        </div>
+
+        <!-- Main Game Canvas Frame (Constrained to 1:1 Aspect Ratio) -->
+        <div class="sk_canvas_wrapper">
+            <div class="sk_aspect_lock_1_1">
+                <canvas id="sk_game_canvas"></canvas>
+
+                <!-- Dynamic Game Screens Overlays -->
+                <!-- Loading & Network Level Fetcher Progress Overlay -->
+                <div class="sk_overlay_screen sk_visible" id="sk_screen_loading">
+                    <div class="sk_overlay_content">
+                        <span class="sk_splash_logo">⚙</span>
+                        <p class="sk_splash_title">LOADING LEVELS</p>
+                        <p class="sk_splash_subtitle" id="sk_loader_status">Initializing connection...</p>
+                        <div class="sk_progress_bar_container">
+                            <div class="sk_progress_bar" id="sk_loader_progress"></div>
+                        </div>
+                        <button class="sk_action_btn" id="sk_btn_skip_fetch" style="margin-top: 15px; display:none;">USE
+                            LOCAL LEVELS</button>
+                    </div>
+                </div>
+
+                <!-- 1. Start / Main Menu Screen -->
+                <div class="sk_overlay_screen sk_hidden" id="sk_screen_start">
+                    <div class="sk_overlay_content">
+                        <span class="sk_splash_logo">⌾</span>
+                        <p class="sk_splash_title">OUROLOOP</p>
+                        <p class="sk_splash_subtitle">The Elastic Spatial Puzzle</p>
+                        <button class="sk_action_btn" id="sk_btn_start_game">PLAY GAME [Enter]</button>
+                        <button class="sk_action_btn sk_secondary_btn" id="sk_btn_demo">WATCH DEMO</button>
+                        <p class="sk_orientation_warning">Rotate device to Landscape for best experience!</p>
+                    </div>
+                </div>
+
+                <!-- 2. Game Over Screen -->
+                <div class="sk_overlay_screen sk_hidden" id="sk_screen_gameover">
+                    <div class="sk_overlay_content">
+                        <span class="sk_splash_logo sk_fail_color">⌾</span>
+                        <p class="sk_splash_title sk_fail_color">LOOP SNAPPED!</p>
+                        <p class="sk_splash_subtitle" id="sk_fail_reason">You collided with an obstacle or
+                            self-intersected.</p>
+                        <button class="sk_action_btn" id="sk_btn_retry">TRY AGAIN [Enter]</button>
+                        <button class="sk_action_btn sk_secondary_btn" id="sk_btn_menu_fail">MAIN MENU</button>
+                    </div>
+                </div>
+
+                <!-- 3. Level Cleared Screen -->
+                <div class="sk_overlay_screen sk_hidden" id="sk_screen_cleared">
+                    <div class="sk_overlay_content">
+                        <span class="sk_splash_logo sk_success_color">★</span>
+                        <p class="sk_splash_title sk_success_color">LEVEL CLEARED!</p>
+                        <p class="sk_splash_subtitle" id="sk_clear_stats">You enclosed the core essence efficiently.</p>
+                        <button class="sk_action_btn" id="sk_btn_next">NEXT LEVEL [Enter]</button>
+                    </div>
+                </div>
+
+                <!-- 4. Game Victory (Game Win) Screen -->
+                <div class="sk_overlay_screen sk_hidden" id="sk_screen_victory">
+                    <div class="sk_overlay_content">
+                        <span class="sk_splash_logo sk_success_color">👑</span>
+                        <p class="sk_splash_title sk_success_color">VICTORY!</p>
+                        <p class="sk_splash_subtitle">You have mastered the topology of Ouroloop!</p>
+                        <button class="sk_action_btn" id="sk_btn_finish">PLAY AGAIN</button>
+                    </div>
+                </div>
+
+                <!-- 5. Pause Screen -->
+                <div class="sk_overlay_screen sk_hidden" id="sk_screen_paused">
+                    <div class="sk_overlay_content">
+                        <span class="sk_splash_logo">⏸</span>
+                        <p class="sk_splash_title">GAME PAUSED</p>
+                        <p class="sk_splash_subtitle">You can zoom or pan the view using touch gestures or controllers
+                            while paused.</p>
+                        <button class="sk_action_btn" id="sk_btn_resume">RESUME PLAY</button>
+                        <button class="sk_action_btn sk_secondary_btn" id="sk_btn_pause_menu">MAIN MENU</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popups: Settings -->
+            <div class="sk_popup_modal sk_hidden" id="sk_popup_settings">
+                <div class="sk_popup_inner">
+                    <div class="sk_popup_header">
+                        <b class="sk_popup_title">Settings</b>
+                        <button class="sk_popup_close" id="sk_close_settings">×</button>
+                    </div>
+                    <div class="sk_popup_body">
+                        <div class="sk_setting_row">
+                            <span>Sound Effects</span>
+                            <button class="sk_toggle_btn sk_active" id="sk_toggle_sound">ON</button>
+                        </div>
+                        <div class="sk_setting_row">
+                            <span>Control Sensitivity</span>
+                            <button class="sk_toggle_btn" id="sk_toggle_sensitivity">NORMAL</button>
+                        </div>
+                        <div class="sk_setting_row">
+                            <span>Reset Game Data</span>
+                            <button class="sk_danger_btn" id="sk_btn_reset_data">RESET</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popups: Help / Information -->
+            <div class="sk_popup_modal sk_hidden" id="sk_popup_help">
+                <div class="sk_popup_inner">
+                    <div class="sk_popup_header">
+                        <b class="sk_popup_title">How to Play</b>
+                        <button class="sk_popup_close" id="sk_close_help">×</button>
+                    </div>
+                    <div class="sk_popup_body sk_scrollable">
+                        <p><b>Objective:</b> Enclose the glowing <b>Essence Nodes</b> completely inside your loop, then
+                            press <b>Space</b> or click <b>CONSTRICT</b> to digest them!</p>
+                        <p><b>Movement:</b> Use <b>WASD</b>, <b>Arrow Keys</b>, or swipe to roll your elastic loop along
+                            the grid.</p>
+                        <p><b>Elasticity:</b> Squeezing through narrow walls forces your loop to warp and stretch. Be
+                            careful not to let the loop snap!</p>
+                        <p><b>Snapping:</b> Moving into walls or crossing your own loop will cause it to snap instantly.
+                        </p>
+                        <p><b>Parasites:</b> Moving patrols. If they touch your outer boundary you snap. Capture them
+                            inside and constrict for massive bonus points!</p>
+                        <p><b>Zoom &amp; Pan:</b> Drag screen with Hand Tool or pinch-to-zoom to see different regions.
+                            Use <b>Ctrl +</b> and <b>Ctrl -</b> on keyboards.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popups: Levels Menu -->
+            <div class="sk_popup_modal sk_hidden" id="sk_popup_levels">
+                <div class="sk_popup_inner">
+                    <div class="sk_popup_header">
+                        <b class="sk_popup_title">Select Level</b>
+                        <button class="sk_popup_close" id="sk_close_levels">×</button>
+                    </div>
+                    <div class="sk_popup_body" id="sk_levels_grid">
+                        <!-- Levels generated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popups: High Scores -->
+            <div class="sk_popup_modal sk_hidden" id="sk_popup_scores">
+                <div class="sk_popup_inner">
+                    <div class="sk_popup_header">
+                        <b class="sk_popup_title">Leaderboard</b>
+                        <button class="sk_popup_close" id="sk_close_scores">×</button>
+                    </div>
+                    <div class="sk_popup_body">
+                        <div class="sk_score_list" id="sk_leaderboard_list">
+                            <!-- Score list filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Spacing & Draggable Virtual Controls Zone -->
+        <div class="sk_bottom_zone">
+            <!-- Interactive Viewport Controls Group -->
+            <div class="sk_viewport_controls">
+                <button class="sk_view_btn" id="sk_view_zoom_in" title="Zoom In (Ctrl +)">＋</button>
+                <button class="sk_view_btn" id="sk_view_zoom_out" title="Zoom Out (Ctrl -)">－</button>
+                <button class="sk_view_btn" id="sk_view_zoom_reset" title="Reset View (Ctrl 0)">⟲</button>
+                <button class="sk_view_btn" id="sk_view_pan_tool" title="Pan Hand Tool">🖐</button>
+            </div>
+
+            <div class="sk_controls_container">
+                <div class="sk_control_handle"><i>::: Drag Controller :::</i></div>
+                <div class="sk_controls_layout">
+                    <div class="sk_dpad_zone">
+                        <button class="sk_ctrl_btn sk_btn_up" id="sk_key_up">▲</button>
+                        <div class="sk_dpad_middle">
+                            <button class="sk_ctrl_btn sk_btn_left" id="sk_key_left">◀</button>
+                            <div class="sk_dpad_center">⌾</div>
+                            <button class="sk_ctrl_btn sk_btn_right" id="sk_key_right">▶</button>
+                        </div>
+                        <button class="sk_ctrl_btn sk_btn_down" id="sk_key_down">▼</button>
+                    </div>
+                    <div class="sk_action_zone">
+                        <button class="sk_constrict_btn"
+                            id="sk_btn_constrict">CONSTRICT<br><span>(Space)</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================
+           DYNAMIC CSS INJECTION (Scoped to sk_ game)
+           ========================================== */
+        const sk_styles = `
+* {
+    box-sizing: border-box;
+}
+
+.sk_game_suite_root {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: #121214;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+
+.sk_top_panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #141418;
+    padding: 10px 15px;
+    border-bottom: 2px solid #2d2d38;
+    height: 55px;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+.sk_brand_zone {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sk_logo_icon {
+    font-size: 1.6rem;
+    color: #1abc9c;
+    animation: sk_glow 2s infinite ease-in-out;
+}
+
+.sk_game_title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+.sk_stats_bar {
+    display: flex;
+    gap: 12px;
+    background: #25252f;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    color: #a0a0b0;
+    border: 1px solid #353545;
+}
+
+.sk_stat_item b {
+    color: #1abc9c;
+}
+
+.sk_stat_item span {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.sk_action_buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.sk_btn_icon {
+    background: #25252f;
+    border: 1px solid #353545;
+    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.sk_btn_icon:hover {
+    background: #1abc9c;
+    color: #121214;
+    border-color: #1abc9c;
+}
+
+/* Consolidated Dropdown Menu styling */
+.sk_menu_dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.sk_dropdown_content {
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: #1e1e24;
+    border: 2px solid #2d2d38;
+    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    z-index: 50;
+    overflow: hidden;
+}
+
+.sk_drop_item {
+    background: none;
+    border: none;
+    color: #ffffff;
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s ease;
+}
+
+.sk_drop_item:hover {
+    background: #1abc9c;
+    color: #121214;
+}
+
+.sk_drop_item i {
+    font-style: normal;
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+}
+
+.sk_canvas_wrapper {
+    position: relative;
+    flex-grow: 1;
+    background: #16161a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+/* Aspect lock to force perfect square game space responsive layout */
+.sk_aspect_lock_1_1 {
+    position: relative;
+    width: min(92vw, calc(100dvh - 240px));
+    height: min(92vw, calc(100dvh - 240px));
+    max-width: 100%;
+    max-height: 100%;
+    background: #000;
+    border: 3px solid #2d2d38;
+    border-radius: 12px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#sk_game_canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+}
+
+#sk_game_canvas:active {
+    cursor: grabbing;
+}
+
+/* Overlays inside aspect area */
+.sk_overlay_screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(18, 18, 22, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    transition: opacity 0.3s ease;
+}
+
+.sk_overlay_content {
+    text-align: center;
+    width: 90%;
+    max-width: 320px;
+    animation: sk_scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sk_splash_logo {
+    font-size: 3.5rem;
+    color: #1abc9c;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.sk_splash_title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0;
+    color: #ffffff;
+    letter-spacing: 3px;
+}
+
+.sk_splash_subtitle {
+    font-size: 0.9rem;
+    color: #a0a0b0;
+    margin: 5px 0 20px 0;
+}
+
+.sk_progress_bar_container {
+    width: 100%;
+    height: 8px;
+    background: #25252f;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.sk_progress_bar {
+    width: 0%;
+    height: 100%;
+    background: #1abc9c;
+    transition: width 0.1s ease;
+}
+
+.sk_action_btn {
+    background: #1abc9c;
+    color: #121214;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(26, 188, 156, 0.3);
+    transition: all 0.2s ease;
+    margin: 5px;
+}
+
+.sk_action_btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(26, 188, 156, 0.4);
+    background: #1df2c9;
+}
+
+.sk_secondary_btn {
+    background: #2c2c38;
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.sk_secondary_btn:hover {
+    background: #3e3e4f;
+    box-shadow: none;
+}
+
+.sk_orientation_warning {
+    display: none;
+    font-size: 0.75rem;
+    color: #e67e22;
+    margin-top: 10px;
+}
+
+/* Popups styling */
+.sk_popup_modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 12, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.sk_popup_inner {
+    background: #1e1e24;
+    border: 2px solid #2d2d38;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 85%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+}
+
+.sk_popup_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #2d2d38;
+}
+
+.sk_popup_title {
+    font-size: 1.1rem;
+    color: #ffffff;
+}
+
+.sk_popup_close {
+    background: none;
+    border: none;
+    color: #a0a0b0;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.sk_popup_body {
+    padding: 16px;
+    overflow-y: auto;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.sk_scrollable {
+    max-height: 240px;
+}
+
+.sk_setting_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.sk_toggle_btn {
+    background: #2c2c38;
+    border: 1px solid #3d3d4f;
+    color: #a0a0b0;
+    padding: 5px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.sk_toggle_btn.sk_active {
+    background: #1abc9c;
+    color: #121214;
+    border-color: #1abc9c;
+}
+
+.sk_danger_btn {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 5px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Bottom spacing area containing both viewport tools and draggable controller */
+.sk_bottom_zone {
+    width: 100%;
+    background: #141418;
+    border-top: 2px solid #2d2d38;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
+    flex-shrink: 0;
+    height: 165px;
+}
+
+/* Viewport Zoom & Pan Tool Controllers */
+.sk_viewport_controls {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sk_view_btn {
+    width: 32px;
+    height: 32px;
+    background: #25252f;
+    border: 1px solid #3e3e4f;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.sk_view_btn:hover {
+    background: #1abc9c;
+    color: #121214;
+}
+
+.sk_view_btn.sk_tool_active {
+    background: #e67e22;
+    color: #121214;
+    border-color: #e67e22;
+}
+
+/* Draggable Virtual controls */
+.sk_controls_container {
+    background: rgba(30, 30, 36, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    touch-action: none;
+}
+
+.sk_control_handle {
+    width: 100%;
+    text-align: center;
+    font-size: 0.65rem;
+    color: #888;
+    cursor: move;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.sk_controls_layout {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.sk_dpad_zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sk_dpad_middle {
+    display: flex;
+    align-items: center;
+}
+
+.sk_ctrl_btn {
+    width: 34px;
+    height: 34px;
+    background: #25252f;
+    border: 1px solid #3e3e4f;
+    color: #ffffff;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sk_ctrl_btn:active {
+    background: #1abc9c;
+    color: #121214;
+}
+
+.sk_dpad_center {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1abc9c;
+    font-size: 1.1rem;
+}
+
+.sk_action_zone {
+    display: flex;
+    flex-direction: column;
+}
+
+.sk_constrict_btn {
+    background: #e74c3c;
+    color: #ffffff;
+    border: none;
+    font-weight: 900;
+    font-size: 0.75rem;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+}
+
+.sk_constrict_btn span {
+    font-size: 0.6rem;
+    opacity: 0.8;
+}
+
+.sk_constrict_btn:active {
+    background: #c0392b;
+}
+
+/* Dynamic Level grid card generation */
+#sk_levels_grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.sk_level_card {
+    background: #2c2c38;
+    border: 1px solid #3d3d4f;
+    color: #ffffff;
+    padding: 10px 5px;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.sk_level_card.sk_locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #15151a;
+}
+
+.sk_level_card:hover:not(.sk_locked) {
+    background: #1abc9c;
+    color: #121214;
+}
+
+.sk_score_list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sk_score_row {
+    display: flex;
+    justify-content: space-between;
+    background: #2c2c38;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+.sk_visible {
+    display: flex !important;
+}
+
+.sk_hidden {
+    display: none !important;
+}
+
+.sk_fail_color {
+    color: #e74c3c !important;
+}
+
+.sk_success_color {
+    color: #1abc9c !important;
+}
+
+@keyframes sk_glow {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 1; text-shadow: 0 0 8px #1abc9c; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+@keyframes sk_scaleUp {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Strict Mobile responsive adjustments to lock panels */
+@media (max-width: 600px) {
+    .sk_game_title { display: none; }
+    .sk_top_panel { padding: 5px 10px; height: 50px; }
+    .sk_bottom_zone { height: 145px; padding: 5px 10px; gap: 5px; }
+    .sk_aspect_lock_1_1 { width: min(92vw, calc(100dvh - 210px)); height: min(92vw, calc(100dvh - 210px)); }
+    .sk_ctrl_btn { width: 30px; height: 30px; }
+    .sk_dpad_center { width: 28px; height: 28px; }
+    .sk_constrict_btn { padding: 8px 10px; font-size: 0.7rem; }
+    .sk_view_btn { width: 28px; height: 28px; font-size: 0.85rem; }
+}
+`;
+
+        const sk_style_el = document.createElement('style');
+        sk_style_el.textContent = sk_styles;
+        document.head.appendChild(sk_style_el);
+
+        /* ==========================================
+           GAME ENGINE & LOGIC (Ouroloop)
+           ========================================== */
+
+        /* Static local levels as backup */
+        const localLevels = [
+            {
+                name: "Genesis",
+                desc: "Learn to steer and trap the Essence. Press Space to Constrict.",
+                moves: 35,
+                loop: [
+                    {x: 4, y: 5}, {x: 5, y: 5}, {x: 6, y: 5},
+                    {x: 6, y: 6}, {x: 6, y: 7}, {x: 5, y: 7},
+                    {x: 4, y: 7}, {x: 4, y: 6}
+                ],
+                essences: [{x: 10, y: 6}],
+                parasites: [],
+                voids: []
+            },
+            {
+                name: "Warped Corridors",
+                desc: "Squeeze through voids. The loop stretches to survive.",
+                moves: 45,
+                loop: [
+                    {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5},
+                    {x: 5, y: 6}, {x: 5, y: 7}, {x: 4, y: 7},
+                    {x: 3, y: 7}, {x: 3, y: 6}
+                ],
+                essences: [{x: 12, y: 6}],
+                parasites: [],
+                voids: [
+                    {x: 8, y: 1}, {x: 8, y: 2}, {x: 8, y: 3}, {x: 8, y: 4},
+                    {x: 8, y: 8}, {x: 8, y: 9}, {x: 8, y: 10}
+                ]
+            },
+            {
+                name: "The Hunter",
+                desc: "Avoid the patrolling unit or trap and constrict it!",
+                moves: 50,
+                loop: [
+                    {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5},
+                    {x: 5, y: 6}, {x: 5, y: 7}, {x: 4, y: 7},
+                    {x: 3, y: 7}, {x: 3, y: 6}
+                ],
+                essences: [{x: 12, y: 3}],
+                parasites: [{x: 12, y: 8, dx: 0, dy: -1, minLimit: 5, maxLimit: 10}],
+                voids: [
+                    {x: 7, y: 4}, {x: 7, y: 5}, {x: 7, y: 6}, {x: 7, y: 7}
+                ]
+            },
+            {
+                name: "Symmetric Split",
+                desc: "Two entities require precise topological alignment.",
+                moves: 60,
+                loop: [
+                    {x: 4, y: 5}, {x: 5, y: 5}, {x: 6, y: 5},
+                    {x: 6, y: 6}, {x: 6, y: 7}, {x: 5, y: 7},
+                    {x: 4, y: 7}, {x: 4, y: 6}
+                ],
+                essences: [{x: 3, y: 3}, {x: 12, y: 8}],
+                parasites: [],
+                voids: [
+                    {x: 8, y: 0}, {x: 8, y: 1}, {x: 8, y: 2}, {x: 8, y: 3},
+                    {x: 8, y: 8}, {x: 8, y: 9}, {x: 8, y: 10}, {x: 8, y: 11}
+                ]
+            },
+            {
+                name: "The Labyrinth",
+                desc: "Navigate complex corridors and bypass multiple threats.",
+                moves: 75,
+                loop: [
+                    {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5},
+                    {x: 4, y: 6}, {x: 4, y: 7}, {x: 3, y: 7},
+                    {x: 2, y: 7}, {x: 2, y: 6}
+                ],
+                essences: [{x: 13, y: 3}, {x: 13, y: 8}],
+                parasites: [
+                    {x: 11, y: 3, dx: 0, dy: 1, minLimit: 2, maxLimit: 5},
+                    {x: 11, y: 8, dx: 0, dy: -1, minLimit: 6, maxLimit: 9}
+                ],
+                voids: [
+                    {x: 6, y: 2}, {x: 6, y: 3}, {x: 6, y: 4},
+                    {x: 6, y: 7}, {x: 6, y: 8}, {x: 6, y: 9},
+                    {x: 10, y: 5}, {x: 10, y: 6}
+                ]
+            }
+        ];
+
+        let levels = [...localLevels];
+
+        const gameState = {
+            currentLevelIdx: 0,
+            score: 0,
+            movesTaken: 0,
+            maxMoves: 30,
+            unlockedLevel: 0,
+            soundEnabled: true,
+            highScores: [],
+            loopNodes: [],
+            essences: [],
+            parasites: [],
+            voids: [],
+            status: "LOADING", /* LOADING, MENU, PLAYING, CLEARING, GAMEOVER, CLEARED, VICTORY, DEMO, PAUSED */
+            gridCols: 16,
+            gridRows: 12,
+            screenShake: 0,
+            demoTimer: null,
+            demoStep: 0,
+            enclosureCheckTicks: 0,
+
+            /* Viewport Pan and Zoom Variables */
+            zoomScale: 1.0,
+            panOffsetX: 0,
+            panOffsetY: 0,
+            isPanToolActive: false
+        };
+
+        /* HTML Elements */
+        const canvas = document.getElementById("sk_game_canvas");
+        const ctx = canvas.getContext("2d");
+        const elLevel = document.getElementById("sk_val_level");
+        const elMoves = document.getElementById("sk_val_moves");
+        const elScore = document.getElementById("sk_val_score");
+
+        /* Screens */
+        const screenLoading = document.getElementById("sk_screen_loading");
+        const screenStart = document.getElementById("sk_screen_start");
+        const screenGameOver = document.getElementById("sk_screen_gameover");
+        const screenCleared = document.getElementById("sk_screen_cleared");
+        const screenVictory = document.getElementById("sk_screen_victory");
+        const screenPaused = document.getElementById("sk_screen_paused");
+
+        /* Popups */
+        const popSettings = document.getElementById("sk_popup_settings");
+        const popHelp = document.getElementById("sk_popup_help");
+        const popLevels = document.getElementById("sk_popup_levels");
+        const popScores = document.getElementById("sk_popup_scores");
+
+        /* Control Overlay Buttons */
+        const btnStart = document.getElementById("sk_btn_start_game");
+        const btnDemo = document.getElementById("sk_btn_demo");
+        const btnDemoMenu = document.getElementById("sk_btn_demo_menu");
+        const btnRetry = document.getElementById("sk_btn_retry");
+        const btnNext = document.getElementById("sk_btn_next");
+        const btnFinish = document.getElementById("sk_btn_finish");
+        const btnMenuFail = document.getElementById("sk_btn_menu_fail");
+        const btnPause = document.getElementById("sk_btn_pause");
+        const btnResume = document.getElementById("sk_btn_resume");
+        const btnPauseMenu = document.getElementById("sk_btn_pause_menu");
+
+        /* Toggle elements & dropdowns */
+        const btnMenuToggle = document.getElementById("sk_btn_menu_toggle");
+        const dropdownMenu = document.getElementById("sk_dropdown_menu");
+
+        /* Network fetch properties */
+        const rawGitUrl = "./Ouroloop.json"; /* Change to custom or simulated URL */
+
+        /* ==========================================
+           LEVEL FETCHER & PARSER ENGINE
+           ========================================== */
+        function fetchLevelsFromGit() {
+            const progressBar = document.getElementById("sk_loader_progress");
+            const statusText = document.getElementById("sk_loader_status");
+            const skipBtn = document.getElementById("sk_btn_skip_fetch");
+
+            progressBar.style.width = "20%";
+            statusText.textContent = "Connecting to git raw repositories...";
+            skipBtn.style.display = "inline-block";
+
+            fetch(rawGitUrl)
+                .then(response => {
+                    progressBar.style.width = "60%";
+                    if (!response.ok) throw new Error("HTTP error " + response.status);
+                    return response.text();
+                })
+                .then(text => {
+                    progressBar.style.width = "90%";
+                    statusText.textContent = "Parsing procedural layout array...";
+
+                    /* Secure parsing removing slashes, single-line and multi-line JS comment blocks */
+                    const cleansed = text
+                        .replace(/\/\*[\s\S]*?\*\//g, "") /* block comments */
+                        .replace(/(?:^|[^:])\/\/.*$/gm, "") /* single line comments */
+                        .trim();
+
+                    const parsed = JSON.parse(cleansed);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        levels = parsed;
+                        statusText.textContent = "Levels injected successfully!";
+                    } else {
+                        throw new Error("Invalid levels scheme");
+                    }
+
+                    setTimeout(() => {
+                        progressBar.style.width = "100%";
+                        completeLoading();
+                    }, 600);
+                })
+                .catch(err => {
+                    console.warn("Failed fetching external git levels, falling back to local database. Error Details: ", err);
+                    statusText.textContent = "Offline/Fallback activated: Using local structures.";
+                    progressBar.style.width = "100%";
+                    levels = [...localLevels];
+                    setTimeout(completeLoading, 1000);
+                });
+        }
+
+        function completeLoading() {
+            screenLoading.classList.remove("sk_visible");
+            screenLoading.classList.add("sk_hidden");
+            changeState("MENU");
+        }
+
+        document.getElementById("sk_btn_skip_fetch").addEventListener("click", () => {
+            levels = [...localLevels];
+            completeLoading();
+        });
+
+        /* ==========================================
+           AUDIO ENGINE (Synthesizer via Web Audio API)
+           ========================================== */
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(freq, duration, type = 'sine', sweep = 0) {
+            if (!gameState.soundEnabled) return;
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                if (sweep > 0) {
+                    osc.frequency.exponentialRampToValueAtTime(sweep, audioCtx.currentTime + duration);
+                }
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.warn("Audio Context blocked or failed to init", e);
+            }
+        }
+
+        function sfxMove() {
+            playSound(280, 0.08, 'triangle', 450);
+        }
+
+        function sfxSuccess() {
+            playSound(400, 0.15, 'sine');
+            setTimeout(() => playSound(600, 0.15, 'sine'), 80);
+            setTimeout(() => playSound(800, 0.25, 'sine'), 160);
+        }
+
+        function sfxFail() {
+            playSound(180, 0.4, 'sawtooth', 80);
+        }
+
+        function sfxVictory() {
+            const notes = [261.63, 329.63, 392.00, 523.25];
+            notes.forEach((freq, idx) => {
+                setTimeout(() => playSound(freq, 0.25, 'sine'), idx * 120);
+            });
+        }
+
+        function triggerShake() {
+            gameState.screenShake = 10;
+        }
+
+        /* ==========================================
+           DROPDOWN & INTERFACE MANAGEMENT
+           ========================================== */
+        btnMenuToggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle("sk_hidden");
+        });
+
+        document.addEventListener("click", () => {
+            dropdownMenu.classList.add("sk_hidden");
+        });
+
+        /* ==========================================
+           DRAGGABLE VIRTUAL CONTROLS
+           ========================================== */
+        const controlsContainer = document.querySelector('.sk_controls_container');
+        const dragHandle = document.querySelector('.sk_control_handle');
+        let isDraggingController = false;
+        let dragX = 0, dragY = 0;
+
+        dragHandle.addEventListener('pointerdown', (e) => {
+            isDraggingController = true;
+            const rect = controlsContainer.getBoundingClientRect();
+            const parentRect = controlsContainer.parentElement.getBoundingClientRect();
+            dragX = e.clientX - rect.left;
+            dragY = e.clientY - rect.top;
+            dragHandle.setPointerCapture(e.pointerId);
+        });
+
+        dragHandle.addEventListener('pointermove', (e) => {
+            if (!isDraggingController) return;
+            const parentRect = controlsContainer.parentElement.getBoundingClientRect();
+            let left = e.clientX - parentRect.left - dragX;
+            let top = e.clientY - parentRect.top - dragY;
+
+            left = Math.max(0, Math.min(left, parentRect.width - controlsContainer.offsetWidth));
+            top = Math.max(0, Math.min(top, parentRect.height - controlsContainer.offsetHeight));
+
+            controlsContainer.style.position = 'absolute';
+            controlsContainer.style.left = `${left}px`;
+            controlsContainer.style.top = `${top}px`;
+        });
+
+        dragHandle.addEventListener('pointerup', (e) => {
+            isDraggingController = false;
+            dragHandle.releasePointerCapture(e.pointerId);
+        });
+
+        /* ==========================================
+           RESPONSIVE GAME CANVAS SYSTEM
+           ========================================== */
+        let viewW = 0;
+        let viewH = 0;
+        let lastFrameTime = 0;
+
+        function resizeCanvas() {
+            const parent = canvas.parentElement;
+            const rect = parent.getBoundingClientRect();
+            viewW = rect.width;
+            viewH = rect.height;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.max(1, Math.round(viewW * dpr));
+            canvas.height = Math.max(1, Math.round(viewH * dpr));
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            resizeCanvas();
+            drawGame();
+        });
+        resizeObserver.observe(canvas.parentElement);
+
+        /* ==========================================
+           LOCAL STORAGE MANAGEMENT
+           ========================================== */
+        function saveGameData() {
+            localStorage.setItem("ouroloop_unlocked", gameState.unlockedLevel);
+            localStorage.setItem("ouroloop_highscores", JSON.stringify(gameState.highScores));
+        }
+
+        function loadGameData() {
+            const savedUnlocked = localStorage.getItem("ouroloop_unlocked");
+            if (savedUnlocked) gameState.unlockedLevel = parseInt(savedUnlocked);
+
+            const savedScores = localStorage.getItem("ouroloop_highscores");
+            if (savedScores) gameState.highScores = JSON.parse(savedScores);
+        }
+
+        /* ==========================================
+           INIT LEVEL
+           ========================================== */
+        function initLevel(idx) {
+            if (idx >= levels.length) {
+                changeState("VICTORY");
+                return;
+            }
+            const lvl = levels[idx];
+            gameState.currentLevelIdx = idx;
+            gameState.movesTaken = 0;
+            gameState.maxMoves = lvl.moves;
+            gameState.loopNodes = lvl.loop.map(n => ({...n}));
+            gameState.essences = lvl.essences.map(e => ({...e, collected: false}));
+            gameState.parasites = lvl.parasites.map(p => ({...p}));
+            gameState.voids = lvl.voids.map(v => ({...v}));
+
+            elLevel.textContent = idx + 1;
+            elMoves.textContent = `0/${lvl.moves}`;
+
+            resetViewport();
+            changeState("PLAYING");
+        }
+
+        /* ==========================================
+           STATE MACHINE CONTROLLER
+           ========================================== */
+        function changeState(newState) {
+            gameState.status = newState;
+
+            screenStart.classList.add("sk_hidden");
+            screenGameOver.classList.add("sk_hidden");
+            screenCleared.classList.add("sk_hidden");
+            screenVictory.classList.add("sk_hidden");
+            screenPaused.classList.add("sk_hidden");
+
+            if (newState === "PLAYING") {
+                stopDemo();
+            } else if (newState === "MENU") {
+                screenStart.classList.remove("sk_hidden");
+                stopDemo();
+            } else if (newState === "GAMEOVER") {
+                screenGameOver.classList.remove("sk_hidden");
+                sfxFail();
+            } else if (newState === "CLEARED") {
+                screenCleared.classList.remove("sk_hidden");
+                sfxSuccess();
+                recordHighScore();
+                if (gameState.currentLevelIdx + 1 > gameState.unlockedLevel) {
+                    gameState.unlockedLevel = Math.min(gameState.currentLevelIdx + 1, levels.length - 1);
+                    saveGameData();
+                }
+            } else if (newState === "VICTORY") {
+                screenVictory.classList.remove("sk_hidden");
+                sfxVictory();
+                recordHighScore();
+            } else if (newState === "PAUSED") {
+                screenPaused.classList.remove("sk_hidden");
+            }
+        }
+
+        function recordHighScore() {
+            gameState.highScores.push({level: gameState.currentLevelIdx + 1, val: gameState.score});
+            gameState.highScores.sort((a, b) => b.val - a.val);
+            gameState.highScores = gameState.highScores.slice(0, 5);
+            saveGameData();
+        }
+
+        /* ==========================================
+           COLLISION & UTILS
+           ========================================== */
+        function isWall(x, y) {
+            if (x < 0 || x >= gameState.gridCols || y < 0 || y >= gameState.gridRows) return true;
+            return gameState.voids.some(v => v.x === x && v.y === y);
+        }
+
+        /* ==========================================
+           CATERPILLAR DEFORMATION ENGINE
+           ========================================== */
+        function applyMovement(dx, dy) {
+            if (gameState.status !== "PLAYING" && gameState.status !== "DEMO") return;
+
+            if (gameState.movesTaken >= gameState.maxMoves) {
+                if (gameState.status === "DEMO") {
+                    stopDemo();
+                    changeState("MENU");
+                    return;
+                }
+                gameState.screenShake = 12;
+                changeState("GAMEOVER");
+                document.getElementById("sk_fail_reason").textContent = "You ran out of topological energy (moves limit reached!).";
+                return;
+            }
+
+            const nodes = gameState.loopNodes;
+            const len = nodes.length;
+            let nextNodes = nodes.map(n => ({x: n.x, y: n.y}));
+
+            let hasBlockedNode = false;
+
+            for (let i = 0; i < len; i++) {
+                let proposedX = nodes[i].x + dx;
+                let proposedY = nodes[i].y + dy;
+                if (isWall(proposedX, proposedY)) {
+                    hasBlockedNode = true;
+                } else {
+                    nextNodes[i].x = proposedX;
+                    nextNodes[i].y = proposedY;
+                }
+            }
+
+            if (hasBlockedNode) {
+                let resolved = [];
+                for (let i = 0; i < len; i++) {
+                    let p1 = nextNodes[i];
+                    let p2 = nextNodes[(i + 1) % len];
+                    resolved.push(p1);
+
+                    let manhattanDist = Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
+                    if (manhattanDist > 1) {
+                        if (resolved.length < 18) {
+                            let mx = p1.x + Math.sign(p2.x - p1.x);
+                            let my = p1.y + Math.sign(p2.y - p1.y);
+                            if (!isWall(mx, my)) {
+                                resolved.push({x: mx, y: my});
+                            }
+                        }
+                    } else if (manhattanDist === 0) {
+                        resolved.pop();
+                    }
+                }
+
+                if (resolved.length >= 6) {
+                    gameState.loopNodes = resolved;
+                } else {
+                    changeState("GAMEOVER");
+                    document.getElementById("sk_fail_reason").textContent = "Your loop snapped while squeezing through a gap!";
+                    return;
+                }
+            } else {
+                gameState.loopNodes = nextNodes;
+            }
+
+            if (checkSelfIntersection(gameState.loopNodes)) {
+                changeState("GAMEOVER");
+                document.getElementById("sk_fail_reason").textContent = "Your loop collapsed upon itself (self-intersection!).";
+                return;
+            }
+
+            gameState.movesTaken++;
+            elMoves.textContent = `${gameState.movesTaken}/${gameState.maxMoves}`;
+            sfxMove();
+
+            updatePatrols();
+        }
+
+        function checkSelfIntersection(nodes) {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 2; j < nodes.length; j++) {
+                    if (i === 0 && j === nodes.length - 1) continue;
+                    if (nodes[i].x === nodes[j].x && nodes[i].y === nodes[j].y) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function updatePatrols() {
+            for (let i = 0; i < gameState.parasites.length; i++) {
+                const p = gameState.parasites[i];
+
+                if (gameState.loopNodes.some(node => node.x === p.x && node.y === p.y)) {
+                    changeState("GAMEOVER");
+                    document.getElementById("sk_fail_reason").textContent = "A Parasite compromised your loop outer integrity!";
+                    return;
+                }
+
+                let nxtX = p.x + p.dx;
+                let nxtY = p.y + p.dy;
+
+                const outX = p.dx !== 0 && (nxtX < p.minLimit || nxtX > p.maxLimit || isWall(nxtX, p.y));
+                const outY = p.dy !== 0 && (nxtY < p.minLimit || nxtY > p.maxLimit || isWall(p.x, nxtY));
+
+                if (outX) {
+                    p.dx *= -1;
+                    nxtX = p.x + p.dx;
+                }
+                if (outY) {
+                    p.dy *= -1;
+                    nxtY = p.y + p.dy;
+                }
+
+                p.x = nxtX;
+                p.y = nxtY;
+
+                if (gameState.loopNodes.some(node => node.x === p.x && node.y === p.y)) {
+                    changeState("GAMEOVER");
+                    document.getElementById("sk_fail_reason").textContent = "A Parasite compromised your loop outer integrity!";
+                    return;
+                }
+            }
+        }
+
+        /* ==========================================
+           FLOOD-FILL SPATIAL ENCLOSURE DETECTOR
+           ========================================== */
+        function checkEnclosure(targetX, targetY) {
+            const loop = gameState.loopNodes;
+            if (loop.some(node => node.x === targetX && node.y === targetY)) return false;
+
+            const visited = new Set();
+            const queue = [{x: targetX, y: targetY}];
+            const key = (x, y) => `${x},${y}`;
+            visited.add(key(targetX, targetY));
+
+            let reachedEdge = false;
+
+            while (queue.length > 0) {
+                const curr = queue.shift();
+
+                if (curr.x <= 0 || curr.x >= gameState.gridCols - 1 || curr.y <= 0 || curr.y >= gameState.gridRows - 1) {
+                    reachedEdge = true;
+                    break;
+                }
+
+                const neighbors = [
+                    {x: curr.x + 1, y: curr.y},
+                    {x: curr.x - 1, y: curr.y},
+                    {x: curr.x, y: curr.y + 1},
+                    {x: curr.x, y: curr.y - 1}
+                ];
+
+                for (const n of neighbors) {
+                    const nKey = key(n.x, n.y);
+                    if (!visited.has(nKey)) {
+                        const onLoop = loop.some(ln => ln.x === n.x && ln.y === n.y);
+                        if (!onLoop) {
+                            visited.add(nKey);
+                            queue.push(n);
+                        }
+                    }
+                }
+            }
+
+            return !reachedEdge;
+        }
+
+        function performConstriction() {
+            if (gameState.status !== "PLAYING" && gameState.status !== "DEMO") return;
+
+            let targetDigestCount = 0;
+            let pointEarnings = 0;
+
+            gameState.essences.forEach(e => {
+                if (!e.collected && checkEnclosure(e.x, e.y)) {
+                    e.collected = true;
+                    targetDigestCount++;
+                    pointEarnings += 100;
+                }
+            });
+
+            const remainingParasites = [];
+            gameState.parasites.forEach(p => {
+                if (checkEnclosure(p.x, p.y)) {
+                    pointEarnings += 250;
+                    targetDigestCount++;
+                } else {
+                    remainingParasites.push(p);
+                }
+            });
+            gameState.parasites = remainingParasites;
+
+            if (targetDigestCount > 0) {
+                gameState.score += pointEarnings;
+                elScore.textContent = gameState.score;
+                playSound(450, 0.3, 'sine', 900);
+
+                gameState.enclosureCheckTicks = 15;
+
+                const allCleared = gameState.essences.every(e => e.collected);
+                if (allCleared) {
+                    gameState.status = "CLEARING";
+                    setTimeout(() => {
+                        if (gameState.status !== "CLEARING") return;
+                        if (gameState.currentLevelIdx === levels.length - 1) {
+                            changeState("VICTORY");
+                        } else {
+                            changeState("CLEARED");
+                        }
+                    }, 300);
+                }
+            } else {
+                triggerShake();
+                playSound(180, 0.25, 'sawtooth');
+            }
+        }
+
+        /* ==========================================
+           VIEWPORT SCALING & PANNING CONTROLS
+           ========================================== */
+        function adjustZoom(amount) {
+            const prevScale = gameState.zoomScale;
+            gameState.zoomScale = Math.max(0.5, Math.min(2.5, gameState.zoomScale + amount));
+            drawGame();
+        }
+
+        function resetViewport() {
+            gameState.zoomScale = 1.0;
+            gameState.panOffsetX = 0;
+            gameState.panOffsetY = 0;
+            drawGame();
+        }
+
+        document.getElementById("sk_view_zoom_in").addEventListener("click", () => adjustZoom(0.1));
+        document.getElementById("sk_view_zoom_out").addEventListener("click", () => adjustZoom(-0.1));
+        document.getElementById("sk_view_zoom_reset").addEventListener("click", resetViewport);
+
+        const panToolBtn = document.getElementById("sk_view_pan_tool");
+        panToolBtn.addEventListener("click", () => {
+            gameState.isPanToolActive = !gameState.isPanToolActive;
+            panToolBtn.classList.toggle("sk_tool_active", gameState.isPanToolActive);
+        });
+
+        /* ==========================================
+           ADVANCED MOBILE TOUCH IMPLEMENTATION
+           ========================================== */
+        let activeTouches = {};
+        let lastTouchTime = 0;
+        let touchStartDist = 0;
+        let isTouchPanning = false;
+        let startPanX = 0, startPanY = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            initAudio();
+            const now = Date.now();
+            const touchList = e.targetTouches;
+
+            /* Multi-touch active registry */
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                activeTouches[touch.identifier] = {
+                    startX: touch.clientX,
+                    startY: touch.clientY,
+                    lastX: touch.clientX,
+                    lastY: touch.clientY,
+                    time: now
+                };
+            }
+
+            /* Double Tap Detection (<300ms) */
+            if (touchList.length === 1) {
+                const delta = now - lastTouchTime;
+                if (delta < 300 && delta > 5) {
+                    /* Double Tap action: automatically toggle the pan hand tool for quick navigation adjustments */
+                    gameState.isPanToolActive = !gameState.isPanToolActive;
+                    panToolBtn.classList.toggle("sk_tool_active", gameState.isPanToolActive);
+                    playSound(320, 0.1, 'sine');
+                }
+                lastTouchTime = now;
+
+                /* Set up long touch timer (>500ms) */
+                const singleTouch = touchList[0];
+                const touchId = singleTouch.identifier;
+                activeTouches[touchId].longTouchTimer = setTimeout(() => {
+                    if (activeTouches[touchId]) {
+                        /* Long touch action: instantly performs constriction */
+                        performConstriction();
+                        playSound(500, 0.2, 'sine');
+                    }
+                }, 500);
+
+                /* Single pointer drag start */
+                isTouchPanning = gameState.isPanToolActive;
+                startPanX = singleTouch.clientX - gameState.panOffsetX;
+                startPanY = singleTouch.clientY - gameState.panOffsetY;
+            }
+
+            /* Pinch-to-zoom setup (Multi-touch gesture) */
+            if (touchList.length === 2) {
+                const t1 = touchList[0];
+                const t2 = touchList[1];
+                touchStartDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+            }
+        }, {passive: true});
+
+        canvas.addEventListener('touchmove', (e) => {
+            const touchList = e.targetTouches;
+            const now = Date.now();
+
+            /* Multi-Touch Finger Drag & Pan tracking */
+            if (touchList.length === 1 && (gameState.isPanToolActive || isTouchPanning)) {
+                const touch = touchList[0];
+                gameState.panOffsetX = touch.clientX - startPanX;
+                gameState.panOffsetY = touch.clientY - startPanY;
+                drawGame();
+                return;
+            }
+
+            /* Swipe calculation on game grid (if pan is not currently active) */
+            if (touchList.length === 1 && !gameState.isPanToolActive) {
+                const touch = touchList[0];
+                const record = activeTouches[touch.identifier];
+                if (record) {
+                    const dx = touch.clientX - record.lastX;
+                    const dy = touch.clientY - record.lastY;
+
+                    /* Break the long touch timer if finger is actively moved */
+                    if (Math.hypot(dx, dy) > 10 && record.longTouchTimer) {
+                        clearTimeout(record.longTouchTimer);
+                    }
+
+                    if (Math.abs(dx) > 35 || Math.abs(dy) > 35) {
+                        if (Math.abs(dx) > Math.abs(dy)) {
+                            applyMovement(Math.sign(dx), 0);
+                        } else {
+                            applyMovement(0, Math.sign(dy));
+                        }
+                        record.lastX = touch.clientX;
+                        record.lastY = touch.clientY;
+                    }
+                }
+            }
+
+            /* Multi-touch 2-finger zoom and pan */
+            if (touchList.length === 2) {
+                const t1 = touchList[0];
+                const t2 = touchList[1];
+                const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+                if (touchStartDist > 0) {
+                    const factor = dist / touchStartDist;
+                    gameState.zoomScale = Math.max(0.5, Math.min(2.5, gameState.zoomScale * (factor - 1) * 0.05 + 1));
+                    drawGame();
+                }
+            }
+        }, {passive: true});
+
+        canvas.addEventListener('touchend', (e) => {
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                const record = activeTouches[touch.identifier];
+                if (record && record.longTouchTimer) {
+                    clearTimeout(record.longTouchTimer);
+                }
+                delete activeTouches[touch.identifier];
+            }
+            if (e.targetTouches.length < 2) {
+                touchStartDist = 0;
+            }
+            if (e.targetTouches.length === 0) {
+                isTouchPanning = false;
+            }
+        }, {passive: true});
+
+        canvas.addEventListener('touchcancel', (e) => {
+            activeTouches = {};
+            isTouchPanning = false;
+            touchStartDist = 0;
+        }, {passive: true});
+
+
+        /* ==========================================
+           INPUT REGISTRATION & INTERACTION LISTENERS
+           ========================================== */
+        window.addEventListener("keydown", (e) => {
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
+                e.preventDefault();
+            }
+
+            /* Custom keyboard view adjustments (Ctrl + and Ctrl -) */
+            if (e.ctrlKey) {
+                if (e.key === "=" || e.key === "+") {
+                    e.preventDefault();
+                    adjustZoom(0.1);
+                    return;
+                }
+                if (e.key === "-") {
+                    e.preventDefault();
+                    adjustZoom(-0.1);
+                    return;
+                }
+                if (e.key === "0") {
+                    e.preventDefault();
+                    resetViewport();
+                    return;
+                }
+            }
+
+            if (gameState.status === "PLAYING") {
+                switch (e.key) {
+                    case "ArrowUp":
+                    case "w":
+                    case "W":
+                        applyMovement(0, -1);
+                        break;
+                    case "ArrowDown":
+                    case "s":
+                    case "S":
+                        applyMovement(0, 1);
+                        break;
+                    case "ArrowLeft":
+                    case "a":
+                    case "A":
+                        applyMovement(-1, 0);
+                        break;
+                    case "ArrowRight":
+                    case "d":
+                    case "D":
+                        applyMovement(1, 0);
+                        break;
+                    case " ":
+                        performConstriction();
+                        break;
+                }
+            } else {
+                if (e.key === "Enter" || e.key === "Escape") {
+                    initAudio();
+                    if (gameState.status === "PAUSED") {
+                        changeState("PLAYING");
+                    } else if (gameState.status === "MENU") {
+                        initLevel(gameState.unlockedLevel);
+                    } else if (gameState.status === "GAMEOVER") {
+                        initLevel(gameState.currentLevelIdx);
+                    } else if (gameState.status === "CLEARED") {
+                        initLevel(gameState.currentLevelIdx + 1);
+                    }
+                }
+            }
+        });
+
+        /* UI Touch & Buttons binds */
+        document.getElementById("sk_key_up").addEventListener("click", () => applyMovement(0, -1));
+        document.getElementById("sk_key_down").addEventListener("click", () => applyMovement(0, 1));
+        document.getElementById("sk_key_left").addEventListener("click", () => applyMovement(-1, 0));
+        document.getElementById("sk_key_right").addEventListener("click", () => applyMovement(1, 0));
+        document.getElementById("sk_btn_constrict").addEventListener("click", performConstriction);
+
+        /* Control overlays click hooks */
+        btnStart.addEventListener("click", () => {
+            initAudio();
+            initLevel(gameState.unlockedLevel);
+        });
+        btnRetry.addEventListener("click", () => initLevel(gameState.currentLevelIdx));
+        btnMenuFail.addEventListener("click", () => changeState("MENU"));
+        btnNext.addEventListener("click", () => initLevel(gameState.currentLevelIdx + 1));
+        btnFinish.addEventListener("click", () => changeState("MENU"));
+
+        /* Pause and Resume Handlers */
+        btnPause.addEventListener("click", () => {
+            if (gameState.status === "PLAYING") {
+                changeState("PAUSED");
+            }
+        });
+        btnResume.addEventListener("click", () => {
+            if (gameState.status === "PAUSED") {
+                changeState("PLAYING");
+            }
+        });
+        btnPauseMenu.addEventListener("click", () => {
+            changeState("MENU");
+        });
+
+        /* HELP POPUPS HOOKS */
+        document.getElementById("sk_btn_help").addEventListener("click", () => {
+            popHelp.classList.remove("sk_hidden");
+            dropdownMenu.classList.add("sk_hidden");
+        });
+        document.getElementById("sk_close_help").addEventListener("click", () => popHelp.classList.add("sk_hidden"));
+
+        /* SETTINGS MODAL */
+        document.getElementById("sk_btn_settings").addEventListener("click", () => {
+            popSettings.classList.remove("sk_hidden");
+            dropdownMenu.classList.add("sk_hidden");
+        });
+        document.getElementById("sk_close_settings").addEventListener("click", () => popSettings.classList.add("sk_hidden"));
+
+        const toggleSound = document.getElementById("sk_toggle_sound");
+        toggleSound.addEventListener("click", () => {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            toggleSound.textContent = gameState.soundEnabled ? "ON" : "OFF";
+            toggleSound.classList.toggle("sk_active", gameState.soundEnabled);
+        });
+
+        document.getElementById("sk_btn_reset_data").addEventListener("click", () => {
+            if (confirm("Reset highscores and levels progression?")) {
+                gameState.unlockedLevel = 0;
+                gameState.highScores = [];
+                saveGameData();
+                renderLevelsMenu();
+                popSettings.classList.add("sk_hidden");
+            }
+        });
+
+        /* LEVELS POPUP MODAL */
+        document.getElementById("sk_btn_levels").addEventListener("click", () => {
+            renderLevelsMenu();
+            popLevels.classList.remove("sk_hidden");
+            dropdownMenu.classList.add("sk_hidden");
+        });
+        document.getElementById("sk_close_levels").addEventListener("click", () => popLevels.classList.add("sk_hidden"));
+
+        function renderLevelsMenu() {
+            const levelsGrid = document.getElementById("sk_levels_grid");
+            levelsGrid.innerHTML = "";
+            levels.forEach((lvl, idx) => {
+                const card = document.createElement("div");
+                card.className = "sk_level_card";
+                if (idx > gameState.unlockedLevel) {
+                    card.classList.add("sk_locked");
+                    card.textContent = `🔒 Lvl ${idx + 1}`;
+                } else {
+                    card.textContent = `Lvl ${idx + 1}`;
+                    card.addEventListener("click", () => {
+                        popLevels.classList.add("sk_hidden");
+                        initLevel(idx);
+                    });
+                }
+                levelsGrid.appendChild(card);
+            });
+        }
+
+        /* HIGHSCORES LEADERBOARD */
+        document.getElementById("sk_btn_scores").addEventListener("click", () => {
+            renderScores();
+            popScores.classList.remove("sk_hidden");
+            dropdownMenu.classList.add("sk_hidden");
+        });
+        document.getElementById("sk_close_scores").addEventListener("click", () => popScores.classList.add("sk_hidden"));
+
+        function renderScores() {
+            const list = document.getElementById("sk_leaderboard_list");
+            list.innerHTML = "";
+            if (gameState.highScores.length === 0) {
+                const p = document.createElement("p");
+                p.textContent = "No records recorded yet!";
+                list.appendChild(p);
+            } else {
+                gameState.highScores.slice(0, 5).forEach((entry, idx) => {
+                    const row = document.createElement("div");
+                    row.className = "sk_score_row";
+                    row.innerHTML = `<span>Rank ${idx + 1}: Level ${entry.level}</span><b>${entry.val} pts</b>`;
+                    list.appendChild(row);
+                });
+            }
+        }
+
+        /* FULLSCREEN API TOGGLE */
+        const fsButton = document.getElementById("sk_btn_fullscreen");
+        fsButton.addEventListener("click", () => {
+            const target = document.querySelector(".sk_game_suite_root");
+            if (!document.fullscreenElement) {
+                target.requestFullscreen().catch(err => {
+                    console.error("Fullscreen initiation error: ", err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        /* ==========================================
+           DEMO MACHINE SYSTEM (Auto loop moves playback)
+           ========================================== */
+        function runDemoMode() {
+            initLevel(0);
+            gameState.status = "DEMO";
+            gameState.demoStep = 0;
+
+            clearInterval(gameState.demoTimer);
+            gameState.demoTimer = setInterval(() => {
+                if (gameState.status !== "DEMO") {
+                    clearInterval(gameState.demoTimer);
+                    return;
+                }
+                if (gameState.demoStep >= 64) {
+                    clearInterval(gameState.demoTimer);
+                    gameState.status = "MENU";
+                    return;
+                }
+
+                const uncollected = gameState.essences.filter(e => !e.collected);
+                const allEnclosed = uncollected.length > 0 && uncollected.every(e => checkEnclosure(e.x, e.y));
+
+                if (allEnclosed) {
+                    performConstriction();
+                    clearInterval(gameState.demoTimer);
+                    setTimeout(() => {
+                        changeState("MENU");
+                    }, 1500);
+                    return;
+                }
+
+                let centerX = 0, centerY = 0;
+                const nodes = gameState.loopNodes;
+                for (const n of nodes) {centerX += n.x; centerY += n.y;}
+                centerX /= nodes.length;
+                centerY /= nodes.length;
+
+                let targetX = 0, targetY = 0;
+                for (const e of uncollected) {targetX += e.x; targetY += e.y;}
+                targetX /= uncollected.length;
+                targetY /= uncollected.length;
+
+                const dx = Math.round(targetX - centerX);
+                const dy = Math.round(targetY - centerY);
+
+                if (Math.abs(dx) >= Math.abs(dy)) {
+                    applyMovement(Math.sign(dx), 0);
+                } else {
+                    applyMovement(0, Math.sign(dy));
+                }
+
+                gameState.demoStep++;
+            }, 600);
+        }
+
+        btnDemo.addEventListener("click", runDemoMode);
+        btnDemoMenu.addEventListener("click", () => {
+            runDemoMode();
+            dropdownMenu.classList.add("sk_hidden");
+        });
+
+        function stopDemo() {
+            if (gameState.demoTimer) {
+                clearInterval(gameState.demoTimer);
+            }
+        }
+
+        /* Mouse Interaction & Drag coordinates translation mapping zoom/offset */
+        let isMouseDragging = false;
+        let mouseStartX = 0, mouseStartY = 0;
+
+        canvas.addEventListener("mousedown", (e) => {
+            if (gameState.isPanToolActive) {
+                isMouseDragging = true;
+                mouseStartX = e.clientX - gameState.panOffsetX;
+                mouseStartY = e.clientY - gameState.panOffsetY;
+            }
+        });
+
+        canvas.addEventListener("mousemove", (e) => {
+            if (isMouseDragging && gameState.isPanToolActive) {
+                gameState.panOffsetX = e.clientX - mouseStartX;
+                gameState.panOffsetY = e.clientY - mouseStartY;
+                drawGame();
+            }
+        });
+
+        canvas.addEventListener("mouseup", () => {
+            isMouseDragging = false;
+        });
+
+        canvas.addEventListener("mouseleave", () => {
+            isMouseDragging = false;
+        });
+
+        /* ==========================================
+           CANVAS PROCEDURAL RENDERING SYSTEM
+           ========================================== */
+        function drawGame() {
+            if (viewW <= 0 || viewH <= 0) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cellW = viewW / gameState.gridCols;
+            const cellH = viewH / gameState.gridRows;
+
+            ctx.save();
+
+            /* Apply Screen Shake Camera Transformations */
+            if (gameState.screenShake > 0) {
+                const dx = (Math.random() - 0.5) * gameState.screenShake;
+                const dy = (Math.random() - 0.5) * gameState.screenShake;
+                ctx.translate(dx, dy);
+            }
+
+            /* Center-anchored zoom + screen-space pan so pan speed is zoom-independent */
+            ctx.translate(viewW / 2 + gameState.panOffsetX, viewH / 2 + gameState.panOffsetY);
+            ctx.scale(gameState.zoomScale, gameState.zoomScale);
+            ctx.translate(-viewW / 2, -viewH / 2);
+
+            /* 1. Draw Grid System Lines */
+            ctx.strokeStyle = "#25252f";
+            ctx.lineWidth = 1;
+            for (let c = 0; c <= gameState.gridCols; c++) {
+                ctx.beginPath();
+                ctx.moveTo(c * cellW, 0);
+                ctx.lineTo(c * cellW, viewH);
+                ctx.stroke();
+            }
+            for (let r = 0; r <= gameState.gridRows; r++) {
+                ctx.beginPath();
+                ctx.moveTo(0, r * cellH);
+                ctx.lineTo(viewW, r * cellH);
+                ctx.stroke();
+            }
+
+            /* 2. Draw Void Blocks */
+            ctx.fillStyle = "#2a2d36";
+            ctx.shadowBlur = 0;
+            gameState.voids.forEach(v => {
+                ctx.beginPath();
+                ctx.roundRect(v.x * cellW + 2, v.y * cellH + 2, cellW - 4, cellH - 4, 8);
+                ctx.fill();
+                ctx.strokeStyle = "#3e4250";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            /* Highlight inside loop if Enclosed target */
+            gameState.essences.forEach(e => {
+                if (!e.collected && checkEnclosure(e.x, e.y)) {
+                    ctx.fillStyle = "rgba(26, 188, 156, 0.12)";
+                    ctx.fillRect(e.x * cellW, e.y * cellH, cellW, cellH);
+                }
+            });
+
+            /* 3. Draw Essence Target Nodes (Pulsing glowing orbs) */
+            const timeFactor = Date.now() * 0.005;
+            const pulseFactor = 2 + Math.sin(timeFactor) * 3;
+            gameState.essences.forEach(e => {
+                if (e.collected) return;
+
+                ctx.save();
+                ctx.shadowColor = "#e67e22";
+                ctx.shadowBlur = 10 + pulseFactor;
+                ctx.fillStyle = "#e67e22";
+                ctx.beginPath();
+                ctx.arc(e.x * cellW + cellW / 2, e.y * cellH + cellH / 2, (cellW / 4) + pulseFactor * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = "#ffdd59";
+                ctx.beginPath();
+                ctx.arc(e.x * cellW + cellW / 2, e.y * cellH + cellH / 2, cellW / 7, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            /* 4. Draw Parasite Patrols (Danger Spikes) */
+            gameState.parasites.forEach(p => {
+                ctx.save();
+                ctx.shadowColor = "#e74c3c";
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = "#e74c3c";
+
+                const px = p.x * cellW + cellW / 2;
+                const py = p.y * cellH + cellH / 2;
+                const radius = cellW / 3;
+
+                ctx.beginPath();
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i * Math.PI) / 4 + timeFactor;
+                    const spkX = px + Math.cos(angle) * radius;
+                    const spky = py + Math.sin(angle) * radius;
+                    if (i === 0) ctx.moveTo(spkX, spky);
+                    else ctx.lineTo(spkX, spky);
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            });
+
+            /* 5. Draw the Connected Elastic Loop */
+            const loop = gameState.loopNodes;
+            if (loop.length > 1) {
+                ctx.save();
+                ctx.shadowColor = "#1abc9c";
+                ctx.shadowBlur = 8;
+                ctx.strokeStyle = "#1abc9c";
+                ctx.lineWidth = cellW / 2.5;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+
+                ctx.beginPath();
+                ctx.moveTo(loop[0].x * cellW + cellW / 2, loop[0].y * cellH + cellH / 2);
+                for (let i = 1; i < loop.length; i++) {
+                    ctx.lineTo(loop[i].x * cellW + cellW / 2, loop[i].y * cellH + cellH / 2);
+                }
+                ctx.closePath();
+                ctx.stroke();
+
+                ctx.strokeStyle = "#e8fdfa";
+                ctx.lineWidth = cellW / 6;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            /* 6. Constriction Burst Feedback Animation */
+            if (gameState.enclosureCheckTicks > 0) {
+                ctx.fillStyle = `rgba(26, 188, 156, ${gameState.enclosureCheckTicks / 15})`;
+                ctx.fillRect(0, 0, viewW, viewH);
+                gameState.enclosureCheckTicks--;
+            }
+
+            ctx.restore();
+        }
+
+        /* CENTRAL LOOP REQUEST ANIMATION */
+        function animationCycle(time) {
+            if (lastFrameTime === 0) lastFrameTime = time;
+            const dt = Math.min(100, time - lastFrameTime);
+            lastFrameTime = time;
+            if (gameState.screenShake > 0) {
+                gameState.screenShake = Math.max(0, gameState.screenShake - dt * 0.018);
+            }
+            drawGame();
+            requestAnimationFrame(animationCycle);
+        }
+
+        /* Setup levels fetching and trigger execution */
+        loadGameData();
+        fetchLevelsFromGit();
+        animationCycle();
+
+    </script>
+</body>
+
+</html>

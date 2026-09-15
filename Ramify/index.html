@@ -1471,6 +1471,7 @@
             const parsed = sanitizeParse(text);
             if (applyLevelPack(parsed)) {
               if (!dom.overlayLevels.classList.contains('sk_hidden')) generateLevelsGrid();
+              endLoader();
             } else {
               setTimeout(endLoader, 1200);
             }
