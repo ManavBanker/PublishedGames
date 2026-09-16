@@ -2083,7 +2083,8 @@
       }, 120);
 
       try {
-        const response = await fetch(LEVEL_REMOTE_URL, { cache: 'no-cache' });
+        const cacheBust = LEVEL_REMOTE_URL + '?_=' + Date.now();
+        const response = await fetch(cacheBust, { cache: 'no-cache' });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} ${response.statusText}`);
         }
