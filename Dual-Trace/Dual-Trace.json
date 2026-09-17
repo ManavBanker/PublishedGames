@@ -1,0 +1,1028 @@
+[
+  {
+    "id": 6,
+    "name": "Parallel Columns",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 5 },
+    "leftGoal": { "x": 6, "y": 3 },
+    "rightStart": { "x": 1, "y": 2 },
+    "rightGoal": { "x": 6, "y": 0 },
+    "wallsLeft": [
+      { "x": 2, "y": 4 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 4 }
+    ],
+    "wallsRight": [
+      { "x": 2, "y": 1 },
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 1 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 7
+  },
+  {
+    "id": 7,
+    "name": "Mirror Divide",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 5 },
+    "leftGoal": { "x": 5, "y": 2 },
+    "rightStart": { "x": 6, "y": 5 },
+    "rightGoal": { "x": 2, "y": 2 },
+    "wallsLeft": [
+      { "x": 2, "y": 5 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 5 },
+      { "x": 4, "y": 5 },
+      { "x": 3, "y": 5 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 7
+  },
+  {
+    "id": 8,
+    "name": "Vertical Split",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 2, "y": 5 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 2, "y": 2 },
+    "rightGoal": { "x": 5, "y": 2 },
+    "wallsLeft": [
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 5
+  },
+  {
+    "id": 9,
+    "name": "Rotational Orbit",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 2, "y": 2 },
+    "leftGoal": { "x": 5, "y": 2 },
+    "rightStart": { "x": 5, "y": 5 },
+    "rightGoal": { "x": 2, "y": 5 },
+    "wallsLeft": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 5 },
+      { "x": 3, "y": 5 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 5
+  },
+  {
+    "id": 10,
+    "name": "Symmetry Shift Alpha",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 4, "y": 2 },
+    "rightStart": { "x": 1, "y": 6 },
+    "rightGoal": { "x": 2, "y": 7 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 1, "nextSymmetry": "Horizontal Mirror" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 4
+  },
+  {
+    "id": 11,
+    "name": "The Zig-Zag Alley",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 6 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 1, "y": 6 },
+    "rightGoal": { "x": 6, "y": 1 },
+    "wallsLeft": [
+      { "x": 2, "y": 6 },
+      { "x": 2, "y": 5 },
+      { "x": 2, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 1 }
+    ],
+    "wallsRight": [
+      { "x": 2, "y": 6 },
+      { "x": 2, "y": 5 },
+      { "x": 2, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 1 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 12
+  },
+  {
+    "id": 12,
+    "name": "Mirror Maze",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 6, "y": 1 },
+    "rightGoal": { "x": 1, "y": 6 },
+    "wallsLeft": [
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 2 },
+      { "x": 4, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 2, "y": 5 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 12
+  },
+  {
+    "id": 13,
+    "name": "Reflections in the Dark",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 2, "y": 1 },
+    "leftGoal": { "x": 5, "y": 6 },
+    "rightStart": { "x": 2, "y": 6 },
+    "rightGoal": { "x": 5, "y": 1 },
+    "wallsLeft": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 3 }
+    ],
+    "wallsRight": [
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 4 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 14,
+    "name": "Central Helix",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 6, "y": 6 },
+    "rightGoal": { "x": 1, "y": 6 },
+    "wallsLeft": [
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "wallsRight": [
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 15,
+    "name": "The Threshold",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 5 },
+    "leftGoal": { "x": 6, "y": 2 },
+    "rightStart": { "x": 1, "y": 5 },
+    "rightGoal": { "x": 6, "y": 2 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [],
+    "gates": [
+      { "x": 4, "y": 3, "openByPlate": { "x": 2, "y": 5 } }
+    ],
+    "plates": [
+      { "x": 2, "y": 5, "activatesGate": { "x": 4, "y": 3 } }
+    ],
+    "par": 11
+  },
+  {
+    "id": 16,
+    "name": "Shift Pattern Beta",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 2, "y": 2 },
+    "leftGoal": { "x": 5, "y": 2 },
+    "rightStart": { "x": 2, "y": 5 },
+    "rightGoal": { "x": 5, "y": 5 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 2, "nextSymmetry": "Translation" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 8
+  },
+  {
+    "id": 17,
+    "name": "Corridor Exchange",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 2 },
+    "leftGoal": { "x": 1, "y": 5 },
+    "rightStart": { "x": 6, "y": 2 },
+    "rightGoal": { "x": 6, "y": 5 },
+    "wallsLeft": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 3, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 4, "y": 5 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 18,
+    "name": "Quad Core",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 2, "y": 2 },
+    "leftGoal": { "x": 5, "y": 2 },
+    "rightStart": { "x": 5, "y": 5 },
+    "rightGoal": { "x": 2, "y": 5 },
+    "wallsLeft": [
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 2 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 4 },
+      { "x": 4, "y": 5 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 8
+  },
+  {
+    "id": 19,
+    "name": "Pressure Chamber",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 2 },
+    "leftGoal": { "x": 6, "y": 2 },
+    "rightStart": { "x": 1, "y": 5 },
+    "rightGoal": { "x": 6, "y": 5 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 5, "y": 2, "openByPlate": { "x": 3, "y": 5 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 5, "activatesGate": { "x": 5, "y": 2 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 20,
+    "name": "Divergent Paths",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 2, "y": 1 },
+    "leftGoal": { "x": 2, "y": 6 },
+    "rightStart": { "x": 5, "y": 1 },
+    "rightGoal": { "x": 5, "y": 6 },
+    "wallsLeft": [
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 3 },
+      { "x": 4, "y": 3 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 9
+  },
+  {
+    "id": 21,
+    "name": "Symmetry Loop",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 4, "y": 4 },
+    "rightStart": { "x": 6, "y": 1 },
+    "rightGoal": { "x": 3, "y": 4 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 2, "y": 2, "nextSymmetry": "Translation" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 8
+  },
+  {
+    "id": 22,
+    "name": "The Split Switch",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 1, "y": 6 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 1, "y": 1 },
+    "rightGoal": { "x": 6, "y": 1 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 4, "y": 6, "openByPlate": { "x": 3, "y": 1 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 1, "activatesGate": { "x": 4, "y": 6 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 23,
+    "name": "Rotational Gate",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 6, "y": 6 },
+    "rightGoal": { "x": 2, "y": 2 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 4, "y": 4, "openByPlate": { "x": 3, "y": 3 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 3, "activatesGate": { "x": 4, "y": 4 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 24,
+    "name": "Mirror Shift",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 2 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 1, "y": 5 },
+    "rightGoal": { "x": 5, "y": 2 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 2, "nextSymmetry": "Vertical Mirror" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 25,
+    "name": "Double Sided",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 2 },
+    "leftGoal": { "x": 6, "y": 5 },
+    "rightStart": { "x": 6, "y": 2 },
+    "rightGoal": { "x": 1, "y": 5 },
+    "wallsLeft": [
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 2 },
+      { "x": 4, "y": 3 },
+      { "x": 3, "y": 4 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 11
+  },
+  {
+    "id": 26,
+    "name": "Synchronization Matrix",
+    "symmetry": "Translation",
+    "leftStart": { "x": 2, "y": 2 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 2, "y": 2 },
+    "rightGoal": { "x": 5, "y": 5 },
+    "wallsLeft": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }
+    ],
+    "wallsRight": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 8
+  },
+  {
+    "id": 27,
+    "name": "Crossbeams",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 1, "y": 5 },
+    "leftGoal": { "x": 6, "y": 5 },
+    "rightStart": { "x": 6, "y": 2 },
+    "rightGoal": { "x": 1, "y": 2 },
+    "wallsLeft": [
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 2 },
+      { "x": 3, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 7
+  },
+  {
+    "id": 28,
+    "name": "Alternating Current",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 1, "y": 6 },
+    "rightGoal": { "x": 6, "y": 6 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 1, "nextSymmetry": "Horizontal Mirror" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 29,
+    "name": "Vertical Chasm",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 2, "y": 2 },
+    "leftGoal": { "x": 5, "y": 2 },
+    "rightStart": { "x": 2, "y": 5 },
+    "rightGoal": { "x": 5, "y": 5 },
+    "wallsLeft": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 }
+    ],
+    "wallsRight": [
+      { "x": 3, "y": 6 },
+      { "x": 3, "y": 5 },
+      { "x": 3, "y": 4 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 8
+  },
+  {
+    "id": 30,
+    "name": "Corner Lock",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 1, "y": 1 },
+    "rightGoal": { "x": 6, "y": 6 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 5, "y": 5, "openByPlate": { "x": 3, "y": 3 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 3, "activatesGate": { "x": 5, "y": 5 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 31,
+    "name": "Bifurcated Logic",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 6, "y": 1 },
+    "rightGoal": { "x": 2, "y": 5 },
+    "wallsLeft": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 3 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 1 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 3 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 12
+  },
+  {
+    "id": 32,
+    "name": "Phase Inversion",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 2, "y": 1 },
+    "leftGoal": { "x": 5, "y": 2 },
+    "rightStart": { "x": 2, "y": 6 },
+    "rightGoal": { "x": 5, "y": 5 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 1, "nextSymmetry": "180 Rotation" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 9
+  },
+  {
+    "id": 33,
+    "name": "Synchronous Trap",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 6 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 1, "y": 6 },
+    "rightGoal": { "x": 6, "y": 1 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 5, "y": 2, "openByPlate": { "x": 3, "y": 6 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 6, "activatesGate": { "x": 5, "y": 2 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 34,
+    "name": "Inverse Helix",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 2, "y": 2 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 5, "y": 5 },
+    "rightGoal": { "x": 2, "y": 2 },
+    "wallsLeft": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 5 },
+      { "x": 3, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 8
+  },
+  {
+    "id": 35,
+    "name": "Intersecting Planes",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 5 },
+    "leftGoal": { "x": 5, "y": 1 },
+    "rightStart": { "x": 6, "y": 5 },
+    "rightGoal": { "x": 2, "y": 1 },
+    "wallsLeft": [
+      { "x": 3, "y": 4 },
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 2 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 36,
+    "name": "Polar Shifts",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 2 },
+    "leftGoal": { "x": 6, "y": 5 },
+    "rightStart": { "x": 1, "y": 5 },
+    "rightGoal": { "x": 6, "y": 2 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 4, "y": 2, "nextSymmetry": "Vertical Mirror" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 11
+  },
+  {
+    "id": 37,
+    "name": "Divided Chamber",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 2, "y": 1 },
+    "leftGoal": { "x": 5, "y": 1 },
+    "rightStart": { "x": 2, "y": 6 },
+    "rightGoal": { "x": 5, "y": 6 },
+    "wallsLeft": [
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 1 }
+    ],
+    "wallsRight": [
+      { "x": 3, "y": 6 },
+      { "x": 4, "y": 6 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 38,
+    "name": "Dual Resonator",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 6, "y": 6 },
+    "rightGoal": { "x": 1, "y": 6 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 5, "y": 1, "openByPlate": { "x": 2, "y": 6 } }
+    ],
+    "plates": [
+      { "x": 2, "y": 6, "activatesGate": { "x": 5, "y": 1 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 39,
+    "name": "Mirror Maze Pro",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 6 },
+    "leftGoal": { "x": 5, "y": 1 },
+    "rightStart": { "x": 6, "y": 6 },
+    "rightGoal": { "x": 2, "y": 1 },
+    "wallsLeft": [
+      { "x": 2, "y": 5 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 5 },
+      { "x": 4, "y": 4 },
+      { "x": 3, "y": 3 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 12
+  },
+  {
+    "id": 40,
+    "name": "Cascade Control",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 1, "y": 1 },
+    "rightGoal": { "x": 6, "y": 6 },
+    "wallsLeft": [
+      { "x": 2, "y": 1 },
+      { "x": 4, "y": 3 }
+    ],
+    "wallsRight": [
+      { "x": 2, "y": 1 },
+      { "x": 4, "y": 3 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 41,
+    "name": "Kinetic Gateway",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 1, "y": 5 },
+    "leftGoal": { "x": 6, "y": 5 },
+    "rightStart": { "x": 1, "y": 2 },
+    "rightGoal": { "x": 6, "y": 2 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 4, "y": 5, "openByPlate": { "x": 3, "y": 2 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 2, "activatesGate": { "x": 4, "y": 5 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 42,
+    "name": "Phase Lock Shift",
+    "symmetry": "Translation",
+    "leftStart": { "x": 2, "y": 1 },
+    "leftGoal": { "x": 5, "y": 6 },
+    "rightStart": { "x": 2, "y": 1 },
+    "rightGoal": { "x": 2, "y": 6 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 1, "nextSymmetry": "Horizontal Mirror" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 11
+  },
+  {
+    "id": 43,
+    "name": "Reflex Helix",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 2, "y": 5 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 5, "y": 2 },
+    "rightGoal": { "x": 2, "y": 2 },
+    "wallsLeft": [
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 4 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 3 },
+      { "x": 3, "y": 3 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 8
+  },
+  {
+    "id": 44,
+    "name": "Core Disruption",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 2 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 6, "y": 2 },
+    "rightGoal": { "x": 1, "y": 6 },
+    "wallsLeft": [
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 2 },
+      { "x": 4, "y": 2 },
+      { "x": 3, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 13
+  },
+  {
+    "id": 45,
+    "name": "Synaptic Gap",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 6 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 1, "y": 6 },
+    "rightGoal": { "x": 6, "y": 1 },
+    "wallsLeft": [
+      { "x": 3, "y": 5 },
+      { "x": 3, "y": 4 },
+      { "x": 3, "y": 3 }
+    ],
+    "wallsRight": [
+      { "x": 3, "y": 5 },
+      { "x": 3, "y": 4 },
+      { "x": 3, "y": 3 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 11
+  },
+  {
+    "id": 46,
+    "name": "Quantum Tangent",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 1, "y": 6 },
+    "rightGoal": { "x": 6, "y": 6 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 5, "y": 1, "openByPlate": { "x": 3, "y": 6 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 6, "activatesGate": { "x": 5, "y": 1 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 47,
+    "name": "Spatial Resonance",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 2, "y": 2 },
+    "leftGoal": { "x": 5, "y": 5 },
+    "rightStart": { "x": 5, "y": 2 },
+    "rightGoal": { "x": 2, "y": 5 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 2, "nextSymmetry": "Vertical Mirror" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 48,
+    "name": "The Singularity",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 1, "y": 6 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 6, "y": 1 },
+    "rightGoal": { "x": 1, "y": 1 },
+    "wallsLeft": [
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 2 },
+      { "x": 3, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 10
+  },
+  {
+    "id": 49,
+    "name": "Asymmetric Alliance",
+    "symmetry": "Translation",
+    "leftStart": { "x": 2, "y": 5 },
+    "leftGoal": { "x": 6, "y": 5 },
+    "rightStart": { "x": 2, "y": 2 },
+    "rightGoal": { "x": 6, "y": 2 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 5, "y": 5, "openByPlate": { "x": 4, "y": 2 } }
+    ],
+    "plates": [
+      { "x": 4, "y": 2, "activatesGate": { "x": 5, "y": 5 } }
+    ],
+    "par": 12
+  },
+  {
+    "id": 50,
+    "name": "Harmonic Convergence",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 6, "y": 1 },
+    "rightGoal": { "x": 1, "y": 6 },
+    "wallsLeft": [
+      { "x": 2, "y": 2 },
+      { "x": 4, "y": 4 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 2 },
+      { "x": 3, "y": 4 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 12
+  },
+  {
+    "id": 51,
+    "name": "Entropic Gateway",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 2, "y": 6 },
+    "leftGoal": { "x": 5, "y": 6 },
+    "rightStart": { "x": 2, "y": 1 },
+    "rightGoal": { "x": 5, "y": 1 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 4, "y": 6, "openByPlate": { "x": 3, "y": 1 } }
+    ],
+    "plates": [
+      { "x": 3, "y": 1, "activatesGate": { "x": 4, "y": 6 } }
+    ],
+    "par": 11
+  },
+  {
+    "id": 52,
+    "name": "Nexus Shift",
+    "symmetry": "Translation",
+    "leftStart": { "x": 1, "y": 5 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 1, "y": 5 },
+    "rightGoal": { "x": 1, "y": 1 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "modifiers": [
+      { "x": 3, "y": 5, "nextSymmetry": "Horizontal Mirror" }
+    ],
+    "gates": [],
+    "plates": [],
+    "par": 12
+  },
+  {
+    "id": 53,
+    "name": "Double Helix Core",
+    "symmetry": "180 Rotation",
+    "leftStart": { "x": 2, "y": 1 },
+    "leftGoal": { "x": 5, "y": 1 },
+    "rightStart": { "x": 5, "y": 6 },
+    "rightGoal": { "x": 2, "y": 6 },
+    "wallsLeft": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 4, "y": 5 }
+    ],
+    "wallsRight": [
+      { "x": 4, "y": 5 },
+      { "x": 4, "y": 4 },
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 14
+  },
+  {
+    "id": 54,
+    "name": "Reflex Grid",
+    "symmetry": "Horizontal Mirror",
+    "leftStart": { "x": 1, "y": 6 },
+    "leftGoal": { "x": 6, "y": 1 },
+    "rightStart": { "x": 6, "y": 6 },
+    "rightGoal": { "x": 1, "y": 1 },
+    "wallsLeft": [
+      { "x": 2, "y": 5 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 5, "y": 2 }
+    ],
+    "wallsRight": [
+      { "x": 5, "y": 5 },
+      { "x": 4, "y": 4 },
+      { "x": 3, "y": 3 },
+      { "x": 2, "y": 2 }
+    ],
+    "modifiers": [],
+    "gates": [],
+    "plates": [],
+    "par": 14
+  },
+  {
+    "id": 55,
+    "name": "The Grand Calibration",
+    "symmetry": "Vertical Mirror",
+    "leftStart": { "x": 1, "y": 1 },
+    "leftGoal": { "x": 6, "y": 6 },
+    "rightStart": { "x": 1, "y": 6 },
+    "rightGoal": { "x": 6, "y": 1 },
+    "wallsLeft": [],
+    "wallsRight": [],
+    "gates": [
+      { "x": 5, "y": 6, "openByPlate": { "x": 4, "y": 1 } }
+    ],
+    "plates": [
+      { "x": 4, "y": 1, "activatesGate": { "x": 5, "y": 6 } }
+    ],
+    "modifiers": [
+      { "x": 3, "y": 1, "nextSymmetry": "Translation" }
+    ],
+    "par": 15
+  }
+]
