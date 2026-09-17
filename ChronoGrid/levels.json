@@ -54,7 +54,7 @@
   },
   {
     "name": "10. Shield of Past",
-    "start": { "x": 0, "y": 7 },
+    "start": { "x": 8, "y": 7 },
     "exit": { "x": 7, "y": 7 },
     "cores": [{ "id": "c1", "x": 0, "y": 0 }],
     "plates": [],

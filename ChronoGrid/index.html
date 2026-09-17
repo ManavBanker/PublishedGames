@@ -1319,6 +1319,18 @@
     ROOT.querySelector('#sk_screen_gameover').classList.remove('sk_hidden');
   }
 
+  function advanceToNextLevel() {
+    ROOT.querySelector('#sk_screen_cleared').classList.add('sk_hidden');
+    setupLevel(gameState.currentLevel + 1);
+  }
+
+  function returnToMenuFromVictory() {
+    ROOT.querySelector('#sk_screen_victory').classList.add('sk_hidden');
+    gameState.screen = 'menu';
+    ROOT.querySelector('#sk_screen_menu').classList.remove('sk_hidden');
+    setupLevel(0);
+  }
+
   function triggerLevelComplete() {
     gameState.isLevelCleared = true;
     playWin();
@@ -1702,6 +1714,19 @@
     if (e.key === 'Escape') {
       togglePause();
       return;
+    }
+
+    if (e.key === 'Enter') {
+      if (gameState.isLevelCleared) {
+        advanceToNextLevel();
+        e.preventDefault();
+        return;
+      }
+      if (gameState.isGameWon) {
+        returnToMenuFromVictory();
+        e.preventDefault();
+        return;
+      }
     }
 
     if (gameState.isPaused || gameState.isGameOver || gameState.isLevelCleared || gameState.isGameWon) return;
@@ -2141,17 +2166,9 @@
       setupLevel(gameState.currentLevel);
     });
 
-    ROOT.querySelector('#sk_btn_next').addEventListener('click', () => {
-      ROOT.querySelector('#sk_screen_cleared').classList.add('sk_hidden');
-      setupLevel(gameState.currentLevel + 1);
-    });
+    ROOT.querySelector('#sk_btn_next').addEventListener('click', advanceToNextLevel);
 
-    ROOT.querySelector('#sk_btn_victory_menu').addEventListener('click', () => {
-      ROOT.querySelector('#sk_screen_victory').classList.add('sk_hidden');
-      gameState.screen = 'menu';
-      ROOT.querySelector('#sk_screen_menu').classList.remove('sk_hidden');
-      setupLevel(0);
-    });
+    ROOT.querySelector('#sk_btn_victory_menu').addEventListener('click', returnToMenuFromVictory);
 
     /* Popup closing triggers */
     ROOT.querySelector('#sk_close_levels').addEventListener('click', hidePopups);
