@@ -1,0 +1,712 @@
+[
+  {
+    "name": "6. Echo Chambers",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 1, "y": 5 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 5, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 6 }],
+    "walls": [
+      { "x": 3, "y": 0 }, { "x": 3, "y": 1 }, { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "7. Split Path",
+    "start": { "x": 0, "y": 3 },
+    "exit": { "x": 7, "y": 3 },
+    "cores": [{ "id": "c1", "x": 3, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 3, "y": 0, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 4, "y": 3 }],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 4 },
+      { "x": 3, "y": 5 }, { "x": 4, "y": 1 }, { "x": 4, "y": 2 },
+      { "x": 4, "y": 4 }, { "x": 4, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "8. Synchronized Steps",
+    "start": { "x": 2, "y": 6 },
+    "exit": { "x": 5, "y": 1 },
+    "cores": [{ "id": "c1", "x": 2, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 2, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 4, "y": 1 }],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 3, "y": 5 }, { "x": 3, "y": 6 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "9. Laser Safety",
+    "start": { "x": 0, "y": 7 },
+    "exit": { "x": 7, "y": 0 },
+    "cores": [{ "id": "c1", "x": 4, "y": 7 }],
+    "plates": [{ "id": "p1", "x": 4, "y": 7, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 0 }, { "x": 3, "y": 1 }, { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": [{ "id": "l1", "x": 4, "y": 3, "dx": 1, "dy": 0, "active": true }]
+  },
+  {
+    "name": "10. Shield of Past",
+    "start": { "x": 0, "y": 7 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 0, "y": 0 }],
+    "plates": [],
+    "gates": [],
+    "walls": [
+      { "x": 4, "y": 1 }, { "x": 4, "y": 2 }, { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }, { "x": 4, "y": 5 }
+    ],
+    "lasers": [{ "id": "l1", "x": 4, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "11. Parallel Timelines",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 1, "y": 6 },
+    "cores": [{ "id": "c1", "x": 6, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 6, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 1, "y": 5 }],
+    "walls": [
+      { "x": 0, "y": 3 }, { "x": 1, "y": 3 }, { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 }, { "x": 4, "y": 3 }, { "x": 5, "y": 3 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "12. Guarded Core",
+    "start": { "x": 0, "y": 4 },
+    "exit": { "x": 7, "y": 4 },
+    "cores": [{ "id": "c1", "x": 3, "y": 4 }],
+    "plates": [{ "id": "p1", "x": 3, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 3, "y": 3 }],
+    "walls": [
+      { "x": 2, "y": 3 }, { "x": 2, "y": 4 }, { "x": 2, "y": 5 },
+      { "x": 4, "y": 3 }, { "x": 4, "y": 4 }, { "x": 4, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "13. Alternate Switch",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 6, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 6, "y": 5 }],
+    "walls": [
+      { "x": 3, "y": 2 }, { "x": 3, "y": 3 }, { "x": 3, "y": 4 },
+      { "x": 4, "y": 2 }, { "x": 4, "y": 3 }, { "x": 4, "y": 4 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "14. Crossfire Core",
+    "start": { "x": 2, "y": 2 },
+    "exit": { "x": 5, "y": 5 },
+    "cores": [{ "id": "c1", "x": 5, "y": 2 }],
+    "plates": [{ "id": "p1", "x": 2, "y": 5, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 4, "y": 2 }, { "x": 4, "y": 3 }, { "x": 4, "y": 4 }
+    ],
+    "lasers": [{ "id": "l1", "x": 4, "y": 5, "dx": 0, "dy": -1, "active": true }]
+  },
+  {
+    "name": "15. The Waiting Game",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 6, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 1 }],
+    "walls": [
+      { "x": 3, "y": 0 }, { "x": 3, "y": 1 }, { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "16. Binary Gate",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [
+      { "id": "c1", "x": 1, "y": 1 },
+      { "id": "c2", "x": 6, "y": 1 }
+    ],
+    "plates": [
+      { "id": "p1", "x": 1, "y": 1, "gateId": "g1" },
+      { "id": "p2", "x": 6, "y": 1, "gateId": "g2" }
+    ],
+    "gates": [
+      { "id": "g1", "x": 3, "y": 6 },
+      { "id": "g2", "x": 4, "y": 6 }
+    ],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }, { "x": 3, "y": 5 },
+      { "x": 4, "y": 3 }, { "x": 4, "y": 4 }, { "x": 4, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "17. Laser Grid Lockdown",
+    "start": { "x": 0, "y": 0 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 7, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 7, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 3, "y": 2 }, { "x": 4, "y": 2 },
+      { "x": 5, "y": 2 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 0, "y": 3, "dx": 1, "dy": 0, "active": true }
+    ]
+  },
+  {
+    "name": "18. Phase Shift",
+    "start": { "x": 0, "y": 7 },
+    "exit": { "x": 7, "y": 0 },
+    "cores": [{ "id": "c1", "x": 7, "y": 7 }],
+    "plates": [{ "id": "p1", "x": 7, "y": 7, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 6, "y": 0 }],
+    "walls": [
+      { "x": 6, "y": 1 }, { "x": 6, "y": 2 }, { "x": 6, "y": 3 },
+      { "x": 6, "y": 4 }, { "x": 6, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "19. Reflections of Danger",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 3, "y": 5 }],
+    "plates": [{ "id": "p1", "x": 3, "y": 5, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 4 }, { "x": 3, "y": 4 }, { "x": 4, "y": 4 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 0, "y": 3, "dx": 1, "dy": 0, "active": true },
+      { "id": "l2", "x": 7, "y": 3, "dx": -1, "dy": 0, "active": true }
+    ]
+  },
+  {
+    "name": "20. Intersecting Loops",
+    "start": { "x": 2, "y": 5 },
+    "exit": { "x": 5, "y": 2 },
+    "cores": [{ "id": "c1", "x": 2, "y": 2 }],
+    "plates": [{ "id": "p1", "x": 2, "y": 2, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 3 }],
+    "walls": [
+      { "x": 4, "y": 2 }, { "x": 4, "y": 4 }, { "x": 4, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "21. Time-Delayed Deflection",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 6, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 6, "dx": 1, "dy": 0, "active": true }]
+  },
+  {
+    "name": "22. Symmetrical Split",
+    "start": { "x": 3, "y": 6 },
+    "exit": { "x": 4, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 2 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 2, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 4, "y": 2 }],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "23. Crossfire Corridor",
+    "start": { "x": 0, "y": 7 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 0, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 0, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 4 }, { "x": 4, "y": 4 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 4, "y": 7, "dx": 0, "dy": -1, "active": true }
+    ]
+  },
+  {
+    "name": "24. Ghostly Shielding",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "25. Double Gate Puzzle",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 1, "y": 1 }],
+    "plates": [
+      { "id": "p1", "x": 1, "y": 1, "gateId": "g1" },
+      { "id": "p2", "x": 3, "y": 1, "gateId": "g2" }
+    ],
+    "gates": [
+      { "id": "g1", "x": 5, "y": 6 },
+      { "id": "g2", "x": 6, "y": 5 }
+    ],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }, { "x": 3, "y": 5 },
+      { "x": 4, "y": 3 }, { "x": 4, "y": 4 }, { "x": 4, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "26. Laser Maze Run",
+    "start": { "x": 0, "y": 0 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 7, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 7, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 1, "y": 1 }, { "x": 2, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 }, { "x": 5, "y": 5 }, { "x": 6, "y": 6 }
+    ],
+    "lasers": [{ "id": "l1", "x": 4, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "27. Quantum Interlock",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 1 }],
+    "walls": [
+      { "x": 3, "y": 0 }, { "x": 3, "y": 1 }, { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 }, { "x": 5, "y": 2 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "28. Paradox Corridor",
+    "start": { "x": 0, "y": 7 },
+    "exit": { "x": 7, "y": 0 },
+    "cores": [{ "id": "c1", "x": 0, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 0, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 3, "y": 3 }, { "x": 4, "y": 4 },
+      { "x": 5, "y": 5 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "29. Dual Sentry",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 6, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 6, "y": 1, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 4, "y": 1 }, { "x": 4, "y": 2 }, { "x": 4, "y": 3 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 4, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 0, "y": 4, "dx": 1, "dy": 0, "active": true }
+    ]
+  },
+  {
+    "name": "30. The Mirror Vault",
+    "start": { "x": 3, "y": 6 },
+    "exit": { "x": 4, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 4, "y": 2 }],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 3, "y": 2 }, { "x": 4, "y": 3 },
+      { "x": 5, "y": 3 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "31. Obstacle Relay",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [
+      { "id": "c1", "x": 1, "y": 1 },
+      { "id": "c2", "x": 6, "y": 6 }
+    ],
+    "plates": [
+      { "id": "p1", "x": 1, "y": 1, "gateId": "g1" },
+      { "id": "p2", "x": 6, "y": 6, "gateId": "g2" }
+    ],
+    "gates": [
+      { "id": "g1", "x": 5, "y": 1 },
+      { "id": "g2", "x": 1, "y": 5 }
+    ],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }, { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "32. Precise Projections",
+    "start": { "x": 0, "y": 4 },
+    "exit": { "x": 7, "y": 4 },
+    "cores": [{ "id": "c1", "x": 3, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 3, "y": 1, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 3 }, { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 7, "dx": 0, "dy": -1, "active": true }]
+  },
+  {
+    "name": "33. Synchronous Block",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 6, "dx": 1, "dy": 0, "active": true }]
+  },
+  {
+    "name": "34. Pressure Tactics",
+    "start": { "x": 2, "y": 6 },
+    "exit": { "x": 5, "y": 1 },
+    "cores": [{ "id": "c1", "x": 2, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 2, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 2 }],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 4, "y": 4 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "35. Laser Intersection",
+    "start": { "x": 0, "y": 7 },
+    "exit": { "x": 7, "y": 0 },
+    "cores": [{ "id": "c1", "x": 7, "y": 7 }],
+    "plates": [{ "id": "p1", "x": 7, "y": 7, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 4 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 4, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 0, "y": 4, "dx": 1, "dy": 0, "active": true }
+    ]
+  },
+  {
+    "name": "36. Gateway Chain",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 2 }],
+    "walls": [
+      { "x": 4, "y": 1 }, { "x": 4, "y": 2 }, { "x": 4, "y": 3 },
+      { "x": 5, "y": 3 }, { "x": 6, "y": 3 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "37. Shield Relay",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 2 }, { "x": 3, "y": 3 }, { "x": 3, "y": 4 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 3, "y": 7, "dx": 0, "dy": -1, "active": true }
+    ]
+  },
+  {
+    "name": "38. Crossbeams Chamber",
+    "start": { "x": 0, "y": 0 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 7, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 7, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 2, "y": 3 }, { "x": 3, "y": 2 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 0, "y": 3, "dx": 1, "dy": 0, "active": true }
+    ]
+  },
+  {
+    "name": "39. Parallel Redirection",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 6, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 6, "y": 1, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 3 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "40. Timing Maze",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 6, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 6 }],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "41. Matrix Security",
+    "start": { "x": 0, "y": 4 },
+    "exit": { "x": 7, "y": 4 },
+    "cores": [{ "id": "c1", "x": 3, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 3, "y": 1, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 3, "y": 2 }, { "x": 4, "y": 2 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 5, "dx": 0, "dy": -1, "active": true }]
+  },
+  {
+    "name": "42. Temporal Gateway Chain",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 1 }],
+    "walls": [
+      { "x": 3, "y": 0 }, { "x": 3, "y": 1 }, { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "43. Shielded Approach",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 2 }, { "x": 3, "y": 3 }, { "x": 3, "y": 4 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "44. Cross Connection",
+    "start": { "x": 0, "y": 0 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 7, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 7, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 2, "y": 3 }, { "x": 3, "y": 2 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 0, "y": 3, "dx": 1, "dy": 0, "active": true }
+    ]
+  },
+  {
+    "name": "45. Temporal Sentry Chamber",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 6, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 6, "y": 1, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 3 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "46. Multi-Switch Vault",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [
+      { "id": "c1", "x": 1, "y": 1 },
+      { "id": "c2", "x": 6, "y": 1 }
+    ],
+    "plates": [
+      { "id": "p1", "x": 1, "y": 1, "gateId": "g1" },
+      { "id": "p2", "x": 6, "y": 1, "gateId": "g2" }
+    ],
+    "gates": [
+      { "id": "g1", "x": 3, "y": 6 },
+      { "id": "g2", "x": 4, "y": 6 }
+    ],
+    "walls": [
+      { "x": 3, "y": 2 }, { "x": 3, "y": 3 }, { "x": 3, "y": 4 },
+      { "x": 4, "y": 2 }, { "x": 4, "y": 3 }, { "x": 4, "y": 4 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "47. Double Laser Block",
+    "start": { "x": 0, "y": 7 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 0, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 0, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 3 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 4, "y": 0, "dx": 0, "dy": 1, "active": true }
+    ]
+  },
+  {
+    "name": "48. Portal Defender",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 2 }, { "x": 3, "y": 3 }, { "x": 3, "y": 4 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 3, "y": 7, "dx": 0, "dy": -1, "active": true }
+    ]
+  },
+  {
+    "name": "49. Crossroads Puzzle",
+    "start": { "x": 0, "y": 0 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [{ "id": "c1", "x": 7, "y": 0 }],
+    "plates": [{ "id": "p1", "x": 7, "y": 0, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 2, "y": 3 }, { "x": 3, "y": 2 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 0, "y": 3, "dx": 1, "dy": 0, "active": true }
+    ]
+  },
+  {
+    "name": "50. Time Shift Chamber",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 6, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 6, "y": 1, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 3 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true }]
+  },
+  {
+    "name": "51. The Gauntlet",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 6 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 6, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 6 }],
+    "walls": [
+      { "x": 3, "y": 1 }, { "x": 3, "y": 2 }, { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 }, { "x": 3, "y": 5 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "52. Laser Grid Control",
+    "start": { "x": 0, "y": 4 },
+    "exit": { "x": 7, "y": 4 },
+    "cores": [{ "id": "c1", "x": 3, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 3, "y": 1, "laserId": "l1" }],
+    "gates": [],
+    "walls": [
+      { "x": 2, "y": 2 }, { "x": 3, "y": 2 }, { "x": 4, "y": 2 }
+    ],
+    "lasers": [{ "id": "l1", "x": 3, "y": 5, "dx": 0, "dy": -1, "active": true }]
+  },
+  {
+    "name": "53. Quad Gate Security",
+    "start": { "x": 1, "y": 6 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 1 }],
+    "plates": [{ "id": "p1", "x": 1, "y": 1, "gateId": "g1" }],
+    "gates": [{ "id": "g1", "x": 5, "y": 1 }],
+    "walls": [
+      { "x": 3, "y": 0 }, { "x": 3, "y": 1 }, { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }
+    ],
+    "lasers": []
+  },
+  {
+    "name": "54. Final Sentry",
+    "start": { "x": 1, "y": 1 },
+    "exit": { "x": 6, "y": 1 },
+    "cores": [{ "id": "c1", "x": 1, "y": 6 }],
+    "plates": [],
+    "gates": [],
+    "walls": [
+      { "x": 3, "y": 2 }, { "x": 3, "y": 3 }, { "x": 3, "y": 4 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 3, "y": 7, "dx": 0, "dy": -1, "active": true }
+    ]
+  },
+  {
+    "name": "55. Grand Chrono-Master",
+    "start": { "x": 0, "y": 0 },
+    "exit": { "x": 7, "y": 7 },
+    "cores": [
+      { "id": "c1", "x": 7, "y": 0 },
+      { "id": "c2", "x": 0, "y": 7 }
+    ],
+    "plates": [
+      { "id": "p1", "x": 7, "y": 0, "laserId": "l1" },
+      { "id": "p2", "x": 0, "y": 7, "gateId": "g1" }
+    ],
+    "gates": [{ "id": "g1", "x": 6, "y": 7 }],
+    "walls": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 4 }, { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 }
+    ],
+    "lasers": [
+      { "id": "l1", "x": 3, "y": 0, "dx": 0, "dy": 1, "active": true },
+      { "id": "l2", "x": 0, "y": 3, "dx": 1, "dy": 0, "active": true }
+    ]
+  }
+]

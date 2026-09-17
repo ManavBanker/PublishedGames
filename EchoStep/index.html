@@ -252,6 +252,11 @@
       display: flex;
     }
 
+    #sk_screen_levels.sk_active {
+      justify-content: flex-start;
+      padding: 16px 12px;
+    }
+
     .sk_title {
       font-size: 28px;
       font-weight: 900;
@@ -313,11 +318,38 @@
     /* Level Select Screen Grid */
     .sk_level_grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       width: 100%;
       max-width: 350px;
       margin-bottom: 20px;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      align-content: start;
+      padding: 10px;
+      background-color: rgba(11, 15, 25, 0.5);
+      border: 1px solid var(--sk-panel-border);
+      border-radius: 6px;
+      touch-action: pan-y;
+    }
+
+    .sk_game_suite_root .sk_level_grid * {
+      touch-action: pan-y;
+    }
+
+    .sk_level_grid::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sk_level_grid::-webkit-scrollbar-track {
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: 3px;
+    }
+
+    .sk_level_grid::-webkit-scrollbar-thumb {
+      background-color: var(--sk-accent-cyan);
+      border-radius: 3px;
     }
 
     .sk_level_item {
@@ -646,9 +678,9 @@
 
           <!-- Level Selector Popup -->
           <div class="sk_screen" id="sk_screen_levels">
-            <p class="sk_screen_title">TEMPORAL LEVELS</p>
+            <p class="sk_screen_title" style="margin-bottom: 10px; flex-shrink: 0;">TEMPORAL LEVELS</p>
             <div class="sk_level_grid" id="sk_level_grid"></div>
-            <button class="sk_btn" id="sk_btn_close_levels">Back to Menu</button>
+            <button class="sk_btn" style="margin-top: 10px; flex-shrink: 0;" id="sk_btn_close_levels">Back to Menu</button>
           </div>
 
           <!-- Settings Popup -->

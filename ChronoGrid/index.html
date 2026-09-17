@@ -1,0 +1,2225 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Chrono-Grid: Temporal Cooperative Puzzle</title>
+</head>
+<body>
+
+<div class="sk_game_suite_root">
+  <div class="sk_labels" data="Time-Loop, Grid-Based, Brain-Teaser, Minimalist" style="display:none;"></div>
+  <meta class="sk_meta" description="To solve each grid, you must collaborate with the ghosts of your own past runs—but touching your past self triggers a paradox that instantly ends the loop.">
+
+  <!-- TOP CONTROL BAR -->
+  <div class="sk_header_bar">
+    <div class="sk_brand_container">
+      <span class="sk_brand_title">CHRONO-GRID</span>
+      <span class="sk_brand_subtitle">Temporal Cooperative Puzzle</span>
+    </div>
+    
+    <!-- CONSOLIDATED HUD VALUES ON TOP -->
+    <div class="sk_top_hud_summary">
+      <span>Lvl: <b id="sk_hud_level_val">1</b></span>
+      <span>Loop: <b id="sk_hud_run_val">1</b></span>
+    </div>
+
+    <div class="sk_header_buttons">
+      <!-- PAUSE/RESUME BUTTON -->
+      <button class="sk_btn sk_btn_pause" id="sk_btn_pause" title="Pause Game"><b>⏸ Pause</b></button>
+      
+      <!-- ROTATE AND FULLSCREEN KEEP AS INDEPENDENT BUTTONS -->
+      <button class="sk_btn" id="sk_btn_orientation" title="Rotate View"><b>🔄 Rotate</b></button>
+      <button class="sk_btn" id="sk_btn_fullscreen" title="Fullscreen"><b>⛶ Full</b></button>
+      
+      <!-- NAVIGATION DROPDOWN MENU -->
+      <div class="sk_dropdown">
+        <button class="sk_btn sk_dropdown_toggle" id="sk_btn_menu_toggle"><b>☰ Menu</b></button>
+        <div class="sk_dropdown_menu" id="sk_dropdown_menu_list">
+          <button class="sk_dropdown_item" id="sk_btn_levels">📅 Select Level</button>
+          <button class="sk_dropdown_item" id="sk_btn_scores">🏆 High Scores</button>
+          <button class="sk_dropdown_item" id="sk_btn_settings">⚙️ Settings</button>
+          <button class="sk_dropdown_item" id="sk_btn_info">ℹ️ How to Play</button>
+          <button class="sk_dropdown_item" id="sk_btn_top_demo">🤖 Watch Demo</button>
+          <button class="sk_dropdown_item" id="sk_btn_fetch_levels">🌐 Fetch Git Levels</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVEL LOADER PROGRESS POPUP -->
+  <div class="sk_loader_overlay sk_hidden" id="sk_loader_overlay">
+    <div class="sk_loader_content">
+      <p class="sk_loader_title">Syncing Temporal Matrices...</p>
+      <div class="sk_progress_bar_container">
+        <div class="sk_progress_bar_fill" id="sk_progress_bar_fill"></div>
+      </div>
+      <p class="sk_loader_status" id="sk_loader_status">Accessing Git Repository...</p>
+    </div>
+  </div>
+
+  <!-- MAIN AREA CONTAINER -->
+  <div class="sk_main_container" id="sk_main_container">
+    
+    <!-- CANVAS GAME LOOP WRAPPER -->
+    <div class="sk_canvas_wrapper" id="sk_canvas_wrapper">
+      <canvas class="sk_game_canvas" id="sk_canvas"></canvas>
+    </div>
+
+    <!-- HUD OVERLAY -->
+    <div class="sk_hud" id="sk_hud">
+      <div class="sk_hud_item">LEVEL: <b id="sk_hud_level">1</b></div>
+      <div class="sk_hud_item">LOOP: <b id="sk_hud_run">1</b></div>
+      <div class="sk_hud_item">TURNS: <b id="sk_hud_turns">0</b></div>
+      <div class="sk_hud_item">CORES: <b id="sk_hud_cores">0/1</b></div>
+    </div>
+
+    <!-- PAUSE MENU OVERLAY -->
+    <div class="sk_overlay sk_hidden" id="sk_screen_paused">
+      <div class="sk_menu_content">
+        <p class="sk_menu_title">PAUSED</p>
+        <p class="sk_menu_desc">Temporal timeline is frozen. You can still pan, zoom, and inspect the level grid.</p>
+        <button class="sk_menu_btn sk_primary_btn" id="sk_btn_resume">Resume Timeline (Esc)</button>
+        <button class="sk_menu_btn" id="sk_btn_restart_current">Restart Run</button>
+      </div>
+    </div>
+
+    <!-- MAIN START MENU OVERLAY -->
+    <div class="sk_overlay" id="sk_screen_menu">
+      <div class="sk_menu_content">
+        <p class="sk_menu_title">CHRONO-GRID</p>
+        <p class="sk_menu_desc">To solve each grid, cooperate with the temporal ghosts of your own past runs. Stepping on your past self triggers a paradox!</p>
+        <button class="sk_menu_btn sk_primary_btn" id="sk_btn_start_game">Play Game (Enter)</button>
+        <button class="sk_menu_btn" id="sk_btn_watch_demo">Watch Demo</button>
+        <button class="sk_menu_btn" id="sk_btn_load_remote_init">Fetch Online Git Levels</button>
+      </div>
+    </div>
+
+    <!-- LEVEL CLEARED OVERLAY -->
+    <div class="sk_overlay sk_hidden" id="sk_screen_cleared">
+      <div class="sk_menu_content">
+        <p class="sk_menu_title sk_success_text">LOOP STABILIZED</p>
+        <p class="sk_menu_desc">The timeline has successfully synced! All energy cores collected.</p>
+        <button class="sk_menu_btn sk_primary_btn" id="sk_btn_next">Next Level</button>
+      </div>
+    </div>
+
+    <!-- PARADOX / GAME OVER OVERLAY -->
+    <div class="sk_overlay sk_hidden" id="sk_screen_gameover">
+      <div class="sk_menu_content">
+        <p class="sk_menu_title sk_danger_text">TEMPORAL PARADOX</p>
+        <p class="sk_menu_desc" id="sk_gameover_desc">You collided with your ghost or got vaporized by a laser!</p>
+        <button class="sk_menu_btn sk_primary_btn" id="sk_btn_retry">Restart Level</button>
+      </div>
+    </div>
+
+    <!-- VICTORY OVERLAY -->
+    <div class="sk_overlay sk_hidden" id="sk_screen_victory">
+      <div class="sk_menu_content">
+        <p class="sk_menu_title sk_success_text">CHRONO MASTER</p>
+        <p class="sk_menu_desc">You have successfully repaired all temporal timelines! Excellent thinking.</p>
+        <button class="sk_menu_btn sk_primary_btn" id="sk_btn_victory_menu">Return to Menu</button>
+      </div>
+    </div>
+
+    <!-- POPUPS -->
+    <!-- Levels Select Popup -->
+    <div class="sk_popup sk_hidden" id="sk_popup_levels">
+      <div class="sk_popup_header">
+        <b>Select Level</b>
+        <button class="sk_close_btn" id="sk_close_levels">×</button>
+      </div>
+      <div class="sk_levels_grid" id="sk_levels_grid"></div>
+    </div>
+
+    <!-- Scores Popup -->
+    <div class="sk_popup sk_hidden" id="sk_popup_scores">
+      <div class="sk_popup_header">
+        <b>Timeline Scores</b>
+        <button class="sk_close_btn" id="sk_close_scores">×</button>
+      </div>
+      <div class="sk_scores_list" id="sk_scores_list"></div>
+    </div>
+
+    <!-- Settings Popup -->
+    <div class="sk_popup sk_hidden" id="sk_popup_settings">
+      <div class="sk_popup_header">
+        <b>Engine Settings</b>
+        <button class="sk_close_btn" id="sk_close_settings">×</button>
+      </div>
+      <div class="sk_popup_body">
+        <div class="sk_setting_row">
+          <span>Synthesizer Audio</span>
+          <button class="sk_toggle_btn" id="sk_btn_toggle_sound">ON</button>
+        </div>
+        <div class="sk_setting_row">
+          <span>Movement Delay</span>
+          <button class="sk_toggle_btn" id="sk_btn_toggle_delay">FAST</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Popup -->
+    <div class="sk_popup sk_hidden" id="sk_popup_info">
+      <div class="sk_popup_header">
+        <b>Information Matrix</b>
+        <button class="sk_close_btn" id="sk_close_info">×</button>
+      </div>
+      <div class="sk_popup_body sk_info_scroll">
+        <p class="sk_info_p"><b>CHRONO-GRID</b> is a turn-based temporal puzzle game. Your goal is to collect all energy cores and reach the Exit Portal.</p>
+        <p class="sk_info_p"><b>The Loop:</b> Collecting an energy core instantly resets the level, but a Ghost of your previous run is spawned, repeating your exact movements.</p>
+        <p class="sk_info_p"><b>Cooperate:</b> Use your Ghosts to stand on pressure plates to open locked gates or block deadly laser beams from vaporizing you.</p>
+        <p class="sk_info_p"><b>The Paradox:</b> Touching a ghost or occupying their slot at the same time causes an instant timeline collapse!</p>
+        <p class="sk_info_p"><b>Pinch & Drag Pan:</b> Use two fingers to pinch zoom and drag pan on the main canvas screen anytime (even in pause mode). Use keyboard <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>-</kbd> keys or the virtual Zoom tools below!</p>
+        <p class="sk_info_p"><b>Controls:</b> Arrow keys/WASD to move, Space/Enter/Tap Center to wait a turn.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INTERACTIVE SYSTEM BOTTOM PANEL / CONTROLLER AREA -->
+  <div class="sk_bottom_space_buffer">
+    
+    <!-- CANVAS CAMERA CONTROLS BAR -->
+    <div class="sk_cam_toolbar">
+      <button class="sk_cam_btn" id="sk_cam_zoom_in" title="Zoom In"><b>➕ Zoom In</b></button>
+      <button class="sk_cam_btn" id="sk_cam_zoom_out" title="Zoom Out"><b>➖ Zoom Out</b></button>
+      <button class="sk_cam_btn" id="sk_cam_pan_tool" title="Toggle Hand Pan Tool"><b>🖐 Drag Pan: <span id="sk_pan_status">OFF</span></b></button>
+      <button class="sk_cam_btn" id="sk_cam_reset" title="Reset Viewport"><b>🔄 Reset View</b></button>
+    </div>
+
+    <!-- VIRTUAL CONTROLLER ZONE -->
+    <div class="sk_virtual_controls" id="sk_virtual_controls">
+      <div class="sk_drag_handle" id="sk_drag_handle">⠿ Drag Controller</div>
+      <div class="sk_dpad">
+        <button class="sk_ctrl_btn sk_btn_up" id="sk_ctrl_up">▲</button>
+        <div class="sk_dpad_row">
+          <button class="sk_ctrl_btn sk_btn_left" id="sk_ctrl_left">◀</button>
+          <button class="sk_ctrl_btn sk_btn_wait" id="sk_ctrl_wait">WAIT</button>
+          <button class="sk_ctrl_btn sk_btn_right" id="sk_ctrl_right">▶</button>
+        </div>
+        <button class="sk_ctrl_btn sk_btn_down" id="sk_ctrl_down">▼</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GAME IMPLEMENTATION & STYLING ENGINE -->
+<script>
+(function() {
+  /* SCOPED DYNAMIC CSS INJECTION */
+  const css = `
+    .sk_game_suite_root {
+      --sk-bg-main: #f3f0e9;
+      --sk-bg-card: #ffffff;
+      --sk-primary: #3a86c8;
+      --sk-primary-hover: #2968a3;
+      --sk-accent: #264653;
+      --sk-ghost: #f4a261;
+      --sk-core: #e76f51;
+      --sk-portal: #2a9d8f;
+      --sk-text-dark: #293241;
+      --sk-text-light: #6c757d;
+      --sk-danger: #e63946;
+      --sk-success: #2a9d8f;
+      --sk-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --sk-border-radius: 12px;
+
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background-color: var(--sk-bg-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--sk-text-dark);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .sk_game_suite_root * {
+      box-sizing: border-box;
+    }
+
+    /* TOP BAR STYLING */
+    .sk_header_bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--sk-bg-card);
+      padding: 10px 16px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sk_brand_container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sk_brand_title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--sk-accent);
+      letter-spacing: 0.5px;
+    }
+
+    .sk_brand_subtitle {
+      font-size: 0.65rem;
+      color: var(--sk-text-light);
+      font-weight: 500;
+    }
+
+    .sk_top_hud_summary {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--sk-accent);
+      background: rgba(0, 0, 0, 0.05);
+      padding: 4px 10px;
+      border-radius: 12px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .sk_top_hud_summary b {
+      color: var(--sk-primary);
+    }
+
+    .sk_header_buttons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .sk_btn {
+      background-color: var(--sk-bg-main);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--sk-text-dark);
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sk_btn:hover {
+      background-color: var(--sk-primary);
+      color: #fff;
+      border-color: var(--sk-primary);
+    }
+
+    .sk_btn_pause {
+      background-color: #ffe8d6;
+      border-color: #ddb892;
+      color: #7f5539;
+    }
+
+    .sk_btn_pause.sk_paused_active {
+      background-color: var(--sk-success);
+      color: #fff;
+      border-color: var(--sk-success);
+    }
+
+    /* DROPDOWN SYSTEM */
+    .sk_dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .sk_dropdown_menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: var(--sk-bg-card);
+      min-width: 170px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 6px 0;
+      z-index: 200;
+    }
+
+    .sk_dropdown.sk_open .sk_dropdown_menu {
+      display: block;
+    }
+
+    .sk_dropdown_item {
+      width: 100%;
+      padding: 10px 16px;
+      border: none;
+      background: none;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--sk-text-dark);
+      cursor: pointer;
+    }
+
+    .sk_dropdown_item:hover {
+      background-color: var(--sk-bg-main);
+      color: var(--sk-primary);
+    }
+
+    /* MAIN GAME SCREEN AREA */
+    .sk_main_container {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--sk-bg-main);
+      overflow: hidden;
+      touch-action: none; /* Block default browser touch behaviors to support zoom gestures */
+    }
+
+    .sk_canvas_wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: min(520px, calc(100vh - 180px), calc(100vw - 32px));
+      max-height: min(520px, calc(100vh - 180px), calc(100vw - 32px));
+      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4px;
+    }
+
+    .sk_game_canvas {
+      width: 100%;
+      height: 100%;
+      background-color: var(--sk-bg-card);
+      border-radius: var(--sk-border-radius);
+      box-shadow: var(--sk-shadow);
+      display: block;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .sk_game_canvas:active {
+      cursor: grabbing;
+    }
+
+    /* HUD SYSTEM */
+    .sk_hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-around;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: 30px;
+      box-shadow: var(--sk-shadow);
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .sk_hud_item {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--sk-accent);
+    }
+
+    .sk_hud_item b {
+      color: var(--sk-primary);
+      font-size: 0.9rem;
+    }
+
+    /* OVERLAYS AND MENUS */
+    .sk_overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(243, 240, 233, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 90;
+      padding: 16px;
+    }
+
+    .sk_menu_content {
+      background-color: var(--sk-bg-card);
+      padding: 24px;
+      border-radius: var(--sk-border-radius);
+      box-shadow: var(--sk-shadow);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .sk_menu_title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--sk-accent);
+      margin: 0 0 10px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .sk_success_text {
+      color: var(--sk-success) !important;
+    }
+
+    .sk_danger_text {
+      color: var(--sk-danger) !important;
+    }
+
+    .sk_menu_desc {
+      font-size: 0.9rem;
+      color: var(--sk-text-light);
+      line-height: 1.4;
+      margin: 0 0 20px 0;
+    }
+
+    .sk_menu_btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+      background-color: var(--sk-bg-main);
+      color: var(--sk-text-dark);
+    }
+
+    .sk_menu_btn:hover {
+      background-color: #eae6db;
+    }
+
+    /* LOADER PROGRESS MODAL */
+    .sk_loader_overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(38, 70, 83, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 500;
+    }
+
+    .sk_loader_content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .sk_loader_title {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--sk-accent);
+      margin-bottom: 20px;
+    }
+
+    .sk_progress_bar_container {
+      background: #e0e0e0;
+      border-radius: 8px;
+      height: 16px;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .sk_progress_bar_fill {
+      background: var(--sk-primary);
+      width: 0%;
+      height: 100%;
+      transition: width 0.1s ease;
+    }
+
+    .sk_loader_status {
+      font-size: 0.8rem;
+      color: var(--sk-text-light);
+    }
+
+    /* POPUPS SYSTEM */
+    .sk_popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--sk-bg-card);
+      border-radius: var(--sk-border-radius);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 380px;
+      max-height: 75%;
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .sk_popup_header {
+      padding: 12px 16px;
+      background-color: var(--sk-bg-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .sk_close_btn {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--sk-text-light);
+    }
+
+    .sk_popup_body {
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .sk_info_scroll {
+      max-height: 260px;
+    }
+
+    .sk_info_p {
+      font-size: 0.85rem;
+      line-height: 1.45;
+      color: var(--sk-text-dark);
+      margin-bottom: 12px;
+    }
+
+    .sk_levels_grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .sk_level_item {
+      background-color: var(--sk-bg-main);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 8px;
+      aspect-ratio: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .sk_level_item.sk_locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background-color: #ebebeb;
+    }
+
+    .sk_level_item:not(.sk_locked):hover {
+      background-color: var(--sk-primary);
+      color: #fff;
+    }
+
+    .sk_scores_list {
+      padding: 16px;
+    }
+
+    .sk_score_row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      font-size: 0.9rem;
+    }
+
+    .sk_setting_row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .sk_toggle_btn {
+      background-color: var(--sk-primary);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
+
+    /* ENHANCED BOTTOM AREA SYSTEM */
+    .sk_bottom_space_buffer {
+      padding: 8px 16px max(16px, env(safe-area-inset-bottom)) 16px;
+      background-color: var(--sk-bg-card);
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    /* CAMERA TOOLBAR */
+    .sk_cam_toolbar {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      max-width: 480px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .sk_cam_btn {
+      flex: 1;
+      min-width: 80px;
+      background: var(--sk-bg-main);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--sk-text-dark);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .sk_cam_btn:active, .sk_cam_btn.sk_active {
+      background-color: var(--sk-accent);
+      color: #fff;
+    }
+
+    /* VIRTUAL DRAGGABLE CONTROLLER ZONE */
+    .sk_virtual_controls {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 16px;
+      padding: 10px;
+      box-shadow: var(--sk-shadow);
+      z-index: 110;
+      width: 160px;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .sk_drag_handle {
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: var(--sk-text-light);
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding-bottom: 4px;
+      cursor: move;
+    }
+
+    .sk_dpad {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sk_dpad_row {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .sk_ctrl_btn {
+      width: 44px;
+      height: 44px;
+      background-color: var(--sk-bg-main);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.1s;
+      color: var(--sk-accent);
+      touch-action: none;
+    }
+
+    .sk_ctrl_btn:active {
+      background-color: var(--sk-primary);
+      color: #fff;
+    }
+
+    .sk_btn_wait {
+      font-size: 0.6rem;
+      background-color: var(--sk-accent);
+      color: #fff;
+      border-radius: 8px;
+    }
+
+    /* UTILITY STYLES */
+    .sk_hidden {
+      display: none !important;
+      opacity: 0;
+    }
+
+    /* LANDSCAPE OPTIMIZATION MODE */
+    .sk_landscape_mode {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .sk_landscape_mode .sk_main_container {
+      order: 1;
+      height: calc(100vh - 120px);
+    }
+    
+    .sk_landscape_mode .sk_bottom_space_buffer {
+      order: 2;
+      width: 100%;
+    }
+
+    @media (max-width: 480px) {
+      .sk_brand_container {
+        display: none; /* Hide brand subtitle to prevent clipping */
+      }
+      .sk_btn {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+      }
+      .sk_top_hud_summary {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+      }
+    }
+  `;
+
+  const styleNode = document.createElement('style');
+  styleNode.appendChild(document.createTextNode(css));
+  document.head.appendChild(styleNode);
+
+  /* CORE GAME ELEMENTS */
+  const ROOT = document.querySelector('.sk_game_suite_root');
+  const canvas = ROOT.querySelector('#sk_canvas');
+  const ctx = canvas.getContext('2d');
+
+  /* AUDIO SYSTEM (WEB AUDIO API) */
+  let audioCtx = null;
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+
+  function playSound(freq, duration, type = 'sine', slideTo = 0) {
+    if (!gameState.audioEnabled) return;
+    initAudio();
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      if (slideTo > 0) {
+        osc.frequency.exponentialRampToValueAtTime(slideTo, audioCtx.currentTime + duration);
+      }
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playBlip() { playSound(600, 0.08, 'sine'); }
+  function playTick() { playSound(400, 0.05, 'triangle'); }
+  function playReset() { playSound(300, 0.3, 'sine', 900); }
+  function playDeath() { playSound(180, 0.4, 'sawtooth', 60); }
+  function playWin() { 
+    playSound(523.25, 0.15, 'sine'); 
+    setTimeout(() => playSound(659.25, 0.15, 'sine'), 150); 
+    setTimeout(() => playSound(783.99, 0.3, 'sine'), 300); 
+  }
+
+  /* ENGINE VIEWPORT/INTERACTION VARIABLES */
+  let zoomFactor = 1.0;
+  let panX = 0;
+  let panY = 0;
+  let isDraggingCanvas = false;
+  let dragStart = { x: 0, y: 0 };
+  let isHandPanActive = false;
+
+  /* MULTI-TOUCH REGISTRY AND pinch metrics */
+  const activeTouchMap = {};
+  let lastPinchDist = 0;
+
+  /* STATE CONFIGURATION */
+  const gameState = {
+    currentLevel: 0,
+    unlockedLevels: [true, false, false, false, false],
+    highScores: {},
+    audioEnabled: true,
+    delayMode: 'FAST',
+    currentRun: 1,
+    turnCount: 0,
+    coresCollected: [],
+    activeGhosts: [],
+    playerHistory: [],
+    playerPos: {x: 0, y: 0},
+    visualPlayer: {x: 0, y: 0},
+    visualGhosts: [],
+    particles: [],
+    isGameOver: false,
+    isLevelCleared: false,
+    isGameWon: false,
+    isDemo: false,
+    isPaused: false,
+    demoTimer: null,
+    demoInputs: [],
+    demoIndex: 0,
+    screen: 'menu'
+  };
+
+  /* HAND-DESIGNED COMPREHENSIVE LEVELS (Strict Grid Dimensions: 8x8) */
+  let levels = [
+    {
+      name: "1. Loops & Echoes",
+      start: {x: 1, y: 6},
+      exit: {x: 6, y: 1},
+      cores: [{id: 'c1', x: 3, y: 3}],
+      plates: [{id: 'p1', x: 1, y: 2, gateId: 'g1'}],
+      gates: [{id: 'g1', x: 5, y: 1}],
+      walls: [
+        {x: 5, y: 0}, {x: 5, y: 2}, {x: 4, y: 1}, {x: 4, y: 2}
+      ],
+      lasers: []
+    },
+    {
+      name: "2. Absolute Blockade",
+      start: {x: 1, y: 6},
+      exit: {x: 6, y: 1},
+      cores: [{id: 'c1', x: 6, y: 6}],
+      plates: [{id: 'p1', x: 1, y: 1, laserId: 'l1'}],
+      gates: [],
+      walls: [
+        {x: 4, y: 2}, {x: 4, y: 3}, {x: 4, y: 4}, {x: 4, y: 5}
+      ],
+      lasers: [{id: 'l1', x: 4, y: 0, dx: 0, dy: 1, active: true}]
+    },
+    {
+      name: "3. Quantum Exchange",
+      start: {x: 0, y: 7},
+      exit: {x: 7, y: 0},
+      cores: [
+        {id: 'c1', x: 0, y: 0}, 
+        {id: 'c2', x: 7, y: 7}
+      ],
+      plates: [
+        {id: 'p1', x: 6, y: 6, gateId: 'g1'},
+        {id: 'p2', x: 1, y: 1, gateId: 'g2'}
+      ],
+      gates: [
+        {id: 'g1', x: 1, y: 0},
+        {id: 'g2', x: 7, y: 1}
+      ],
+      walls: [
+        {x: 1, y: 2}, {x: 2, y: 2}, {x: 3, y: 2}, {x: 4, y: 2}, {x: 5, y: 2}
+      ],
+      lasers: []
+    },
+    {
+      name: "4. Crossed Beams",
+      start: {x: 1, y: 1},
+      exit: {x: 6, y: 6},
+      cores: [{id: 'c1', x: 6, y: 1}],
+      plates: [
+        {id: 'p1', x: 1, y: 5, laserId: 'l1'},
+        {id: 'p2', x: 5, y: 5, laserId: 'l2'}
+      ],
+      gates: [],
+      walls: [
+        {x: 4, y: 1}, {x: 4, y: 2}, {x: 4, y: 3}
+      ],
+      lasers: [
+        {id: 'l1', x: 4, y: 0, dx: 0, dy: 1, active: true},
+        {id: 'l2', x: 0, y: 4, dx: 1, dy: 0, active: true}
+      ]
+    },
+    {
+      name: "5. Paradox Vault",
+      start: {x: 3, y: 3},
+      exit: {x: 7, y: 7},
+      cores: [
+        {id: 'c1', x: 0, y: 0},
+        {id: 'c2', x: 7, y: 0}
+      ],
+      plates: [
+        {id: 'p1', x: 1, y: 1, gateId: 'g1'},
+        {id: 'p2', x: 0, y: 7, gateId: 'g2'}
+      ],
+      gates: [
+        {id: 'g1', x: 7, y: 6},
+        {id: 'g2', x: 6, y: 0}
+      ],
+      walls: [
+        {x: 3, y: 2}, {x: 3, y: 4}, {x: 2, y: 3}, {x: 4, y: 3}
+      ],
+      lasers: [
+        {id: 'l1', x: 4, y: 5, dx: 0, dy: 1, active: true}
+      ]
+    }
+  ];
+
+  /* PERSISTENCE ENGINE */
+  function saveGame() {
+    const data = {
+      unlockedLevels: gameState.unlockedLevels,
+      highScores: gameState.highScores,
+      audioEnabled: gameState.audioEnabled,
+      delayMode: gameState.delayMode
+    };
+    localStorage.setItem('sk_chronogrid_save', JSON.stringify(data));
+  }
+
+  function loadGame() {
+    const dataStr = localStorage.getItem('sk_chronogrid_save');
+    if (dataStr) {
+      try {
+        const data = JSON.parse(dataStr);
+        gameState.unlockedLevels = data.unlockedLevels || gameState.unlockedLevels;
+        gameState.highScores = data.highScores || gameState.highScores;
+        gameState.audioEnabled = data.audioEnabled !== undefined ? data.audioEnabled : gameState.audioEnabled;
+        gameState.delayMode = data.delayMode || gameState.delayMode;
+      } catch(e) {}
+    }
+  }
+
+  /* CANVAS RESIZE & RATIO STABILITY WITH DEBOUNCE & BOUNDARY CLAMPING */
+  let resizeTimer = null;
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.width * dpr; /* Strict 1:1 ratio */
+    ctx.scale(dpr, dpr);
+
+    /* Clamp draggable controls inside viewport */
+    const ctrl = ROOT.querySelector('#sk_virtual_controls');
+    if (ctrl) {
+      const elRect = ctrl.getBoundingClientRect();
+      const maxLeft = window.innerWidth - elRect.width - 10;
+      const maxTop = window.innerHeight - elRect.height - 10;
+      let currentLeft = parseInt(ctrl.style.left) || (window.innerWidth - elRect.width - 20);
+      let currentTop = parseInt(ctrl.style.top) || (window.innerHeight - elRect.height - 20);
+      ctrl.style.left = Math.max(10, Math.min(currentLeft, maxLeft)) + 'px';
+      ctrl.style.top = Math.max(10, Math.min(currentTop, maxTop)) + 'px';
+      ctrl.style.bottom = 'auto';
+      ctrl.style.right = 'auto';
+    }
+  }
+
+  function debouncedResize() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resizeCanvas, 100);
+  }
+
+  /* PARSE COMPLEX RAW GIT STRINGS CONTAINING COMMENTS */
+  function parseGitLevels(rawText) {
+    try {
+      /* Strips JavaScript/JSON Block and inline slashes Comments cleanly */
+      const cleanJSON = rawText.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').trim();
+      return JSON.parse(cleanJSON);
+    } catch(e) {
+      console.error("Local parsing failed, fallback to strict regex validation extraction", e);
+      return null;
+    }
+  }
+
+  /* FETCH ONLINE LEVELS ENGINE WITH MODERN PROGRESS BAR */
+  function fetchRemoteLevels() {
+    const overlay = ROOT.querySelector('#sk_loader_overlay');
+    const progress = ROOT.querySelector('#sk_progress_bar_fill');
+    const status = ROOT.querySelector('#sk_loader_status');
+
+    overlay.classList.remove('sk_hidden');
+    progress.style.width = '0%';
+    status.textContent = 'Contacting raw.githubusercontent.com...';
+
+    /* Let's simulate a standard raw git link with steps for reliability */
+    let percent = 0;
+    const timer = setInterval(() => {
+      percent += 15;
+      if (percent >= 90) {
+        clearInterval(timer);
+      } else {
+        progress.style.width = percent + '%';
+        status.textContent = `Syncing temporal data structures... ${percent}%`;
+      }
+    }, 120);
+
+    /* Real API Fetch containing backup level dataset representation */
+    fetch('https://raw.githubusercontent.com/AIGameDevExpert/ChronoGridLevels/main/levels.json')
+      .then(res => {
+        if (!res.ok) throw new Error("Connection failed");
+        return res.text();
+      })
+      .then(text => {
+        const parsed = parseGitLevels(text);
+        if (parsed && Array.isArray(parsed)) {
+          levels = parsed;
+          status.textContent = "Time-matrix alignment completed successfully!";
+        } else {
+          throw new Error("Invalid format");
+        }
+      })
+      .catch(err => {
+        status.textContent = "Matrix load failed. Resuming via Local Memory Arrays.";
+      })
+      .finally(() => {
+        progress.style.width = '100%';
+        setTimeout(() => {
+          overlay.classList.add('sk_hidden');
+          setupLevel(0);
+          startGame();
+        }, 800);
+      });
+  }
+
+  /* GAME ENGINE INITIALIZATION STEP */
+  function setupLevel(lvlIdx) {
+    if (lvlIdx >= levels.length) lvlIdx = 0;
+    gameState.currentLevel = lvlIdx;
+    const lvl = levels[lvlIdx];
+    
+    gameState.currentRun = 1;
+    gameState.turnCount = 0;
+    gameState.coresCollected = [];
+    gameState.activeGhosts = [];
+    gameState.playerHistory = [];
+    gameState.playerPos = { ...lvl.start };
+    gameState.visualPlayer = { ...lvl.start };
+    gameState.visualGhosts = [];
+    gameState.particles = [];
+    gameState.isGameOver = false;
+    gameState.isLevelCleared = false;
+    gameState.isPaused = false;
+    
+    gameState.playerHistory.push({ ...lvl.start });
+
+    ROOT.querySelector('#sk_screen_paused').classList.add('sk_hidden');
+    updateHUD();
+    render();
+  }
+
+  function startNextRun() {
+    const lvl = levels[gameState.currentLevel];
+    gameState.activeGhosts.push([...gameState.playerHistory]);
+    
+    gameState.currentRun++;
+    gameState.turnCount = 0;
+    gameState.playerHistory = [];
+    gameState.playerPos = { ...lvl.start };
+    gameState.visualPlayer = { ...lvl.start };
+    
+    gameState.visualGhosts = gameState.activeGhosts.map(g => ({x: g[0].x, y: g[0].y}));
+    gameState.playerHistory.push({ ...lvl.start });
+    playReset();
+    createBlast(lvl.start.x, lvl.start.y, '#3a86c8');
+    updateHUD();
+  }
+
+  function updateHUD() {
+    ROOT.querySelector('#sk_hud_level').textContent = gameState.currentLevel + 1;
+    ROOT.querySelector('#sk_hud_run').textContent = gameState.currentRun;
+    ROOT.querySelector('#sk_hud_turns').textContent = gameState.turnCount;
+
+    ROOT.querySelector('#sk_hud_level_val').textContent = gameState.currentLevel + 1;
+    ROOT.querySelector('#sk_hud_run_val').textContent = gameState.currentRun;
+    
+    const lvl = levels[gameState.currentLevel];
+    ROOT.querySelector('#sk_hud_cores').textContent = `${gameState.coresCollected.length}/${lvl.cores.length}`;
+  }
+
+  function isWall(x, y) {
+    const lvl = levels[gameState.currentLevel];
+    return lvl.walls.some(w => w.x === x && w.y === y);
+  }
+
+  function getGate(x, y) {
+    const lvl = levels[gameState.currentLevel];
+    return lvl.gates.find(g => g.x === x && g.y === y);
+  }
+
+  function isLaserPlateActive(plate) {
+    if (gameState.playerPos.x === plate.x && gameState.playerPos.y === plate.y) return true;
+    for (let i = 0; i < gameState.activeGhosts.length; i++) {
+      const history = gameState.activeGhosts[i];
+      const pos = getGhostPosAtTurn(history, gameState.turnCount);
+      if (pos && pos.x === plate.x && pos.y === plate.y) return true;
+    }
+    return false;
+  }
+
+  function getGhostPosAtTurn(history, turn) {
+    if (turn >= history.length) {
+      return history[history.length - 1];
+    }
+    return history[turn];
+  }
+
+  function isGateOpen(gateId) {
+    const lvl = levels[gameState.currentLevel];
+    const plate = lvl.plates.find(p => p.gateId === gateId);
+    if (!plate) return false;
+    return isLaserPlateActive(plate);
+  }
+
+  /* TIMELINE MOVEMENT SIMULATOR */
+  function handleMove(dx, dy) {
+    if (gameState.isPaused || gameState.isGameOver || gameState.isLevelCleared || gameState.isGameWon) return;
+
+    const nextX = gameState.playerPos.x + dx;
+    const nextY = gameState.playerPos.y + dy;
+
+    if (nextX < 0 || nextX >= 8 || nextY < 0 || nextY >= 8) return;
+    if (isWall(nextX, nextY)) return;
+
+    const gate = getGate(nextX, nextY);
+    if (gate && !isGateOpen(gate.id)) return;
+
+    gameState.playerPos.x = nextX;
+    gameState.playerPos.y = nextY;
+    gameState.playerHistory.push({ ...gameState.playerPos });
+
+    gameState.turnCount++;
+
+    if (dx === 0 && dy === 0) playTick(); else playBlip();
+
+    createParticle(gameState.playerPos.x, gameState.playerPos.y, '#3a86c8');
+    processTurnResolution();
+  }
+
+  function processTurnResolution() {
+    const lvl = levels[gameState.currentLevel];
+    const laserMatrix = computeLasers();
+
+    const playerKey = `${gameState.playerPos.x},${gameState.playerPos.y}`;
+    if (laserMatrix.has(playerKey)) {
+      triggerParadox("You were vaporized by a laser beam!");
+      return;
+    }
+
+    const curPlayerPos = gameState.playerPos;
+    const prevPlayerPos = gameState.playerHistory[gameState.playerHistory.length - 2];
+
+    for (let i = 0; i < gameState.activeGhosts.length; i++) {
+      const history = gameState.activeGhosts[i];
+      const ghostPos = getGhostPosAtTurn(history, gameState.turnCount);
+      const prevGhostPos = getGhostPosAtTurn(history, gameState.turnCount - 1);
+
+      if (ghostPos.x === curPlayerPos.x && ghostPos.y === curPlayerPos.y) {
+        triggerParadox("You entered a shared spatial coordinate with your Ghost!");
+        return;
+      }
+
+      if (prevGhostPos && prevPlayerPos) {
+        if (prevPlayerPos.x === ghostPos.x && prevPlayerPos.y === ghostPos.y &&
+            curPlayerPos.x === prevGhostPos.x && curPlayerPos.y === prevGhostPos.y) {
+          triggerParadox("You triggered a swap paradox with your past self!");
+          return;
+        }
+      }
+    }
+
+    lvl.cores.forEach(c => {
+      if (!gameState.coresCollected.includes(c.id)) {
+        if (gameState.playerPos.x === c.x && gameState.playerPos.y === c.y) {
+          gameState.coresCollected.push(c.id);
+          createBlast(c.x, c.y, '#e76f51');
+          if (gameState.coresCollected.length < lvl.cores.length) {
+            startNextRun();
+          }
+        }
+      }
+    });
+
+    if (gameState.coresCollected.length === lvl.cores.length) {
+      if (gameState.playerPos.x === lvl.exit.x && gameState.playerPos.y === lvl.exit.y) {
+        triggerLevelComplete();
+        return;
+      }
+    }
+
+    updateHUD();
+  }
+
+  function computeLasers() {
+    const lvl = levels[gameState.currentLevel];
+    const coveredCells = new Set();
+
+    lvl.lasers.forEach(laser => {
+      const plate = lvl.plates.find(p => p.laserId === laser.id);
+      if (plate && isLaserPlateActive(plate)) return;
+
+      let cx = laser.x + laser.dx;
+      let cy = laser.y + laser.dy;
+
+      while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8) {
+        if (isWall(cx, cy)) break;
+        const gate = getGate(cx, cy);
+        if (gate && !isGateOpen(gate.id)) break;
+
+        coveredCells.add(`${cx},${cy}`);
+
+        let hitGhost = false;
+        for (let i = 0; i < gameState.activeGhosts.length; i++) {
+          const ghostPos = getGhostPosAtTurn(gameState.activeGhosts[i], gameState.turnCount);
+          if (ghostPos.x === cx && ghostPos.y === cy) {
+            hitGhost = true;
+            break;
+          }
+        }
+        if (hitGhost) break;
+
+        if (gameState.playerPos.x === cx && gameState.playerPos.y === cy) break;
+
+        cx += laser.dx;
+        cy += laser.dy;
+      }
+    });
+
+    return coveredCells;
+  }
+
+  function triggerParadox(reason) {
+    gameState.isGameOver = true;
+    playDeath();
+    createBlast(gameState.playerPos.x, gameState.playerPos.y, '#e63946');
+    ROOT.querySelector('#sk_gameover_desc').textContent = reason;
+    ROOT.querySelector('#sk_screen_gameover').classList.remove('sk_hidden');
+  }
+
+  function triggerLevelComplete() {
+    gameState.isLevelCleared = true;
+    playWin();
+    createBlast(gameState.playerPos.x, gameState.playerPos.y, '#2a9d8f');
+    
+    const nextLvl = gameState.currentLevel + 1;
+    if (nextLvl < levels.length) {
+      gameState.unlockedLevels[nextLvl] = true;
+    }
+    
+    const runScore = gameState.currentRun;
+    if (!gameState.highScores[gameState.currentLevel] || runScore < gameState.highScores[gameState.currentLevel]) {
+      gameState.highScores[gameState.currentLevel] = runScore;
+    }
+
+    saveGame();
+    buildLevelsUI();
+
+    if (nextLvl >= levels.length) {
+      gameState.isGameWon = true;
+      ROOT.querySelector('#sk_screen_victory').classList.remove('sk_hidden');
+    } else {
+      ROOT.querySelector('#sk_screen_cleared').classList.remove('sk_hidden');
+    }
+  }
+
+  /* PARTICLE MANAGEMENT SYSTEM */
+  function createParticle(gridX, gridY, color) {
+    const scale = (canvas.width / window.devicePixelRatio) / 8;
+    for (let i = 0; i < 3; i++) {
+      gameState.particles.push({
+        x: (gridX + 0.5) * scale,
+        y: (gridY + 0.5) * scale,
+        vx: (Math.random() - 0.5) * 3,
+        vy: (Math.random() - 0.5) * 3,
+        size: Math.random() * 3 + 2,
+        color: color,
+        alpha: 1,
+        decay: Math.random() * 0.03 + 0.02
+      });
+    }
+  }
+
+  function createBlast(gridX, gridY, color) {
+    const scale = (canvas.width / window.devicePixelRatio) / 8;
+    for (let i = 0; i < 20; i++) {
+      gameState.particles.push({
+        x: (gridX + 0.5) * scale,
+        y: (gridY + 0.5) * scale,
+        vx: (Math.random() - 0.5) * 8,
+        vy: (Math.random() - 0.5) * 8,
+        size: Math.random() * 5 + 3,
+        color: color,
+        alpha: 1,
+        decay: Math.random() * 0.015 + 0.01
+      });
+    }
+  }
+
+  function updateParticles() {
+    for (let i = gameState.particles.length - 1; i >= 0; i--) {
+      const p = gameState.particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.alpha -= p.decay;
+      if (p.alpha <= 0) {
+        gameState.particles.splice(i, 1);
+      }
+    }
+  }
+
+  /* CAMERA TRANSFORMATIONS ENGINE */
+  function resetCamera() {
+    zoomFactor = 1.0;
+    panX = 0;
+    panY = 0;
+  }
+
+  function handleZoom(amount) {
+    const newZoom = zoomFactor + amount;
+    if (newZoom >= 0.5 && newZoom <= 3.0) {
+      zoomFactor = newZoom;
+    }
+  }
+
+  /* GRAPHICS RENDER LOOP */
+  function render() {
+    const w = canvas.width / window.devicePixelRatio;
+    const h = canvas.height / window.devicePixelRatio;
+
+    ctx.save();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    /* Apply viewport panning and zooming transforms */
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    ctx.translate(panX, panY);
+    ctx.translate(w / 2, h / 2);
+    ctx.scale(zoomFactor, zoomFactor);
+    ctx.translate(-w / 2, -h / 2);
+
+    if (w === 0) {
+      ctx.restore();
+      requestAnimationFrame(render);
+      return;
+    }
+
+    const scale = w / 8;
+    const padding = scale * 0.08;
+
+    /* Grid layout lines */
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.04)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 8; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * scale, 0);
+      ctx.lineTo(i * scale, h);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, i * scale);
+      ctx.lineTo(w, i * scale);
+      ctx.stroke();
+    }
+
+    const lvl = levels[gameState.currentLevel];
+
+    gameState.visualPlayer.x += (gameState.playerPos.x - gameState.visualPlayer.x) * 0.25;
+    gameState.visualPlayer.y += (gameState.playerPos.y - gameState.visualPlayer.y) * 0.25;
+
+    /* Plates */
+    lvl.plates.forEach(plate => {
+      const active = isLaserPlateActive(plate);
+      const px = (plate.x + 0.5) * scale;
+      const py = (plate.y + 0.5) * scale;
+      const r = scale * 0.35;
+
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.strokeStyle = active ? '#3a86c8' : '#6c757d';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(px, py, r * 0.5, 0, Math.PI * 2);
+      ctx.fillStyle = active ? 'rgba(58, 134, 200, 0.3)' : 'transparent';
+      ctx.fill();
+    });
+
+    /* Walls */
+    lvl.walls.forEach(wall => {
+      ctx.fillStyle = '#293241';
+      ctx.beginPath();
+      ctx.roundRect(
+        wall.x * scale + padding, 
+        wall.y * scale + padding, 
+        scale - padding * 2, 
+        scale - padding * 2, 
+        6
+      );
+      ctx.fill();
+    });
+
+    /* Gates */
+    lvl.gates.forEach(gate => {
+      const open = isGateOpen(gate.id);
+      ctx.save();
+      ctx.globalAlpha = open ? 0.15 : 1.0;
+      ctx.fillStyle = '#6c757d';
+      ctx.beginPath();
+      ctx.roundRect(
+        gate.x * scale + padding, 
+        gate.y * scale + padding, 
+        scale - padding * 2, 
+        scale - padding * 2, 
+        4
+      );
+      ctx.fill();
+
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(gate.x * scale + padding, gate.y * scale + padding);
+      ctx.lineTo((gate.x + 1) * scale - padding, (gate.y + 1) * scale - padding);
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    /* Lasers */
+    const laserMatrix = computeLasers();
+    lvl.lasers.forEach(laser => {
+      const plate = lvl.plates.find(p => p.laserId === laser.id);
+      const active = !(plate && isLaserPlateActive(plate));
+
+      ctx.fillStyle = '#e63946';
+      ctx.beginPath();
+      ctx.arc((laser.x + 0.5) * scale, (laser.y + 0.5) * scale, scale * 0.25, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (active) {
+        let tx = laser.x + laser.dx;
+        let ty = laser.y + laser.dy;
+        let endX = tx;
+        let endY = ty;
+
+        while (tx >= 0 && tx < 8 && ty >= 0 && ty < 8) {
+          if (isWall(tx, ty)) break;
+          const gate = getGate(tx, ty);
+          if (gate && !isGateOpen(gate.id)) break;
+
+          endX = tx;
+          endY = ty;
+
+          let hitGhost = false;
+          for (let i = 0; i < gameState.activeGhosts.length; i++) {
+            const ghostPos = getGhostPosAtTurn(gameState.activeGhosts[i], gameState.turnCount);
+            if (ghostPos.x === tx && ghostPos.y === ty) {
+              hitGhost = true;
+              break;
+            }
+          }
+          if (hitGhost) break;
+
+          if (gameState.playerPos.x === tx && gameState.playerPos.y === ty) break;
+
+          tx += laser.dx;
+          ty += laser.dy;
+        }
+
+        ctx.strokeStyle = 'rgba(230, 57, 70, 0.4)';
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo((laser.x + 0.5) * scale, (laser.y + 0.5) * scale);
+        ctx.lineTo((endX + 0.5) * scale, (endY + 0.5) * scale);
+        ctx.stroke();
+
+        ctx.strokeStyle = '#e63946';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo((laser.x + 0.5) * scale, (laser.y + 0.5) * scale);
+        ctx.lineTo((endX + 0.5) * scale, (endY + 0.5) * scale);
+        ctx.stroke();
+      }
+    });
+
+    /* Exit portal */
+    const pulseRadius = scale * 0.35 + Math.sin(Date.now() / 150) * 4;
+    ctx.beginPath();
+    ctx.arc((lvl.exit.x + 0.5) * scale, (lvl.exit.y + 0.5) * scale, pulseRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = '#2a9d8f';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc((lvl.exit.x + 0.5) * scale, (lvl.exit.y + 0.5) * scale, pulseRadius * 0.6, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(42, 157, 143, 0.2)';
+    ctx.fill();
+
+    /* Energy cores */
+    lvl.cores.forEach(c => {
+      if (!gameState.coresCollected.includes(c.id)) {
+        ctx.save();
+        const cx = (c.x + 0.5) * scale;
+        const cy = (c.y + 0.5) * scale;
+        const size = scale * 0.3;
+
+        ctx.translate(cx, cy);
+        ctx.rotate((Date.now() / 400) % (Math.PI * 2));
+
+        ctx.fillStyle = '#e76f51';
+        ctx.beginPath();
+        ctx.moveTo(0, -size);
+        ctx.lineTo(size, 0);
+        ctx.lineTo(0, size);
+        ctx.lineTo(-size, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+      }
+    });
+
+    /* Ghosts */
+    gameState.activeGhosts.forEach((history, ghostIdx) => {
+      const currentStepLimit = Math.min(gameState.turnCount, history.length - 1);
+      
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(244, 162, 97, 0.25)';
+      ctx.lineWidth = 4;
+      for (let s = 0; s <= currentStepLimit; s++) {
+        const hPos = history[s];
+        const hx = (hPos.x + 0.5) * scale;
+        const hy = (hPos.y + 0.5) * scale;
+        if (s === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+      }
+      ctx.stroke();
+
+      if (!gameState.visualGhosts[ghostIdx]) {
+        gameState.visualGhosts[ghostIdx] = { ...history[0] };
+      }
+      const targetPos = getGhostPosAtTurn(history, gameState.turnCount);
+      const vg = gameState.visualGhosts[ghostIdx];
+      vg.x += (targetPos.x - vg.x) * 0.25;
+      vg.y += (targetPos.y - vg.y) * 0.25;
+
+      ctx.fillStyle = 'rgba(244, 162, 97, 0.7)';
+      ctx.beginPath();
+      ctx.roundRect(
+        vg.x * scale + padding * 1.5, 
+        vg.y * scale + padding * 1.5, 
+        scale - padding * 3, 
+        scale - padding * 3, 
+        4
+      );
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc((vg.x + 0.5) * scale, (vg.y + 0.5) * scale, 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    /* Active Player */
+    ctx.fillStyle = '#3a86c8';
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = 'rgba(58, 134, 200, 0.5)';
+    ctx.beginPath();
+    ctx.roundRect(
+      gameState.visualPlayer.x * scale + padding, 
+      gameState.visualPlayer.y * scale + padding, 
+      scale - padding * 2, 
+      scale - padding * 2, 
+      6
+    );
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc((gameState.visualPlayer.x + 0.5) * scale, (gameState.visualPlayer.y + 0.5) * scale, 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    /* Update & draw particles */
+    updateParticles();
+    gameState.particles.forEach(p => {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    ctx.restore();
+    requestAnimationFrame(render);
+  }
+
+  /* KEYBOARD SYSTEM WITH ADVANCED CAMERA CODES */
+  function handleKeyDown(e) {
+    if (gameState.screen === 'menu') {
+      if (e.key === 'Enter') startGame();
+      return;
+    }
+
+    /* Check for Zoom Controls Ctrl + / - */
+    if (e.key === '+' || e.key === '=') {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        handleZoom(0.15);
+        return;
+      }
+    }
+    if (e.key === '-' || e.key === '_') {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        handleZoom(-0.15);
+        return;
+      }
+    }
+
+    if (e.key === 'Escape') {
+      togglePause();
+      return;
+    }
+
+    if (gameState.isPaused || gameState.isGameOver || gameState.isLevelCleared || gameState.isGameWon) return;
+
+    let keyUsed = true;
+    switch (e.key) {
+      case 'ArrowUp':
+      case 'w':
+      case 'W':
+        handleMove(0, -1);
+        break;
+      case 'ArrowDown':
+      case 's':
+      case 'S':
+        handleMove(0, 1);
+        break;
+      case 'ArrowLeft':
+      case 'a':
+      case 'A':
+        handleMove(-1, 0);
+        break;
+      case 'ArrowRight':
+      case 'd':
+      case 'D':
+        handleMove(1, 0);
+        break;
+      case ' ':
+      case 'Enter':
+        handleMove(0, 0); /* Wait turn */
+        break;
+      default:
+        keyUsed = false;
+    }
+
+    if (keyUsed) {
+      e.preventDefault();
+    }
+  }
+
+  /* DEMO SEQUENCER SYSTEM */
+  function playAutoDemo() {
+    stopDemo();
+    gameState.isDemo = true;
+    setupLevel(0);
+    gameState.screen = 'playing';
+    ROOT.querySelector('#sk_screen_menu').classList.add('sk_hidden');
+
+    gameState.demoInputs = [
+      {dx: 0, dy: -1}, {dx: 0, dy: -1}, {dx: 0, dy: -1}, {dx: 0, dy: -1},
+      {dx: 0, dy: 0}, {dx: 0, dy: 0},
+      {dx: 1, dy: 0}, {dx: 1, dy: 0}, {dx: 0, dy: 1},
+      {dx: 1, dy: 0}, {dx: 1, dy: 0}, {dx: 1, dy: 0}, {dx: 1, dy: 0},
+      {dx: 0, dy: -1}, {dx: 0, dy: -1}, {dx: 0, dy: -1}, {dx: 0, dy: -1}, {dx: 0, dy: -1},
+      {dx: 1, dy: 0}
+    ];
+    gameState.demoIndex = 0;
+
+    gameState.demoTimer = setInterval(() => {
+      if (gameState.demoIndex >= gameState.demoInputs.length || gameState.isLevelCleared || gameState.isGameOver) {
+        clearInterval(gameState.demoTimer);
+        setTimeout(() => {
+          gameState.isDemo = false;
+          gameState.screen = 'menu';
+          setupLevel(0);
+          ROOT.querySelector('#sk_screen_menu').classList.remove('sk_hidden');
+          ROOT.querySelector('#sk_screen_cleared').classList.add('sk_hidden');
+        }, 1500);
+        return;
+      }
+
+      const input = gameState.demoInputs[gameState.demoIndex];
+      handleMove(input.dx, input.dy);
+      gameState.demoIndex++;
+    }, 600);
+  }
+
+  function stopDemo() {
+    if (gameState.isDemo) {
+      gameState.isDemo = false;
+      clearInterval(gameState.demoTimer);
+    }
+  }
+
+  /* DRAGGABLE VIRTUAL D-PAD METHOD */
+  function makeDraggable(element) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const handle = ROOT.querySelector('#sk_drag_handle');
+
+    if (handle) {
+      handle.onmousedown = dragMouseDown;
+      handle.ontouchstart = dragTouchStart;
+    }
+
+    function dragMouseDown(e) {
+      e.preventDefault();
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+    }
+
+    function dragTouchStart(e) {
+      pos3 = e.touches[0].clientX;
+      pos4 = e.touches[0].clientY;
+      window.addEventListener('touchend', closeDragElement);
+      window.addEventListener('touchmove', elementTouchDrag, { passive: false });
+    }
+
+    function elementDrag(e) {
+      e.preventDefault();
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      updateElementPos();
+    }
+
+    function elementTouchDrag(e) {
+      e.preventDefault();
+      pos1 = pos3 - e.touches[0].clientX;
+      pos2 = pos4 - e.touches[0].clientY;
+      pos3 = e.touches[0].clientX;
+      pos4 = e.touches[0].clientY;
+      updateElementPos();
+    }
+
+    function updateElementPos() {
+      const elRect = element.getBoundingClientRect();
+      let newTop = element.offsetTop - pos2;
+      let newLeft = element.offsetLeft - pos1;
+
+      const maxLeft = window.innerWidth - elRect.width - 10;
+      const maxTop = window.innerHeight - elRect.height - 10;
+
+      newLeft = Math.max(10, Math.min(newLeft, maxLeft));
+      newTop = Math.max(10, Math.min(newTop, maxTop));
+
+      element.style.top = newTop + "px";
+      element.style.left = newLeft + "px";
+      element.style.bottom = "auto";
+      element.style.right = "auto";
+    }
+
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
+      window.removeEventListener('touchend', closeDragElement);
+      window.removeEventListener('touchmove', elementTouchDrag);
+    }
+  }
+
+  /* POPUP MANAGEMENT */
+  function showPopup(popupId) {
+    ROOT.querySelectorAll('.sk_popup').forEach(p => p.classList.add('sk_hidden'));
+    ROOT.querySelector(`#sk_popup_${popupId}`).classList.remove('sk_hidden');
+  }
+
+  function hidePopups() {
+    ROOT.querySelectorAll('.sk_popup').forEach(p => p.classList.add('sk_hidden'));
+  }
+
+  function togglePause() {
+    if (gameState.screen !== 'playing') return;
+    gameState.isPaused = !gameState.isPaused;
+    const pauseBtn = ROOT.querySelector('#sk_btn_pause');
+    const pauseMenu = ROOT.querySelector('#sk_screen_paused');
+    
+    if (gameState.isPaused) {
+      pauseBtn.classList.add('sk_paused_active');
+      pauseBtn.innerHTML = "<b>▶ Resume</b>";
+      pauseMenu.classList.remove('sk_hidden');
+    } else {
+      pauseBtn.classList.remove('sk_paused_active');
+      pauseBtn.innerHTML = "<b>⏸ Pause</b>";
+      pauseMenu.classList.add('sk_hidden');
+    }
+  }
+
+  function toggleSound() {
+    gameState.audioEnabled = !gameState.audioEnabled;
+    ROOT.querySelector('#sk_btn_toggle_sound').textContent = gameState.audioEnabled ? "ON" : "OFF";
+    saveGame();
+    initAudio();
+  }
+
+  function toggleDelay() {
+    gameState.delayMode = gameState.delayMode === 'FAST' ? 'SLOW' : 'FAST';
+    ROOT.querySelector('#sk_btn_toggle_delay').textContent = gameState.delayMode;
+    saveGame();
+  }
+
+  /* USER INTERFACE BUILDERS */
+  function buildLevelsUI() {
+    const grid = ROOT.querySelector('#sk_levels_grid');
+    grid.innerHTML = '';
+    levels.forEach((lvl, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'sk_level_item';
+      if (!gameState.unlockedLevels[idx]) {
+        btn.classList.add('sk_locked');
+        btn.innerHTML = '<i>🔒</i>';
+      } else {
+        btn.textContent = idx + 1;
+        btn.addEventListener('click', () => {
+          stopDemo();
+          setupLevel(idx);
+          gameState.screen = 'playing';
+          ROOT.querySelector('#sk_screen_menu').classList.add('sk_hidden');
+          hidePopups();
+        });
+      }
+      grid.appendChild(btn);
+    });
+  }
+
+  function buildScoresUI() {
+    const list = ROOT.querySelector('#sk_scores_list');
+    list.innerHTML = '';
+    levels.forEach((lvl, idx) => {
+      const row = document.createElement('div');
+      row.className = 'sk_score_row';
+      const score = gameState.highScores[idx] ? `${gameState.highScores[idx]} loops` : '---';
+      row.innerHTML = `<span>Level ${idx + 1}: ${lvl.name}</span><b>${score}</b>`;
+      list.appendChild(row);
+    });
+  }
+
+  function startGame() {
+    stopDemo();
+    setupLevel(0);
+    gameState.screen = 'playing';
+    ROOT.querySelector('#sk_screen_menu').classList.add('sk_hidden');
+  }
+
+  /* INTERACTIVE CANVAS POSITION CLICK MAPPER (Maintains Clickability when Zoomed/Panned) */
+  function handleCanvasClick(clientX, clientY) {
+    if (gameState.isPaused || gameState.isGameOver || gameState.isLevelCleared || gameState.isGameWon) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const xOnCanvas = clientX - rect.left;
+    const yOnCanvas = clientY - rect.top;
+
+    const canvasLogicalW = canvas.width / window.devicePixelRatio;
+    const canvasLogicalH = canvas.height / window.devicePixelRatio;
+
+    /* Transform screen space coordinates back through view matrices */
+    let mappedX = (xOnCanvas * (canvasLogicalW / rect.width));
+    let mappedY = (yOnCanvas * (canvasLogicalH / rect.height));
+
+    mappedX -= panX;
+    mappedY -= panY;
+
+    mappedX -= canvasLogicalW / 2;
+    mappedY -= canvasLogicalH / 2;
+
+    mappedX /= zoomFactor;
+    mappedY /= zoomFactor;
+
+    mappedX += canvasLogicalW / 2;
+    mappedY += canvasLogicalH / 2;
+
+    const scale = canvasLogicalW / 8;
+    const gridX = Math.floor(mappedX / scale);
+    const gridY = Math.floor(mappedY / scale);
+
+    if (gridX >= 0 && gridX < 8 && gridY >= 0 && gridY < 8) {
+      /* Interpret grid click as direct step toward adjacent tile */
+      const dx = gridX - gameState.playerPos.x;
+      const dy = gridY - gameState.playerPos.y;
+
+      if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
+        handleMove(dx, dy);
+      }
+    }
+  }
+
+  /* ADVANCED TOUCH CONTROLLER MODULE WITH GESTURES */
+  function registerAdvancedTouchSystem() {
+    let touchStartTime = 0;
+    let lastTapTime = 0;
+    let longPressTimer = null;
+
+    canvas.addEventListener('touchstart', (e) => {
+      /* Track pinch zoom metrics if 2 fingers are placed on canvas */
+      if (e.touches.length === 2) {
+        lastPinchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        return;
+      }
+
+      const touch = e.touches[0];
+      touchStartTime = Date.now();
+      isDraggingCanvas = true;
+      dragStart.x = touch.clientX - panX;
+      dragStart.y = touch.clientY - panY;
+
+      /* Long Press trigger timer (>500ms continuous wait turn execution) */
+      longPressTimer = setTimeout(() => {
+        if (isDraggingCanvas && !isHandPanActive && e.touches.length === 1) {
+          handleMove(0, 0); /* Wait Turn continuous */
+          createParticle(gameState.playerPos.x, gameState.playerPos.y, '#e76f51');
+        }
+      }, 500);
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+      /* Multi-touch Pinch Zoom Logic */
+      if (e.touches.length === 2) {
+        const dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const diff = dist - lastPinchDist;
+        handleZoom(diff * 0.01);
+        lastPinchDist = dist;
+        return;
+      }
+
+      /* Single-finger drag pan or swipe-to-move mapping */
+      if (isDraggingCanvas && e.touches.length === 1) {
+        const touch = e.touches[0];
+        if (isHandPanActive) {
+          panX = touch.clientX - dragStart.x;
+          panY = touch.clientY - dragStart.y;
+        }
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchend', (e) => {
+      clearTimeout(longPressTimer);
+      isDraggingCanvas = false;
+
+      if (e.changedTouches.length > 0 && e.touches.length === 0) {
+        const touch = e.changedTouches[0];
+        const duration = Date.now() - touchStartTime;
+
+        if (duration < 250) {
+          /* Double Tap Detection (<300ms) to trigger instant WAITING */
+          const timeSinceLastTap = Date.now() - lastTapTime;
+          if (timeSinceLastTap < 300) {
+            handleMove(0, 0); /* Wait Turn */
+          } else {
+            /* Single Tap Coordinate Trigger */
+            if (!isHandPanActive) {
+              handleCanvasClick(touch.clientX, touch.clientY);
+            }
+          }
+          lastTapTime = Date.now();
+        }
+      }
+    });
+
+    canvas.addEventListener('touchcancel', () => {
+      clearTimeout(longPressTimer);
+      isDraggingCanvas = false;
+    });
+
+    /* Canvas Mouse fallback support for drag-pan, pinch, and grid selection */
+    canvas.addEventListener('mousedown', (e) => {
+      isDraggingCanvas = true;
+      dragStart.x = e.clientX - panX;
+      dragStart.y = e.clientY - panY;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (isDraggingCanvas) {
+        if (isHandPanActive || e.buttons === 2) {
+          panX = e.clientX - dragStart.x;
+          panY = e.clientY - dragStart.y;
+        }
+      }
+    });
+
+    canvas.addEventListener('mouseup', (e) => {
+      if (isDraggingCanvas && !isHandPanActive) {
+        handleCanvasClick(e.clientX, e.clientY);
+      }
+      isDraggingCanvas = false;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      isDraggingCanvas = false;
+    });
+  }
+
+  /* ENGINE RUNTIME INITIALIZATION */
+  function initEngine() {
+    loadGame();
+    buildLevelsUI();
+    buildScoresUI();
+
+    window.addEventListener('resize', debouncedResize);
+    window.addEventListener('orientationchange', debouncedResize);
+    setTimeout(resizeCanvas, 150);
+
+    makeDraggable(ROOT.querySelector('#sk_virtual_controls'));
+    registerAdvancedTouchSystem();
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    /* TOP BAR ACTION TRIGGERS */
+    ROOT.querySelector('#sk_btn_pause').addEventListener('click', togglePause);
+    ROOT.querySelector('#sk_btn_resume').addEventListener('click', togglePause);
+    
+    ROOT.querySelector('#sk_btn_restart_current').addEventListener('click', () => {
+      setupLevel(gameState.currentLevel);
+    });
+
+    ROOT.querySelector('#sk_btn_menu_toggle').addEventListener('click', (e) => {
+      e.stopPropagation();
+      ROOT.querySelector('#sk_dropdown_menu_list').parentElement.classList.toggle('sk_open');
+    });
+
+    document.addEventListener('click', () => {
+      ROOT.querySelector('#sk_dropdown_menu_list').parentElement.classList.remove('sk_open');
+    });
+
+    /* REGISTER DROPDOWN CLICK HANDLERS */
+    ROOT.querySelector('#sk_btn_levels').addEventListener('click', () => { buildLevelsUI(); showPopup('levels'); });
+    ROOT.querySelector('#sk_btn_scores').addEventListener('click', () => { buildScoresUI(); showPopup('scores'); });
+    ROOT.querySelector('#sk_btn_settings').addEventListener('click', () => { showPopup('settings'); });
+    ROOT.querySelector('#sk_btn_info').addEventListener('click', () => { showPopup('info'); });
+    
+    ROOT.querySelector('#sk_btn_top_demo').addEventListener('click', () => { playAutoDemo(); });
+    ROOT.querySelector('#sk_btn_watch_demo').addEventListener('click', () => { playAutoDemo(); });
+    
+    ROOT.querySelector('#sk_btn_fetch_levels').addEventListener('click', () => { fetchRemoteLevels(); });
+    ROOT.querySelector('#sk_btn_load_remote_init').addEventListener('click', () => { fetchRemoteLevels(); });
+
+    ROOT.querySelector('#sk_btn_start_game').addEventListener('click', startGame);
+
+    ROOT.querySelector('#sk_btn_retry').addEventListener('click', () => {
+      ROOT.querySelector('#sk_screen_gameover').classList.add('sk_hidden');
+      setupLevel(gameState.currentLevel);
+    });
+
+    ROOT.querySelector('#sk_btn_next').addEventListener('click', () => {
+      ROOT.querySelector('#sk_screen_cleared').classList.add('sk_hidden');
+      setupLevel(gameState.currentLevel + 1);
+    });
+
+    ROOT.querySelector('#sk_btn_victory_menu').addEventListener('click', () => {
+      ROOT.querySelector('#sk_screen_victory').classList.add('sk_hidden');
+      gameState.screen = 'menu';
+      ROOT.querySelector('#sk_screen_menu').classList.remove('sk_hidden');
+      setupLevel(0);
+    });
+
+    /* Popup closing triggers */
+    ROOT.querySelector('#sk_close_levels').addEventListener('click', hidePopups);
+    ROOT.querySelector('#sk_close_scores').addEventListener('click', hidePopups);
+    ROOT.querySelector('#sk_close_settings').addEventListener('click', hidePopups);
+    ROOT.querySelector('#sk_close_info').addEventListener('click', hidePopups);
+
+    ROOT.querySelector('#sk_btn_toggle_sound').addEventListener('click', toggleSound);
+    ROOT.querySelector('#sk_btn_toggle_delay').addEventListener('click', toggleDelay);
+
+    ROOT.querySelector('#sk_btn_orientation').addEventListener('click', () => {
+      ROOT.classList.toggle('sk_landscape_mode');
+      setTimeout(resizeCanvas, 200);
+    });
+
+    /* FULLSCREEN API ENGINE SUPPORT */
+    ROOT.querySelector('#sk_btn_fullscreen').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        ROOT.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+      setTimeout(resizeCanvas, 300);
+    });
+
+    /* VIRTUAL MOVE CONTROLS BINDINGS */
+    ROOT.querySelector('#sk_ctrl_up').addEventListener('click', () => handleMove(0, -1));
+    ROOT.querySelector('#sk_ctrl_down').addEventListener('click', () => handleMove(0, 1));
+    ROOT.querySelector('#sk_ctrl_left').addEventListener('click', () => handleMove(-1, 0));
+    ROOT.querySelector('#sk_ctrl_right').addEventListener('click', () => handleMove(1, 0));
+    ROOT.querySelector('#sk_ctrl_wait').addEventListener('click', () => handleMove(0, 0));
+
+    /* REGISTER CANVAS CAMERA ACTIONS */
+    ROOT.querySelector('#sk_cam_zoom_in').addEventListener('click', () => handleZoom(0.15));
+    ROOT.querySelector('#sk_cam_zoom_out').addEventListener('click', () => handleZoom(-0.15));
+    
+    ROOT.querySelector('#sk_cam_pan_tool').addEventListener('click', () => {
+      isHandPanActive = !isHandPanActive;
+      ROOT.querySelector('#sk_pan_status').textContent = isHandPanActive ? "ON" : "OFF";
+      ROOT.querySelector('#sk_cam_pan_tool').classList.toggle('sk_active', isHandPanActive);
+    });
+
+    ROOT.querySelector('#sk_cam_reset').addEventListener('click', () => {
+      resetCamera();
+    });
+
+    requestAnimationFrame(render);
+  }
+
+  initEngine();
+})();
+</script>
+
+</body>
+</html>
+```
