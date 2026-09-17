@@ -915,95 +915,79 @@
     screen: 'menu'
   };
 
-  /* HAND-DESIGNED COMPREHENSIVE LEVELS (Strict Grid Dimensions: 8x8) */
-  let levels = [
-    {
-      name: "1. Loops & Echoes",
-      start: {x: 1, y: 6},
-      exit: {x: 6, y: 1},
-      cores: [{id: 'c1', x: 3, y: 3}],
-      plates: [{id: 'p1', x: 1, y: 2, gateId: 'g1'}],
-      gates: [{id: 'g1', x: 5, y: 1}],
-      walls: [
-        {x: 5, y: 0}, {x: 5, y: 2}, {x: 4, y: 1}, {x: 4, y: 2}
-      ],
-      lasers: []
-    },
-    {
-      name: "2. Absolute Blockade",
-      start: {x: 1, y: 6},
-      exit: {x: 6, y: 1},
-      cores: [{id: 'c1', x: 6, y: 6}],
-      plates: [{id: 'p1', x: 1, y: 1, laserId: 'l1'}],
-      gates: [],
-      walls: [
-        {x: 4, y: 2}, {x: 4, y: 3}, {x: 4, y: 4}, {x: 4, y: 5}
-      ],
-      lasers: [{id: 'l1', x: 4, y: 0, dx: 0, dy: 1, active: true}]
-    },
-    {
-      name: "3. Quantum Exchange",
-      start: {x: 0, y: 7},
-      exit: {x: 7, y: 0},
-      cores: [
-        {id: 'c1', x: 0, y: 0}, 
-        {id: 'c2', x: 7, y: 7}
-      ],
-      plates: [
-        {id: 'p1', x: 6, y: 6, gateId: 'g1'},
-        {id: 'p2', x: 1, y: 1, gateId: 'g2'}
-      ],
-      gates: [
-        {id: 'g1', x: 1, y: 0},
-        {id: 'g2', x: 7, y: 1}
-      ],
-      walls: [
-        {x: 1, y: 2}, {x: 2, y: 2}, {x: 3, y: 2}, {x: 4, y: 2}, {x: 5, y: 2}
-      ],
-      lasers: []
-    },
-    {
-      name: "4. Crossed Beams",
-      start: {x: 1, y: 1},
-      exit: {x: 6, y: 6},
-      cores: [{id: 'c1', x: 6, y: 1}],
-      plates: [
-        {id: 'p1', x: 1, y: 5, laserId: 'l1'},
-        {id: 'p2', x: 5, y: 5, laserId: 'l2'}
-      ],
-      gates: [],
-      walls: [
-        {x: 4, y: 1}, {x: 4, y: 2}, {x: 4, y: 3}
-      ],
-      lasers: [
-        {id: 'l1', x: 4, y: 0, dx: 0, dy: 1, active: true},
-        {id: 'l2', x: 0, y: 4, dx: 1, dy: 0, active: true}
-      ]
-    },
-    {
-      name: "5. Paradox Vault",
-      start: {x: 3, y: 3},
-      exit: {x: 7, y: 7},
-      cores: [
-        {id: 'c1', x: 0, y: 0},
-        {id: 'c2', x: 7, y: 0}
-      ],
-      plates: [
-        {id: 'p1', x: 1, y: 1, gateId: 'g1'},
-        {id: 'p2', x: 0, y: 7, gateId: 'g2'}
-      ],
-      gates: [
-        {id: 'g1', x: 7, y: 6},
-        {id: 'g2', x: 6, y: 0}
-      ],
-      walls: [
-        {x: 3, y: 2}, {x: 3, y: 4}, {x: 2, y: 3}, {x: 4, y: 3}
-      ],
-      lasers: [
-        {id: 'l1', x: 4, y: 5, dx: 0, dy: 1, active: true}
-      ]
-    }
-  ];
+  /* INITIALIZE GAME LEVELS FROM REMOTE URL */
+  let levels = [];
+  function loadInitialRemoteLevels() {
+    fetch('https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/ChronoGrid/levels.json')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          // Prepend or use fetched levels. The remote levels start from level 6.
+          // Let's combine the initial 5 levels with the fetched levels, or use fetched levels directly if they cover all.
+          // The fetched array contains levels 6 to 55. Let's keep levels 1-5 or use fetched directly.
+          // Actually, let's keep the built-in 5 levels and append the fetched levels, or replace/merge properly.
+          // Let's merge them so levels array has everything seamlessly!
+          const baseLevels = [
+            {
+              name: "1. Loops & Echoes",
+              start: {x: 1, y: 6},
+              exit: {x: 6, y: 1},
+              cores: [{id: 'c1', x: 3, y: 3}],
+              plates: [{id: 'p1', x: 1, y: 2, gateId: 'g1'}],
+              gates: [{id: 'g1', x: 5, y: 1}],
+              walls: [{x: 5, y: 0}, {x: 5, y: 2}, {x: 4, y: 1}, {x: 4, y: 2}],
+              lasers: []
+            },
+            {
+              name: "2. Absolute Blockade",
+              start: {x: 1, y: 6},
+              exit: {x: 6, y: 1},
+              cores: [{id: 'c1', x: 6, y: 6}],
+              plates: [{id: 'p1', x: 1, y: 1, laserId: 'l1'}],
+              gates: [],
+              walls: [{x: 4, y: 2}, {x: 4, y: 3}, {x: 4, y: 4}, {x: 4, y: 5}],
+              lasers: [{id: 'l1', x: 4, y: 0, dx: 0, dy: 1, active: true}]
+            },
+            {
+              name: "3. Quantum Exchange",
+              start: {x: 0, y: 7},
+              exit: {x: 7, y: 0},
+              cores: [{id: 'c1', x: 0, y: 0}, {id: 'c2', x: 7, y: 7}],
+              plates: [{id: 'p1', x: 6, y: 6, gateId: 'g1'}, {id: 'p2', x: 1, y: 1, gateId: 'g2'}],
+              gates: [{id: 'g1', x: 1, y: 0}, {id: 'g2', x: 7, y: 1}],
+              walls: [{x: 1, y: 2}, {x: 2, y: 2}, {x: 3, y: 2}, {x: 4, y: 2}, {x: 5, y: 2}],
+              lasers: []
+            },
+            {
+              name: "4. Crossed Beams",
+              start: {x: 1, y: 1},
+              exit: {x: 6, y: 6},
+              cores: [{id: 'c1', x: 6, y: 1}],
+              plates: [{id: 'p1', x: 1, y: 5, laserId: 'l1'}, {id: 'p2', x: 5, y: 5, laserId: 'l2'}],
+              gates: [],
+              walls: [{x: 4, y: 1}, {x: 4, y: 2}, {x: 4, y: 3}],
+              lasers: [{id: 'l1', x: 4, y: 0, dx: 0, dy: 1, active: true}, {id: 'l2', x: 0, y: 4, dx: 1, dy: 0, active: true}]
+            },
+            {
+              name: "5. Paradox Vault",
+              start: {x: 3, y: 3},
+              exit: {x: 7, y: 7},
+              cores: [{id: 'c1', x: 0, y: 0}, {id: 'c2', x: 7, y: 0}],
+              plates: [{id: 'p1', x: 1, y: 1, gateId: 'g1'}, {id: 'p2', x: 0, y: 7, gateId: 'g2'}],
+              gates: [{id: 'g1', x: 7, y: 6}, {id: 'g2', x: 6, y: 0}],
+              walls: [{x: 3, y: 2}, {x: 3, y: 4}, {x: 4, y: 3}],
+              lasers: [{id: 'l1', x: 4, y: 5, dx: 0, dy: 1, active: true}]
+            }
+          ];
+          levels = baseLevels.concat(data);
+          gameState.unlockedLevels = new Array(levels.length).fill(true);
+          setupLevel(0);
+        }
+      })
+      .catch(e => {
+        console.error("Failed to load remote levels, using fallback", e);
+      });
+  }
 
   /* PERSISTENCE ENGINE */
   function saveGame() {
@@ -1094,7 +1078,7 @@
     }, 120);
 
     /* Real API Fetch containing backup level dataset representation */
-    fetch('https://raw.githubusercontent.com/AIGameDevExpert/ChronoGridLevels/main/levels.json')
+    fetch('https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/ChronoGrid/levels.json')
       .then(res => {
         if (!res.ok) throw new Error("Connection failed");
         return res.text();
@@ -2108,6 +2092,7 @@
   /* ENGINE RUNTIME INITIALIZATION */
   function initEngine() {
     loadGame();
+    loadInitialRemoteLevels();
     buildLevelsUI();
     buildScoresUI();
 
