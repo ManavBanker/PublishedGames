@@ -1,0 +1,573 @@
+[
+  {
+    "name": "Symmetric Whispers",
+    "gridSize": 6,
+    "playerStart": { "col": 1, "row": 4 },
+    "blueGoal": { "col": 3, "row": 2 },
+    "redGoal": { "col": 2, "row": 2 },
+    "walls": [{ "col": 0, "row": 2 }, { "col": 4, "row": 2 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 5, "row": 5 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "UP", "RIGHT", "RIGHT"]
+  },
+  {
+    "name": "Converging Shadows",
+    "gridSize": 6,
+    "playerStart": { "col": 4, "row": 4 },
+    "blueGoal": { "col": 2, "row": 2 },
+    "redGoal": { "col": 3, "row": 2 },
+    "walls": [{ "col": 2, "row": 4 }, { "col": 3, "row": 4 }],
+    "voids": [{ "col": 1, "row": 1 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "LEFT", "UP"]
+  },
+  {
+    "name": "Mirror's Threshold",
+    "gridSize": 6,
+    "playerStart": { "col": 2, "row": 3 },
+    "blueGoal": { "col": 3, "row": 1 },
+    "redGoal": { "col": 2, "row": 1 },
+    "walls": [{ "col": 1, "row": 1 }, { "col": 4, "row": 1 }],
+    "voids": [],
+    "initAngle": 0.78539816339,
+    "demoPath": ["UP", "RIGHT", "UP"]
+  },
+  {
+    "name": "Parallel Steps",
+    "gridSize": 6,
+    "playerStart": { "col": 1, "row": 1 },
+    "blueGoal": { "col": 1, "row": 3 },
+    "redGoal": { "col": 1, "row": 2 },
+    "walls": [{ "col": 2, "row": 1 }, { "col": 3, "row": 1 }],
+    "voids": [{ "col": 0, "row": 5 }, { "col": 5, "row": 0 }],
+    "initAngle": 0,
+    "demoPath": ["DOWN", "RIGHT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "The Angular Gate",
+    "gridSize": 6,
+    "playerStart": { "col": 3, "row": 4 },
+    "blueGoal": { "col": 1, "row": 2 },
+    "redGoal": { "col": 4, "row": 2 },
+    "walls": [{ "col": 2, "row": 3 }, { "col": 3, "row": 3 }],
+    "voids": [],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "LEFT"]
+  },
+  {
+    "name": "Symmetric Passage",
+    "gridSize": 6,
+    "playerStart": { "col": 2, "row": 5 },
+    "blueGoal": { "col": 1, "row": 3 },
+    "redGoal": { "col": 4, "row": 3 },
+    "walls": [{ "col": 2, "row": 4 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 5, "row": 0 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "RIGHT"]
+  },
+  {
+    "name": "Double Helix",
+    "gridSize": 6,
+    "playerStart": { "col": 1, "row": 4 },
+    "blueGoal": { "col": 3, "row": 3 },
+    "redGoal": { "col": 3, "row": 2 },
+    "walls": [{ "col": 1, "row": 2 }, { "col": 4, "row": 2 }],
+    "voids": [],
+    "initAngle": 0.78539816339,
+    "demoPath": ["RIGHT", "UP", "RIGHT", "DOWN"]
+  },
+  {
+    "name": "Split Reflection",
+    "gridSize": 6,
+    "playerStart": { "col": 4, "row": 1 },
+    "blueGoal": { "col": 2, "row": 3 },
+    "redGoal": { "col": 3, "row": 3 },
+    "walls": [{ "col": 3, "row": 2 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 5, "row": 5 }],
+    "initAngle": 0,
+    "demoPath": ["LEFT", "DOWN", "LEFT", "DOWN"]
+  },
+  {
+    "name": "Corridor of Parity",
+    "gridSize": 7,
+    "playerStart": { "col": 3, "row": 5 },
+    "blueGoal": { "col": 1, "row": 3 },
+    "redGoal": { "col": 5, "row": 3 },
+    "walls": [{ "col": 3, "row": 4 }, { "col": 2, "row": 3 }, { "col": 4, "row": 3 }],
+    "voids": [{ "col": 0, "row": 6 }, { "col": 6, "row": 6 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "LEFT"]
+  },
+  {
+    "name": "Prism Alignment",
+    "gridSize": 7,
+    "playerStart": { "col": 2, "row": 5 },
+    "blueGoal": { "col": 4, "row": 2 },
+    "redGoal": { "col": 2, "row": 2 },
+    "walls": [{ "col": 3, "row": 5 }, { "col": 3, "row": 4 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 6, "row": 0 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "RIGHT", "UP", "RIGHT"]
+  },
+  {
+    "name": "The Angular Divide",
+    "gridSize": 7,
+    "playerStart": { "col": 5, "row": 5 },
+    "blueGoal": { "col": 2, "row": 4 },
+    "redGoal": { "col": 4, "row": 2 },
+    "walls": [{ "col": 4, "row": 5 }, { "col": 4, "row": 4 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 1, "row": 1 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["UP", "LEFT", "LEFT", "DOWN"]
+  },
+  {
+    "name": "Void Waltz",
+    "gridSize": 7,
+    "playerStart": { "col": 1, "row": 5 },
+    "blueGoal": { "col": 3, "row": 3 },
+    "redGoal": { "col": 3, "row": 3 },
+    "walls": [{ "col": 2, "row": 5 }, { "col": 4, "row": 5 }],
+    "voids": [{ "col": 3, "row": 6 }, { "col": 3, "row": 0 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "UP", "RIGHT", "RIGHT", "DOWN"]
+  },
+  {
+    "name": "Biaxial Shift",
+    "gridSize": 7,
+    "playerStart": { "col": 3, "row": 1 },
+    "blueGoal": { "col": 1, "row": 3 },
+    "redGoal": { "col": 5, "row": 3 },
+    "walls": [{ "col": 2, "row": 2 }, { "col": 4, "row": 2 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 6, "row": 6 }],
+    "initAngle": 0,
+    "demoPath": ["DOWN", "LEFT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "Chamber of Glass",
+    "gridSize": 7,
+    "playerStart": { "col": 5, "row": 2 },
+    "blueGoal": { "col": 3, "row": 4 },
+    "redGoal": { "col": 3, "row": 2 },
+    "walls": [{ "col": 4, "row": 2 }, { "col": 4, "row": 3 }],
+    "voids": [],
+    "initAngle": 0.78539816339,
+    "demoPath": ["DOWN", "LEFT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "Lateral Lattice",
+    "gridSize": 7,
+    "playerStart": { "col": 1, "row": 1 },
+    "blueGoal": { "col": 3, "row": 3 },
+    "redGoal": { "col": 3, "row": 3 },
+    "walls": [{ "col": 2, "row": 1 }, { "col": 1, "row": 2 }],
+    "voids": [{ "col": 5, "row": 5 }, { "col": 6, "row": 6 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["DOWN", "DOWN", "RIGHT", "RIGHT", "UP"]
+  },
+  {
+    "name": "Inverse Orbit",
+    "gridSize": 7,
+    "playerStart": { "col": 4, "row": 4 },
+    "blueGoal": { "col": 2, "row": 2 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 3, "row": 3 }],
+    "voids": [{ "col": 0, "row": 3 }, { "col": 6, "row": 3 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "LEFT", "UP", "RIGHT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "Reflected Canyon",
+    "gridSize": 8,
+    "playerStart": { "col": 1, "row": 6 },
+    "blueGoal": { "col": 3, "row": 4 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 2, "row": 6 }, { "col": 5, "row": 6 }, { "col": 1, "row": 5 }, { "col": 6, "row": 5 }],
+    "voids": [{ "col": 0, "row": 7 }, { "col": 7, "row": 7 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "RIGHT", "RIGHT", "UP", "UP", "RIGHT"]
+  },
+  {
+    "name": "Asymmetric Symmetry",
+    "gridSize": 8,
+    "playerStart": { "col": 2, "row": 5 },
+    "blueGoal": { "col": 5, "row": 3 },
+    "redGoal": { "col": 4, "row": 2 },
+    "walls": [{ "col": 3, "row": 1 }, { "col": 3, "row": 2 }, { "col": 4, "row": 5 }, { "col": 4, "row": 6 }],
+    "voids": [{ "col": 1, "row": 1 }, { "col": 6, "row": 1 }, { "col": 1, "row": 6 }, { "col": 6, "row": 6 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "RIGHT", "RIGHT", "UP", "RIGHT"]
+  },
+  {
+    "name": "The Angular Vortex",
+    "gridSize": 8,
+    "playerStart": { "col": 2, "row": 2 },
+    "blueGoal": { "col": 4, "row": 4 },
+    "redGoal": { "col": 3, "row": 3 },
+    "walls": [{ "col": 2, "row": 3 }, { "col": 3, "row": 2 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 7, "row": 7 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["DOWN", "RIGHT", "DOWN", "RIGHT", "UP"]
+  },
+  {
+    "name": "Polarity Shift",
+    "gridSize": 8,
+    "playerStart": { "col": 3, "row": 6 },
+    "blueGoal": { "col": 1, "row": 4 },
+    "redGoal": { "col": 6, "row": 4 },
+    "walls": [{ "col": 3, "row": 5 }, { "col": 2, "row": 4 }, { "col": 5, "row": 4 }],
+    "voids": [{ "col": 0, "row": 7 }, { "col": 7, "row": 7 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "LEFT", "DOWN"]
+  },
+  {
+    "name": "Crystalline Maze",
+    "gridSize": 8,
+    "playerStart": { "col": 5, "row": 6 },
+    "blueGoal": { "col": 3, "row": 3 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 4, "row": 6 }, { "col": 5, "row": 5 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 7, "row": 0 }, { "col": 0, "row": 7 }],
+    "initAngle": 0,
+    "demoPath": ["UP", "LEFT", "UP", "LEFT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "Synchronous Descent",
+    "gridSize": 8,
+    "playerStart": { "col": 1, "row": 2 },
+    "blueGoal": { "col": 3, "row": 5 },
+    "redGoal": { "col": 4, "row": 2 },
+    "walls": [{ "col": 1, "row": 3 }, { "col": 2, "row": 2 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 7, "row": 7 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["RIGHT", "DOWN", "DOWN", "RIGHT", "DOWN"]
+  },
+  {
+    "name": "The Mirror Core",
+    "gridSize": 8,
+    "playerStart": { "col": 3, "row": 2 },
+    "blueGoal": { "col": 5, "row": 4 },
+    "redGoal": { "col": 2, "row": 3 },
+    "walls": [{ "col": 4, "row": 2 }, { "col": 3, "row": 3 }],
+    "voids": [{ "col": 0, "row": 3 }, { "col": 7, "row": 4 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["RIGHT", "DOWN", "RIGHT", "DOWN", "UP"]
+  },
+  {
+    "name": "Octave Shift",
+    "gridSize": 8,
+    "playerStart": { "col": 2, "row": 6 },
+    "blueGoal": { "col": 5, "row": 4 },
+    "redGoal": { "col": 2, "row": 3 },
+    "walls": [{ "col": 3, "row": 6 }, { "col": 2, "row": 5 }],
+    "voids": [],
+    "initAngle": 0.78539816339,
+    "demoPath": ["UP", "RIGHT", "UP", "RIGHT", "DOWN"]
+  },
+  {
+    "name": "The Sentry Gates",
+    "gridSize": 8,
+    "playerStart": { "col": 4, "row": 5 },
+    "blueGoal": { "col": 2, "row": 3 },
+    "redGoal": { "col": 5, "row": 4 },
+    "walls": [{ "col": 3, "row": 5 }, { "col": 4, "row": 4 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 7, "row": 7 }],
+    "initAngle": 0,
+    "demoPath": ["LEFT", "UP", "LEFT", "UP", "RIGHT"]
+  },
+  {
+    "name": "Prismatic Cascade",
+    "gridSize": 8,
+    "playerStart": { "col": 1, "row": 5 },
+    "blueGoal": { "col": 3, "row": 2 },
+    "redGoal": { "col": 4, "row": 5 },
+    "walls": [{ "col": 2, "row": 5 }, { "col": 1, "row": 4 }],
+    "voids": [{ "col": 0, "row": 7 }, { "col": 7, "row": 0 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "RIGHT", "UP", "RIGHT", "LEFT"]
+  },
+  {
+    "name": "The Void Horizon",
+    "gridSize": 9,
+    "playerStart": { "col": 4, "row": 7 },
+    "blueGoal": { "col": 2, "row": 4 },
+    "redGoal": { "col": 6, "row": 4 },
+    "walls": [{ "col": 4, "row": 6 }, { "col": 3, "row": 5 }, { "col": 5, "row": 5 }],
+    "voids": [
+      { "col": 0, "row": 8 }, { "col": 1, "row": 8 }, { "col": 2, "row": 8 },
+      { "col": 6, "row": 8 }, { "col": 7, "row": 8 }, { "col": 8, "row": 8 }
+    ],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "LEFT", "DOWN"]
+  },
+  {
+    "name": "Refractive Fields",
+    "gridSize": 9,
+    "playerStart": { "col": 2, "row": 6 },
+    "blueGoal": { "col": 5, "row": 3 },
+    "redGoal": { "col": 3, "row": 5 },
+    "walls": [{ "col": 3, "row": 6 }, { "col": 2, "row": 5 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 8, "row": 8 }, { "col": 4, "row": 4 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["UP", "RIGHT", "UP", "RIGHT", "UP"]
+  },
+  {
+    "name": "Lateral Lock",
+    "gridSize": 9,
+    "playerStart": { "col": 6, "row": 2 },
+    "blueGoal": { "col": 4, "row": 4 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 5, "row": 2 }, { "col": 6, "row": 3 }],
+    "voids": [{ "col": 8, "row": 0 }, { "col": 0, "row": 8 }],
+    "initAngle": 0,
+    "demoPath": ["DOWN", "LEFT", "DOWN", "LEFT", "UP"]
+  },
+  {
+    "name": "Symmetric Sanctuary",
+    "gridSize": 9,
+    "playerStart": { "col": 1, "row": 7 },
+    "blueGoal": { "col": 4, "row": 4 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 2, "row": 7 }, { "col": 1, "row": 6 }],
+    "voids": [{ "col": 0, "row": 8 }, { "col": 8, "row": 8 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "UP", "RIGHT", "RIGHT", "UP", "RIGHT"]
+  },
+  {
+    "name": "Chamber of Echoes",
+    "gridSize": 9,
+    "playerStart": { "col": 7, "row": 6 },
+    "blueGoal": { "col": 4, "row": 3 },
+    "redGoal": { "col": 4, "row": 5 },
+    "walls": [{ "col": 6, "row": 6 }, { "col": 7, "row": 5 }],
+    "voids": [{ "col": 8, "row": 8 }, { "col": 0, "row": 0 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["UP", "LEFT", "UP", "LEFT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "The Split Corridor",
+    "gridSize": 9,
+    "playerStart": { "col": 3, "row": 7 },
+    "blueGoal": { "col": 1, "row": 4 },
+    "redGoal": { "col": 7, "row": 4 },
+    "walls": [{ "col": 3, "row": 6 }, { "col": 2, "row": 5 }, { "col": 4, "row": 5 }],
+    "voids": [],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "LEFT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "Prismatic Node",
+    "gridSize": 9,
+    "playerStart": { "col": 2, "row": 2 },
+    "blueGoal": { "col": 5, "row": 5 },
+    "redGoal": { "col": 3, "row": 3 },
+    "walls": [{ "col": 3, "row": 2 }, { "col": 2, "row": 3 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 8, "row": 8 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["DOWN", "RIGHT", "DOWN", "RIGHT", "DOWN", "LEFT"]
+  },
+  {
+    "name": "The Double Bind",
+    "gridSize": 9,
+    "playerStart": { "col": 4, "row": 6 },
+    "blueGoal": { "col": 2, "row": 3 },
+    "redGoal": { "col": 6, "row": 5 },
+    "walls": [{ "col": 3, "row": 6 }, { "col": 5, "row": 6 }],
+    "voids": [{ "col": 4, "row": 8 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "LEFT", "UP", "LEFT", "UP", "RIGHT"]
+  },
+  {
+    "name": "Angular Ascent",
+    "gridSize": 9,
+    "playerStart": { "col": 1, "row": 6 },
+    "blueGoal": { "col": 4, "row": 3 },
+    "redGoal": { "col": 4, "row": 5 },
+    "walls": [{ "col": 2, "row": 6 }, { "col": 1, "row": 5 }],
+    "voids": [{ "col": 0, "row": 8 }, { "col": 8, "row": 0 }],
+    "initAngle": 0,
+    "demoPath": ["UP", "RIGHT", "UP", "RIGHT", "UP", "LEFT"]
+  },
+  {
+    "name": "Vortex of Parity",
+    "gridSize": 9,
+    "playerStart": { "col": 5, "row": 7 },
+    "blueGoal": { "col": 3, "row": 4 },
+    "redGoal": { "col": 5, "row": 4 },
+    "walls": [{ "col": 4, "row": 7 }, { "col": 5, "row": 6 }],
+    "voids": [{ "col": 8, "row": 8 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "LEFT", "UP", "LEFT", "DOWN", "RIGHT"]
+  },
+  {
+    "name": "The Iron Lattice",
+    "gridSize": 10,
+    "playerStart": { "col": 2, "row": 8 },
+    "blueGoal": { "col": 5, "row": 5 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 3, "row": 8 }, { "col": 2, "row": 7 }, { "col": 4, "row": 6 }, { "col": 5, "row": 7 }],
+    "voids": [
+      { "col": 0, "row": 9 }, { "col": 1, "row": 9 }, { "col": 8, "row": 9 }, { "col": 9, "row": 9 },
+      { "col": 0, "row": 0 }, { "col": 9, "row": 0 }
+    ],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "RIGHT", "UP", "RIGHT", "UP", "RIGHT"]
+  },
+  {
+    "name": "Symmetric Fortress",
+    "gridSize": 10,
+    "playerStart": { "col": 1, "row": 8 },
+    "blueGoal": { "col": 4, "row": 5 },
+    "redGoal": { "col": 5, "row": 5 },
+    "walls": [
+      { "col": 2, "row": 8 }, { "col": 1, "row": 7 },
+      { "col": 7, "row": 8 }, { "col": 8, "row": 7 }
+    ],
+    "voids": [{ "col": 0, "row": 9 }, { "col": 9, "row": 9 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "UP", "RIGHT", "RIGHT", "UP", "RIGHT", "UP"]
+  },
+  {
+    "name": "The Void Pillars",
+    "gridSize": 10,
+    "playerStart": { "col": 4, "row": 8 },
+    "blueGoal": { "col": 2, "row": 5 },
+    "redGoal": { "col": 7, "row": 5 },
+    "walls": [{ "col": 4, "row": 7 }, { "col": 3, "row": 6 }, { "col": 5, "row": 6 }],
+    "voids": [
+      { "col": 2, "row": 8 }, { "col": 7, "row": 8 },
+      { "col": 1, "row": 1 }, { "col": 8, "row": 1 }
+    ],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "LEFT", "UP", "LEFT"]
+  },
+  {
+    "name": "Prismatic Bastion",
+    "gridSize": 10,
+    "playerStart": { "col": 7, "row": 8 },
+    "blueGoal": { "col": 4, "row": 5 },
+    "redGoal": { "col": 5, "row": 4 },
+    "walls": [{ "col": 6, "row": 8 }, { "col": 7, "row": 7 }],
+    "voids": [{ "col": 9, "row": 9 }, { "col": 0, "row": 0 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["UP", "LEFT", "UP", "LEFT", "UP", "LEFT", "DOWN"]
+  },
+  {
+    "name": "The Angular Divide II",
+    "gridSize": 10,
+    "playerStart": { "col": 2, "row": 2 },
+    "blueGoal": { "col": 5, "row": 5 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 3, "row": 2 }, { "col": 2, "row": 3 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 9, "row": 9 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["DOWN", "RIGHT", "DOWN", "RIGHT", "DOWN", "RIGHT", "UP"]
+  },
+  {
+    "name": "The Abyssal Gates",
+    "gridSize": 10,
+    "playerStart": { "col": 8, "row": 7 },
+    "blueGoal": { "col": 5, "row": 4 },
+    "redGoal": { "col": 4, "row": 5 },
+    "walls": [{ "col": 7, "row": 7 }, { "col": 8, "row": 6 }],
+    "voids": [
+      { "col": 9, "row": 8 }, { "col": 9, "row": 9 },
+      { "col": 0, "row": 0 }, { "col": 1, "row": 0 }
+    ],
+    "initAngle": 0,
+    "demoPath": ["UP", "LEFT", "UP", "LEFT", "UP", "LEFT", "DOWN"]
+  },
+  {
+    "name": "Crystalline Spires",
+    "gridSize": 10,
+    "playerStart": { "col": 1, "row": 2 },
+    "blueGoal": { "col": 4, "row": 5 },
+    "redGoal": { "col": 5, "row": 2 },
+    "walls": [{ "col": 1, "row": 3 }, { "col": 2, "row": 2 }],
+    "voids": [{ "col": 0, "row": 0 }, { "col": 9, "row": 9 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["RIGHT", "DOWN", "DOWN", "RIGHT", "DOWN", "RIGHT", "UP"]
+  },
+  {
+    "name": "The Mirror Vault",
+    "gridSize": 10,
+    "playerStart": { "col": 5, "row": 8 },
+    "blueGoal": { "col": 3, "row": 5 },
+    "redGoal": { "col": 6, "row": 5 },
+    "walls": [{ "col": 5, "row": 7 }, { "col": 4, "row": 6 }, { "col": 6, "row": 6 }],
+    "voids": [{ "col": 0, "row": 9 }, { "col": 9, "row": 9 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["LEFT", "UP", "UP", "LEFT", "UP", "RIGHT"]
+  },
+  {
+    "name": "Singularity Grid",
+    "gridSize": 10,
+    "playerStart": { "col": 2, "row": 7 },
+    "blueGoal": { "col": 5, "row": 4 },
+    "redGoal": { "col": 4, "row": 5 },
+    "walls": [{ "col": 3, "row": 7 }, { "col": 2, "row": 6 }],
+    "voids": [{ "col": 0, "row": 9 }, { "col": 9, "row": 9 }, { "col": 4, "row": 4 }, { "col": 5, "row": 5 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "RIGHT", "UP", "RIGHT", "UP", "RIGHT", "DOWN"]
+  },
+  {
+    "name": "The Lattice Matrix",
+    "gridSize": 10,
+    "playerStart": { "col": 7, "row": 2 },
+    "blueGoal": { "col": 4, "row": 5 },
+    "redGoal": { "col": 5, "row": 5 },
+    "walls": [{ "col": 6, "row": 2 }, { "col": 7, "row": 3 }],
+    "voids": [{ "col": 9, "row": 0 }, { "col": 0, "row": 9 }],
+    "initAngle": 0,
+    "demoPath": ["DOWN", "LEFT", "DOWN", "LEFT", "DOWN", "LEFT", "UP"]
+  },
+  {
+    "name": "The Celestial Axis",
+    "gridSize": 10,
+    "playerStart": { "col": 3, "row": 8 },
+    "blueGoal": { "col": 6, "row": 5 },
+    "redGoal": { "col": 3, "row": 5 },
+    "walls": [{ "col": 3, "row": 7 }, { "col": 2, "row": 6 }, { "col": 4, "row": 6 }],
+    "voids": [{ "col": 0, "row": 9 }, { "col": 9, "row": 9 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["RIGHT", "UP", "UP", "RIGHT", "UP", "RIGHT", "LEFT"]
+  },
+  {
+    "name": "Inverse Nebula",
+    "gridSize": 10,
+    "playerStart": { "col": 8, "row": 2 },
+    "blueGoal": { "col": 5, "row": 5 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [{ "col": 7, "row": 2 }, { "col": 8, "row": 3 }],
+    "voids": [{ "col": 9, "row": 0 }, { "col": 0, "row": 9 }],
+    "initAngle": 0.78539816339,
+    "demoPath": ["LEFT", "DOWN", "LEFT", "DOWN", "LEFT", "DOWN", "UP"]
+  },
+  {
+    "name": "The Chrono Loop",
+    "gridSize": 10,
+    "playerStart": { "col": 1, "row": 7 },
+    "blueGoal": { "col": 4, "row": 4 },
+    "redGoal": { "col": 5, "row": 4 },
+    "walls": [{ "col": 2, "row": 7 }, { "col": 1, "row": 6 }],
+    "voids": [{ "col": 0, "row": 9 }, { "col": 9, "row": 9 }],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "UP", "RIGHT", "RIGHT", "UP", "RIGHT", "DOWN", "RIGHT"]
+  },
+  {
+    "name": "Axial Zenith",
+    "gridSize": 10,
+    "playerStart": { "col": 2, "row": 8 },
+    "blueGoal": { "col": 5, "row": 5 },
+    "redGoal": { "col": 4, "row": 4 },
+    "walls": [
+      { "col": 3, "row": 8 }, { "col": 2, "row": 7 },
+      { "col": 7, "row": 8 }, { "col": 8, "row": 7 }
+    ],
+    "voids": [
+      { "col": 0, "row": 0 }, { "col": 9, "row": 0 },
+      { "col": 0, "row": 9 }, { "col": 9, "row": 9 }
+    ],
+    "initAngle": 1.57079632679,
+    "demoPath": ["UP", "UP", "RIGHT", "RIGHT", "UP", "RIGHT", "UP", "LEFT"]
+  }
+]
