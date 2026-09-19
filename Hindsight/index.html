@@ -331,7 +331,7 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
             text-align: left;
             box-sizing: border-box;
-            max-height: 90vh;
+            max-height: 400px;
             overflow-y: auto;
         }
 
@@ -594,6 +594,31 @@
         .sk_shake_active {
             animation: sk_shake 0.3s;
         }
+
+        /* Transient Toast Notification */
+        .sk_toast {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #111625;
+            color: #ffd700;
+            border: 2px solid #2ec4b6;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 150;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        .sk_toast.show {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -763,6 +788,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="sk_toast" id="sk_toast"></div>
     </div>
 
     <script>
@@ -1074,6 +1101,26 @@
             fetchGitLevels();
         };
 
+        function sanitizeLevels(list) {
+            if (!Array.isArray(list)) return [];
+            return list.filter(lvl => {
+                if (!lvl || typeof lvl.energy !== 'number' || !Array.isArray(lvl.grid) || !lvl.grid.length) return false;
+                const w = lvl.grid[0].length;
+                let doors = 0, keys = 0, hasS = false, hasE = false;
+                for (let y = 0; y < lvl.grid.length; y++) {
+                    if (typeof lvl.grid[y] !== 'string' || lvl.grid[y].length !== w) return false;
+                    for (let x = 0; x < w; x++) {
+                        const c = lvl.grid[y][x];
+                        if (c === 'O') doors++;
+                        else if (c === 'K') keys++;
+                        else if (c === 'S') hasS = true;
+                        else if (c === 'E') hasE = true;
+                    }
+                }
+                return hasS && hasE && doors === keys;
+            });
+        }
+
         function fetchGitLevels() {
             openPopup('progress');
             const pBar = document.getElementById('sk_progress_bar');
@@ -1105,12 +1152,13 @@
                         cleaned = cleaned.replace(/\/\/.*/g, ''); /* Line comments */
 
                         const parsed = JSON.parse(cleaned);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            sk_levels = parsed;
+                        const clean = sanitizeLevels(parsed);
+                        if (clean.length > 0) {
+                            sk_levels = clean;
                             pBar.style.width = '100%';
                             pText.textContent = `Successfully synced ${sk_levels.length} external sectors!`;
                         } else {
-                            throw new Error('Malformed JSON structure');
+                            throw new Error('No playable sectors found');
                         }
                     })
                     .catch(err => {
@@ -1122,12 +1170,13 @@
                             })
                             .then(text => {
                                 const parsed = JSON.parse(text);
-                                if (Array.isArray(parsed) && parsed.length > 0) {
-                                    sk_levels = parsed;
+                                const clean = sanitizeLevels(parsed);
+                                if (clean.length > 0) {
+                                    sk_levels = clean;
                                     pBar.style.width = '100%';
                                     pText.textContent = `Remote unreachable - restored ${sk_levels.length} local sectors!`;
                                 } else {
-                                    throw new Error('Malformed JSON structure');
+                                    throw new Error('No playable sectors found');
                                 }
                             })
                             .catch(() => {
@@ -1197,6 +1246,15 @@
             }, 300);
         }
 
+        let sk_toast_timer = null;
+        function showToast(msg) {
+            const el = document.getElementById('sk_toast');
+            el.textContent = msg;
+            el.classList.add('show');
+            clearTimeout(sk_toast_timer);
+            sk_toast_timer = setTimeout(() => el.classList.remove('show'), 2500);
+        }
+
         function movePlayer(dx, dy) {
             if (!sk_state.isPlaying || sk_state.isPaused || (sk_state.isDemo && !arguments[2])) return;
 
@@ -1260,6 +1318,9 @@
                 } else if (sk_state.keys > 0) {
                     triggerParadox("Cannot traverse portal with residual keys. Lock timelines first.");
                     return;
+                } else {
+                    showToast('Timeline incomplete - restore all doors and keys before entering the Entrance Portal.');
+                    return;
                 }
             }
 
@@ -1288,10 +1349,9 @@
         function checkEnemyCollisions() {
             sk_state.enemies.forEach(enemy => {
                 if (enemy.x === sk_state.playerX && enemy.y === sk_state.playerY) {
-                    sk_state.hp += 3;
-                    sk_sound.heal();
-                    if (sk_state.hp > 10) {
-                        triggerParadox("Unstable cell contact. HP exceeded 10.");
+                    if (sk_state.hp < 10) {
+                        sk_state.hp = Math.min(10, sk_state.hp + 3);
+                        sk_sound.heal();
                     }
                 }
             });
@@ -1886,6 +1946,19 @@
         document.getElementById('sk_btn_demo').onclick = () => {
             if (!sk_levels.length) {
                 fetchGitLevels();
+                return;
+            }
+
+            const demoMap = [
+                "#######",
+                "#S....#",
+                "###.###",
+                "###^###",
+                "###E###",
+                "#######"
+            ];
+            if (!sk_levels[0] || JSON.stringify(sk_levels[0].grid) !== JSON.stringify(demoMap)) {
+                showToast('Demo requires the native tutorial sector. Start a manual run instead.');
                 return;
             }
             closeAllPopups();
