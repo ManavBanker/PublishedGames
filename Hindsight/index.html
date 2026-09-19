@@ -1,0 +1,1923 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hindsight - Reverse Causality Puzzle Game</title>
+    <style>
+        /* Base styles to prevent scrollbars and provide a clean page */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b0d19;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        /* Root widget wrapper: Scales and fits seamlessly into any parent */
+        .sk_game_suite_root {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 960px;
+            max-height: 100vh;
+            background-color: #1a1e2e;
+            display: flex;
+            flex-direction: column;
+            color: #f0f4f8;
+            box-sizing: border-box;
+            border: 4px solid #1b2a4a;
+            overflow: hidden;
+        }
+
+        /* Top Bar Styling */
+        .sk_top_bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #111625;
+            padding: 6px 12px;
+            color: #f0f4f8;
+            z-index: 10;
+            border-bottom: 2px solid #2ec4b6;
+            flex-shrink: 0;
+        }
+
+        .sk_game_title {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #2ec4b6;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .sk_top_buttons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .sk_btn {
+            background-color: #1b2a4a;
+            border: 1px solid #2ec4b6;
+            color: #f0f4f8;
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            white-space: nowrap;
+        }
+
+        .sk_btn:hover, .sk_btn:active {
+            background-color: #2ec4b6;
+            color: #111625;
+            border-color: #2ec4b6;
+        }
+
+        /* Dropdown Navigation Menu */
+        .sk_nav_container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .sk_dropdown_menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #111625;
+            border: 2px solid #2ec4b6;
+            border-radius: 6px;
+            min-width: 160px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            z-index: 100;
+            padding: 4px 0;
+        }
+
+        .sk_dropdown_item {
+            color: #f0f4f8;
+            padding: 10px 14px;
+            text-decoration: none;
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(46, 196, 182, 0.1);
+        }
+
+        .sk_dropdown_item:hover {
+            background-color: #2ec4b6;
+            color: #111625;
+        }
+
+        /* Main game viewport wrapper */
+        .sk_main_game_wrapper {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #161a2b;
+        }
+
+        /* Screen overlays (Start, Game Over, Victory) */
+        .sk_screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(11, 13, 25, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .sk_menu_title {
+            font-size: 36px;
+            font-weight: 900;
+            color: #2ec4b6;
+            margin: 0 0 5px 0;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 0px #ff6b35;
+        }
+
+        .sk_menu_subtitle {
+            font-size: 12px;
+            color: #ff6b35;
+            margin: 0 0 20px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .sk_menu_btn {
+            background-color: #1b2a4a;
+            color: #f0f4f8;
+            border: 2px solid #2ec4b6;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .sk_menu_btn:hover {
+            background-color: #2ec4b6;
+            color: #111625;
+            transform: translateY(-2px);
+        }
+
+        /* Fail / Paradox Screen */
+        #sk_screen_gameover {
+            background-color: rgba(27, 42, 74, 0.95);
+            color: #f0f4f8;
+        }
+
+        .sk_fail_title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ff3333;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(255,0,0,0.3);
+        }
+
+        .sk_fail_reason {
+            font-size: 15px;
+            color: #ffd700;
+            margin-bottom: 25px;
+            max-width: 450px;
+        }
+
+        /* Win Screen */
+        #sk_screen_victory {
+            background-color: rgba(46, 196, 182, 0.95);
+            color: #1b2a4a;
+        }
+
+        .sk_win_title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1b2a4a;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .sk_win_msg {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            max-width: 450px;
+        }
+
+        /* Active Gameplay Interface */
+        .sk_game_play_area {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+
+        .sk_hud {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            background-color: #111625;
+            color: #f0f4f8;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            margin-bottom: 4px;
+            border: 1px solid #2ec4b6;
+        }
+
+        /* Enforce a strict 1:1 Canvas aspect ratio container in layout */
+        .sk_canvas_container {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            background-color: #0b0d19;
+            border-radius: 8px;
+            border: 2px solid #1b2a4a;
+        }
+
+        /* Pivot container for scale & translate matrix shifts */
+        #sk_canvas_pivot {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center center;
+            will-change: transform;
+        }
+
+        #sk_game_canvas {
+            background-color: #e2e8f0;
+            border-radius: 6px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.5);
+            max-width: 100%;
+            max-height: 100%;
+            aspect-ratio: 1 / 1;
+            display: block;
+        }
+
+        /* Overlay Popups Container & Popups */
+        .sk_overlay_container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(11, 13, 25, 0.9);
+            z-index: 120;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .sk_popup {
+            background-color: #1a1e2e;
+            border: 3px solid #2ec4b6;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 440px;
+            color: #f0f4f8;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            text-align: left;
+            box-sizing: border-box;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .sk_popup b {
+            font-size: 20px;
+            color: #2ec4b6;
+            display: block;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+
+        .sk_popup p {
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 8px 0;
+        }
+
+        .sk_popup_close {
+            background-color: #2ec4b6;
+            color: #111625;
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            margin-top: 15px;
+        }
+
+        .sk_popup_close:hover {
+            background-color: #ff6b35;
+            color: #f0f4f8;
+        }
+
+        /* Level Grid Selector */
+        .sk_level_grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .sk_level_btn {
+            background-color: #111625;
+            color: #f0f4f8;
+            border: 2px solid #1b2a4a;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sk_level_btn.unlocked {
+            background-color: #2ec4b6;
+            color: #111625;
+            border-color: #2ec4b6;
+        }
+
+        .sk_level_btn.unlocked:hover {
+            background-color: #ff6b35;
+            color: #f0f4f8;
+        }
+
+        .sk_level_btn.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Toggle Button in settings */
+        .sk_toggle_btn {
+            background-color: #ff6b35;
+            color: #f0f4f8;
+            border: none;
+            padding: 5px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .sk_toggle_btn.active {
+            background-color: #2ec4b6;
+            color: #111625;
+        }
+
+        /* Progress Bar Panel */
+        #sk_progress_popup {
+            text-align: center;
+        }
+        .sk_progress_track {
+            background-color: #111625;
+            border: 2px solid #2ec4b6;
+            height: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+            position: relative;
+        }
+        .sk_progress_bar {
+            background: linear-gradient(90deg, #2ec4b6, #ff6b35);
+            width: 0%;
+            height: 100%;
+            transition: width 0.1s linear;
+        }
+
+        /* Bottom Control Space - Optimized to eliminate canvas overlap */
+        .sk_bottom_interaction_panel {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #111625;
+            border-top: 2px solid #1b2a4a;
+            box-sizing: border-box;
+            z-index: 15;
+            flex-shrink: 0;
+            gap: 10px;
+        }
+
+        /* Zoom and Pan Controls Wrapper */
+        .sk_aux_controls {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sk_aux_row {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* Virtual Control D-Pad Styling */
+        .sk_virtual_controls {
+            width: 120px;
+            background-color: rgba(27, 42, 74, 0.95);
+            border: 2px solid #2ec4b6;
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            user-select: none;
+            touch-action: none;
+        }
+
+        .sk_control_drag_handle {
+            width: 100%;
+            background-color: #111625;
+            color: #2ec4b6;
+            font-size: 8px;
+            text-align: center;
+            padding: 2px 0;
+            border-radius: 4px;
+            cursor: move;
+            margin-bottom: 4px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .sk_control_pad {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .sk_row {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .sk_ctrl_btn {
+            width: 34px;
+            height: 34px;
+            background-color: #111625;
+            color: #f0f4f8;
+            border: 2px solid #2ec4b6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1px;
+            transition: background 0.1s;
+        }
+
+        .sk_ctrl_btn:active, .sk_ctrl_btn.active {
+            background-color: #ff6b35;
+            color: #f0f4f8;
+            border-color: #f0f4f8;
+        }
+
+        /* Landscape Mode Override */
+        .sk_landscape_mode {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            border: none !important;
+            border-radius: 0 !important;
+        }
+
+        /* Screen Shake Animation */
+        @keyframes sk_shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .sk_shake_active {
+            animation: sk_shake 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sk_game_suite_root" id="sk_game_root">
+        <!-- Metadata Elements -->
+        <div class="sk_labels" data="Time-Loop, Retro, Brain-Teaser, Minimalist" style="display:none;"></div>
+        <meta class="sk_meta" description="A mind-bending grid puzzle where you play levels in reverse—stepping on hazards to gain health and locking doors to return keys—in order to reconstruct the timeline perfectly.">
+
+        <!-- Top Navigation & Control Bar -->
+        <div class="sk_top_bar">
+            <span class="sk_game_title">HINDSIGHT</span>
+            <div class="sk_top_buttons">
+                <button class="sk_btn" id="sk_btn_fullscreen">⛶ Full</button>
+                <button class="sk_btn" id="sk_btn_orient">📱 Screen</button>
+                <button class="sk_btn" id="sk_btn_pause">⏸ Pause</button>
+                <button class="sk_btn" id="sk_btn_demo">📺 Demo</button>
+                
+                <!-- Unified Navigation Menu Dropdown -->
+                <div class="sk_nav_container">
+                    <button class="sk_btn" id="sk_btn_menu_trigger">☰ Menu</button>
+                    <div class="sk_dropdown_menu" id="sk_top_dropdown">
+                        <a class="sk_dropdown_item" id="sk_nav_levels">🗺️ Timeline Registry</a>
+                        <a class="sk_dropdown_item" id="sk_nav_settings">⚙️ Settings</a>
+                        <a class="sk_dropdown_item" id="sk_nav_help">❓ Operational Guide</a>
+                        <a class="sk_dropdown_item" id="sk_nav_scores">🏆 High Scores</a>
+                        <a class="sk_dropdown_item" id="sk_nav_fetch_levels">🔄 Sync Git Levels</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlays (Settings, Help, Levels, Scores, Progress) -->
+        <div class="sk_overlay_container" id="sk_overlay_container" style="display:none;">
+            <!-- Settings Popup -->
+            <div class="sk_popup" id="sk_popup_settings" style="display:none;">
+                <b>Settings</b>
+                <p>Configure game preferences here. Progress is auto-saved locally.</p>
+                <br>
+                <p>Sound FX: <button class="sk_toggle_btn active" id="sk_btn_sound_toggle">ON</button></p>
+                <button class="sk_popup_close" id="sk_close_settings">Close</button>
+            </div>
+
+            <!-- Help Popup -->
+            <div class="sk_popup" id="sk_popup_help" style="display:none;">
+                <b>Temporal Reconstruction Protocol</b>
+                <p>Welcome to <b>Hindsight</b>, where timeline causality is fully reversed!</p>
+                <p>1. You start at the <b>Exit Portal (E)</b> with exactly <b>1 HP</b>.</p>
+                <p>2. Your goal is to backtrack to the <b>Entrance Portal (S)</b> with exactly <b>10 HP</b> and <b>0 Keys</b>.</p>
+                <p>3. <b>Spikes & Hazards</b>: Stepping on spikes restores <b>+3 HP</b> (reversing forward damage). But beware—healing past 10 HP causes a paradox!</p>
+                <p>4. <b>Doors & Keys</b>: Walk through Open Doors. As you exit, they automatically lock behind you and return <b>+1 Key</b> to your inventory. To restore the key, you must step on a Key Spawn point <b>(K)</b> to 'un-collect' it.</p>
+                <p>5. Every movement uses <b>1 Temporal Energy</b>. Plan carefully!</p>
+                <button class="sk_popup_close" id="sk_close_help">Close</button>
+            </div>
+
+            <!-- Levels Popup -->
+            <div class="sk_popup" id="sk_popup_levels" style="display:none;">
+                <b>Timeline Registry</b>
+                <p>Select an unlocked reverse scenario:</p>
+                <div class="sk_level_grid" id="sk_level_grid">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+                <button class="sk_popup_close" id="sk_close_levels">Close</button>
+            </div>
+
+            <!-- Scores Popup -->
+            <div class="sk_popup" id="sk_popup_scores" style="display:none;">
+                <b>Best Timeline Integrities</b>
+                <p>Scores are recorded based on remaining Temporal Energy:</p>
+                <div id="sk_scores_list">
+                    <!-- Loaded dynamically -->
+                </div>
+                <button class="sk_popup_close" id="sk_close_scores">Close</button>
+            </div>
+
+            <!-- Progress Loader Popup -->
+            <div class="sk_popup" id="sk_popup_progress" style="display:none;">
+                <b>Temporal Syncing</b>
+                <p id="sk_progress_status">Connecting to temporal database nodes...</p>
+                <div class="sk_progress_track">
+                    <div class="sk_progress_bar" id="sk_progress_bar"></div>
+                </div>
+                <button class="sk_popup_close" id="sk_close_progress" style="display:none;">Initiate</button>
+            </div>
+        </div>
+
+        <!-- Main Game Viewport Wrapper -->
+        <div class="sk_main_game_wrapper">
+            
+            <!-- Menu Screen -->
+            <div class="sk_screen" id="sk_screen_start">
+                <span class="sk_menu_title">HINDSIGHT</span>
+                <span class="sk_menu_subtitle">CRACK THE REVERSE CAUSALITY TIME-LOOP</span>
+                <button class="sk_menu_btn" id="sk_btn_start_game">INITIATE TIMELINE [Enter]</button>
+                <button class="sk_menu_btn" id="sk_btn_menu_help">OPERATIONAL GUIDE</button>
+            </div>
+
+            <!-- Paradox Fail Screen -->
+            <div class="sk_screen" id="sk_screen_gameover" style="display:none;">
+                <span class="sk_fail_title">PARADOX DETECTED</span>
+                <span class="sk_fail_reason" id="sk_fail_reason">Temporal decay reached critical levels...</span>
+                <button class="sk_menu_btn" id="sk_btn_retry">RESTORE TIMELINE</button>
+                <button class="sk_menu_btn" id="sk_btn_menu_back1">ABORT TO MENU</button>
+            </div>
+
+            <!-- Victory Screen -->
+            <div class="sk_screen" id="sk_screen_victory" style="display:none;">
+                <span class="sk_win_title">TIMELINE STABILIZED</span>
+                <span class="sk_win_msg" id="sk_win_msg">Entropy matched forward parameters flawlessly!</span>
+                <button class="sk_menu_btn" id="sk_btn_next_level">ADVANCE LEVEL</button>
+                <button class="sk_menu_btn" id="sk_btn_menu_back2">MAIN MENU</button>
+            </div>
+
+            <!-- Active Gameplay HUD and Canvas Area -->
+            <div class="sk_game_play_area" id="sk_game_play_area" style="display:none;">
+                <div class="sk_hud">
+                    <span>SECTOR: <span id="sk_hud_level" style="color: #2ec4b6;">1</span></span>
+                    <span>HP: <span id="sk_hud_hp" style="color: #ff3333;">1/10</span></span>
+                    <span>KEYS: <span id="sk_hud_keys" style="color: #ffd700;">0</span></span>
+                    <span>ENERGY: <span id="sk_hud_energy" style="color: #4aff4a;">25</span></span>
+                </div>
+                <div class="sk_canvas_container" id="sk_canvas_container">
+                    <!-- Pivot container translates coordinate structures for zoom & drag -->
+                    <div id="sk_canvas_pivot">
+                        <canvas id="sk_game_canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Interface Panel containing draggable controller and secondary scale overrides -->
+        <div class="sk_bottom_interaction_panel">
+            <!-- Navigation Matrix Controls -->
+            <div class="sk_aux_controls">
+                <div class="sk_aux_row">
+                    <button class="sk_btn" id="sk_btn_zoom_in">🔍 Zoom In (+)</button>
+                    <button class="sk_btn" id="sk_btn_zoom_out">🔍 Zoom Out (-)</button>
+                </div>
+                <div class="sk_aux_row">
+                    <button class="sk_btn" id="sk_btn_zoom_reset">🔄 Reset Zoom</button>
+                    <button class="sk_btn" id="sk_btn_pan_tool">🖐️ Drag Map: OFF</button>
+                </div>
+            </div>
+
+            <!-- Draggable Controls -->
+            <div class="sk_virtual_controls" id="sk_virtual_controls">
+                <div class="sk_control_drag_handle" id="sk_control_drag_handle">↕ DRAG PAD</div>
+                <div class="sk_control_pad">
+                    <div class="sk_row">
+                        <button class="sk_ctrl_btn" id="sk_ctrl_up">▲</button>
+                    </div>
+                    <div class="sk_row">
+                        <button class="sk_ctrl_btn" id="sk_ctrl_left">◀</button>
+                        <button class="sk_ctrl_btn" id="sk_ctrl_center">⟳</button>
+                        <button class="sk_ctrl_btn" id="sk_ctrl_right">▶</button>
+                    </div>
+                    <div class="sk_row">
+                        <button class="sk_ctrl_btn" id="sk_ctrl_down">▼</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- LEVEL REGISTRY --- */
+        const sk_local_levels = [
+            {
+                name: "1. Harm's Restoration",
+                energy: 25,
+                grid: [
+                    "#######",
+                    "#S....#",
+                    "###.###",
+                    "###^###",
+                    "###E###",
+                    "#######"
+                ]
+            },
+            {
+                name: "2. The Key Corrective",
+                energy: 35,
+                grid: [
+                    "########",
+                    "#S....K#",
+                    "###.####",
+                    "###O####",
+                    "###^####",
+                    "###E####",
+                    "########"
+                ]
+            },
+            {
+                name: "3. Dual Retrograde",
+                energy: 45,
+                grid: [
+                    "###########",
+                    "#S..K...K.#",
+                    "###.O...O.#",
+                    "###.#####.#",
+                    "###.^...^.#",
+                    "###E#####.#",
+                    "###########"
+                ]
+            },
+            {
+                name: "4. Chrono-Patroller",
+                energy: 40,
+                grid: [
+                    "#########",
+                    "#S......#",
+                    "###.#####",
+                    "###^#####",
+                    "#...X...#",
+                    "###E#####",
+                    "#########"
+                ]
+            },
+            {
+                name: "5. Master Grand Paradox",
+                energy: 55,
+                grid: [
+                    "###########",
+                    "#S.K.K....#",
+                    "##.O.O.##.#",
+                    "##.#####..#",
+                    "##.^...^..#",
+                    "#####E#####",
+                    "###########"
+                ]
+            }
+        ];
+
+        let sk_levels = [...sk_local_levels];
+
+        /* --- AUDIO FX (Web Audio API Synthesizer) --- */
+        let sk_audio_ctx = null;
+        function initAudio() {
+            if (!sk_audio_ctx) {
+                sk_audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playBeep(freq, type, duration, slideTo = 0) {
+            if (!sk_state.soundEnabled) return;
+            initAudio();
+            if (!sk_audio_ctx) return;
+
+            const osc = sk_audio_ctx.createOscillator();
+            const gain = sk_audio_ctx.createGain();
+
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, sk_audio_ctx.currentTime);
+            if (slideTo > 0) {
+                osc.frequency.exponentialRampToValueAtTime(slideTo, sk_audio_ctx.currentTime + duration);
+            }
+
+            gain.gain.setValueAtTime(0.15, sk_audio_ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, sk_audio_ctx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(sk_audio_ctx.destination);
+
+            osc.start();
+            osc.stop(sk_audio_ctx.currentTime + duration);
+        }
+
+        const sk_sound = {
+            move: () => playBeep(450, 'sine', 0.08),
+            heal: () => {
+                playBeep(330, 'triangle', 0.12);
+                setTimeout(() => playBeep(494, 'triangle', 0.12), 100);
+                setTimeout(() => playBeep(659, 'triangle', 0.18), 200);
+            },
+            lock: () => playBeep(180, 'square', 0.15, 60),
+            key: () => playBeep(880, 'sine', 0.25, 1200),
+            win: () => {
+                playBeep(523.25, 'sine', 0.15);
+                setTimeout(() => playBeep(659.25, 'sine', 0.15), 150);
+                setTimeout(() => playBeep(783.99, 'sine', 0.15), 300);
+                setTimeout(() => playBeep(1046.50, 'sine', 0.35), 450);
+            },
+            fail: () => playBeep(220, 'sawtooth', 0.6, 50)
+        };
+
+        /* --- GAME ENGINE STATE --- */
+        const sk_state = {
+            currentLevelIndex: 0,
+            unlockedLevels: [0],
+            highScores: {},
+            soundEnabled: true,
+            isPlaying: false,
+            isPaused: false,
+            isDemo: false,
+            
+            /* Current level variables */
+            hp: 1,
+            keys: 0,
+            energy: 30,
+            playerX: 0,
+            playerY: 0,
+            grid: [],
+            enemies: [],
+            
+            playerOnDoorX: -1,
+            playerOnDoorY: -1
+        };
+
+        /* Save States */
+        function loadSaveState() {
+            const saved = localStorage.getItem('sk_hindsight_save');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    sk_state.unlockedLevels = parsed.unlockedLevels || [0];
+                    sk_state.highScores = parsed.highScores || {};
+                    sk_state.soundEnabled = parsed.soundEnabled !== false;
+                } catch(e) {}
+            }
+            updateSettingsUI();
+        }
+
+        function saveGameState() {
+            const data = {
+                unlockedLevels: sk_state.unlockedLevels,
+                highScores: sk_state.highScores,
+                soundEnabled: sk_state.soundEnabled
+            };
+            localStorage.setItem('sk_hindsight_save', JSON.stringify(data));
+        }
+
+        /* --- DOM ELEMENTS --- */
+        const sk_root = document.getElementById('sk_game_root');
+        const sk_canvas = document.getElementById('sk_game_canvas');
+        const sk_ctx = sk_canvas.getContext('2d');
+        const sk_canvas_container = document.getElementById('sk_canvas_container');
+        const sk_canvas_pivot = document.getElementById('sk_canvas_pivot');
+
+        const sk_screen_start = document.getElementById('sk_screen_start');
+        const sk_screen_gameover = document.getElementById('sk_screen_gameover');
+        const sk_screen_victory = document.getElementById('sk_screen_victory');
+        const sk_game_play_area = document.getElementById('sk_game_play_area');
+
+        const sk_overlay_container = document.getElementById('sk_overlay_container');
+        const sk_popups = {
+            settings: document.getElementById('sk_popup_settings'),
+            help: document.getElementById('sk_popup_help'),
+            levels: document.getElementById('sk_popup_levels'),
+            scores: document.getElementById('sk_popup_scores'),
+            progress: document.getElementById('sk_popup_progress')
+        };
+
+        const sk_hud_level = document.getElementById('sk_hud_level');
+        const sk_hud_hp = document.getElementById('sk_hud_hp');
+        const sk_hud_keys = document.getElementById('sk_hud_keys');
+        const sk_hud_energy = document.getElementById('sk_hud_energy');
+        const sk_fail_reason = document.getElementById('sk_fail_reason');
+        const sk_win_msg = document.getElementById('sk_win_msg');
+
+        /* Dropdown Controls */
+        const sk_top_dropdown = document.getElementById('sk_top_dropdown');
+        const sk_btn_menu_trigger = document.getElementById('sk_btn_menu_trigger');
+
+        sk_btn_menu_trigger.onclick = (e) => {
+            e.stopPropagation();
+            const visible = sk_top_dropdown.style.display === 'block';
+            sk_top_dropdown.style.display = visible ? 'none' : 'block';
+        };
+
+        document.addEventListener('click', () => {
+            sk_top_dropdown.style.display = 'none';
+        });
+
+        /* Viewport Transformation State Matrix */
+        const sk_view = {
+            scale: 1.0,
+            panX: 0,
+            panY: 0,
+            isPanningMode: false,
+            isPointerDown: false,
+            startX: 0,
+            startY: 0
+        };
+
+        /* Update transform properties applied to the pivot wrapper */
+        function updateViewportMatrix() {
+            sk_canvas_pivot.style.transform = `translate(${sk_view.panX}px, ${sk_view.panY}px) scale(${sk_view.scale})`;
+        }
+
+        function zoomViewport(factor) {
+            sk_view.scale = Math.max(0.5, Math.min(sk_view.scale * factor, 4.0));
+            updateViewportMatrix();
+        }
+
+        function resetViewport() {
+            sk_view.scale = 1.0;
+            sk_view.panX = 0;
+            sk_view.panY = 0;
+            updateViewportMatrix();
+        }
+
+        /* Virtual trigger mappings */
+        document.getElementById('sk_btn_zoom_in').onclick = () => zoomViewport(1.2);
+        document.getElementById('sk_btn_zoom_out').onclick = () => zoomViewport(0.8);
+        document.getElementById('sk_btn_zoom_reset').onclick = resetViewport;
+
+        const sk_btn_pan_tool = document.getElementById('sk_btn_pan_tool');
+        sk_btn_pan_tool.onclick = () => {
+            sk_view.isPanningMode = !sk_view.isPanningMode;
+            if (sk_view.isPanningMode) {
+                sk_btn_pan_tool.textContent = '🖐️ Drag Map: ON';
+                sk_btn_pan_tool.classList.add('active');
+            } else {
+                sk_btn_pan_tool.textContent = '🖐️ Drag Map: OFF';
+                sk_btn_pan_tool.classList.remove('active');
+            }
+        };
+
+        /* --- POPUP MANAGEMENT --- */
+        function openPopup(key) {
+            sk_overlay_container.style.display = 'flex';
+            for (let k in sk_popups) {
+                sk_popups[k].style.display = (k === key) ? 'block' : 'none';
+            }
+            if (key === 'levels') {
+                renderLevelGrid();
+            } else if (key === 'scores') {
+                renderScores();
+            }
+        }
+
+        function closeAllPopups() {
+            sk_overlay_container.style.display = 'none';
+            for (let k in sk_popups) {
+                sk_popups[k].style.display = 'none';
+            }
+        }
+
+        document.getElementById('sk_close_settings').onclick = closeAllPopups;
+        document.getElementById('sk_close_help').onclick = closeAllPopups;
+        document.getElementById('sk_close_levels').onclick = closeAllPopups;
+        document.getElementById('sk_close_scores').onclick = closeAllPopups;
+        document.getElementById('sk_close_progress').onclick = closeAllPopups;
+
+        document.getElementById('sk_nav_settings').onclick = () => openPopup('settings');
+        document.getElementById('sk_nav_help').onclick = () => openPopup('help');
+        document.getElementById('sk_nav_levels').onclick = () => openPopup('levels');
+        document.getElementById('sk_nav_scores').onclick = () => openPopup('scores');
+        document.getElementById('sk_btn_menu_help').onclick = () => openPopup('help');
+
+        /* Toggle sound */
+        const sk_btn_sound_toggle = document.getElementById('sk_btn_sound_toggle');
+        sk_btn_sound_toggle.onclick = () => {
+            sk_state.soundEnabled = !sk_state.soundEnabled;
+            updateSettingsUI();
+            saveGameState();
+        };
+
+        function updateSettingsUI() {
+            if (sk_state.soundEnabled) {
+                sk_btn_sound_toggle.textContent = 'ON';
+                sk_btn_sound_toggle.classList.add('active');
+            } else {
+                sk_btn_sound_toggle.textContent = 'OFF';
+                sk_btn_sound_toggle.classList.remove('active');
+            }
+        }
+
+        function renderLevelGrid() {
+            const gridEl = document.getElementById('sk_level_grid');
+            gridEl.innerHTML = '';
+            sk_levels.forEach((lvl, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'sk_level_btn';
+                btn.textContent = (idx + 1).toString();
+                if (sk_state.unlockedLevels.includes(idx)) {
+                    btn.classList.add('unlocked');
+                    btn.onclick = () => {
+                        closeAllPopups();
+                        startGame(idx);
+                    };
+                } else {
+                    btn.classList.add('locked');
+                }
+                gridEl.appendChild(btn);
+            });
+        }
+
+        function renderScores() {
+            const listEl = document.getElementById('sk_scores_list');
+            listEl.innerHTML = '';
+            sk_levels.forEach((lvl, idx) => {
+                const scoreStr = sk_state.highScores[idx] !== undefined 
+                    ? `Integrity: ${sk_state.highScores[idx]} (Energy Remaining)`
+                    : 'Unexplored';
+                const p = document.createElement('p');
+                p.innerHTML = `<b>Level ${idx + 1}</b> - ${scoreStr}`;
+                listEl.appendChild(p);
+            });
+        }
+
+        /* Fullscreen API */
+        document.getElementById('sk_btn_fullscreen').onclick = () => {
+            const r = document.getElementById('sk_game_root');
+            if (!document.fullscreenElement) {
+                r.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen();
+            }
+        };
+
+        document.getElementById('sk_btn_orient').onclick = () => {
+            const r = document.getElementById('sk_game_root');
+            r.classList.toggle('sk_landscape_mode');
+            resizeCanvas();
+        };
+
+        /* Pause / Resume Functionality */
+        const sk_btn_pause = document.getElementById('sk_btn_pause');
+        sk_btn_pause.onclick = () => {
+            if (!sk_state.isPlaying) return;
+            sk_state.isPaused = !sk_state.isPaused;
+            if (sk_state.isPaused) {
+                sk_btn_pause.textContent = '▶ Resume';
+                sk_btn_pause.classList.add('active');
+            } else {
+                sk_btn_pause.textContent = '⏸ Pause';
+                sk_btn_pause.classList.remove('active');
+            }
+        };
+
+        /* --- GIT LEVEL FETCHER --- */
+        document.getElementById('sk_nav_fetch_levels').onclick = () => {
+            fetchGitLevels();
+        };
+
+        function fetchGitLevels() {
+            openPopup('progress');
+            const pBar = document.getElementById('sk_progress_bar');
+            const pText = document.getElementById('sk_progress_status');
+            const pClose = document.getElementById('sk_close_progress');
+            
+            pBar.style.width = '0%';
+            pText.textContent = 'Connecting to raw repositories...';
+            pClose.style.display = 'none';
+
+            setTimeout(() => {
+                pBar.style.width = '40%';
+                pText.textContent = 'Retrieving map layouts...';
+                
+                /* Raw git level mapping containing slashes and block comments */
+                const rawUrl = 'https://raw.githubusercontent.com/sk-game-suite/hindsight-levels/main/levels.txt';
+                
+                fetch(rawUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network offline or resource unavailable');
+                        return response.text();
+                    })
+                    .then(text => {
+                        pBar.style.width = '80%';
+                        pText.textContent = 'Sanitizing parameters...';
+                        
+                        /* Remove comments */
+                        let cleaned = text.replace(/\/\*[\s\S]*?\*\//g, ''); /* Block comments */
+                        cleaned = cleaned.replace(/\/\/.*/g, ''); /* Line comments */
+                        
+                        const parsed = JSON.parse(cleaned);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            sk_levels = parsed;
+                            pBar.style.width = '100%';
+                            pText.textContent = `Successfully synced ${sk_levels.length} external sectors!`;
+                        } else {
+                            throw new Error('Malformed JSON structure');
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("Falling back to internal levels due to: ", err.message);
+                        sk_levels = [...sk_local_levels];
+                        pBar.style.width = '100%';
+                        pText.textContent = 'Local registry restored successfully!';
+                    })
+                    .finally(() => {
+                        pClose.style.display = 'block';
+                    });
+            }, 800);
+        }
+
+        /* --- GAME LOOP & PHYSICS ENGINE --- */
+        let sk_animation_id = null;
+
+        function loadLevel(index) {
+            const lvl = sk_levels[index];
+            sk_state.currentLevelIndex = index;
+            sk_state.energy = lvl.energy;
+            sk_state.hp = 1;
+            sk_state.keys = 0;
+            sk_state.playerOnDoorX = -1;
+            sk_state.playerOnDoorY = -1;
+            sk_state.grid = [];
+            sk_state.enemies = [];
+
+            for (let y = 0; y < lvl.grid.length; y++) {
+                sk_state.grid[y] = [];
+                for (let x = 0; x < lvl.grid[y].length; x++) {
+                    const ch = lvl.grid[y][x];
+                    if (ch === 'E') {
+                        sk_state.playerX = x;
+                        sk_state.playerY = y;
+                        sk_state.grid[y][x] = 'E';
+                    } else if (ch === 'X') {
+                        sk_state.enemies.push({
+                            x: x,
+                            y: y,
+                            baseX: x,
+                            baseY: y,
+                            dir: 1,
+                            tickRate: 1
+                        });
+                        sk_state.grid[y][x] = '.';
+                    } else {
+                        sk_state.grid[y][x] = ch;
+                    }
+                }
+            }
+
+            updateHUD();
+            resizeCanvas();
+        }
+
+        function updateHUD() {
+            sk_hud_level.textContent = (sk_state.currentLevelIndex + 1).toString();
+            sk_hud_hp.textContent = `${sk_state.hp}/10`;
+            sk_hud_keys.textContent = sk_state.keys.toString();
+            sk_hud_energy.textContent = sk_state.energy.toString();
+        }
+
+        function triggerShake() {
+            sk_canvas_container.classList.add('sk_shake_active');
+            setTimeout(() => {
+                sk_canvas_container.classList.remove('sk_shake_active');
+            }, 300);
+        }
+
+        function movePlayer(dx, dy) {
+            if (!sk_state.isPlaying || sk_state.isPaused || (sk_state.isDemo && !arguments[2])) return;
+
+            const nextX = sk_state.playerX + dx;
+            const nextY = sk_state.playerY + dy;
+
+            if (nextY < 0 || nextY >= sk_state.grid.length || nextX < 0 || nextX >= sk_state.grid[0].length) return;
+            const cell = sk_state.grid[nextY][nextX];
+
+            if (cell === '#' || cell === 'L') {
+                triggerShake();
+                return;
+            }
+
+            sk_state.energy--;
+            sk_sound.move();
+
+            if (sk_state.playerOnDoorX !== -1 && sk_state.playerOnDoorY !== -1) {
+                if (sk_state.playerOnDoorX !== nextX || sk_state.playerOnDoorY !== nextY) {
+                    sk_state.grid[sk_state.playerOnDoorY][sk_state.playerOnDoorX] = 'L';
+                    sk_state.keys++;
+                    sk_sound.lock();
+                    sk_state.playerOnDoorX = -1;
+                    sk_state.playerOnDoorY = -1;
+                }
+            }
+
+            sk_state.playerX = nextX;
+            sk_state.playerY = nextY;
+
+            const currentCell = sk_state.grid[nextY][nextX];
+
+            if (currentCell === 'O') {
+                sk_state.playerOnDoorX = nextX;
+                sk_state.playerOnDoorY = nextY;
+            } else if (currentCell === '^') {
+                sk_state.hp += 3;
+                sk_sound.heal();
+                if (sk_state.hp > 10) {
+                    triggerParadox("Overloaded temporal bio-signature. HP exceeded 10 (Forward timeline decay).");
+                    return;
+                }
+            } else if (currentCell === 'K') {
+                if (sk_state.keys > 0) {
+                    sk_state.grid[nextY][nextX] = 'k';
+                    sk_state.keys--;
+                    sk_sound.key();
+                }
+            }
+
+            moveEnemies();
+            checkEnemyCollisions();
+
+            if (currentCell === 'S') {
+                if (sk_state.hp === 10 && sk_state.keys === 0 && checkLevelReconstruction()) {
+                    triggerVictory();
+                    return;
+                } else if (sk_state.hp !== 10) {
+                    triggerParadox("Arrived at start portal without exact 10 HP. Forward loop remains shattered.");
+                    return;
+                } else if (sk_state.keys > 0) {
+                    triggerParadox("Cannot traverse portal with residual keys. Lock timelines first.");
+                    return;
+                }
+            }
+
+            if (sk_state.energy <= 0) {
+                triggerParadox("Temporal energy depleted. You got trapped inside the recursion loop.");
+                return;
+            }
+
+            updateHUD();
+        }
+
+        function moveEnemies() {
+            sk_state.enemies.forEach(enemy => {
+                const nextY = enemy.y + enemy.dir;
+                if (nextY >= 0 && nextY < sk_state.grid.length) {
+                    const targetCell = sk_state.grid[nextY][enemy.x];
+                    if (targetCell !== '#' && targetCell !== 'L') {
+                        enemy.y = nextY;
+                        return;
+                    }
+                }
+                enemy.dir = -enemy.dir;
+            });
+        }
+
+        function checkEnemyCollisions() {
+            sk_state.enemies.forEach(enemy => {
+                if (enemy.x === sk_state.playerX && enemy.y === sk_state.playerY) {
+                    sk_state.hp += 3;
+                    sk_sound.heal();
+                    if (sk_state.hp > 10) {
+                        triggerParadox("Unstable cell contact. HP exceeded 10.");
+                    }
+                }
+            });
+        }
+
+        function checkLevelReconstruction() {
+            for (let y = 0; y < sk_state.grid.length; y++) {
+                for (let x = 0; x < sk_state.grid[y].length; x++) {
+                    const cell = sk_state.grid[y][x];
+                    if (cell === 'O') return false;
+                    if (cell === 'K') return false;
+                }
+            }
+            return true;
+        }
+
+        function triggerParadox(reason) {
+            sk_state.isPlaying = false;
+            sk_sound.fail();
+            sk_fail_reason.textContent = reason;
+            sk_game_play_area.style.display = 'none';
+            sk_screen_gameover.style.display = 'flex';
+        }
+
+        function triggerVictory() {
+            sk_state.isPlaying = false;
+            sk_sound.win();
+
+            const remEnergy = sk_state.energy;
+            const currentLvl = sk_state.currentLevelIndex;
+            if (!sk_state.highScores[currentLvl] || remEnergy > sk_state.highScores[currentLvl]) {
+                sk_state.highScores[currentLvl] = remEnergy;
+            }
+
+            if (currentLvl + 1 < sk_levels.length) {
+                if (!sk_state.unlockedLevels.includes(currentLvl + 1)) {
+                    sk_state.unlockedLevels.push(currentLvl + 1);
+                }
+            }
+
+            saveGameState();
+
+            sk_win_msg.innerHTML = `Timeline Sector ${currentLvl + 1} perfectly synchronized!<br><br><b>Chronal Residue:</b> ${remEnergy} Energy Units.`;
+            sk_game_play_area.style.display = 'none';
+            sk_screen_victory.style.display = 'flex';
+        }
+
+        /* --- CANVAS RENDERING SYSTEM --- */
+        function resizeCanvas() {
+            const containerW = sk_canvas_container.clientWidth;
+            const containerH = sk_canvas_container.clientHeight;
+            const size = Math.min(containerW - 12, containerH - 12);
+            sk_canvas.width = size;
+            sk_canvas.height = size;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        function startRenderLoop() {
+            if (sk_animation_id) cancelAnimationFrame(sk_animation_id);
+
+            function loop() {
+                renderGame();
+                sk_animation_id = requestAnimationFrame(loop);
+            }
+            sk_animation_id = requestAnimationFrame(loop);
+        }
+
+        function renderGame() {
+            if (!sk_state.grid.length) return;
+
+            const cols = sk_state.grid[0].length;
+            const rows = sk_state.grid.length;
+
+            const tileW = sk_canvas.width / cols;
+            const tileH = sk_canvas.height / rows;
+
+            sk_ctx.fillStyle = "#161a2b";
+            sk_ctx.fillRect(0, 0, sk_canvas.width, sk_canvas.height);
+
+            sk_ctx.strokeStyle = "rgba(46, 196, 182, 0.1)";
+            sk_ctx.lineWidth = 1;
+            for (let i = 0; i <= cols; i++) {
+                sk_ctx.beginPath();
+                sk_ctx.moveTo(i * tileW, 0);
+                sk_ctx.lineTo(i * tileW, sk_canvas.height);
+                sk_ctx.stroke();
+            }
+            for (let j = 0; j <= rows; j++) {
+                sk_ctx.beginPath();
+                sk_ctx.moveTo(0, j * tileH);
+                sk_ctx.lineTo(sk_canvas.width, j * tileH);
+                sk_ctx.stroke();
+            }
+
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const cell = sk_state.grid[y][x];
+                    const px = x * tileW;
+                    const py = y * tileH;
+
+                    if (cell === '#') {
+                        sk_ctx.fillStyle = "#1b2a4a";
+                        sk_ctx.fillRect(px + 2, py + 2, tileW - 4, tileH - 4);
+                        sk_ctx.strokeStyle = "#2ec4b6";
+                        sk_ctx.lineWidth = 1.5;
+                        sk_ctx.strokeRect(px + 4, py + 4, tileW - 8, tileH - 8);
+                    } else if (cell === 'S') {
+                        const cx = px + tileW/2;
+                        const cy = py + tileH/2;
+                        const pulse = Math.sin(Date.now() / 150) * 4 + (tileW/3.5);
+
+                        sk_ctx.fillStyle = "rgba(46, 196, 182, 0.25)";
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(cx, cy, pulse + 6, 0, Math.PI * 2);
+                        sk_ctx.fill();
+
+                        sk_ctx.fillStyle = "#2ec4b6";
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(cx, cy, pulse, 0, Math.PI * 2);
+                        sk_ctx.fill();
+
+                        sk_ctx.strokeStyle = "#1b2a4a";
+                        sk_ctx.lineWidth = 3;
+                        sk_ctx.stroke();
+                        
+                        sk_ctx.fillStyle = "#1b2a4a";
+                        sk_ctx.font = "bold 14px monospace";
+                        sk_ctx.textAlign = "center";
+                        sk_ctx.textBaseline = "middle";
+                        sk_ctx.fillText("S", cx, cy);
+
+                    } else if (cell === 'E') {
+                        const cx = px + tileW/2;
+                        const cy = py + tileH/2;
+                        const pulse = Math.sin(Date.now() / 200) * 3 + (tileW/3.5);
+
+                        sk_ctx.fillStyle = "rgba(255, 107, 53, 0.25)";
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(cx, cy, pulse + 6, 0, Math.PI * 2);
+                        sk_ctx.fill();
+
+                        sk_ctx.fillStyle = "#ff6b35";
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(cx, cy, pulse, 0, Math.PI * 2);
+                        sk_ctx.fill();
+
+                        sk_ctx.strokeStyle = "#111625";
+                        sk_ctx.lineWidth = 3;
+                        sk_ctx.stroke();
+
+                        sk_ctx.fillStyle = "#111625";
+                        sk_ctx.font = "bold 14px monospace";
+                        sk_ctx.textAlign = "center";
+                        sk_ctx.textBaseline = "middle";
+                        sk_ctx.fillText("E", cx, cy);
+
+                    } else if (cell === '^') {
+                        sk_ctx.fillStyle = "#ff6b35";
+                        sk_ctx.beginPath();
+                        sk_ctx.moveTo(px + tileW/2, py + 4);
+                        sk_ctx.lineTo(px + 4, py + tileH - 4);
+                        sk_ctx.lineTo(px + tileW - 4, py + tileH - 4);
+                        sk_ctx.closePath();
+                        sk_ctx.fill();
+
+                        sk_ctx.strokeStyle = "#111625";
+                        sk_ctx.lineWidth = 2;
+                        sk_ctx.stroke();
+
+                        const pulseGlow = Math.abs(Math.sin(Date.now() / 300));
+                        sk_ctx.fillStyle = `rgba(46, 196, 182, ${pulseGlow})`;
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(px + tileW/2, py + tileH/2, 4, 0, Math.PI * 2);
+                        sk_ctx.fill();
+
+                    } else if (cell === 'O') {
+                        sk_ctx.strokeStyle = "#ffb703";
+                        sk_ctx.lineWidth = 3;
+                        sk_ctx.setLineDash([4, 4]);
+                        sk_ctx.strokeRect(px + 6, py + 6, tileW - 12, tileH - 12);
+                        sk_ctx.setLineDash([]);
+
+                        sk_ctx.fillStyle = "#ffb703";
+                        sk_ctx.fillRect(px + 2, py + 2, 4, tileH - 4);
+                        sk_ctx.fillRect(px + tileW - 6, py + 2, 4, tileH - 4);
+
+                    } else if (cell === 'L') {
+                        sk_ctx.fillStyle = "#ffb703";
+                        sk_ctx.fillRect(px + 4, py + 4, tileW - 8, tileH - 8);
+                        sk_ctx.strokeStyle = "#111625";
+                        sk_ctx.lineWidth = 3;
+                        sk_ctx.strokeRect(px + 4, py + 4, tileW - 8, tileH - 8);
+
+                        sk_ctx.fillStyle = "#111625";
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(px + tileW/2, py + tileH/2 - 2, 3, 0, Math.PI*2);
+                        sk_ctx.fill();
+                        sk_ctx.fillRect(px + tileW/2 - 1.5, py + tileH/2 - 2, 3, 8);
+
+                    } else if (cell === 'K') {
+                        sk_ctx.strokeStyle = "rgba(255, 183, 3, 0.4)";
+                        sk_ctx.lineWidth = 2;
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(px + tileW/2, py + tileH/2, tileW/4, 0, Math.PI * 2);
+                        sk_ctx.stroke();
+
+                        sk_ctx.fillStyle = "rgba(255, 183, 3, 0.6)";
+                        sk_ctx.font = "9px monospace";
+                        sk_ctx.textAlign = "center";
+                        sk_ctx.fillText("KEY", px + tileW/2, py + tileH/2 + 3);
+
+                    } else if (cell === 'k') {
+                        sk_ctx.fillStyle = "#ffb703";
+                        sk_ctx.strokeStyle = "#111625";
+                        sk_ctx.lineWidth = 1.5;
+
+                        sk_ctx.beginPath();
+                        sk_ctx.arc(px + tileW/3, py + tileH/2, 5, 0, Math.PI * 2);
+                        sk_ctx.fill();
+                        sk_ctx.stroke();
+
+                        sk_ctx.fillRect(px + tileW/3 + 4, py + tileH/2 - 2, tileW/3, 4);
+                        sk_ctx.strokeRect(px + tileW/3 + 4, py + tileH/2 - 2, tileW/3, 4);
+
+                        sk_ctx.fillRect(px + tileW/3 + tileW/3 + 1, py + tileH/2, 3, 5);
+                    }
+                }
+            }
+
+            sk_state.enemies.forEach(enemy => {
+                const ex = enemy.x * tileW;
+                const ey = enemy.y * tileH;
+                const pulse = Math.sin(Date.now() / 100) * 2;
+
+                sk_ctx.fillStyle = "#8a2be2";
+                sk_ctx.fillRect(ex + 6 - pulse, ey + 6 - pulse, tileW - 12 + pulse*2, tileH - 12 + pulse*2);
+                
+                sk_ctx.strokeStyle = "#111625";
+                sk_ctx.lineWidth = 2;
+                sk_ctx.strokeRect(ex + 6 - pulse, ey + 6 - pulse, tileW - 12 + pulse*2, tileH - 12 + pulse*2);
+
+                sk_ctx.fillStyle = "#2ec4b6";
+                sk_ctx.fillRect(ex + tileW/3 - 2, ey + tileH/3, 4, 4);
+                sk_ctx.fillRect(ex + tileW - tileW/3 - 2, ey + tileH/3, 4, 4);
+            });
+
+            const px = sk_state.playerX * tileW + tileW/2;
+            const py = sk_state.playerY * tileH + tileH/2;
+
+            sk_ctx.fillStyle = "rgba(46, 196, 182, 0.3)";
+            sk_ctx.beginPath();
+            sk_ctx.arc(px, py, tileW/3 + 4, 0, Math.PI * 2);
+            sk_ctx.fill();
+
+            sk_ctx.fillStyle = "#111625";
+            sk_ctx.beginPath();
+            sk_ctx.arc(px, py, tileW/3, 0, Math.PI * 2);
+            sk_ctx.fill();
+
+            sk_ctx.strokeStyle = "#2ec4b6";
+            sk_ctx.lineWidth = 3;
+            sk_ctx.stroke();
+
+            const t = Date.now();
+            const angle = -(t / 400);
+            sk_ctx.strokeStyle = "#f0f4f8";
+            sk_ctx.lineWidth = 2;
+            sk_ctx.beginPath();
+            sk_ctx.moveTo(px, py);
+            sk_ctx.lineTo(px + Math.cos(angle) * (tileW/6), py + Math.sin(angle) * (tileW/6));
+            sk_ctx.stroke();
+
+            if (sk_state.isPaused) {
+                sk_ctx.fillStyle = "rgba(11, 13, 25, 0.6)";
+                sk_ctx.fillRect(0, 0, sk_canvas.width, sk_canvas.height);
+                sk_ctx.fillStyle = "#2ec4b6";
+                sk_ctx.font = "bold 24px sans-serif";
+                sk_ctx.textAlign = "center";
+                sk_ctx.textBaseline = "middle";
+                sk_ctx.fillText("⏸ TEMPORAL PAUSE", sk_canvas.width / 2, sk_canvas.height / 2);
+            }
+        }
+
+        /* --- GAME CONTROLLER INTERFACES --- */
+        function startGame(levelIndex) {
+            closeAllPopups();
+            sk_state.isPlaying = true;
+            sk_state.isPaused = false;
+            sk_state.isDemo = false;
+            sk_btn_pause.textContent = '⏸ Pause';
+            sk_btn_pause.classList.remove('active');
+            loadLevel(levelIndex);
+            
+            sk_screen_start.style.display = 'none';
+            sk_screen_gameover.style.display = 'none';
+            sk_screen_victory.style.display = 'none';
+            sk_game_play_area.style.display = 'flex';
+            
+            startRenderLoop();
+        }
+
+        document.getElementById('sk_btn_start_game').onclick = () => startGame(0);
+        document.getElementById('sk_btn_retry').onclick = () => startGame(sk_state.currentLevelIndex);
+        
+        document.getElementById('sk_btn_next_level').onclick = () => {
+            const nextIdx = sk_state.currentLevelIndex + 1;
+            if (nextIdx < sk_levels.length) {
+                startGame(nextIdx);
+            } else {
+                goMenu();
+            }
+        };
+
+        function goMenu() {
+            sk_state.isPlaying = false;
+            sk_state.isPaused = false;
+            sk_screen_gameover.style.display = 'none';
+            sk_screen_victory.style.display = 'none';
+            sk_game_play_area.style.display = 'none';
+            sk_screen_start.style.display = 'flex';
+        }
+
+        document.getElementById('sk_btn_menu_back1').onclick = goMenu;
+        document.getElementById('sk_btn_menu_back2').onclick = goMenu;
+
+        /* --- KEYBOARD LISTENER --- */
+        window.addEventListener('keydown', e => {
+            if (e.key === '=' && e.ctrlKey) {
+                e.preventDefault();
+                zoomViewport(1.2);
+                return;
+            }
+            if (e.key === '-' && e.ctrlKey) {
+                e.preventDefault();
+                zoomViewport(0.8);
+                return;
+            }
+
+            if (!sk_state.isPlaying) {
+                if (e.key === 'Enter') {
+                    if (sk_screen_start.style.display !== 'none') {
+                        startGame(0);
+                    } else if (sk_screen_gameover.style.display !== 'none') {
+                        startGame(sk_state.currentLevelIndex);
+                    } else if (sk_screen_victory.style.display !== 'none') {
+                        document.getElementById('sk_btn_next_level').click();
+                    }
+                }
+                return;
+            }
+
+            if (e.key === 'p' || e.key === 'P') {
+                sk_btn_pause.click();
+                return;
+            }
+
+            switch(e.key) {
+                case 'ArrowUp':
+                case 'w':
+                case 'W':
+                    movePlayer(0, -1);
+                    e.preventDefault();
+                    break;
+                case 'ArrowDown':
+                case 's':
+                case 'S':
+                    movePlayer(0, 1);
+                    e.preventDefault();
+                    break;
+                case 'ArrowLeft':
+                case 'a':
+                case 'A':
+                    movePlayer(-1, 0);
+                    e.preventDefault();
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                case 'D':
+                    movePlayer(1, 0);
+                    e.preventDefault();
+                    break;
+                case 'r':
+                case 'R':
+                    startGame(sk_state.currentLevelIndex);
+                    break;
+            }
+        });
+
+        /* --- ADVANCED MOBILE TOUCH SYSTEM --- */
+        const activeTouches = {};
+        let touchStartTimes = {};
+        let lastTapTime = 0;
+        let initialPinchDistance = 0;
+        let initialScale = 1.0;
+
+        function getPinchDistance(t1, t2) {
+            const dx = t1.clientX - t2.clientX;
+            const dy = t1.clientY - t2.clientY;
+            return Math.sqrt(dx*dx + dy*dy);
+        }
+
+        sk_canvas_container.addEventListener('touchstart', e => {
+            const now = Date.now();
+            Array.from(e.changedTouches).forEach(touch => {
+                activeTouches[touch.identifier] = {
+                    startX: touch.clientX,
+                    startY: touch.clientY,
+                    lastX: touch.clientX,
+                    lastY: touch.clientY,
+                    time: now
+                };
+                touchStartTimes[touch.identifier] = now;
+            });
+
+            /* Double Tap */
+            if (e.touches.length === 1) {
+                const gap = now - lastTapTime;
+                if (gap < 300) {
+                    /* Double tap resets zoom */
+                    resetViewport();
+                }
+                lastTapTime = now;
+
+                /* Long Touch Timer */
+                const id = e.touches[0].identifier;
+                setTimeout(() => {
+                    if (touchStartTimes[id] && Date.now() - touchStartTimes[id] >= 500) {
+                        /* Trigger Quick Restart on Long Press */
+                        if (sk_state.isPlaying) {
+                            startGame(sk_state.currentLevelIndex);
+                        }
+                    }
+                }, 520);
+            }
+
+            /* Pinch Start */
+            if (e.touches.length === 2) {
+                initialPinchDistance = getPinchDistance(e.touches[0], e.touches[1]);
+                initialScale = sk_view.scale;
+            }
+
+            if (!sk_view.isPanningMode && e.touches.length === 1) {
+                sk_view.startX = e.touches[0].clientX;
+                sk_view.startY = e.touches[0].clientY;
+            }
+
+            e.preventDefault();
+        }, { passive: false });
+
+        sk_canvas_container.addEventListener('touchmove', e => {
+            const now = Date.now();
+            
+            /* Two finger Pinch Zoom / Pan */
+            if (e.touches.length === 2) {
+                const dist = getPinchDistance(e.touches[0], e.touches[1]);
+                if (initialPinchDistance > 0) {
+                    const factor = dist / initialPinchDistance;
+                    sk_view.scale = Math.max(0.5, Math.min(initialScale * factor, 4.0));
+                }
+
+                /* Midpoint Shift */
+                const t1 = e.touches[0];
+                const t2 = e.touches[1];
+                const midX = (t1.clientX + t2.clientX) / 2;
+                const midY = (t1.clientY + t2.clientY) / 2;
+
+                const prev1 = activeTouches[t1.identifier];
+                const prev2 = activeTouches[t2.identifier];
+                if (prev1 && prev2) {
+                    const prevMidX = (prev1.lastX + prev2.lastX) / 2;
+                    const prevMidY = (prev1.lastY + prev2.lastY) / 2;
+                    sk_view.panX += (midX - prevMidX);
+                    sk_view.panY += (midY - prevMidY);
+                }
+                updateViewportMatrix();
+            }
+            /* One finger Pan/Drag Map (if enabled) */
+            else if (e.touches.length === 1 && sk_view.isPanningMode) {
+                const t = e.touches[0];
+                const prev = activeTouches[t.identifier];
+                if (prev) {
+                    sk_view.panX += (t.clientX - prev.lastX);
+                    sk_view.panY += (t.clientY - prev.lastY);
+                    updateViewportMatrix();
+                }
+            }
+
+            Array.from(e.touches).forEach(touch => {
+                if (activeTouches[touch.identifier]) {
+                    activeTouches[touch.identifier].lastX = touch.clientX;
+                    activeTouches[touch.identifier].lastY = touch.clientY;
+                }
+            });
+
+            e.preventDefault();
+        }, { passive: false });
+
+        sk_canvas_container.addEventListener('touchend', e => {
+            Array.from(e.changedTouches).forEach(touch => {
+                const record = activeTouches[touch.identifier];
+                if (record && e.touches.length === 0 && !sk_view.isPanningMode) {
+                    const diffX = touch.clientX - record.startX;
+                    const diffY = touch.clientY - record.startY;
+                    const elapsed = Date.now() - record.time;
+
+                    if (elapsed < 300 && Math.abs(diffX) < 10 && Math.abs(diffY) < 10) {
+                        /* Action single tap execution if needed */
+                    } else if (Math.abs(diffX) > 25 || Math.abs(diffY) > 25) {
+                        /* Swipe gesture mapping */
+                        if (Math.abs(diffX) > Math.abs(diffY)) {
+                            movePlayer(diffX > 0 ? 1 : -1, 0);
+                        } else {
+                            movePlayer(0, diffY > 0 ? 1 : -1);
+                        }
+                    }
+                }
+                delete activeTouches[touch.identifier];
+                delete touchStartTimes[touch.identifier];
+            });
+
+            if (e.touches.length < 2) {
+                initialPinchDistance = 0;
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        /* --- DRAGGABLE CONTROLLER PANEL INTERFACE --- */
+        const sk_ctrl_zone = document.getElementById('sk_virtual_controls');
+        const sk_drag_handle = document.getElementById('sk_control_drag_handle');
+        let sk_is_dragging = false;
+        let sk_drag_offset_x = 0;
+        let sk_drag_offset_y = 0;
+
+        sk_drag_handle.addEventListener('mousedown', dragStart);
+        sk_drag_handle.addEventListener('touchstart', dragStart, { passive: false });
+
+        function dragStart(e) {
+            sk_is_dragging = true;
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            const cy = e.touches ? e.touches[0].clientY : e.clientY;
+            const rect = sk_ctrl_zone.getBoundingClientRect();
+            sk_drag_offset_x = cx - rect.left;
+            sk_drag_offset_y = cy - rect.top;
+            e.preventDefault();
+        }
+
+        document.addEventListener('mousemove', dragMove);
+        document.addEventListener('touchmove', dragMove, { passive: false });
+
+        function dragMove(e) {
+            if (!sk_is_dragging) return;
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            const cy = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const rootRect = sk_root.getBoundingClientRect();
+            let newX = cx - rootRect.left - sk_drag_offset_x;
+            let newY = cy - rootRect.top - sk_drag_offset_y;
+
+            const limitX = rootRect.width - sk_ctrl_zone.offsetWidth;
+            const limitY = rootRect.height - sk_ctrl_zone.offsetHeight;
+
+            newX = Math.max(0, Math.min(newX, limitX));
+            newY = Math.max(0, Math.min(newY, limitY));
+
+            sk_ctrl_zone.style.left = newX + "px";
+            sk_ctrl_zone.style.top = newY + "px";
+            sk_ctrl_zone.style.bottom = "auto";
+            sk_ctrl_zone.style.right = "auto";
+        }
+
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('touchend', dragEnd);
+
+        function dragEnd() {
+            sk_is_dragging = false;
+        }
+
+        /* Setup Virtual button triggers */
+        document.getElementById('sk_ctrl_up').onclick = () => movePlayer(0, -1);
+        document.getElementById('sk_ctrl_left').onclick = () => movePlayer(-1, 0);
+        document.getElementById('sk_ctrl_right').onclick = () => movePlayer(1, 0);
+        document.getElementById('sk_ctrl_down').onclick = () => movePlayer(0, 1);
+        document.getElementById('sk_ctrl_center').onclick = () => startGame(sk_state.currentLevelIndex);
+
+        /* --- AUTOMATED LEVEL DEMO --- */
+        let sk_demo_timeout = null;
+        document.getElementById('sk_btn_demo').onclick = () => {
+            closeAllPopups();
+            startGame(0);
+            sk_state.isDemo = true;
+            
+            const demoSteps = [
+                {dx: 0, dy: -1}, /* Up (spike) -> HP 4 */
+                {dx: 0, dy: 1},  /* Down */
+                {dx: 0, dy: -1}, /* Up (spike) -> HP 7 */
+                {dx: 0, dy: 1},  /* Down */
+                {dx: 0, dy: -1}, /* Up (spike) -> HP 10 */
+                {dx: 0, dy: -1}, /* Up */
+                {dx: -1, dy: 0}, /* Left */
+                {dx: -1, dy: 0}, /* Left (entrance reached) */
+            ];
+
+            let stepIdx = 0;
+            function runDemoStep() {
+                if (!sk_state.isDemo || !sk_state.isPlaying || sk_state.isPaused) return;
+                
+                const step = demoSteps[stepIdx];
+                movePlayer(step.dx, step.dy, true);
+
+                stepIdx++;
+                if (stepIdx < demoSteps.length) {
+                    sk_demo_timeout = setTimeout(runDemoStep, 700);
+                } else {
+                    sk_state.isDemo = false;
+                }
+            }
+
+            sk_demo_timeout = setTimeout(runDemoStep, 800);
+        };
+
+        /* --- INIT INSTANCE --- */
+        loadSaveState();
+    </script>
+</body>
+</html>
+```

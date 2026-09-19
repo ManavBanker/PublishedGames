@@ -1331,6 +1331,11 @@
     setupLevel(0);
   }
 
+  function retryLevel() {
+    ROOT.querySelector('#sk_screen_gameover').classList.add('sk_hidden');
+    setupLevel(gameState.currentLevel);
+  }
+
   function triggerLevelComplete() {
     gameState.isLevelCleared = true;
     playWin();
@@ -1724,6 +1729,11 @@
       }
       if (gameState.isGameWon) {
         returnToMenuFromVictory();
+        e.preventDefault();
+        return;
+      }
+      if (gameState.isGameOver) {
+        retryLevel();
         e.preventDefault();
         return;
       }
@@ -2161,10 +2171,7 @@
 
     ROOT.querySelector('#sk_btn_start_game').addEventListener('click', startGame);
 
-    ROOT.querySelector('#sk_btn_retry').addEventListener('click', () => {
-      ROOT.querySelector('#sk_screen_gameover').classList.add('sk_hidden');
-      setupLevel(gameState.currentLevel);
-    });
+    ROOT.querySelector('#sk_btn_retry').addEventListener('click', retryLevel);
 
     ROOT.querySelector('#sk_btn_next').addEventListener('click', advanceToNextLevel);
 
