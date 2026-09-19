@@ -1,13 +1,15 @@
 ```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hindsight - Reverse Causality Puzzle Game</title>
     <style>
         /* Base styles to prevent scrollbars and provide a clean page */
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -57,7 +59,7 @@
             font-weight: 800;
             letter-spacing: 1.5px;
             color: #2ec4b6;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .sk_top_buttons {
@@ -82,7 +84,8 @@
             white-space: nowrap;
         }
 
-        .sk_btn:hover, .sk_btn:active {
+        .sk_btn:hover,
+        .sk_btn:active {
             background-color: #2ec4b6;
             color: #111625;
             border-color: #2ec4b6;
@@ -103,7 +106,7 @@
             border: 2px solid #2ec4b6;
             border-radius: 6px;
             min-width: 160px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             z-index: 100;
             padding: 4px 0;
         }
@@ -184,7 +187,7 @@
             cursor: pointer;
             margin: 6px;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .sk_menu_btn:hover {
@@ -205,7 +208,7 @@
             color: #ff3333;
             letter-spacing: 2px;
             margin-bottom: 10px;
-            text-shadow: 0 4px 10px rgba(255,0,0,0.3);
+            text-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
         }
 
         .sk_fail_reason {
@@ -259,7 +262,7 @@
             border-radius: 6px;
             font-weight: bold;
             font-size: 13px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
             margin-bottom: 4px;
             border: 1px solid #2ec4b6;
@@ -294,7 +297,7 @@
         #sk_game_canvas {
             background-color: #e2e8f0;
             border-radius: 6px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.5);
             max-width: 100%;
             max-height: 100%;
             aspect-ratio: 1 / 1;
@@ -325,7 +328,7 @@
             width: 100%;
             max-width: 440px;
             color: #f0f4f8;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
             text-align: left;
             box-sizing: border-box;
             max-height: 90vh;
@@ -420,6 +423,7 @@
         #sk_progress_popup {
             text-align: center;
         }
+
         .sk_progress_track {
             background-color: #111625;
             border: 2px solid #2ec4b6;
@@ -429,6 +433,7 @@
             margin-top: 15px;
             position: relative;
         }
+
         .sk_progress_bar {
             background: linear-gradient(90deg, #2ec4b6, #ff6b35);
             width: 0%;
@@ -473,7 +478,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             user-select: none;
             touch-action: none;
         }
@@ -522,7 +527,8 @@
             transition: background 0.1s;
         }
 
-        .sk_ctrl_btn:active, .sk_ctrl_btn.active {
+        .sk_ctrl_btn:active,
+        .sk_ctrl_btn.active {
             background-color: #ff6b35;
             color: #f0f4f8;
             border-color: #f0f4f8;
@@ -540,17 +546,49 @@
 
         /* Screen Shake Animation */
         @keyframes sk_shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(0px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(2px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(2px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+            0% {
+                transform: translate(1px, 1px) rotate(0deg);
+            }
+
+            10% {
+                transform: translate(-1px, -2px) rotate(-1deg);
+            }
+
+            20% {
+                transform: translate(-3px, 0px) rotate(1deg);
+            }
+
+            30% {
+                transform: translate(0px, 2px) rotate(0deg);
+            }
+
+            40% {
+                transform: translate(1px, -1px) rotate(1deg);
+            }
+
+            50% {
+                transform: translate(-1px, 2px) rotate(-1deg);
+            }
+
+            60% {
+                transform: translate(-3px, 1px) rotate(0deg);
+            }
+
+            70% {
+                transform: translate(2px, 1px) rotate(-1deg);
+            }
+
+            80% {
+                transform: translate(-1px, -1px) rotate(1deg);
+            }
+
+            90% {
+                transform: translate(2px, 2px) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(1px, -2px) rotate(-1deg);
+            }
         }
 
         .sk_shake_active {
@@ -558,12 +596,14 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="sk_game_suite_root" id="sk_game_root">
         <!-- Metadata Elements -->
         <div class="sk_labels" data="Time-Loop, Retro, Brain-Teaser, Minimalist" style="display:none;"></div>
-        <meta class="sk_meta" description="A mind-bending grid puzzle where you play levels in reverse—stepping on hazards to gain health and locking doors to return keys—in order to reconstruct the timeline perfectly.">
+        <meta class="sk_meta"
+            description="A mind-bending grid puzzle where you play levels in reverse—stepping on hazards to gain health and locking doors to return keys—in order to reconstruct the timeline perfectly.">
 
         <!-- Top Navigation & Control Bar -->
         <div class="sk_top_bar">
@@ -573,7 +613,7 @@
                 <button class="sk_btn" id="sk_btn_orient">📱 Screen</button>
                 <button class="sk_btn" id="sk_btn_pause">⏸ Pause</button>
                 <button class="sk_btn" id="sk_btn_demo">📺 Demo</button>
-                
+
                 <!-- Unified Navigation Menu Dropdown -->
                 <div class="sk_nav_container">
                     <button class="sk_btn" id="sk_btn_menu_trigger">☰ Menu</button>
@@ -604,9 +644,14 @@
                 <b>Temporal Reconstruction Protocol</b>
                 <p>Welcome to <b>Hindsight</b>, where timeline causality is fully reversed!</p>
                 <p>1. You start at the <b>Exit Portal (E)</b> with exactly <b>1 HP</b>.</p>
-                <p>2. Your goal is to backtrack to the <b>Entrance Portal (S)</b> with exactly <b>10 HP</b> and <b>0 Keys</b>.</p>
-                <p>3. <b>Spikes & Hazards</b>: Stepping on spikes restores <b>+3 HP</b> (reversing forward damage). But beware—healing past 10 HP causes a paradox!</p>
-                <p>4. <b>Doors & Keys</b>: Walk through Open Doors. As you exit, they automatically lock behind you and return <b>+1 Key</b> to your inventory. To restore the key, you must step on a Key Spawn point <b>(K)</b> to 'un-collect' it.</p>
+                <p>2. Your goal is to backtrack to the <b>Entrance Portal (S)</b> with exactly <b>10 HP</b> and <b>0
+                        Keys</b>.</p>
+                <p>3. <b>Spikes & Hazards</b>: Stepping on spikes restores <b>+3 HP</b> (reversing forward damage). But
+                    beware—healing past 10 HP causes a paradox!</p>
+                <p>4. <b>Doors & Keys</b>: Walk through Open Doors. As you exit, they automatically lock behind you and
+                    return <b>+1 Key</b> to your inventory. To restore the key, you must step on a Key Spawn point
+                    <b>(K)</b> to 'un-collect' it.
+                </p>
                 <p>5. Every movement uses <b>1 Temporal Energy</b>. Plan carefully!</p>
                 <button class="sk_popup_close" id="sk_close_help">Close</button>
             </div>
@@ -644,7 +689,7 @@
 
         <!-- Main Game Viewport Wrapper -->
         <div class="sk_main_game_wrapper">
-            
+
             <!-- Menu Screen -->
             <div class="sk_screen" id="sk_screen_start">
                 <span class="sk_menu_title">HINDSIGHT</span>
@@ -722,74 +767,7 @@
 
     <script>
         /* --- LEVEL REGISTRY --- */
-        const sk_local_levels = [
-            {
-                name: "1. Harm's Restoration",
-                energy: 25,
-                grid: [
-                    "#######",
-                    "#S....#",
-                    "###.###",
-                    "###^###",
-                    "###E###",
-                    "#######"
-                ]
-            },
-            {
-                name: "2. The Key Corrective",
-                energy: 35,
-                grid: [
-                    "########",
-                    "#S....K#",
-                    "###.####",
-                    "###O####",
-                    "###^####",
-                    "###E####",
-                    "########"
-                ]
-            },
-            {
-                name: "3. Dual Retrograde",
-                energy: 45,
-                grid: [
-                    "###########",
-                    "#S..K...K.#",
-                    "###.O...O.#",
-                    "###.#####.#",
-                    "###.^...^.#",
-                    "###E#####.#",
-                    "###########"
-                ]
-            },
-            {
-                name: "4. Chrono-Patroller",
-                energy: 40,
-                grid: [
-                    "#########",
-                    "#S......#",
-                    "###.#####",
-                    "###^#####",
-                    "#...X...#",
-                    "###E#####",
-                    "#########"
-                ]
-            },
-            {
-                name: "5. Master Grand Paradox",
-                energy: 55,
-                grid: [
-                    "###########",
-                    "#S.K.K....#",
-                    "##.O.O.##.#",
-                    "##.#####..#",
-                    "##.^...^..#",
-                    "#####E#####",
-                    "###########"
-                ]
-            }
-        ];
-
-        let sk_levels = [...sk_local_levels];
+        let sk_levels = [];
 
         /* --- AUDIO FX (Web Audio API Synthesizer) --- */
         let sk_audio_ctx = null;
@@ -850,7 +828,7 @@
             isPlaying: false,
             isPaused: false,
             isDemo: false,
-            
+
             /* Current level variables */
             hp: 1,
             keys: 0,
@@ -859,7 +837,7 @@
             playerY: 0,
             grid: [],
             enemies: [],
-            
+
             playerOnDoorX: -1,
             playerOnDoorY: -1
         };
@@ -873,7 +851,7 @@
                     sk_state.unlockedLevels = parsed.unlockedLevels || [0];
                     sk_state.highScores = parsed.highScores || {};
                     sk_state.soundEnabled = parsed.soundEnabled !== false;
-                } catch(e) {}
+                } catch (e) { }
             }
             updateSettingsUI();
         }
@@ -1027,6 +1005,10 @@
         function renderLevelGrid() {
             const gridEl = document.getElementById('sk_level_grid');
             gridEl.innerHTML = '';
+            if (!sk_levels.length) {
+                gridEl.innerHTML = '<p style="grid-column: 1 / -1; color: #ffd700; font-size: 12px;">No sectors loaded. Use Sync Git Levels.</p>';
+                return;
+            }
             sk_levels.forEach((lvl, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'sk_level_btn';
@@ -1048,7 +1030,7 @@
             const listEl = document.getElementById('sk_scores_list');
             listEl.innerHTML = '';
             sk_levels.forEach((lvl, idx) => {
-                const scoreStr = sk_state.highScores[idx] !== undefined 
+                const scoreStr = sk_state.highScores[idx] !== undefined
                     ? `Integrity: ${sk_state.highScores[idx]} (Energy Remaining)`
                     : 'Unexplored';
                 const p = document.createElement('p');
@@ -1061,7 +1043,7 @@
         document.getElementById('sk_btn_fullscreen').onclick = () => {
             const r = document.getElementById('sk_game_root');
             if (!document.fullscreenElement) {
-                r.requestFullscreen().catch(() => {});
+                r.requestFullscreen().catch(() => { });
             } else {
                 document.exitFullscreen();
             }
@@ -1097,7 +1079,7 @@
             const pBar = document.getElementById('sk_progress_bar');
             const pText = document.getElementById('sk_progress_status');
             const pClose = document.getElementById('sk_close_progress');
-            
+
             pBar.style.width = '0%';
             pText.textContent = 'Connecting to raw repositories...';
             pClose.style.display = 'none';
@@ -1105,10 +1087,10 @@
             setTimeout(() => {
                 pBar.style.width = '40%';
                 pText.textContent = 'Retrieving map layouts...';
-                
+
                 /* Raw git level mapping containing slashes and block comments */
-                const rawUrl = 'https://raw.githubusercontent.com/sk-game-suite/hindsight-levels/main/levels.txt';
-                
+                const rawUrl = 'https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Hindsight/levels.json';
+
                 fetch(rawUrl)
                     .then(response => {
                         if (!response.ok) throw new Error('Network offline or resource unavailable');
@@ -1117,11 +1099,11 @@
                     .then(text => {
                         pBar.style.width = '80%';
                         pText.textContent = 'Sanitizing parameters...';
-                        
+
                         /* Remove comments */
                         let cleaned = text.replace(/\/\*[\s\S]*?\*\//g, ''); /* Block comments */
                         cleaned = cleaned.replace(/\/\/.*/g, ''); /* Line comments */
-                        
+
                         const parsed = JSON.parse(cleaned);
                         if (Array.isArray(parsed) && parsed.length > 0) {
                             sk_levels = parsed;
@@ -1132,10 +1114,26 @@
                         }
                     })
                     .catch(err => {
-                        console.warn("Falling back to internal levels due to: ", err.message);
-                        sk_levels = [...sk_local_levels];
-                        pBar.style.width = '100%';
-                        pText.textContent = 'Local registry restored successfully!';
+                        console.warn("Primary remote sync failed: ", err.message);
+                        fetch('./levels.json')
+                            .then(resp => {
+                                if (!resp.ok) throw new Error('Offline fallback unavailable');
+                                return resp.text();
+                            })
+                            .then(text => {
+                                const parsed = JSON.parse(text);
+                                if (Array.isArray(parsed) && parsed.length > 0) {
+                                    sk_levels = parsed;
+                                    pBar.style.width = '100%';
+                                    pText.textContent = `Remote unreachable - restored ${sk_levels.length} local sectors!`;
+                                } else {
+                                    throw new Error('Malformed JSON structure');
+                                }
+                            })
+                            .catch(() => {
+                                pBar.style.width = '100%';
+                                pText.textContent = 'Unable to reach timeline vault. Check connection and retry.';
+                            });
                     })
                     .finally(() => {
                         pClose.style.display = 'block';
@@ -1402,9 +1400,9 @@
                         sk_ctx.lineWidth = 1.5;
                         sk_ctx.strokeRect(px + 4, py + 4, tileW - 8, tileH - 8);
                     } else if (cell === 'S') {
-                        const cx = px + tileW/2;
-                        const cy = py + tileH/2;
-                        const pulse = Math.sin(Date.now() / 150) * 4 + (tileW/3.5);
+                        const cx = px + tileW / 2;
+                        const cy = py + tileH / 2;
+                        const pulse = Math.sin(Date.now() / 150) * 4 + (tileW / 3.5);
 
                         sk_ctx.fillStyle = "rgba(46, 196, 182, 0.25)";
                         sk_ctx.beginPath();
@@ -1419,7 +1417,7 @@
                         sk_ctx.strokeStyle = "#1b2a4a";
                         sk_ctx.lineWidth = 3;
                         sk_ctx.stroke();
-                        
+
                         sk_ctx.fillStyle = "#1b2a4a";
                         sk_ctx.font = "bold 14px monospace";
                         sk_ctx.textAlign = "center";
@@ -1427,9 +1425,9 @@
                         sk_ctx.fillText("S", cx, cy);
 
                     } else if (cell === 'E') {
-                        const cx = px + tileW/2;
-                        const cy = py + tileH/2;
-                        const pulse = Math.sin(Date.now() / 200) * 3 + (tileW/3.5);
+                        const cx = px + tileW / 2;
+                        const cy = py + tileH / 2;
+                        const pulse = Math.sin(Date.now() / 200) * 3 + (tileW / 3.5);
 
                         sk_ctx.fillStyle = "rgba(255, 107, 53, 0.25)";
                         sk_ctx.beginPath();
@@ -1454,7 +1452,7 @@
                     } else if (cell === '^') {
                         sk_ctx.fillStyle = "#ff6b35";
                         sk_ctx.beginPath();
-                        sk_ctx.moveTo(px + tileW/2, py + 4);
+                        sk_ctx.moveTo(px + tileW / 2, py + 4);
                         sk_ctx.lineTo(px + 4, py + tileH - 4);
                         sk_ctx.lineTo(px + tileW - 4, py + tileH - 4);
                         sk_ctx.closePath();
@@ -1467,7 +1465,7 @@
                         const pulseGlow = Math.abs(Math.sin(Date.now() / 300));
                         sk_ctx.fillStyle = `rgba(46, 196, 182, ${pulseGlow})`;
                         sk_ctx.beginPath();
-                        sk_ctx.arc(px + tileW/2, py + tileH/2, 4, 0, Math.PI * 2);
+                        sk_ctx.arc(px + tileW / 2, py + tileH / 2, 4, 0, Math.PI * 2);
                         sk_ctx.fill();
 
                     } else if (cell === 'O') {
@@ -1490,21 +1488,21 @@
 
                         sk_ctx.fillStyle = "#111625";
                         sk_ctx.beginPath();
-                        sk_ctx.arc(px + tileW/2, py + tileH/2 - 2, 3, 0, Math.PI*2);
+                        sk_ctx.arc(px + tileW / 2, py + tileH / 2 - 2, 3, 0, Math.PI * 2);
                         sk_ctx.fill();
-                        sk_ctx.fillRect(px + tileW/2 - 1.5, py + tileH/2 - 2, 3, 8);
+                        sk_ctx.fillRect(px + tileW / 2 - 1.5, py + tileH / 2 - 2, 3, 8);
 
                     } else if (cell === 'K') {
                         sk_ctx.strokeStyle = "rgba(255, 183, 3, 0.4)";
                         sk_ctx.lineWidth = 2;
                         sk_ctx.beginPath();
-                        sk_ctx.arc(px + tileW/2, py + tileH/2, tileW/4, 0, Math.PI * 2);
+                        sk_ctx.arc(px + tileW / 2, py + tileH / 2, tileW / 4, 0, Math.PI * 2);
                         sk_ctx.stroke();
 
                         sk_ctx.fillStyle = "rgba(255, 183, 3, 0.6)";
                         sk_ctx.font = "9px monospace";
                         sk_ctx.textAlign = "center";
-                        sk_ctx.fillText("KEY", px + tileW/2, py + tileH/2 + 3);
+                        sk_ctx.fillText("KEY", px + tileW / 2, py + tileH / 2 + 3);
 
                     } else if (cell === 'k') {
                         sk_ctx.fillStyle = "#ffb703";
@@ -1512,14 +1510,14 @@
                         sk_ctx.lineWidth = 1.5;
 
                         sk_ctx.beginPath();
-                        sk_ctx.arc(px + tileW/3, py + tileH/2, 5, 0, Math.PI * 2);
+                        sk_ctx.arc(px + tileW / 3, py + tileH / 2, 5, 0, Math.PI * 2);
                         sk_ctx.fill();
                         sk_ctx.stroke();
 
-                        sk_ctx.fillRect(px + tileW/3 + 4, py + tileH/2 - 2, tileW/3, 4);
-                        sk_ctx.strokeRect(px + tileW/3 + 4, py + tileH/2 - 2, tileW/3, 4);
+                        sk_ctx.fillRect(px + tileW / 3 + 4, py + tileH / 2 - 2, tileW / 3, 4);
+                        sk_ctx.strokeRect(px + tileW / 3 + 4, py + tileH / 2 - 2, tileW / 3, 4);
 
-                        sk_ctx.fillRect(px + tileW/3 + tileW/3 + 1, py + tileH/2, 3, 5);
+                        sk_ctx.fillRect(px + tileW / 3 + tileW / 3 + 1, py + tileH / 2, 3, 5);
                     }
                 }
             }
@@ -1530,28 +1528,28 @@
                 const pulse = Math.sin(Date.now() / 100) * 2;
 
                 sk_ctx.fillStyle = "#8a2be2";
-                sk_ctx.fillRect(ex + 6 - pulse, ey + 6 - pulse, tileW - 12 + pulse*2, tileH - 12 + pulse*2);
-                
+                sk_ctx.fillRect(ex + 6 - pulse, ey + 6 - pulse, tileW - 12 + pulse * 2, tileH - 12 + pulse * 2);
+
                 sk_ctx.strokeStyle = "#111625";
                 sk_ctx.lineWidth = 2;
-                sk_ctx.strokeRect(ex + 6 - pulse, ey + 6 - pulse, tileW - 12 + pulse*2, tileH - 12 + pulse*2);
+                sk_ctx.strokeRect(ex + 6 - pulse, ey + 6 - pulse, tileW - 12 + pulse * 2, tileH - 12 + pulse * 2);
 
                 sk_ctx.fillStyle = "#2ec4b6";
-                sk_ctx.fillRect(ex + tileW/3 - 2, ey + tileH/3, 4, 4);
-                sk_ctx.fillRect(ex + tileW - tileW/3 - 2, ey + tileH/3, 4, 4);
+                sk_ctx.fillRect(ex + tileW / 3 - 2, ey + tileH / 3, 4, 4);
+                sk_ctx.fillRect(ex + tileW - tileW / 3 - 2, ey + tileH / 3, 4, 4);
             });
 
-            const px = sk_state.playerX * tileW + tileW/2;
-            const py = sk_state.playerY * tileH + tileH/2;
+            const px = sk_state.playerX * tileW + tileW / 2;
+            const py = sk_state.playerY * tileH + tileH / 2;
 
             sk_ctx.fillStyle = "rgba(46, 196, 182, 0.3)";
             sk_ctx.beginPath();
-            sk_ctx.arc(px, py, tileW/3 + 4, 0, Math.PI * 2);
+            sk_ctx.arc(px, py, tileW / 3 + 4, 0, Math.PI * 2);
             sk_ctx.fill();
 
             sk_ctx.fillStyle = "#111625";
             sk_ctx.beginPath();
-            sk_ctx.arc(px, py, tileW/3, 0, Math.PI * 2);
+            sk_ctx.arc(px, py, tileW / 3, 0, Math.PI * 2);
             sk_ctx.fill();
 
             sk_ctx.strokeStyle = "#2ec4b6";
@@ -1564,7 +1562,7 @@
             sk_ctx.lineWidth = 2;
             sk_ctx.beginPath();
             sk_ctx.moveTo(px, py);
-            sk_ctx.lineTo(px + Math.cos(angle) * (tileW/6), py + Math.sin(angle) * (tileW/6));
+            sk_ctx.lineTo(px + Math.cos(angle) * (tileW / 6), py + Math.sin(angle) * (tileW / 6));
             sk_ctx.stroke();
 
             if (sk_state.isPaused) {
@@ -1580,6 +1578,10 @@
 
         /* --- GAME CONTROLLER INTERFACES --- */
         function startGame(levelIndex) {
+            if (!sk_levels.length) {
+                fetchGitLevels();
+                return;
+            }
             closeAllPopups();
             sk_state.isPlaying = true;
             sk_state.isPaused = false;
@@ -1587,18 +1589,18 @@
             sk_btn_pause.textContent = '⏸ Pause';
             sk_btn_pause.classList.remove('active');
             loadLevel(levelIndex);
-            
+
             sk_screen_start.style.display = 'none';
             sk_screen_gameover.style.display = 'none';
             sk_screen_victory.style.display = 'none';
             sk_game_play_area.style.display = 'flex';
-            
+
             startRenderLoop();
         }
 
         document.getElementById('sk_btn_start_game').onclick = () => startGame(0);
         document.getElementById('sk_btn_retry').onclick = () => startGame(sk_state.currentLevelIndex);
-        
+
         document.getElementById('sk_btn_next_level').onclick = () => {
             const nextIdx = sk_state.currentLevelIndex + 1;
             if (nextIdx < sk_levels.length) {
@@ -1651,7 +1653,7 @@
                 return;
             }
 
-            switch(e.key) {
+            switch (e.key) {
                 case 'ArrowUp':
                 case 'w':
                 case 'W':
@@ -1693,7 +1695,7 @@
         function getPinchDistance(t1, t2) {
             const dx = t1.clientX - t2.clientX;
             const dy = t1.clientY - t2.clientY;
-            return Math.sqrt(dx*dx + dy*dy);
+            return Math.sqrt(dx * dx + dy * dy);
         }
 
         sk_canvas_container.addEventListener('touchstart', e => {
@@ -1746,7 +1748,7 @@
 
         sk_canvas_container.addEventListener('touchmove', e => {
             const now = Date.now();
-            
+
             /* Two finger Pinch Zoom / Pan */
             if (e.touches.length === 2) {
                 const dist = getPinchDistance(e.touches[0], e.touches[1]);
@@ -1882,25 +1884,29 @@
         /* --- AUTOMATED LEVEL DEMO --- */
         let sk_demo_timeout = null;
         document.getElementById('sk_btn_demo').onclick = () => {
+            if (!sk_levels.length) {
+                fetchGitLevels();
+                return;
+            }
             closeAllPopups();
             startGame(0);
             sk_state.isDemo = true;
-            
+
             const demoSteps = [
-                {dx: 0, dy: -1}, /* Up (spike) -> HP 4 */
-                {dx: 0, dy: 1},  /* Down */
-                {dx: 0, dy: -1}, /* Up (spike) -> HP 7 */
-                {dx: 0, dy: 1},  /* Down */
-                {dx: 0, dy: -1}, /* Up (spike) -> HP 10 */
-                {dx: 0, dy: -1}, /* Up */
-                {dx: -1, dy: 0}, /* Left */
-                {dx: -1, dy: 0}, /* Left (entrance reached) */
+                { dx: 0, dy: -1 }, /* Up (spike) -> HP 4 */
+                { dx: 0, dy: 1 },  /* Down */
+                { dx: 0, dy: -1 }, /* Up (spike) -> HP 7 */
+                { dx: 0, dy: 1 },  /* Down */
+                { dx: 0, dy: -1 }, /* Up (spike) -> HP 10 */
+                { dx: 0, dy: -1 }, /* Up */
+                { dx: -1, dy: 0 }, /* Left */
+                { dx: -1, dy: 0 }, /* Left (entrance reached) */
             ];
 
             let stepIdx = 0;
             function runDemoStep() {
                 if (!sk_state.isDemo || !sk_state.isPlaying || sk_state.isPaused) return;
-                
+
                 const step = demoSteps[stepIdx];
                 movePlayer(step.dx, step.dy, true);
 
@@ -1917,7 +1923,9 @@
 
         /* --- INIT INSTANCE --- */
         loadSaveState();
+        fetchGitLevels();
     </script>
 </body>
+
 </html>
 ```
