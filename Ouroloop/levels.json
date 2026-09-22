@@ -1,4749 +1,1624 @@
-[
+{
+  "puzzles": [
     {
-        "name": "The Core",
-        "desc": "A simple exercise in spatial wrapping. Navigate to the right and swallow the essence.",
-        "moves": 9,
-        "loop": [
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 4,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 5
-            }
-        ],
-        "essences": [
-            {
-                "x": 10,
-                "y": 5
-            }
-        ],
-        "parasites": [],
-        "voids": [
-            {
-                "x": 7,
-                "y": 3
-            },
-            {
-                "x": 7,
-                "y": 7
-            }
-        ]
+      "id": 1,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 5,
+        "height": 4
+      },
+      "grid": [
+        "#####",
+        "#P B#",
+        "# .T#",
+        "#####"
+      ],
+      "solution": [
+        "Right",
+        "Down"
+      ]
     },
     {
-        "name": "First Squeeze",
-        "desc": "Slide through the opening left in the barrier to reach the essence.",
-        "moves": 10,
-        "loop": [
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 4,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 5
-            }
-        ],
-        "essences": [
-            {
-                "x": 11,
-                "y": 5
-            }
-        ],
-        "parasites": [],
-        "voids": [
-            {
-                "x": 7,
-                "y": 1
-            },
-            {
-                "x": 7,
-                "y": 2
-            },
-            {
-                "x": 7,
-                "y": 3
-            },
-            {
-                "x": 7,
-                "y": 7
-            },
-            {
-                "x": 7,
-                "y": 8
-            },
-            {
-                "x": 7,
-                "y": 9
-            }
-        ]
+      "id": 2,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 7,
+        "height": 3
+      },
+      "grid": [
+        "#######",
+        "#P B .T#",
+        "#######"
+      ],
+      "solution": [
+        "Right",
+        "Right"
+      ]
     },
     {
-        "name": "Topological Shift",
-        "desc": "A single barrier forces you to roll around the outer perimeter.",
-        "moves": 18,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 8
-            }
-        ],
-        "parasites": [],
-        "voids": [
-            {
-                "x": 6,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 9,
-                "y": 4
-            },
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 5
-            }
-        ]
+      "id": 3,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 5,
+        "height": 5
+      },
+      "grid": [
+        "#####",
+        "#P  #",
+        "# B #",
+        "# T #",
+        "#####"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Down"
+      ]
     },
     {
-        "name": "Double Feed",
-        "desc": "Enclose two split essences. You must roll back and forth carefully.",
-        "moves": 24,
-        "loop": [
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 5,
-                "y": 6
-            },
-            {
-                "x": 5,
-                "y": 7
-            },
-            {
-                "x": 4,
-                "y": 7
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 3,
-                "y": 6
-            }
-        ],
-        "essences": [
-            {
-                "x": 2,
-                "y": 9
-            },
-            {
-                "x": 5,
-                "y": 8
-            }
-        ],
-        "parasites": [
-            {
-                "x": 3,
-                "y": 1,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 9,
-                "y": 4
-            },
-            {
-                "x": 9,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 7
-            },
-            {
-                "x": 12,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 7
-            }
-        ]
+      "id": 4,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 6,
+        "height": 4
+      },
+      "grid": [
+        "######",
+        "#P B T#",
+        "#  B T#",
+        "######"
+      ],
+      "solution": [
+        "Right",
+        "Right",
+        "Down",
+        "Left",
+        "Down",
+        "Right"
+      ]
     },
     {
-        "name": "The Watcher",
-        "desc": "Avoid the slow moving parasite guarding the vertical gap.",
-        "moves": 18,
-        "loop": [
-            {
-                "x": 1,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 1,
-                "y": 6
-            },
-            {
-                "x": 1,
-                "y": 5
-            }
-        ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 5
-            }
-        ],
-        "parasites": [
-            {
-                "x": 7,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 0,
-                "maxLimit": 11
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 0
-            },
-            {
-                "x": 6,
-                "y": 1
-            },
-            {
-                "x": 6,
-                "y": 10
-            },
-            {
-                "x": 6,
-                "y": 11
-            },
-            {
-                "x": 8,
-                "y": 0
-            },
-            {
-                "x": 8,
-                "y": 1
-            },
-            {
-                "x": 8,
-                "y": 10
-            },
-            {
-                "x": 8,
-                "y": 11
-            },
-            {
-                "x": 11,
-                "y": 4
-            }
-        ]
+      "id": 5,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 5,
+        "height": 5
+      },
+      "grid": [
+        "#####",
+        "# T #",
+        "# B #",
+        "#P  #",
+        "#####"
+      ],
+      "solution": [
+        "Right",
+        "Up",
+        "Up"
+      ]
     },
     {
-        "name": "Chamber Split",
-        "desc": "Two chambers connected by a narrow tunnel.",
-        "moves": 23,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 9
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 8,
-                "y": 0
-            },
-            {
-                "x": 8,
-                "y": 1
-            },
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 3
-            },
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 8
-            },
-            {
-                "x": 8,
-                "y": 9
-            },
-            {
-                "x": 8,
-                "y": 10
-            },
-            {
-                "x": 8,
-                "y": 11
-            },
-            {
-                "x": 12,
-                "y": 8
-            }
-        ]
+      "id": 6,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 6,
+        "height": 5
+      },
+      "grid": [
+        "######",
+        "#P B #",
+        "# ##T#",
+        "#    #",
+        "######"
+      ],
+      "solution": [
+        "Down",
+        "Right",
+        "Right",
+        "Up",
+        "Right"
+      ]
     },
     {
-        "name": "Dual Orbit",
-        "desc": "Collect essences surrounding a central structural void pillar.",
-        "moves": 20,
-        "loop": [
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 6
-            },
-            {
-                "x": 10,
-                "y": 7
-            },
-            {
-                "x": 9,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 6
-            }
-        ],
-        "essences": [
-            {
-                "x": 5,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 9
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 3,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 13,
-                "y": 4
-            },
-            {
-                "x": 13,
-                "y": 5
-            },
-            {
-                "x": 13,
-                "y": 6
-            },
-            {
-                "x": 13,
-                "y": 7
-            },
-            {
-                "x": 12,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 7
-            }
-        ]
+      "id": 7,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 6,
+        "height": 4
+      },
+      "grid": [
+        "######",
+        "# T B#",
+        "# P  #",
+        "######"
+      ],
+      "solution": [
+        "Right",
+        "Up",
+        "Left"
+      ]
     },
     {
-        "name": "Narrow Passage",
-        "desc": "Be careful not to snap while translating through the central horizontal split.",
-        "moves": 37,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 9
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 0,
-                "y": 6
-            },
-            {
-                "x": 1,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 4,
-                "y": 6
-            },
-            {
-                "x": 5,
-                "y": 6
-            },
-            {
-                "x": 6,
-                "y": 6
-            },
-            {
-                "x": 7,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 10,
-                "y": 6
-            },
-            {
-                "x": 11,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 6
-            },
-            {
-                "x": 13,
-                "y": 6
-            },
-            {
-                "x": 14,
-                "y": 6
-            },
-            {
-                "x": 15,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 1
-            }
-        ]
+      "id": 8,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 7,
+        "height": 3
+      },
+      "grid": [
+        "#######",
+        "#P BBTT#",
+        "#######"
+      ],
+      "solution": [
+        "Right",
+        "Right"
+      ]
     },
     {
-        "name": "Parasite Patrol",
-        "desc": "A parasite moves horizontally across your path. Time your loop stretch.",
-        "moves": 29,
-        "loop": [
-            {
-                "x": 2,
-                "y": 8
-            },
-            {
-                "x": 3,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 9
-            },
-            {
-                "x": 4,
-                "y": 10
-            },
-            {
-                "x": 3,
-                "y": 10
-            },
-            {
-                "x": 2,
-                "y": 10
-            },
-            {
-                "x": 2,
-                "y": 9
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 8,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 5,
-                "maxLimit": 11
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 4
-            },
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 6,
-                "y": 6
-            },
-            {
-                "x": 10,
-                "y": 4
-            },
-            {
-                "x": 10,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 1
-            }
-        ]
+      "id": 9,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 6,
+        "height": 4
+      },
+      "grid": [
+        "######",
+        "#  T #",
+        "# B P#",
+        "######"
+      ],
+      "solution": [
+        "Up",
+        "Left",
+        "Left",
+        "Down",
+        "Right"
+      ]
     },
     {
-        "name": "Corner Trap",
-        "desc": "A tight spot holds the target essence. Enter and reverse carefully.",
-        "moves": 23,
-        "loop": [
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 5,
-                "y": 2
-            },
-            {
-                "x": 6,
-                "y": 2
-            },
-            {
-                "x": 6,
-                "y": 3
-            },
-            {
-                "x": 6,
-                "y": 4
-            },
-            {
-                "x": 5,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 3
-            }
-        ],
-        "parasites": [
-            {
-                "x": 6,
-                "y": 6,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 8
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 7,
-                "y": 8
-            },
-            {
-                "x": 8,
-                "y": 8
-            },
-            {
-                "x": 9,
-                "y": 8
-            },
-            {
-                "x": 10,
-                "y": 8
-            },
-            {
-                "x": 11,
-                "y": 8
-            }
-        ]
+      "id": 10,
+      "theme": "Sokoban",
+      "dimensions": {
+        "width": 7,
+        "height": 5
+      },
+      "grid": [
+        "#######",
+        "#P B  #",
+        "### # #",
+        "#T    #",
+        "#######"
+      ],
+      "solution": [
+        "Right",
+        "Right",
+        "Down",
+        "Down",
+        "Left",
+        "Left"
+      ]
     },
     {
-        "name": "Alternator",
-        "desc": "Two obstacles require winding moves. Plan your loop's dynamic curve.",
-        "moves": 23,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
+      "id": 11,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          0,
+          0,
+          0
         ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 5
-            }
+        [
+          0,
+          1,
+          0
         ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 5,
-                "y": 1
-            },
-            {
-                "x": 5,
-                "y": 2
-            },
-            {
-                "x": 5,
-                "y": 3
-            },
-            {
-                "x": 5,
-                "y": 4
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 7
-            },
-            {
-                "x": 9,
-                "y": 8
-            },
-            {
-                "x": 9,
-                "y": 9
-            },
-            {
-                "x": 9,
-                "y": 10
-            },
-            {
-                "x": 12,
-                "y": 4
-            }
+        [
+          0,
+          0,
+          0
         ]
+      ],
+      "solution": [
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
-        "name": "The Guard Dog",
-        "desc": "The parasite sweeps the only safe entry channel. Sync your cycle.",
-        "moves": 22,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
+      "id": 12,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          0,
+          1,
+          0
         ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 5
-            }
+        [
+          1,
+          1,
+          1
         ],
-        "parasites": [
-            {
-                "x": 8,
-                "y": 5,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 3,
-                "maxLimit": 8
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 7,
-                "y": 2
-            },
-            {
-                "x": 7,
-                "y": 3
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 7
-            },
-            {
-                "x": 9,
-                "y": 8
-            },
-            {
-                "x": 11,
-                "y": 4
-            }
+        [
+          0,
+          1,
+          0
         ]
+      ],
+      "solution": [
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
-        "name": "T-Crossing",
-        "desc": "Navigate the tricky intersections to consume dual essences.",
-        "moves": 17,
-        "loop": [
-            {
-                "x": 1,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 3,
-                "y": 8
-            },
-            {
-                "x": 2,
-                "y": 8
-            },
-            {
-                "x": 1,
-                "y": 8
-            },
-            {
-                "x": 1,
-                "y": 7
-            }
+      "id": 13,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          1,
+          0,
+          0
         ],
-        "essences": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 6,
-                "y": 7
-            }
+        [
+          0,
+          0,
+          0
         ],
-        "parasites": [
-            {
-                "x": 14,
-                "y": 2,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 11,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 2
-            },
-            {
-                "x": 7,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 9,
-                "y": 2
-            },
-            {
-                "x": 10,
-                "y": 2
-            },
-            {
-                "x": 11,
-                "y": 4
-            },
-            {
-                "x": 11,
-                "y": 5
-            },
-            {
-                "x": 11,
-                "y": 6
-            },
-            {
-                "x": 11,
-                "y": 7
-            },
-            {
-                "x": 11,
-                "y": 8
-            }
+        [
+          0,
+          0,
+          1
         ]
+      ],
+      "solution": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
-        "name": "Split Gateways",
-        "desc": "Choose between the upper or lower path. One is safer, one is faster.",
-        "moves": 25,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
+      "id": 14,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          1,
+          1,
+          1
         ],
-        "essences": [
-            {
-                "x": 14,
-                "y": 6
-            }
+        [
+          0,
+          0,
+          0
         ],
-        "parasites": [
-            {
-                "x": 7,
-                "y": 2,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 5,
-                "maxLimit": 10
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 6
-            },
-            {
-                "x": 7,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 6
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 13,
-                "y": 5
-            }
+        [
+          0,
+          0,
+          0
         ]
+      ],
+      "solution": [
+        [
+          0,
+          1
+        ]
+      ]
     },
     {
-        "name": "Islands of Trust",
-        "desc": "Warp your layout across small platform blocks without breaking symmetry.",
-        "moves": 17,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
+      "id": 15,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          1,
+          0,
+          0
         ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 2
-            }
+        [
+          1,
+          0,
+          0
         ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 2
-            },
-            {
-                "x": 6,
-                "y": 8
-            },
-            {
-                "x": 9,
-                "y": 4
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 1
-            }
+        [
+          1,
+          0,
+          0
         ]
+      ],
+      "solution": [
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
-        "name": "The Vertical Wave",
-        "desc": "A continuous wall forces a series of sharp up-and-down maneuvers.",
-        "moves": 15,
-        "loop": [
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 9,
-                "y": 4
-            },
-            {
-                "x": 10,
-                "y": 4
-            },
-            {
-                "x": 10,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 8,
-                "y": 6
-            },
-            {
-                "x": 8,
-                "y": 5
-            }
+      "id": 16,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          0,
+          1,
+          0
         ],
-        "essences": [
-            {
-                "x": 11,
-                "y": 9
-            }
+        [
+          1,
+          0,
+          1
         ],
-        "parasites": [
-            {
-                "x": 5,
-                "y": 7,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 5,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 4,
-                "y": 6
-            },
-            {
-                "x": 4,
-                "y": 7
-            },
-            {
-                "x": 4,
-                "y": 8
-            }
+        [
+          0,
+          1,
+          0
         ]
+      ],
+      "solution": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
-        "name": "Double Trouble",
-        "desc": "Two patrolling bugs cross paths. Find the safe temporal window.",
-        "moves": 28,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
+      "id": 17,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          1,
+          0,
+          0
         ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 6
-            }
+        [
+          0,
+          1,
+          0
         ],
-        "parasites": [
-            {
-                "x": 6,
-                "y": 3,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 2,
-                "maxLimit": 8
-            },
-            {
-                "x": 10,
-                "y": 8,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 3,
-                "maxLimit": 9
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 5
-            }
+        [
+          0,
+          0,
+          1
         ]
+      ],
+      "solution": [
+        [
+          0,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ]
     },
     {
-        "name": "Topological Lock",
-        "desc": "The essence is protected inside an incomplete ring of voids.",
-        "moves": 15,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
+      "id": 18,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          1,
+          1,
+          1
         ],
-        "essences": [
-            {
-                "x": 11,
-                "y": 5
-            }
+        [
+          1,
+          1,
+          1
         ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 10,
-                "y": 3
-            },
-            {
-                "x": 11,
-                "y": 3
-            },
-            {
-                "x": 12,
-                "y": 3
-            },
-            {
-                "x": 10,
-                "y": 7
-            },
-            {
-                "x": 11,
-                "y": 7
-            },
-            {
-                "x": 12,
-                "y": 7
-            },
-            {
-                "x": 10,
-                "y": 4
-            }
+        [
+          1,
+          1,
+          1
         ]
+      ],
+      "solution": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ]
     },
     {
-        "name": "Symmetric Vault",
-        "desc": "A puzzle requiring balanced moves left and right.",
-        "moves": 17,
-        "loop": [
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 6,
-                "y": 6
-            },
-            {
-                "x": 6,
-                "y": 7
-            },
-            {
-                "x": 5,
-                "y": 7
-            },
-            {
-                "x": 4,
-                "y": 7
-            },
-            {
-                "x": 4,
-                "y": 6
-            }
+      "id": 19,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          1,
+          0,
+          1
         ],
-        "essences": [
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 5
-            }
+        [
+          0,
+          0,
+          0
         ],
-        "parasites": [
-            {
-                "x": 14,
-                "y": 3,
-                "dx": -1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 6
-            },
-            {
-                "x": 7,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 6
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 7,
-                "y": 9
-            },
-            {
-                "x": 8,
-                "y": 9
-            },
-            {
-                "x": 9,
-                "y": 9
-            },
-            {
-                "x": 10,
-                "y": 9
-            }
+        [
+          1,
+          0,
+          1
         ]
+      ],
+      "solution": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ]
     },
     {
-        "name": "Spiral Inward",
-        "desc": "Wind your way inside a winding spiral corridor to collect the essence.",
-        "moves": 40,
-        "loop": [
-            {
-                "x": 1,
-                "y": 1
-            },
-            {
-                "x": 2,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 2,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 2
-            }
+      "id": 20,
+      "theme": "Lights Out",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        [
+          1,
+          0,
+          1
         ],
-        "essences": [
-            {
-                "x": 8,
-                "y": 5
-            }
+        [
+          0,
+          1,
+          0
         ],
-        "parasites": [
-            {
-                "x": 12,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 5,
-                "y": 2
-            },
-            {
-                "x": 6,
-                "y": 2
-            },
-            {
-                "x": 7,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 9,
-                "y": 2
-            },
-            {
-                "x": 10,
-                "y": 2
-            },
-            {
-                "x": 11,
-                "y": 2
-            },
-            {
-                "x": 11,
-                "y": 3
-            },
-            {
-                "x": 11,
-                "y": 4
-            },
-            {
-                "x": 11,
-                "y": 5
-            },
-            {
-                "x": 11,
-                "y": 6
-            },
-            {
-                "x": 11,
-                "y": 7
-            },
-            {
-                "x": 11,
-                "y": 8
-            },
-            {
-                "x": 5,
-                "y": 8
-            },
-            {
-                "x": 6,
-                "y": 8
-            },
-            {
-                "x": 7,
-                "y": 8
-            },
-            {
-                "x": 8,
-                "y": 8
-            },
-            {
-                "x": 9,
-                "y": 8
-            },
-            {
-                "x": 10,
-                "y": 8
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 5,
-                "y": 6
-            },
-            {
-                "x": 5,
-                "y": 7
-            },
-            {
-                "x": 7,
-                "y": 4
-            }
+        [
+          1,
+          0,
+          1
         ]
+      ],
+      "solution": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
-        "name": "Speed Traps",
-        "desc": "Quickly slip past fast, localized parasites.",
-        "moves": 25,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
+      "id": 21,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        "1.2",
+        "...",
+        "1.2"
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
         ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 7,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 4
-            },
-            {
-                "x": 9,
-                "y": 7,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 6,
-                "maxLimit": 9
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 8,
-                "y": 1
-            },
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 3
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 8
-            },
-            {
-                "x": 8,
-                "y": 9
-            },
-            {
-                "x": 11,
-                "y": 1
-            }
+        "2": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
         ]
+      }
     },
     {
-        "name": "Bifurcation",
-        "desc": "Split decision. Ensure your loop tail is clear of hazards.",
-        "moves": 30,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
+      "id": 22,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        "12.",
+        "...",
+        "1.2"
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
         ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 1
-            },
-            {
-                "x": 13,
-                "y": 10
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 0
-            }
+        "2": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
         ]
+      }
     },
     {
-        "name": "The Gridiron",
-        "desc": "A rigid checkerboard of voids. Deform step-by-step.",
-        "moves": 25,
-        "loop": [
-            {
-                "x": 1,
-                "y": 1
-            },
-            {
-                "x": 2,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 2,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 2
-            }
+      "id": 23,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        "1.1",
+        "2..",
+        "..2"
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ]
         ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 9
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 5,
-                "y": 2
-            },
-            {
-                "x": 5,
-                "y": 6
-            },
-            {
-                "x": 5,
-                "y": 10
-            },
-            {
-                "x": 9,
-                "y": 1
-            },
-            {
-                "x": 9,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 9
-            },
-            {
-                "x": 13,
-                "y": 3
-            },
-            {
-                "x": 13,
-                "y": 7
-            },
-            {
-                "x": 12,
-                "y": 8
-            }
+        "2": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ]
         ]
+      }
     },
     {
-        "name": "Slalom Run",
-        "desc": "Zigzag horizontally to reach the dual nodes at the right boundary.",
-        "moves": 39,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
+      "id": 24,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 4,
+        "height": 4
+      },
+      "grid": [
+        "1..2",
+        ".33.",
+        "....",
+        "1..2"
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ]
         ],
-        "essences": [
-            {
-                "x": 14,
-                "y": 4
-            },
-            {
-                "x": 14,
-                "y": 8
-            }
+        "2": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
         ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 5,
-                "y": 0
-            },
-            {
-                "x": 5,
-                "y": 1
-            },
-            {
-                "x": 5,
-                "y": 2
-            },
-            {
-                "x": 5,
-                "y": 3
-            },
-            {
-                "x": 5,
-                "y": 4
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 7
-            },
-            {
-                "x": 9,
-                "y": 8
-            },
-            {
-                "x": 9,
-                "y": 9
-            },
-            {
-                "x": 9,
-                "y": 10
-            },
-            {
-                "x": 9,
-                "y": 11
-            },
-            {
-                "x": 13,
-                "y": 3
-            }
+        "3": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ]
         ]
+      }
     },
     {
-        "name": "Weave and Bob",
-        "desc": "A moving parasite coordinates with tight columns.",
-        "moves": 27,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
+      "id": 25,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 4,
+        "height": 4
+      },
+      "grid": [
+        "1234",
+        "....",
+        "....",
+        "1234"
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ]
         ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 9
-            }
+        "2": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ]
         ],
-        "parasites": [
-            {
-                "x": 8,
-                "y": 4,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
+        "3": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ]
         ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 0
-            },
-            {
-                "x": 6,
-                "y": 1
-            },
-            {
-                "x": 6,
-                "y": 2
-            },
-            {
-                "x": 6,
-                "y": 3
-            },
-            {
-                "x": 10,
-                "y": 8
-            },
-            {
-                "x": 10,
-                "y": 9
-            },
-            {
-                "x": 10,
-                "y": 10
-            },
-            {
-                "x": 10,
-                "y": 11
-            },
-            {
-                "x": 11,
-                "y": 8
-            }
+        "4": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
         ]
+      }
     },
     {
-        "name": "Pressure Chamber",
-        "desc": "Small spaces mean high self-intersection probability.",
-        "moves": 12,
-        "loop": [
-            {
-                "x": 10,
-                "y": 7
-            },
-            {
-                "x": 11,
-                "y": 7
-            },
-            {
-                "x": 12,
-                "y": 7
-            },
-            {
-                "x": 12,
-                "y": 8
-            },
-            {
-                "x": 12,
-                "y": 9
-            },
-            {
-                "x": 11,
-                "y": 9
-            },
-            {
-                "x": 10,
-                "y": 9
-            },
-            {
-                "x": 10,
-                "y": 8
-            }
-        ],
-        "essences": [
-            {
-                "x": 7,
-                "y": 7
-            }
-        ],
-        "parasites": [
-            {
-                "x": 1,
-                "y": 6,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 12
-            }
-        ],
-        "voids": [
-            {
-                "x": 13,
-                "y": 4
-            },
-            {
-                "x": 13,
-                "y": 5
-            },
-            {
-                "x": 13,
-                "y": 6
-            },
-            {
-                "x": 13,
-                "y": 7
-            },
-            {
-                "x": 13,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 5,
-                "y": 4
-            },
-            {
-                "x": 6,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 8,
-                "y": 4
-            }
+      "id": 26,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 4,
+        "height": 4
+      },
+      "grid": [
+        "1...",
+        "....",
+        "....",
+        "...1"
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
         ]
+      }
     },
     {
-        "name": "Central Core Blockade",
-        "desc": "A massive block sits in the center. Swing around it cleanly.",
-        "moves": 20,
-        "loop": [
-            {
-                "x": 3,
-                "y": 1
-            },
-            {
-                "x": 4,
-                "y": 1
-            },
-            {
-                "x": 5,
-                "y": 1
-            },
-            {
-                "x": 5,
-                "y": 2
-            },
-            {
-                "x": 5,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 3,
-                "y": 2
-            }
+      "id": 27,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 4,
+        "height": 4
+      },
+      "grid": [
+        "1221",
+        "....",
+        "....",
+        "...."
+      ],
+      "solution": {
+        "2": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ]
         ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 10
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 9,
-                "y": 4
-            },
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 5
-            },
-            {
-                "x": 6,
-                "y": 6
-            },
-            {
-                "x": 7,
-                "y": 6
-            },
-            {
-                "x": 8,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 11,
-                "y": 9
-            }
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            3
+          ]
         ]
+      }
     },
     {
-        "name": "Syncopation",
-        "desc": "Synchronize loop contractions with two moving patrol phases.",
-        "moves": 25,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
+      "id": 28,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 4,
+        "height": 4
+      },
+      "grid": [
+        "1..2",
+        ".1..",
+        "..2.",
+        "...."
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ]
         ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 5
-            }
-        ],
-        "parasites": [
-            {
-                "x": 6,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 6
-            },
-            {
-                "x": 10,
-                "y": 9,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 5,
-                "maxLimit": 10
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 8,
-                "y": 0
-            },
-            {
-                "x": 8,
-                "y": 1
-            },
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 9
-            },
-            {
-                "x": 8,
-                "y": 10
-            },
-            {
-                "x": 8,
-                "y": 11
-            },
-            {
-                "x": 12,
-                "y": 4
-            }
+        "2": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            2
+          ]
         ]
+      }
     },
     {
-        "name": "The Hook",
-        "desc": "A hook-shaped corridor guards the path. Navigate around the bend to reach the target.",
-        "moves": 17,
-        "loop": [
-            {
-                "x": 2,
-                "y": 8
-            },
-            {
-                "x": 3,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 9
-            },
-            {
-                "x": 4,
-                "y": 10
-            },
-            {
-                "x": 3,
-                "y": 10
-            },
-            {
-                "x": 2,
-                "y": 10
-            },
-            {
-                "x": 2,
-                "y": 9
-            }
+      "id": 29,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 4,
+        "height": 4
+      },
+      "grid": [
+        "12..",
+        "....",
+        "..2.",
+        "1..."
+      ],
+      "solution": {
+        "1": [
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
         ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 5
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 9,
-                "y": 2
-            },
-            {
-                "x": 10,
-                "y": 2
-            },
-            {
-                "x": 10,
-                "y": 3
-            },
-            {
-                "x": 10,
-                "y": 4
-            },
-            {
-                "x": 11,
-                "y": 4
-            }
+        "2": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            2
+          ]
         ]
+      }
     },
     {
-        "name": "Crossover Alley",
-        "desc": "Two parasites sweep horizontally across the map grid.",
-        "moves": 23,
-        "loop": [
-            {
-                "x": 1,
-                "y": 1
-            },
-            {
-                "x": 2,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 2,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 2
-            }
+      "id": 30,
+      "theme": "Flow",
+      "dimensions": {
+        "width": 4,
+        "height": 4
+      },
+      "grid": [
+        "1..2",
+        "3..4",
+        "3..4",
+        "1..2"
+      ],
+      "solution": {
+        "1": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ]
         ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 9
-            }
+        "2": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
         ],
-        "parasites": [
-            {
-                "x": 4,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 12
-            },
-            {
-                "x": 12,
-                "y": 7,
-                "dx": -1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 12
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
+        "3": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
         ],
-        "voids": [
-            {
-                "x": 12,
-                "y": 8
-            }
+        "4": [
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ]
         ]
+      }
     },
     {
-        "name": "Topological Prism",
-        "desc": "Three essences in highly isolated outer pocket sectors.",
-        "moves": 17,
-        "loop": [
-            {
-                "x": 11,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 4
-            },
-            {
-                "x": 13,
-                "y": 4
-            },
-            {
-                "x": 13,
-                "y": 5
-            },
-            {
-                "x": 13,
-                "y": 6
-            },
-            {
-                "x": 12,
-                "y": 6
-            },
-            {
-                "x": 11,
-                "y": 6
-            },
-            {
-                "x": 11,
-                "y": 5
-            }
-        ],
-        "essences": [
-            {
-                "x": 7,
-                "y": 7
-            },
-            {
-                "x": 7,
-                "y": 2
-            },
-            {
-                "x": 11,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 3,
-                "y": 3,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 4,
-                "y": 6
-            },
-            {
-                "x": 4,
-                "y": 7
-            },
-            {
-                "x": 4,
-                "y": 8
-            }
-        ]
+      "id": 31,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 4,
+        "height": 1
+      },
+      "grid": [
+        "P K D E"
+      ],
+      "solution": [
+        "Right",
+        "Right",
+        "Right"
+      ]
     },
     {
-        "name": "Gatekeeper",
-        "desc": "A single parasite blocks the inner sanctum. Bait and switch.",
-        "moves": 34,
-        "loop": [
-            {
-                "x": 1,
-                "y": 1
-            },
-            {
-                "x": 2,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 2,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 2
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 9,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 4
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 7,
-                "y": 0
-            },
-            {
-                "x": 7,
-                "y": 1
-            },
-            {
-                "x": 7,
-                "y": 2
-            },
-            {
-                "x": 7,
-                "y": 3
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 5
-            },
-            {
-                "x": 11,
-                "y": 1
-            },
-            {
-                "x": 11,
-                "y": 2
-            },
-            {
-                "x": 11,
-                "y": 3
-            },
-            {
-                "x": 11,
-                "y": 4
-            },
-            {
-                "x": 11,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 1
-            }
-        ]
+      "id": 32,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 4,
+        "height": 3
+      },
+      "grid": [
+        "P . D E",
+        ". . . .",
+        "K . . ."
+      ],
+      "solution": [
+        "Down",
+        "Down",
+        "Right",
+        "Up",
+        "Up",
+        "Right",
+        "Right"
+      ]
     },
     {
-        "name": "Checker Clash",
-        "desc": "Navigate checkerboard blocks while an active parasite intercepts tracks.",
-        "moves": 20,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 14,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 9,
-                "y": 6,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 3,
-                "maxLimit": 9
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 10,
-                "y": 2
-            },
-            {
-                "x": 12,
-                "y": 4
-            },
-            {
-                "x": 13,
-                "y": 1
-            }
-        ]
+      "id": 33,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 6,
+        "height": 1
+      },
+      "grid": [
+        "P K1 D1 K2 D2 E"
+      ],
+      "solution": [
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Right"
+      ]
     },
     {
-        "name": "Hourglass Corridor",
-        "desc": "A very tight choke point. You must align your nodes perfectly linearly.",
-        "moves": 18,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
-        ],
-        "essences": [
-            {
-                "x": 14,
-                "y": 6
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 8,
-                "y": 0
-            },
-            {
-                "x": 8,
-                "y": 1
-            },
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 3
-            },
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 8,
-                "y": 8
-            },
-            {
-                "x": 8,
-                "y": 9
-            },
-            {
-                "x": 8,
-                "y": 10
-            },
-            {
-                "x": 8,
-                "y": 11
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 9,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 8
-            },
-            {
-                "x": 9,
-                "y": 8
-            },
-            {
-                "x": 13,
-                "y": 5
-            }
-        ]
+      "id": 34,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 3,
+        "height": 5
+      },
+      "grid": [
+        "# E #",
+        "# D #",
+        "# P #",
+        "# . #",
+        "# K #"
+      ],
+      "solution": [
+        "Down",
+        "Down",
+        "Up",
+        "Up",
+        "Up"
+      ]
     },
     {
-        "name": "Threading the Needle",
-        "desc": "Avoid touch blocks that leave exactly one node space of breathing room.",
-        "moves": 15,
-        "loop": [
-            {
-                "x": 10,
-                "y": 3
-            },
-            {
-                "x": 11,
-                "y": 3
-            },
-            {
-                "x": 12,
-                "y": 3
-            },
-            {
-                "x": 12,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 5
-            },
-            {
-                "x": 11,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 4
-            }
-        ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 7
-            }
-        ],
-        "parasites": [
-            {
-                "x": 8,
-                "y": 6,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 5,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 4,
-                "y": 6
-            }
-        ]
+      "id": 35,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        "P # E",
+        ". # D",
+        "K . ."
+      ],
+      "solution": [
+        "Down",
+        "Down",
+        "Right",
+        "Right",
+        "Up",
+        "Up"
+      ]
     },
     {
-        "name": "Side Winder",
-        "desc": "A horizontal snake course with a parasite tracking the curves.",
-        "moves": 32,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 8,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 6,
-                "maxLimit": 11
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 0,
-                "y": 6
-            },
-            {
-                "x": 1,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 4,
-                "y": 6
-            },
-            {
-                "x": 5,
-                "y": 6
-            },
-            {
-                "x": 8,
-                "y": 0
-            },
-            {
-                "x": 8,
-                "y": 1
-            },
-            {
-                "x": 8,
-                "y": 2
-            },
-            {
-                "x": 8,
-                "y": 3
-            },
-            {
-                "x": 12,
-                "y": 1
-            }
-        ]
+      "id": 36,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 4,
+        "height": 3
+      },
+      "grid": [
+        "P . D1 E",
+        ". # # .",
+        "K1 . D2 K2"
+      ],
+      "solution": [
+        "Down",
+        "Down",
+        "Right",
+        "Right",
+        "Right",
+        "Up",
+        "Up",
+        "Right"
+      ]
     },
     {
-        "name": "Gridiron Split",
-        "desc": "Split walls segmenting four separate essence targets.",
-        "moves": 24,
-        "loop": [
-            {
-                "x": 13,
-                "y": 5
-            },
-            {
-                "x": 14,
-                "y": 5
-            },
-            {
-                "x": 15,
-                "y": 5
-            },
-            {
-                "x": 15,
-                "y": 6
-            },
-            {
-                "x": 15,
-                "y": 7
-            },
-            {
-                "x": 14,
-                "y": 7
-            },
-            {
-                "x": 13,
-                "y": 7
-            },
-            {
-                "x": 13,
-                "y": 6
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 8
-            },
-            {
-                "x": 13,
-                "y": 4
-            },
-            {
-                "x": 10,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 6
-            }
-        ],
-        "parasites": [
-            {
-                "x": 1,
-                "y": 9,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 3,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 7
-            }
-        ]
+      "id": 37,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        "P . .",
+        "# # K",
+        "E D ."
+      ],
+      "solution": [
+        "Right",
+        "Right",
+        "Down",
+        "Down",
+        "Left",
+        "Left"
+      ]
     },
     {
-        "name": "The Centipede",
-        "desc": "A long parasite snake blocks central lanes. Move defensively.",
-        "moves": 23,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 9
-            }
-        ],
-        "parasites": [
-            {
-                "x": 8,
-                "y": 5,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 2,
-                "maxLimit": 9
-            },
-            {
-                "x": 10,
-                "y": 6,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 2,
-                "maxLimit": 9
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 8
-            }
-        ]
+      "id": 38,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 4,
+        "height": 3
+      },
+      "grid": [
+        ". K . .",
+        "P # D E",
+        ". . . ."
+      ],
+      "solution": [
+        "Up",
+        "Right",
+        "Down",
+        "Down",
+        "Right",
+        "Up",
+        "Right"
+      ]
     },
     {
-        "name": "The Outer Rim",
-        "desc": "Outer edges are clear, but central paths are blocked by voids.",
-        "moves": 15,
-        "loop": [
-            {
-                "x": 8,
-                "y": 9
-            },
-            {
-                "x": 9,
-                "y": 9
-            },
-            {
-                "x": 10,
-                "y": 9
-            },
-            {
-                "x": 10,
-                "y": 10
-            },
-            {
-                "x": 10,
-                "y": 11
-            },
-            {
-                "x": 9,
-                "y": 11
-            },
-            {
-                "x": 8,
-                "y": 11
-            },
-            {
-                "x": 8,
-                "y": 10
-            }
-        ],
-        "essences": [
-            {
-                "x": 8,
-                "y": 3
-            }
-        ],
-        "parasites": [
-            {
-                "x": 13,
-                "y": 4,
-                "dx": -1,
-                "dy": 0,
-                "minLimit": 6,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 5,
-                "y": 4
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 5,
-                "y": 6
-            },
-            {
-                "x": 5,
-                "y": 7
-            },
-            {
-                "x": 5,
-                "y": 8
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 3,
-                "y": 8
-            }
-        ]
+      "id": 39,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 3,
+        "height": 3
+      },
+      "grid": [
+        "P K #",
+        ". # D",
+        ". . E"
+      ],
+      "solution": [
+        "Right",
+        "Left",
+        "Down",
+        "Down",
+        "Right",
+        "Right",
+        "Up"
+      ]
     },
     {
-        "name": "Subway System",
-        "desc": "Parallel channels with alternating direction patrols.",
-        "moves": 15,
-        "loop": [
-            {
-                "x": 11,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 5
-            },
-            {
-                "x": 13,
-                "y": 5
-            },
-            {
-                "x": 13,
-                "y": 6
-            },
-            {
-                "x": 13,
-                "y": 7
-            },
-            {
-                "x": 12,
-                "y": 7
-            },
-            {
-                "x": 11,
-                "y": 7
-            },
-            {
-                "x": 11,
-                "y": 6
-            }
-        ],
-        "essences": [
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 14,
-                "y": 3,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            },
-            {
-                "x": 3,
-                "y": 10,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            },
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 9
-            },
-            {
-                "x": 7,
-                "y": 9
-            },
-            {
-                "x": 8,
-                "y": 9
-            },
-            {
-                "x": 9,
-                "y": 9
-            },
-            {
-                "x": 10,
-                "y": 9
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 7
-            }
-        ]
+      "id": 40,
+      "theme": "Maze Escape",
+      "dimensions": {
+        "width": 8,
+        "height": 1
+      },
+      "grid": [
+        "P K1 K2 K3 D1 D2 D3 E"
+      ],
+      "solution": [
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Right",
+        "Right"
+      ]
     },
     {
-        "name": "Helix Chamber",
-        "desc": "An elaborate double helix track with narrow bypass points.",
-        "moves": 18,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 5
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 3
-            },
-            {
-                "x": 7,
-                "y": 3
-            },
-            {
-                "x": 8,
-                "y": 3
-            },
-            {
-                "x": 7,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 9,
-                "y": 7
-            },
-            {
-                "x": 10,
-                "y": 4
-            },
-            {
-                "x": 11,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 4
-            }
-        ]
+      "id": 41,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 5,
+        "height": 5
+      },
+      "grid": [
+        "#####",
+        "#P .#",
+        "#.#.#",
+        "#.E #",
+        "#####"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Left",
+        "Down"
+      ]
     },
     {
-        "name": "The gauntlet",
-        "desc": "A long straight line populated by four rapid vertical patrols.",
-        "moves": 30,
-        "loop": [
-            {
-                "x": 1,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 7
-            },
-            {
-                "x": 1,
-                "y": 6
-            }
-        ],
-        "essences": [
-            {
-                "x": 14,
-                "y": 6
-            }
-        ],
-        "parasites": [
-            {
-                "x": 5,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            },
-            {
-                "x": 7,
-                "y": 9,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            },
-            {
-                "x": 9,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            },
-            {
-                "x": 11,
-                "y": 9,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 13,
-                "y": 5
-            }
-        ]
+      "id": 42,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 6,
+        "height": 5
+      },
+      "grid": [
+        "######",
+        "#P  .#",
+        "## #.#",
+        "#E   #",
+        "######"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Left",
+        "Down"
+      ]
     },
     {
-        "name": "Enclosure Lockout",
-        "desc": "Targets require capturing other objects concurrently to hit the count.",
-        "moves": 17,
-        "loop": [
-            {
-                "x": 1,
-                "y": 1
-            },
-            {
-                "x": 2,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 2,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 2
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 2
-            }
-        ],
-        "parasites": [
-            {
-                "x": 13,
-                "y": 8,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 5,
-                "maxLimit": 10
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 8,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 1
-            }
-        ]
+      "id": 43,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 7,
+        "height": 5
+      },
+      "grid": [
+        "#######",
+        "#P   ##",
+        "### # #",
+        "#E    #",
+        "#######"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Left",
+        "Down"
+      ]
     },
     {
-        "name": "The Sieve",
-        "desc": "An extremely porous wall forces the loop to break into multiple thin tracks.",
-        "moves": 28,
-        "loop": [
-            {
-                "x": 2,
-                "y": 8
-            },
-            {
-                "x": 3,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 9
-            },
-            {
-                "x": 4,
-                "y": 10
-            },
-            {
-                "x": 3,
-                "y": 10
-            },
-            {
-                "x": 2,
-                "y": 10
-            },
-            {
-                "x": 2,
-                "y": 9
-            }
-        ],
-        "essences": [
-            {
-                "x": 6,
-                "y": 4
-            },
-            {
-                "x": 10,
-                "y": 9
-            }
-        ],
-        "parasites": [
-            {
-                "x": 7,
-                "y": 10,
-                "dx": -1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 3
-            },
-            {
-                "x": 9,
-                "y": 5
-            },
-            {
-                "x": 5,
-                "y": 7
-            },
-            {
-                "x": 3,
-                "y": 7
-            }
-        ]
+      "id": 44,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 5,
+        "height": 5
+      },
+      "grid": [
+        "#####",
+        "#P  #",
+        "# # #",
+        "#  E#",
+        "#####"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Right"
+      ]
     },
     {
-        "name": "Cross Check",
-        "desc": "A grid matrix with horizontal and vertical guards sliding past each other.",
-        "moves": 24,
-        "loop": [
-            {
-                "x": 1,
-                "y": 1
-            },
-            {
-                "x": 2,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 1
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 2,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 3
-            },
-            {
-                "x": 1,
-                "y": 2
-            }
-        ],
-        "essences": [
-            {
-                "x": 13,
-                "y": 10
-            }
-        ],
-        "parasites": [
-            {
-                "x": 6,
-                "y": 4,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 2,
-                "maxLimit": 9
-            },
-            {
-                "x": 9,
-                "y": 6,
-                "dx": -1,
-                "dy": 0,
-                "minLimit": 4,
-                "maxLimit": 11
-            },
-            {
-                "x": 5,
-                "y": 5,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 2,
-                "maxLimit": 9
-            }
-        ],
-        "voids": [
-            {
-                "x": 12,
-                "y": 9
-            }
-        ]
+      "id": 45,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 7,
+        "height": 5
+      },
+      "grid": [
+        "#######",
+        "#P .  #",
+        "# # # #",
+        "#  E  #",
+        "#######"
+      ],
+      "solution": [
+        "Down",
+        "Right",
+        "Up",
+        "Right",
+        "Down"
+      ]
     },
     {
-        "name": "Decompression",
-        "desc": "Move into massive spaces but construct loops small enough to avoid obstacles.",
-        "moves": 19,
-        "loop": [
-            {
-                "x": 2,
-                "y": 2
-            },
-            {
-                "x": 3,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 2
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 4,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 3
-            }
-        ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 5
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 6,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 4
-            },
-            {
-                "x": 7,
-                "y": 6
-            },
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 11,
-                "y": 4
-            }
-        ]
+      "id": 46,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 8,
+        "height": 5
+      },
+      "grid": [
+        "########",
+        "#P     #",
+        "##### ##",
+        "#E     #",
+        "########"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Left"
+      ]
     },
     {
-        "name": "Spike Runner",
-        "desc": "A speed-run horizontal track inside highly dangerous spikes.",
-        "moves": 30,
-        "loop": [
-            {
-                "x": 13,
-                "y": 9
-            },
-            {
-                "x": 14,
-                "y": 9
-            },
-            {
-                "x": 15,
-                "y": 9
-            },
-            {
-                "x": 15,
-                "y": 10
-            },
-            {
-                "x": 15,
-                "y": 11
-            },
-            {
-                "x": 14,
-                "y": 11
-            },
-            {
-                "x": 13,
-                "y": 11
-            },
-            {
-                "x": 13,
-                "y": 10
-            }
-        ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 8
-            }
-        ],
-        "parasites": [
-            {
-                "x": 4,
-                "y": 9,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            },
-            {
-                "x": 9,
-                "y": 6,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 8,
-                "maxLimit": 14
-            },
-            {
-                "x": 7,
-                "y": 9,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 6
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 3
-            },
-            {
-                "x": 12,
-                "y": 3
-            },
-            {
-                "x": 7,
-                "y": 3
-            }
-        ]
+      "id": 47,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 6,
+        "height": 6
+      },
+      "grid": [
+        "######",
+        "#P  ##",
+        "##   #",
+        "#  # #",
+        "##  E#",
+        "######"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Left",
+        "Down",
+        "Right"
+      ]
     },
     {
-        "name": "The Trident",
-        "desc": "Three separate long narrow corridors. You must stretch to reach them.",
-        "moves": 22,
-        "loop": [
-            {
-                "x": 10,
-                "y": 4
-            },
-            {
-                "x": 11,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 5
-            },
-            {
-                "x": 12,
-                "y": 6
-            },
-            {
-                "x": 11,
-                "y": 6
-            },
-            {
-                "x": 10,
-                "y": 6
-            },
-            {
-                "x": 10,
-                "y": 5
-            }
-        ],
-        "essences": [
-            {
-                "x": 9,
-                "y": 4
-            },
-            {
-                "x": 12,
-                "y": 8
-            },
-            {
-                "x": 13,
-                "y": 3
-            }
-        ],
-        "parasites": [
-            {
-                "x": 8,
-                "y": 8,
-                "dx": -1,
-                "dy": 0,
-                "minLimit": 3,
-                "maxLimit": 14
-            }
-        ],
-        "voids": [
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 8
-            },
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 3,
-                "y": 7
-            }
-        ]
+      "id": 48,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 7,
+        "height": 5
+      },
+      "grid": [
+        "#######",
+        "#P #  #",
+        "#   # #",
+        "# #  E#",
+        "#######"
+      ],
+      "solution": [
+        "Down",
+        "Right",
+        "Up",
+        "Right",
+        "Down"
+      ]
     },
     {
-        "name": "Mirror Match",
-        "desc": "Perfect spatial mirroring required to hit targets on both poles simultaneously.",
-        "moves": 17,
-        "loop": [
-            {
-                "x": 7,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 5
-            },
-            {
-                "x": 9,
-                "y": 6
-            },
-            {
-                "x": 9,
-                "y": 7
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 7,
-                "y": 7
-            },
-            {
-                "x": 7,
-                "y": 6
-            }
-        ],
-        "essences": [
-            {
-                "x": 8,
-                "y": 1
-            },
-            {
-                "x": 8,
-                "y": 10
-            }
-        ],
-        "parasites": [
-            {
-                "x": 11,
-                "y": 2,
-                "dx": 0,
-                "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 4,
-                "y": 5
-            },
-            {
-                "x": 5,
-                "y": 5
-            },
-            {
-                "x": 10,
-                "y": 5
-            },
-            {
-                "x": 11,
-                "y": 5
-            },
-            {
-                "x": 7,
-                "y": 0
-            }
-        ]
+      "id": 49,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 7,
+        "height": 5
+      },
+      "grid": [
+        "#######",
+        "#P    #",
+        "# ### #",
+        "#  #E #",
+        "#######"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Left",
+        "Up",
+        "Right",
+        "Down"
+      ]
     },
     {
-        "name": "Ouroboros Mastery",
-        "desc": "The ultimate test. Tight pathways, hyper fast patrols, extreme coordination.",
-        "moves": 29,
-        "loop": [
-            {
-                "x": 11,
-                "y": 9
-            },
-            {
-                "x": 12,
-                "y": 9
-            },
-            {
-                "x": 13,
-                "y": 9
-            },
-            {
-                "x": 13,
-                "y": 10
-            },
-            {
-                "x": 13,
-                "y": 11
-            },
-            {
-                "x": 12,
-                "y": 11
-            },
-            {
-                "x": 11,
-                "y": 11
-            },
-            {
-                "x": 11,
-                "y": 10
-            }
-        ],
-        "essences": [
-            {
-                "x": 12,
-                "y": 5
-            },
-            {
-                "x": 8,
-                "y": 7
-            },
-            {
-                "x": 5,
-                "y": 9
-            }
-        ],
-        "parasites": [
-            {
-                "x": 5,
-                "y": 4,
-                "dx": -1,
-                "dy": 0,
-                "minLimit": 4,
-                "maxLimit": 14
-            },
-            {
-                "x": 10,
-                "y": 2,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            },
-            {
-                "x": 2,
-                "y": 9,
-                "dx": 1,
-                "dy": 0,
-                "minLimit": 1,
-                "maxLimit": 14
-            },
-            {
-                "x": 1,
-                "y": 6,
-                "dx": 0,
-                "dy": -1,
-                "minLimit": 1,
-                "maxLimit": 10
-            }
-        ],
-        "voids": [
-            {
-                "x": 3,
-                "y": 4
-            },
-            {
-                "x": 3,
-                "y": 5
-            },
-            {
-                "x": 3,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 4
-            },
-            {
-                "x": 2,
-                "y": 5
-            },
-            {
-                "x": 2,
-                "y": 6
-            },
-            {
-                "x": 2,
-                "y": 7
-            },
-            {
-                "x": 2,
-                "y": 8
-            },
-            {
-                "x": 4,
-                "y": 3
-            },
-            {
-                "x": 5,
-                "y": 3
-            },
-            {
-                "x": 6,
-                "y": 3
-            }
-        ]
+      "id": 50,
+      "theme": "Sliding Ice",
+      "dimensions": {
+        "width": 8,
+        "height": 6
+      },
+      "grid": [
+        "########",
+        "#P  #  #",
+        "# #   ##",
+        "#   #  #",
+        "## # E #",
+        "########"
+      ],
+      "solution": [
+        "Right",
+        "Down",
+        "Left",
+        "Down",
+        "Right",
+        "Up",
+        "Right",
+        "Down"
+      ]
     }
-]
+  ]
+}
