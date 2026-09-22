@@ -202,7 +202,7 @@
     {
         "name": "Double Feed",
         "desc": "Enclose two split essences. You must roll back and forth carefully.",
-        "moves": 19,
+        "moves": 24,
         "loop": [
             {
                 "x": 3,
@@ -338,8 +338,8 @@
                 "y": 2,
                 "dx": 0,
                 "dy": 1,
-                "minLimit": 1,
-                "maxLimit": 9
+                "minLimit": 0,
+                "maxLimit": 11
             },
             {
                 "x": 5,
@@ -624,7 +624,7 @@
         "essences": [
             {
                 "x": 13,
-                "y": 2
+                "y": 9
             }
         ],
         "parasites": [
@@ -1475,7 +1475,7 @@
     {
         "name": "Double Trouble",
         "desc": "Two patrolling bugs cross paths. Find the safe temporal window.",
-        "moves": 22,
+        "moves": 28,
         "loop": [
             {
                 "x": 1,
@@ -1750,7 +1750,7 @@
     {
         "name": "Spiral Inward",
         "desc": "Wind your way inside a winding spiral corridor to collect the essence.",
-        "moves": 14,
+        "moves": 40,
         "loop": [
             {
                 "x": 1,
@@ -3350,7 +3350,7 @@
     {
         "name": "Side Winder",
         "desc": "A horizontal snake course with a parasite tracking the curves.",
-        "moves": 39,
+        "moves": 32,
         "loop": [
             {
                 "x": 2,
