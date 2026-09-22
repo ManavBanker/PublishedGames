@@ -392,6 +392,23 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 10px;
       margin-top: 15px;
+      max-height: 55vh;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    .sk_level_grid::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sk_level_grid::-webkit-scrollbar-track {
+      background: #111420;
+      border-radius: 3px;
+    }
+
+    .sk_level_grid::-webkit-scrollbar-thumb {
+      background: #00f3ff;
+      border-radius: 3px;
     }
 
     .sk_level_cell {
@@ -574,7 +591,7 @@
       }
     }
   </style>
-<link rel="stylesheet" href="css/framework.css">`n</head>
+</head>
 
 <body>
 
@@ -590,7 +607,7 @@
       <div class="sk_top_buttons">
         <!-- Unified Dropdown Navigation Menu -->
         <div class="sk_nav_dropdown">
-          <button id="sk_btn_menu_toggle" class="sk_btn">â˜° Menu</button>
+          <button id="sk_btn_menu_toggle" class="sk_btn">☰ Menu</button>
           <div id="sk_dropdown_menu" class="sk_dropdown_content">
             <button id="sk_btn_levels">Levels</button>
             <button id="sk_btn_settings">Settings</button>
@@ -636,10 +653,6 @@
           <button id="sk_toggle_audio" class="sk_btn sk_btn_active">ON</button>
         </div>
         <div class="sk_popup_row">
-          <span>Control Sensitivity</span>
-          <button id="sk_toggle_sens" class="sk_btn">Normal</button>
-        </div>
-        <div class="sk_popup_row">
           <span>Symmetry visual aid</span>
           <button id="sk_toggle_gridlines" class="sk_btn sk_btn_active">ON</button>
         </div>
@@ -653,15 +666,16 @@
       <div class="sk_popup_content">
         <p class="sk_popup_title">How to Play</p>
         <div class="sk_popup_body">
-          <p>â€¢ You control the <b class="sk_neon_cyan">BLUE (Real) Node</b> directly using WASD, Arrows, or the virtual
+          <p>• You control the <b class="sk_neon_cyan">BLUE (Real) Node</b> directly using WASD, Arrows, or the
+            virtual
             D-Pad.</p>
-          <p>â€¢ The <b class="sk_neon_pink">PINK (Reflection) Node</b> moves simultaneously based on the current <b
+          <p>• The <b class="sk_neon_pink">PINK (Reflection) Node</b> moves simultaneously based on the current <b
               class="sk_neon_green">Symmetry Rule</b>.</p>
-          <p>â€¢ The active Symmetry Rule <b>shifts every 5 moves</b>! Watch the indicator carefully.</p>
-          <p>â€¢ Navigate obstacles. Use walls strategically to get nodes in and out of sync.</p>
-          <p>â€¢ Land both nodes on their respective glowing <b class="sk_neon_cyan">Cyan</b> & <b
+          <p>• The active Symmetry Rule <b>shifts after set intervals</b>! Watch the SHIFT IN indicator carefully.</p>
+          <p>• Navigate obstacles. Use walls strategically to get nodes in and out of sync.</p>
+          <p>• Land both nodes on their respective glowing <b class="sk_neon_cyan">Cyan</b> & <b
               class="sk_neon_pink">Pink</b> <b>Symmetry Gates</b> on the exact same move to win.</p>
-           <p>â€¢ Touch a <b class="sk_neon_orange">Red Void Hazard</b> or exceed par, and the level resets. Use <b>Undo
+          <p>• Touch a <b class="sk_neon_orange">Red Void Hazard</b> or exceed par, and the level resets. Use <b>Undo
               (Z)</b> or Double Tap to experiment safely!</p>
         </div>
         <button class="sk_btn sk_close_popup">Got It</button>
@@ -741,17 +755,17 @@
 
     <!-- THIRD DIV: DRAGGABLE VIRTUAL CONTROLS -->
     <div class="sk_controls_container" id="sk_draggable_controls">
-      <div class="sk_drag_handle">â†• Drag Control Panel â†•</div>
+      <div class="sk_drag_handle">↕ Drag Control Panel ↕</div>
       <div class="sk_control_row">
-        <button id="sk_ctrl_up" class="sk_ctrl_btn">â–²</button>
+        <button id="sk_ctrl_up" class="sk_ctrl_btn">▲</button>
       </div>
       <div class="sk_control_row">
-        <button id="sk_ctrl_left" class="sk_ctrl_btn">â—€</button>
+        <button id="sk_ctrl_left" class="sk_ctrl_btn">◀</button>
         <button id="sk_ctrl_undo" class="sk_ctrl_btn_action">Undo (Z)</button>
-        <button id="sk_ctrl_right" class="sk_ctrl_btn">â–¶</button>
+        <button id="sk_ctrl_right" class="sk_ctrl_btn">▶</button>
       </div>
       <div class="sk_control_row">
-        <button id="sk_ctrl_down" class="sk_ctrl_btn">â–¼</button>
+        <button id="sk_ctrl_down" class="sk_ctrl_btn">▼</button>
       </div>
     </div>
 
@@ -842,10 +856,10 @@
          STATE MANAGEMENT & DATA MODELS
          ========================================== */
       const SYMMETRY_RULES = [
-        {name: 'Vertical Reflection', color: '#39ff14', desc: 'Ref flips Left/Right'},
-        {name: 'Horizontal Reflection', color: '#ffff00', desc: 'Ref flips Up/Down'},
-        {name: 'Rotational Symmetry', color: '#ff6600', desc: 'Ref rotates 180Â°'},
-        {name: 'Diagonal Chiral', color: '#cc00ff', desc: 'Ref swaps X/Y'}
+        { name: 'Vertical Reflection', color: '#39ff14', desc: 'Ref flips Left/Right' },
+        { name: 'Horizontal Reflection', color: '#ffff00', desc: 'Ref flips Up/Down' },
+        { name: 'Rotational Symmetry', color: '#ff6600', desc: 'Ref rotates 180°' },
+        { name: 'Diagonal Chiral', color: '#cc00ff', desc: 'Ref swaps X/Y' }
       ];
 
       /* Local levels fallback */
@@ -867,10 +881,10 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          realStart: {x: 1, y: 3},
-          realGate: {x: 4, y: 3},
-          refStart: {x: 10, y: 3},
-          refGate: {x: 7, y: 3},
+          realStart: { x: 1, y: 3 },
+          realGate: { x: 4, y: 3 },
+          refStart: { x: 10, y: 3 },
+          refGate: { x: 7, y: 3 },
           par: 10
         },
         {
@@ -890,10 +904,10 @@
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          realStart: {x: 1, y: 2},
-          realGate: {x: 4, y: 2},
-          refStart: {x: 10, y: 2},
-          refGate: {x: 7, y: 2},
+          realStart: { x: 1, y: 2 },
+          realGate: { x: 4, y: 2 },
+          refStart: { x: 10, y: 2 },
+          refGate: { x: 7, y: 2 },
           par: 15
         },
         {
@@ -913,10 +927,10 @@
             [0, 2, 2, 0, 0, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          realStart: {x: 1, y: 4},
-          realGate: {x: 4, y: 1},
-          refStart: {x: 10, y: 4},
-          refGate: {x: 7, y: 1},
+          realStart: { x: 1, y: 4 },
+          realGate: { x: 4, y: 1 },
+          refStart: { x: 10, y: 4 },
+          refGate: { x: 7, y: 1 },
           par: 20
         },
         {
@@ -936,10 +950,10 @@
             [0, 0, 0, 1, 0, 0],
             [0, 0, 0, 1, 0, 0]
           ],
-          realStart: {x: 1, y: 1},
-          realGate: {x: 4, y: 4},
-          refStart: {x: 10, y: 1},
-          refGate: {x: 7, y: 4},
+          realStart: { x: 1, y: 1 },
+          realGate: { x: 4, y: 4 },
+          refStart: { x: 10, y: 1 },
+          refGate: { x: 7, y: 4 },
           par: 25
         },
         {
@@ -959,10 +973,10 @@
             [0, 1, 0, 1, 1, 0],
             [0, 0, 0, 0, 0, 0]
           ],
-          realStart: {x: 0, y: 0},
-          realGate: {x: 3, y: 3},
-          refStart: {x: 11, y: 0},
-          refGate: {x: 8, y: 3},
+          realStart: { x: 0, y: 0 },
+          realGate: { x: 3, y: 3 },
+          refStart: { x: 11, y: 0 },
+          refGate: { x: 8, y: 3 },
           par: 30
         }
       ];
@@ -973,16 +987,17 @@
         gameState: 'menu', /* menu, playing, paused, lose, win, victory, demo */
         currentLevel: 0,
         moves: 0,
-        realPos: {x: 0, y: 0},
-        refPos: {x: 0, y: 0},
-        realVisual: {x: 0, y: 0},
-        refVisual: {x: 0, y: 0},
+        realPos: { x: 0, y: 0 },
+        refPos: { x: 0, y: 0 },
+        realVisual: { x: 0, y: 0 },
+        refVisual: { x: 0, y: 0 },
         realTrail: [],
         refTrail: [],
         history: [],
         unlockedLevel: 0,
         highscores: {},
         activeRuleIndex: 0,
+        shiftInterval: 5,
         showGridlines: true,
         shakeFrames: 0
       };
@@ -1033,7 +1048,6 @@
         btnRestartGame: document.getElementById('sk_btn_restart_game'),
         btnVictoryMenu: document.getElementById('sk_btn_victory_menu'),
         btnToggleAudio: document.getElementById('sk_toggle_audio'),
-        btnToggleSens: document.getElementById('sk_toggle_sens'),
         btnToggleGridlines: document.getElementById('sk_toggle_gridlines'),
 
         screenMenu: document.getElementById('sk_screen_menu'),
@@ -1133,7 +1147,7 @@
          LEVEL FETCHER FROM JSON
          ========================================== */
       function fetchRemoteLevels() {
-        const remoteUrl = "./Chiral.json";
+        const remoteUrl = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Chiral/levels.json";
         let progress = 0;
         const progressInterval = setInterval(() => {
           if (progress < 85) {
@@ -1185,10 +1199,11 @@
         state.currentLevel = levelIndex;
         state.moves = 0;
         state.activeRuleIndex = 0;
-        state.realPos = {...data.realStart};
-        state.refPos = {...data.refStart};
-        state.realVisual = {...data.realStart};
-        state.refVisual = {...data.refStart};
+        state.shiftInterval = data.shiftInterval || 5;
+        state.realPos = { ...data.realStart };
+        state.refPos = { ...data.refStart };
+        state.realVisual = { ...data.realStart };
+        state.refVisual = { ...data.refStart };
         state.realTrail = [];
         state.refTrail = [];
         state.history = [];
@@ -1222,7 +1237,7 @@
         elements.hudLevel.innerText = (state.currentLevel + 1).toString();
         elements.hudMoves.innerText = state.moves.toString();
 
-        state.activeRuleIndex = Math.floor(state.moves / 5) % 4;
+        state.activeRuleIndex = Math.floor(state.moves / state.shiftInterval) % 4;
         const rule = SYMMETRY_RULES[state.activeRuleIndex];
         elements.hudRule.innerText = rule.name;
 
@@ -1232,21 +1247,21 @@
         if (state.activeRuleIndex === 2) elements.hudRule.classList.add('sk_neon_orange');
         if (state.activeRuleIndex === 3) elements.hudRule.classList.add('sk_neon_purple');
 
-        elements.hudShift.innerText = (5 - (state.moves % 5)).toString();
+        elements.hudShift.innerText = (state.shiftInterval - (state.moves % state.shiftInterval)).toString();
       }
 
       function getRefTranslation(dx, dy, ruleIndex) {
         switch (ruleIndex) {
           case 0: /* Vertical */
-            return {dx: -dx, dy: dy};
+            return { dx: -dx, dy: dy };
           case 1: /* Horizontal */
-            return {dx: dx, dy: -dy};
+            return { dx: dx, dy: -dy };
           case 2: /* Rotational */
-            return {dx: -dx, dy: -dy};
+            return { dx: -dx, dy: -dy };
           case 3: /* Diagonal */
-            return {dx: dy, dy: dx};
+            return { dx: dy, dy: dx };
           default:
-            return {dx: 0, dy: 0};
+            return { dx: 0, dy: 0 };
         }
       }
 
@@ -1257,14 +1272,14 @@
         const oldRule = state.activeRuleIndex;
 
         state.history.push({
-          realPos: {...state.realPos},
-          refPos: {...state.refPos},
+          realPos: { ...state.realPos },
+          refPos: { ...state.refPos },
           moves: state.moves
         });
 
-        const realTarget = {x: state.realPos.x + dx, y: state.realPos.y + dy};
+        const realTarget = { x: state.realPos.x + dx, y: state.realPos.y + dy };
         const refDelta = getRefTranslation(dx, dy, state.activeRuleIndex);
-        const refTarget = {x: state.refPos.x + refDelta.dx, y: state.refPos.y + refDelta.dy};
+        const refTarget = { x: state.refPos.x + refDelta.dx, y: state.refPos.y + refDelta.dy };
 
         let realMoved = false;
         let refMoved = false;
@@ -1282,13 +1297,13 @@
         );
 
         if (realValid) {
-          state.realTrail.push({...state.realPos});
+          state.realTrail.push({ ...state.realPos });
           if (state.realTrail.length > 5) state.realTrail.shift();
           state.realPos = realTarget;
           realMoved = true;
         }
         if (refValid) {
-          state.refTrail.push({...state.refPos});
+          state.refTrail.push({ ...state.refPos });
           if (state.refTrail.length > 5) state.refTrail.shift();
           state.refPos = refTarget;
           refMoved = true;
@@ -1375,7 +1390,7 @@
 
         if (state.currentLevel < LEVELS.length - 1) {
           state.gameState = 'win';
-          document.getElementById('sk_win_stats').innerText = `Solved in ${state.moves} shifts! (Par: ${LEVELS[state.currentLevel].par})`;
+          document.getElementById('sk_win_stats').innerText = `Solved in ${state.moves} moves! (Par: ${LEVELS[state.currentLevel].par})`;
           elements.screenWin.classList.remove('sk_hidden');
         } else {
           state.gameState = 'victory';
@@ -1392,7 +1407,7 @@
         const cellH = elements.canvas.height / 6;
         const gridX = Math.floor(canvasX / cellW);
         const gridY = Math.floor(canvasY / cellH);
-        return {gridX, gridY};
+        return { gridX, gridY };
       }
 
       /* ==========================================
@@ -1648,7 +1663,7 @@
       let ctrlOrigLeft, ctrlOrigTop;
 
       dragContainer.querySelector('.sk_drag_handle').addEventListener('mousedown', ctrlDragStart);
-      dragContainer.querySelector('.sk_drag_handle').addEventListener('touchstart', ctrlDragStart, {passive: false});
+      dragContainer.querySelector('.sk_drag_handle').addEventListener('touchstart', ctrlDragStart, { passive: false });
 
       function ctrlDragStart(e) {
         isDraggingControls = true;
@@ -1663,7 +1678,7 @@
         ctrlOrigTop = rect.top;
 
         document.addEventListener('mousemove', ctrlDragMove);
-        document.addEventListener('touchmove', ctrlDragMove, {passive: false});
+        document.addEventListener('touchmove', ctrlDragMove, { passive: false });
         document.addEventListener('mouseup', ctrlDragEnd);
         document.addEventListener('touchend', ctrlDragEnd);
         e.preventDefault();
@@ -1709,7 +1724,7 @@
       const SWIPE_THRESHOLD = 30;
 
       elements.canvas.addEventListener('mousedown', (e) => {
-        const {gridX, gridY} = getGridCoordinates(e.clientX, e.clientY);
+        const { gridX, gridY } = getGridCoordinates(e.clientX, e.clientY);
         processGridDirectTap(gridX, gridY);
       });
 
@@ -1725,7 +1740,7 @@
             playSound('move');
           }, 600);
         }
-      }, {passive: true});
+      }, { passive: true });
 
       elements.canvas.addEventListener('touchmove', (e) => {
         if (e.touches.length === 1) {
@@ -1736,7 +1751,7 @@
             clearTimeout(longPressTimeout);
           }
         }
-      }, {passive: true});
+      }, { passive: true });
 
       elements.canvas.addEventListener('touchend', (e) => {
         clearTimeout(longPressTimeout);
@@ -1762,14 +1777,14 @@
               triggerUndo();
             } else {
               doubleTapTimeout = setTimeout(() => {
-                const {gridX, gridY} = getGridCoordinates(touch.clientX, touch.clientY);
+                const { gridX, gridY } = getGridCoordinates(touch.clientX, touch.clientY);
                 processGridDirectTap(gridX, gridY);
               }, 300);
             }
             lastTapTime = currentTime;
           }
         }
-      }, {passive: true});
+      }, { passive: true });
 
       elements.canvas.addEventListener('touchcancel', () => {
         clearTimeout(longPressTimeout);
@@ -1928,6 +1943,6 @@
 
     })();
   </script>
-<script src="js/framework.js"></script>`n</body>
+</body>
 
 </html>
