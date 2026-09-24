@@ -1,5 +1,62 @@
 [
   {
+    "levelNum": 1,
+    "targets": [5, 10, 15],
+    "startVal": 3,
+    "allowedOps": ["+", "-"],
+    "obstacles": [],
+    "speedMs": 250,
+    "desc": "Add and subtract values to match target. Stay away from walls."
+  },
+  {
+    "levelNum": 2,
+    "targets": [12, 24, 8],
+    "startVal": 3,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 5, "y": 6 }, { "x": 5, "y": 7 },
+      { "x": 14, "y": 12 }, { "x": 14, "y": 13 }, { "x": 14, "y": 14 }
+    ],
+    "speedMs": 220,
+    "desc": "Multiplication is now available! Mind the basic wall obstacles."
+  },
+  {
+    "levelNum": 3,
+    "targets": [40, 20, 60],
+    "startVal": 10,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 3, "y": 10 }, { "x": 4, "y": 10 }, { "x": 5, "y": 10 },
+      { "x": 14, "y": 10 }, { "x": 15, "y": 10 }, { "x": 16, "y": 10 }
+    ],
+    "speedMs": 190,
+    "desc": "Split barriers restrict movement. Maintain precision arithmetic!"
+  },
+  {
+    "levelNum": 4,
+    "targets": [18, 50, 99],
+    "startVal": 9,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 10, "y": 2 }, { "x": 10, "y": 3 }, { "x": 10, "y": 4 }, { "x": 10, "y": 5 },
+      { "x": 10, "y": 14 }, { "x": 10, "y": 15 }, { "x": 10, "y": 16 }, { "x": 10, "y": 17 }
+    ],
+    "speedMs": 160,
+    "desc": "Central spine obstacle layout. Plan your rotations carefully."
+  },
+  {
+    "levelNum": 5,
+    "targets": [13, 37, 77],
+    "startVal": 2,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 2, "y": 2 }, { "x": 17, "y": 2 }, { "x": 2, "y": 17 }, { "x": 17, "y": 17 },
+      { "x": 9, "y": 10 }, { "x": 11, "y": 10 }
+    ],
+    "speedMs": 130,
+    "desc": "Core central bunker. High-speed, elite tactical math equations."
+  },
+  {
     "levelNum": 6,
     "targets": [16, 32, 64],
     "startVal": 2,
@@ -53,7 +110,7 @@
   },
   {
     "levelNum": 10,
-    "targets": [50, 100, 150],
+    "targets": [40, 80, 160],
     "startVal": 5,
     "allowedOps": ["+", "*"],
     "obstacles": [
@@ -154,7 +211,7 @@
   },
   {
     "levelNum": 18,
-    "targets": [45, 90, 10],
+    "targets": [45, 90, 54],
     "startVal": 5,
     "allowedOps": ["+", "-", "*"],
     "obstacles": [
@@ -178,7 +235,7 @@
   },
   {
     "levelNum": 20,
-    "targets": [27, 81, 9],
+    "targets": [27, 81, 45],
     "startVal": 3,
     "allowedOps": ["+", "-", "*"],
     "obstacles": [
@@ -250,7 +307,7 @@
   },
   {
     "levelNum": 26,
-    "targets": [100, 50, 200],
+    "targets": [50, 100, 200],
     "startVal": 10,
     "allowedOps": ["+", "-", "*"],
     "obstacles": [
@@ -284,7 +341,7 @@
   },
   {
     "levelNum": 29,
-    "targets": [48, 96, 144],
+    "targets": [48, 96, 192],
     "startVal": 6,
     "allowedOps": ["+", "*"],
     "obstacles": [
@@ -296,7 +353,7 @@
   },
   {
     "levelNum": 30,
-    "targets": [25, 75, 15],
+    "targets": [25, 75, 45],
     "startVal": 5,
     "allowedOps": ["+", "-", "*"],
     "obstacles": [
@@ -308,285 +365,384 @@
   },
   {
     "levelNum": 31,
-    "targets": [13, 26, 52],
-    "startVal": 13,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 5, "y": 5 }, { "x": 14, "y": 5 },
-      { "x": 5, "y": 14 }, { "x": 14, "y": 14 }
-    ],
-    "speedMs": 100,
-    "desc": "Four pillars. Navigate circles around obstacles to construct your sum."
-  },
-  {
-    "levelNum": 32,
-    "targets": [35, 70, 105],
-    "startVal": 7,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 8, "y": 8 }, { "x": 9, "y": 8 }, { "x": 11, "y": 11 }, { "x": 12, "y": 11 }
-    ],
-    "speedMs": 100,
-    "desc": "Compact obstacles near center lane. Avoid collisions while maximizing products."
-  },
-  {
-    "levelNum": 33,
-    "targets": [17, 9, 25],
-    "startVal": 17,
-    "allowedOps": ["+", "-"],
-    "obstacles": [
-      { "x": 2, "y": 5 }, { "x": 17, "y": 5 },
-      { "x": 2, "y": 14 }, { "x": 17, "y": 14 }
-    ],
-    "speedMs": 100,
-    "desc": "Side corridors are narrowed. Squeeze your values to target values safely."
-  },
-  {
-    "levelNum": 34,
-    "targets": [42, 84, 126],
-    "startVal": 2,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 10, "y": 5 }, { "x": 9, "y": 5 }, { "x": 11, "y": 5 },
-      { "x": 10, "y": 14 }, { "x": 9, "y": 14 }, { "x": 11, "y": 14 }
-    ],
-    "speedMs": 100,
-    "desc": "Double central walls block straight vertical loops."
-  },
-  {
-    "levelNum": 35,
-    "targets": [19, 38, 76],
-    "startVal": 19,
-    "allowedOps": ["+", "-", "*"],
-    "obstacles": [
-      { "x": 4, "y": 4 }, { "x": 15, "y": 4 },
-      { "x": 4, "y": 15 }, { "x": 15, "y": 15 }
-    ],
-    "speedMs": 100,
-    "desc": "Pillars are shifted wider. The ultimate speed test for math equations."
-  },
-  {
-    "levelNum": 36,
-    "targets": [31, 62, 93],
-    "startVal": 1,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 10, "y": 2 }, { "x": 10, "y": 3 },
-      { "x": 10, "y": 16 }, { "x": 10, "y": 17 }
-    ],
-    "speedMs": 100,
-    "desc": "Double spine bumpers limit room on the top and bottom."
-  },
-  {
-    "levelNum": 37,
-    "targets": [14, 7, 21],
-    "startVal": 14,
-    "allowedOps": ["+", "-"],
-    "obstacles": [
-      { "x": 5, "y": 10 }, { "x": 14, "y": 10 }
-    ],
-    "speedMs": 100,
-    "desc": "Two center side pins create subtle routing constraints."
-  },
-  {
-    "levelNum": 38,
-    "targets": [60, 120, 180],
-    "startVal": 10,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 3, "y": 3 }, { "x": 3, "y": 4 },
-      { "x": 16, "y": 16 }, { "x": 16, "y": 15 }
-    ],
-    "speedMs": 100,
-    "desc": "Corner blockers force snake routing toward the diagonal axes."
-  },
-  {
-    "levelNum": 39,
-    "targets": [29, 58, 87],
-    "startVal": 2,
-    "allowedOps": ["+", "-", "*"],
-    "obstacles": [
-      { "x": 10, "y": 8 }, { "x": 10, "y": 11 }
-    ],
-    "speedMs": 100,
-    "desc": "Micro pillars close to start coordinates require immediate action."
-  },
-  {
-    "levelNum": 40,
-    "targets": [54, 108, 162],
-    "startVal": 6,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 4, "y": 10 }, { "x": 15, "y": 10 }
-    ],
-    "speedMs": 100,
-    "desc": "Side bumpers limit lanes. Double up equations cleanly."
-  },
-  {
-    "levelNum": 41,
-    "targets": [13, 3, 23],
-    "startVal": 13,
-    "allowedOps": ["+", "-"],
-    "obstacles": [
-      { "x": 10, "y": 5 }, { "x": 10, "y": 14 }
-    ],
-    "speedMs": 100,
-    "desc": "Top/bottom spine pins restrict smooth circle loops."
-  },
-  {
-    "levelNum": 42,
-    "targets": [45, 90, 135],
-    "startVal": 5,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 6, "y": 6 }, { "x": 13, "y": 6 },
-      { "x": 6, "y": 13 }, { "x": 13, "y": 13 }
-    ],
-    "speedMs": 100,
-    "desc": "Four box towers guard inner zones. Scale up with products."
-  },
-  {
-    "levelNum": 43,
-    "targets": [26, 13, 39],
-    "startVal": 26,
-    "allowedOps": ["+", "-"],
-    "obstacles": [
-      { "x": 5, "y": 5 }, { "x": 14, "y": 14 }
-    ],
-    "speedMs": 100,
-    "desc": "Symmetric single blocks require diagonal slaloms."
-  },
-  {
-    "levelNum": 44,
-    "targets": [80, 160, 240],
-    "startVal": 8,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 10, "y": 4 }, { "x": 10, "y": 15 }
-    ],
-    "speedMs": 100,
-    "desc": "Vertical central blocks restrict high maneuvers."
-  },
-  {
-    "levelNum": 45,
-    "targets": [37, 74, 111],
-    "startVal": 1,
-    "allowedOps": ["+", "-", "*"],
-    "obstacles": [
-      { "x": 4, "y": 4 }, { "x": 15, "y": 15 }
-    ],
-    "speedMs": 100,
-    "desc": "Asymmetric blockers. Maintain high arithmetic precision."
-  },
-  {
-    "levelNum": 46,
-    "targets": [15, 30, 60],
-    "startVal": 15,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 8, "y": 8 }, { "x": 11, "y": 11 }
-    ],
-    "speedMs": 100,
-    "desc": "Central lane anchors restrict free pathing. Build targets."
-  },
-  {
-    "levelNum": 47,
-    "targets": [33, 11, 44],
-    "startVal": 33,
-    "allowedOps": ["+", "-"],
-    "obstacles": [
-      { "x": 3, "y": 10 }, { "x": 16, "y": 10 }
-    ],
-    "speedMs": 100,
-    "desc": "Squeeze through side gates to alter and balance equations."
-  },
-  {
-    "levelNum": 48,
-    "targets": [72, 144, 216],
-    "startVal": 9,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 10, "y": 3 }, { "x": 10, "y": 16 }
-    ],
-    "speedMs": 100,
-    "desc": "Long vertical spine blocks limit space in north/south sectors."
-  },
-  {
-    "levelNum": 49,
-    "targets": [23, 46, 69],
-    "startVal": 2,
-    "allowedOps": ["+", "-", "*"],
-    "obstacles": [
-      { "x": 5, "y": 5 }, { "x": 14, "y": 5 }
-    ],
-    "speedMs": 100,
-    "desc": "Top corner blockers force operations into the southern hemisphere."
-  },
-  {
-    "levelNum": 50,
-    "targets": [90, 180, 270],
-    "startVal": 10,
-    "allowedOps": ["+", "*"],
-    "obstacles": [
-      { "x": 5, "y": 14 }, { "x": 14, "y": 14 }
-    ],
-    "speedMs": 100,
-    "desc": "Southern blockers require north-dominated loops to evaluate targets."
-  },
-  {
-    "levelNum": 51,
-    "targets": [17, 34, 68],
-    "startVal": 17,
-    "allowedOps": ["+", "-"],
-    "obstacles": [
-      { "x": 10, "y": 6 }, { "x": 10, "y": 13 }
-    ],
-    "speedMs": 100,
-    "desc": "Inner spine blocks limit quick central switches."
-  },
-  {
-    "levelNum": 52,
-    "targets": [64, 128, 256],
+    "targets": [8, 16, 32],
     "startVal": 4,
     "allowedOps": ["+", "*"],
     "obstacles": [
-      { "x": 2, "y": 2 }, { "x": 17, "y": 17 }
+      { "x": 2, "y": 10 }, { "x": 3, "y": 10 },
+      { "x": 16, "y": 10 }, { "x": 17, "y": 10 },
+      { "x": 10, "y": 2 }, { "x": 10, "y": 3 },
+      { "x": 10, "y": 16 }, { "x": 10, "y": 17 },
+      { "x": 5, "y": 5 }, { "x": 13, "y": 5 }, { "x": 5, "y": 13 }, { "x": 13, "y": 13 }
     ],
     "speedMs": 100,
-    "desc": "Extreme corner blockers. Maximize speed and coordinate growth."
+    "desc": "Spiral arms reach toward the core. Thread the gaps and multiply to double-up."
   },
   {
-    "levelNum": 53,
-    "targets": [19, 9, 29],
-    "startVal": 19,
+    "levelNum": 32,
+    "targets": [3, 6, 12],
+    "startVal": 9,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 5, "y": 3 }, { "x": 6, "y": 3 }, { "x": 7, "y": 3 },
+      { "x": 12, "y": 3 }, { "x": 13, "y": 3 }, { "x": 14, "y": 3 },
+      { "x": 5, "y": 16 }, { "x": 6, "y": 16 }, { "x": 7, "y": 16 },
+      { "x": 12, "y": 16 }, { "x": 13, "y": 16 }, { "x": 14, "y": 16 },
+      { "x": 10, "y": 9 }, { "x": 11, "y": 9 }, { "x": 10, "y": 11 }, { "x": 11, "y": 11 }
+    ],
+    "speedMs": 100,
+    "desc": "Micro-grid clusters quarter the board. Slip between and balance with subtraction."
+  },
+  {
+    "levelNum": 33,
+    "targets": [18, 36, 72],
+    "startVal": 2,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 3, "y": 4 }, { "x": 4, "y": 4 }, { "x": 5, "y": 4 }, { "x": 6, "y": 4 },
+      { "x": 13, "y": 4 }, { "x": 14, "y": 4 }, { "x": 15, "y": 4 }, { "x": 16, "y": 4 },
+      { "x": 3, "y": 15 }, { "x": 4, "y": 15 }, { "x": 5, "y": 15 }, { "x": 6, "y": 15 },
+      { "x": 13, "y": 15 }, { "x": 14, "y": 15 }, { "x": 15, "y": 15 }, { "x": 16, "y": 15 }
+    ],
+    "speedMs": 95,
+    "desc": "Shallow S-bands lock the top and bottom. Build easy products in the open center."
+  },
+  {
+    "levelNum": 34,
+    "targets": [11, 6, 17],
+    "startVal": 5,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 5, "y": 5 }, { "x": 6, "y": 5 }, { "x": 7, "y": 5 }, { "x": 8, "y": 5 },
+      { "x": 12, "y": 5 }, { "x": 13, "y": 5 }, { "x": 14, "y": 5 }, { "x": 15, "y": 5 },
+      { "x": 5, "y": 14 }, { "x": 6, "y": 14 }, { "x": 7, "y": 14 }, { "x": 8, "y": 14 },
+      { "x": 12, "y": 14 }, { "x": 13, "y": 14 }, { "x": 14, "y": 14 }, { "x": 15, "y": 14 }
+    ],
+    "speedMs": 95,
+    "desc": "Zig-zag walls split the arena. Chain additions and subtractions to pivot on targets."
+  },
+  {
+    "levelNum": 35,
+    "targets": [30, 10, 40],
+    "startVal": 3,
     "allowedOps": ["+", "-", "*"],
     "obstacles": [
-      { "x": 6, "y": 10 }, { "x": 13, "y": 10 }
+      { "x": 3, "y": 3 }, { "x": 4, "y": 4 }, { "x": 5, "y": 5 }, { "x": 6, "y": 6 },
+      { "x": 7, "y": 7 }, { "x": 8, "y": 8 }, { "x": 9, "y": 9 },
+      { "x": 13, "y": 13 }, { "x": 14, "y": 14 }, { "x": 15, "y": 15 }, { "x": 16, "y": 16 }, { "x": 17, "y": 17 },
+      { "x": 16, "y": 3 }, { "x": 15, "y": 4 }, { "x": 14, "y": 5 }, { "x": 13, "y": 6 }, { "x": 12, "y": 7 }, { "x": 11, "y": 8 },
+      { "x": 8, "y": 11 }, { "x": 7, "y": 12 }, { "x": 6, "y": 13 }, { "x": 5, "y": 14 }, { "x": 4, "y": 15 }, { "x": 3, "y": 16 }
     ],
-    "speedMs": 100,
-    "desc": "Side gate blockers limit quick switches between left and right zones."
+    "speedMs": 95,
+    "desc": "Crossed diagonal lines carve the map. Weave through the diamond corridors."
   },
   {
-    "levelNum": 54,
-    "targets": [100, 200, 300],
+    "levelNum": 36,
+    "targets": [14, 42, 84],
+    "startVal": 7,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 2 }, { "x": 10, "y": 3 }, { "x": 10, "y": 4 },
+      { "x": 10, "y": 15 }, { "x": 10, "y": 16 }, { "x": 10, "y": 17 },
+      { "x": 2, "y": 10 }, { "x": 3, "y": 10 }, { "x": 4, "y": 10 },
+      { "x": 15, "y": 10 }, { "x": 16, "y": 10 }, { "x": 17, "y": 10 }
+    ],
+    "speedMs": 92,
+    "desc": "A cardinal cross divides the battlefield. Use the four open quadrants to manage value."
+  },
+  {
+    "levelNum": 37,
+    "targets": [18, 9, 27],
+    "startVal": 6,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 1, "y": 1 }, { "x": 2, "y": 1 }, { "x": 3, "y": 1 }, { "x": 4, "y": 1 },
+      { "x": 1, "y": 2 }, { "x": 1, "y": 3 }, { "x": 1, "y": 4 },
+      { "x": 15, "y": 1 }, { "x": 16, "y": 1 }, { "x": 17, "y": 1 }, { "x": 18, "y": 1 },
+      { "x": 18, "y": 2 }, { "x": 18, "y": 3 }, { "x": 18, "y": 4 },
+      { "x": 18, "y": 15 }, { "x": 18, "y": 16 }, { "x": 18, "y": 17 }, { "x": 18, "y": 18 },
+      { "x": 15, "y": 18 }, { "x": 16, "y": 18 }, { "x": 17, "y": 18 },
+      { "x": 1, "y": 15 }, { "x": 1, "y": 16 }, { "x": 1, "y": 17 }, { "x": 1, "y": 18 },
+      { "x": 2, "y": 18 }, { "x": 3, "y": 18 }, { "x": 4, "y": 18 }
+    ],
+    "speedMs": 92,
+    "desc": "Sealed corners form a central room. Loop inside and peek through the corner gates."
+  },
+  {
+    "levelNum": 38,
+    "targets": [50, 100, 200],
+    "startVal": 10,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 0, "y": 5 }, { "x": 0, "y": 6 }, { "x": 0, "y": 7 }, { "x": 0, "y": 8 },
+      { "x": 0, "y": 11 }, { "x": 0, "y": 12 }, { "x": 0, "y": 13 }, { "x": 0, "y": 14 },
+      { "x": 19, "y": 5 }, { "x": 19, "y": 6 }, { "x": 19, "y": 7 }, { "x": 19, "y": 8 },
+      { "x": 19, "y": 11 }, { "x": 19, "y": 12 }, { "x": 19, "y": 13 }, { "x": 19, "y": 14 },
+      { "x": 5, "y": 0 }, { "x": 6, "y": 0 }, { "x": 7, "y": 0 },
+      { "x": 12, "y": 0 }, { "x": 13, "y": 0 }, { "x": 14, "y": 0 },
+      { "x": 5, "y": 19 }, { "x": 6, "y": 19 }, { "x": 7, "y": 19 },
+      { "x": 12, "y": 19 }, { "x": 13, "y": 19 }, { "x": 14, "y": 19 }
+    ],
+    "speedMs": 92,
+    "desc": "Perimeter notches bite the edges. Run the rails and compound carefully."
+  },
+  {
+    "levelNum": 39,
+    "targets": [29, 14, 58],
+    "startVal": 2,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 10, "y": 3 }, { "x": 10, "y": 4 }, { "x": 10, "y": 5 },
+      { "x": 3, "y": 10 }, { "x": 4, "y": 10 }, { "x": 5, "y": 10 }, { "x": 6, "y": 10 },
+      { "x": 7, "y": 10 }, { "x": 8, "y": 10 }, { "x": 9, "y": 10 },
+      { "x": 11, "y": 10 }, { "x": 12, "y": 10 }, { "x": 13, "y": 10 }, { "x": 14, "y": 10 },
+      { "x": 15, "y": 10 }, { "x": 16, "y": 10 }
+    ],
+    "speedMs": 90,
+    "desc": "A horizontal divider with a central slot splits top and bottom chambers."
+  },
+  {
+    "levelNum": 40,
+    "targets": [30, 60, 90],
     "startVal": 5,
     "allowedOps": ["+", "*"],
     "obstacles": [
-      { "x": 10, "y": 2 }, { "x": 10, "y": 17 }
+      { "x": 3, "y": 3 }, { "x": 4, "y": 4 }, { "x": 5, "y": 5 }, { "x": 6, "y": 6 }, { "x": 7, "y": 7 }, { "x": 8, "y": 8 },
+      { "x": 13, "y": 13 }, { "x": 14, "y": 14 }, { "x": 15, "y": 15 }, { "x": 16, "y": 16 },
+      { "x": 11, "y": 6 }, { "x": 12, "y": 6 }, { "x": 13, "y": 6 }, { "x": 14, "y": 6 }, { "x": 15, "y": 6 }, { "x": 16, "y": 6 },
+      { "x": 8, "y": 13 }, { "x": 7, "y": 13 }, { "x": 6, "y": 13 }, { "x": 5, "y": 13 }, { "x": 4, "y": 13 }
     ],
-    "speedMs": 100,
-    "desc": "Spine-tip bumpers restrict open top and bottom loopings."
+    "speedMs": 90,
+    "desc": "Staircase steps climb opposite corners. Mirrored climbs require mirrored arithmetic."
+  },
+  {
+    "levelNum": 41,
+    "targets": [4, 20, 16],
+    "startVal": 8,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 4, "y": 4 }, { "x": 5, "y": 4 }, { "x": 6, "y": 4 }, { "x": 4, "y": 5 },
+      { "x": 13, "y": 4 }, { "x": 14, "y": 4 }, { "x": 15, "y": 4 }, { "x": 15, "y": 5 },
+      { "x": 4, "y": 13 }, { "x": 4, "y": 14 }, { "x": 4, "y": 15 }, { "x": 5, "y": 15 },
+      { "x": 15, "y": 13 }, { "x": 15, "y": 14 }, { "x": 15, "y": 15 }, { "x": 14, "y": 15 }
+    ],
+    "speedMs": 90,
+    "desc": "Offset L-bunkers guard each quadrant. Dock between them to build clean sums."
+  },
+  {
+    "levelNum": 42,
+    "targets": [12, 36, 18],
+    "startVal": 3,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 9, "y": 4 }, { "x": 10, "y": 4 }, { "x": 11, "y": 4 },
+      { "x": 9, "y": 15 }, { "x": 10, "y": 15 }, { "x": 11, "y": 15 },
+      { "x": 4, "y": 9 }, { "x": 4, "y": 10 }, { "x": 4, "y": 11 },
+      { "x": 15, "y": 9 }, { "x": 15, "y": 10 }, { "x": 15, "y": 11 },
+      { "x": 6, "y": 6 }, { "x": 13, "y": 13 }, { "x": 6, "y": 13 }, { "x": 13, "y": 6 }
+    ],
+    "speedMs": 88,
+    "desc": "A diamond ring encircles the core. Enter through a corner gap to reach the heart."
+  },
+  {
+    "levelNum": 43,
+    "targets": [5, 45, 9],
+    "startVal": 15,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 3, "y": 3 }, { "x": 4, "y": 3 }, { "x": 5, "y": 3 }, { "x": 3, "y": 4 },
+      { "x": 16, "y": 16 }, { "x": 15, "y": 16 }, { "x": 14, "y": 16 }, { "x": 16, "y": 15 },
+      { "x": 3, "y": 16 }, { "x": 4, "y": 16 }, { "x": 5, "y": 16 }, { "x": 3, "y": 15 },
+      { "x": 16, "y": 3 }, { "x": 15, "y": 3 }, { "x": 14, "y": 3 }, { "x": 16, "y": 4 }
+    ],
+    "speedMs": 88,
+    "desc": "Pinwheel blades spin from the corners. Ride the open diamond and rebuild values."
+  },
+  {
+    "levelNum": 44,
+    "targets": [24, 48, 96],
+    "startVal": 6,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 2 }, { "x": 10, "y": 3 }, { "x": 10, "y": 4 }, { "x": 10, "y": 5 },
+      { "x": 10, "y": 6 }, { "x": 10, "y": 7 },
+      { "x": 10, "y": 12 }, { "x": 10, "y": 13 }, { "x": 10, "y": 14 }, { "x": 10, "y": 15 },
+      { "x": 10, "y": 16 }, { "x": 10, "y": 17 },
+      { "x": 7, "y": 8 }, { "x": 7, "y": 9 },
+      { "x": 13, "y": 10 }, { "x": 13, "y": 11 }
+    ],
+    "speedMs": 88,
+    "desc": "An S-shaped spine snakes through the middle. Follow the meander and multiply."
+  },
+  {
+    "levelNum": 45,
+    "targets": [3, 27, 54],
+    "startVal": 9,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 3, "y": 3 }, { "x": 16, "y": 3 }, { "x": 3, "y": 16 }, { "x": 16, "y": 16 },
+      { "x": 9, "y": 9 }, { "x": 10, "y": 9 }, { "x": 11, "y": 9 },
+      { "x": 9, "y": 11 }, { "x": 11, "y": 11 }
+    ],
+    "speedMs": 86,
+    "desc": "Quadrant anchors plus a core block. Strike a balance between precision and products."
+  },
+  {
+    "levelNum": 46,
+    "targets": [16, 32, 64],
+    "startVal": 2,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 2, "y": 10 }, { "x": 17, "y": 10 }, { "x": 10, "y": 2 }, { "x": 10, "y": 17 },
+      { "x": 6, "y": 6 }, { "x": 6, "y": 13 }, { "x": 13, "y": 6 }, { "x": 13, "y": 13 }
+    ],
+    "speedMs": 86,
+    "desc": "Side pins and diagonal pips frame the map. Compose sums with wide loops."
+  },
+  {
+    "levelNum": 47,
+    "targets": [22, 44, 66],
+    "startVal": 11,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 3, "y": 3 }, { "x": 3, "y": 4 }, { "x": 4, "y": 3 }, { "x": 4, "y": 4 },
+      { "x": 6, "y": 6 }, { "x": 6, "y": 7 }, { "x": 7, "y": 6 }, { "x": 7, "y": 7 },
+      { "x": 13, "y": 6 }, { "x": 13, "y": 7 }, { "x": 14, "y": 6 }, { "x": 14, "y": 7 },
+      { "x": 3, "y": 15 }, { "x": 3, "y": 16 }, { "x": 4, "y": 15 }, { "x": 4, "y": 16 },
+      { "x": 15, "y": 15 }, { "x": 15, "y": 16 }, { "x": 16, "y": 15 }, { "x": 16, "y": 16 },
+      { "x": 12, "y": 12 }, { "x": 12, "y": 13 }, { "x": 13, "y": 12 }, { "x": 13, "y": 13 }
+    ],
+    "speedMs": 86,
+    "desc": "Scattered box clusters form a maze-like field. Keep one eye on the target value."
+  },
+  {
+    "levelNum": 48,
+    "targets": [16, 4, 20],
+    "startVal": 8,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 4, "y": 3 }, { "x": 4, "y": 4 }, { "x": 4, "y": 5 }, { "x": 4, "y": 6 }, { "x": 4, "y": 7 },
+      { "x": 4, "y": 8 }, { "x": 4, "y": 9 }, { "x": 4, "y": 11 }, { "x": 4, "y": 12 }, { "x": 4, "y": 13 },
+      { "x": 4, "y": 14 }, { "x": 4, "y": 15 }, { "x": 4, "y": 16 },
+      { "x": 15, "y": 3 }, { "x": 15, "y": 4 }, { "x": 15, "y": 5 }, { "x": 15, "y": 6 }, { "x": 15, "y": 7 },
+      { "x": 15, "y": 8 }, { "x": 15, "y": 9 }, { "x": 15, "y": 11 }, { "x": 15, "y": 12 }, { "x": 15, "y": 13 },
+      { "x": 15, "y": 14 }, { "x": 15, "y": 15 }, { "x": 15, "y": 16 },
+      { "x": 9, "y": 4 }, { "x": 9, "y": 7 }, { "x": 9, "y": 12 }, { "x": 9, "y": 15 },
+      { "x": 10, "y": 5 }, { "x": 10, "y": 14 }
+    ],
+    "speedMs": 84,
+    "desc": "Tall columns create two long rooms joined by a central aisle."
+  },
+  {
+    "levelNum": 49,
+    "targets": [25, 5, 40],
+    "startVal": 5,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 3, "y": 5 }, { "x": 4, "y": 6 }, { "x": 5, "y": 7 }, { "x": 6, "y": 8 }, { "x": 7, "y": 9 },
+      { "x": 8, "y": 10 }, { "x": 9, "y": 11 }, { "x": 10, "y": 12 }, { "x": 11, "y": 13 }, { "x": 12, "y": 14 },
+      { "x": 13, "y": 15 }, { "x": 14, "y": 16 },
+      { "x": 16, "y": 5 }, { "x": 15, "y": 6 }, { "x": 14, "y": 7 }, { "x": 13, "y": 8 }, { "x": 12, "y": 9 },
+      { "x": 11, "y": 10 }, { "x": 10, "y": 11 }, { "x": 9, "y": 12 }, { "x": 8, "y": 13 }, { "x": 7, "y": 14 },
+      { "x": 6, "y": 15 }, { "x": 5, "y": 16 }
+    ],
+    "speedMs": 84,
+    "desc": "Crossed diagonal bands hem the center. Exact subtraction keeps you on target."
+  },
+  {
+    "levelNum": 50,
+    "targets": [9, 18, 27],
+    "startVal": 1,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 10, "y": 7 }, { "x": 9, "y": 7 }, { "x": 11, "y": 7 },
+      { "x": 8, "y": 8 }, { "x": 12, "y": 8 },
+      { "x": 7, "y": 9 }, { "x": 13, "y": 9 },
+      { "x": 7, "y": 10 }, { "x": 7, "y": 11 }, { "x": 13, "y": 11 },
+      { "x": 8, "y": 12 }, { "x": 12, "y": 12 },
+      { "x": 9, "y": 13 }, { "x": 10, "y": 13 }, { "x": 11, "y": 13 }
+    ],
+    "speedMs": 84,
+    "desc": "A cage ring surrounds the spawn. Break out through the single gap and multiply."
+  },
+  {
+    "levelNum": 51,
+    "targets": [6, 18, 12],
+    "startVal": 12,
+    "allowedOps": ["+", "-"],
+    "obstacles": [
+      { "x": 4, "y": 4 }, { "x": 5, "y": 4 }, { "x": 6, "y": 4 }, { "x": 7, "y": 4 }, { "x": 8, "y": 4 },
+      { "x": 9, "y": 5 }, { "x": 10, "y": 5 }, { "x": 11, "y": 5 }, { "x": 12, "y": 5 },
+      { "x": 13, "y": 6 }, { "x": 14, "y": 6 }, { "x": 15, "y": 6 }, { "x": 16, "y": 6 },
+      { "x": 15, "y": 7 }, { "x": 14, "y": 7 }
+    ],
+    "speedMs": 82,
+    "desc": "Staircase steps descend the left flank. Ascend the math with measured gains."
+  },
+  {
+    "levelNum": 52,
+    "targets": [28, 56, 112],
+    "startVal": 4,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 2, "y": 2 }, { "x": 3, "y": 2 }, { "x": 2, "y": 3 },
+      { "x": 17, "y": 2 }, { "x": 16, "y": 2 }, { "x": 17, "y": 3 },
+      { "x": 2, "y": 17 }, { "x": 3, "y": 17 }, { "x": 2, "y": 16 },
+      { "x": 17, "y": 17 }, { "x": 16, "y": 17 }, { "x": 17, "y": 16 },
+      { "x": 8, "y": 8 }, { "x": 9, "y": 9 }, { "x": 11, "y": 11 }, { "x": 12, "y": 12 },
+      { "x": 8, "y": 12 }, { "x": 9, "y": 11 }, { "x": 11, "y": 9 }, { "x": 12, "y": 8 }
+    ],
+    "speedMs": 82,
+    "desc": "Pinwheels at every corner plus a tight center cross. High-speed doubling gauntlet."
+  },
+  {
+    "levelNum": 53,
+    "targets": [28, 14, 42],
+    "startVal": 7,
+    "allowedOps": ["+", "-", "*"],
+    "obstacles": [
+      { "x": 10, "y": 3 }, { "x": 9, "y": 4 }, { "x": 8, "y": 5 }, { "x": 7, "y": 6 }, { "x": 6, "y": 7 },
+      { "x": 5, "y": 8 }, { "x": 5, "y": 9 }, { "x": 5, "y": 10 }, { "x": 5, "y": 11 }, { "x": 5, "y": 12 },
+      { "x": 6, "y": 13 }, { "x": 7, "y": 14 }, { "x": 8, "y": 15 }, { "x": 9, "y": 16 }, { "x": 10, "y": 17 },
+      { "x": 11, "y": 16 }, { "x": 12, "y": 15 }, { "x": 13, "y": 14 }, { "x": 14, "y": 13 },
+      { "x": 14, "y": 12 }, { "x": 14, "y": 11 }, { "x": 14, "y": 10 }, { "x": 14, "y": 9 }, { "x": 14, "y": 8 },
+      { "x": 13, "y": 7 }, { "x": 12, "y": 6 }, { "x": 11, "y": 5 }
+    ],
+    "speedMs": 80,
+    "desc": "A horseshoe of walls curves around the core. Only one opening admits passage."
+  },
+  {
+    "levelNum": 54,
+    "targets": [9, 27, 81],
+    "startVal": 3,
+    "allowedOps": ["+", "*"],
+    "obstacles": [
+      { "x": 9, "y": 3 }, { "x": 10, "y": 3 }, { "x": 11, "y": 3 },
+      { "x": 3, "y": 9 }, { "x": 3, "y": 10 }, { "x": 3, "y": 11 },
+      { "x": 9, "y": 16 }, { "x": 10, "y": 16 }, { "x": 11, "y": 16 },
+      { "x": 16, "y": 9 }, { "x": 16, "y": 10 }, { "x": 16, "y": 11 },
+      { "x": 7, "y": 7 }, { "x": 13, "y": 7 }, { "x": 7, "y": 13 }, { "x": 13, "y": 13 }
+    ],
+    "speedMs": 80,
+    "desc": "Four cardinal gates and diagonal pips. Pick your gate and drive the equation."
   },
   {
     "levelNum": 55,
-    "targets": [25, 50, 75],
-    "startVal": 25,
+    "targets": [30, 15, 60],
+    "startVal": 15,
     "allowedOps": ["+", "-", "*"],
     "obstacles": [
-      { "x": 4, "y": 4 }, { "x": 15, "y": 4 },
-      { "x": 4, "y": 15 }, { "x": 15, "y": 15 }
+      { "x": 9, "y": 2 }, { "x": 10, "y": 2 }, { "x": 11, "y": 2 },
+      { "x": 9, "y": 4 }, { "x": 10, "y": 4 }, { "x": 11, "y": 4 },
+      { "x": 2, "y": 9 }, { "x": 2, "y": 10 }, { "x": 2, "y": 11 },
+      { "x": 4, "y": 9 }, { "x": 4, "y": 10 }, { "x": 4, "y": 11 },
+      { "x": 16, "y": 9 }, { "x": 16, "y": 10 }, { "x": 16, "y": 11 },
+      { "x": 17, "y": 9 }, { "x": 17, "y": 10 }, { "x": 17, "y": 11 },
+      { "x": 9, "y": 15 }, { "x": 10, "y": 15 }, { "x": 11, "y": 15 },
+      { "x": 9, "y": 17 }, { "x": 10, "y": 17 }, { "x": 11, "y": 17 },
+      { "x": 9, "y": 9 }, { "x": 11, "y": 9 }, { "x": 9, "y": 11 }, { "x": 11, "y": 11 }
     ],
-    "speedMs": 100,
-    "desc": "The Grand Finale. Symmetrical corner pillars, high speeds, and complex math."
+    "speedMs": 78,
+    "desc": "The grand arena: cross gates ring an inner court. A final test of speed and calculation."
   }
 ]

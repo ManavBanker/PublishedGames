@@ -96,6 +96,7 @@
             <button class="sk_toggle_btn" id="sk_diff_hard">HARD</button>
           </div>
         </div>
+        <button class="sk_action_btn sk_btn_sec" id="sk_reset_progress">RESET PROGRESS</button>
         <button class="sk_action_btn" id="sk_close_settings">SAVE & CLOSE</button>
       </div>
 
@@ -538,6 +539,13 @@
       color: #10b981;
     }
 
+    .sk_lvl_select.sk_locked {
+      border-color: #334155;
+      color: #64748b;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
     .sk_info_text {
       text-align: left;
       font-size: 12px;
@@ -804,7 +812,7 @@
         allowedOps: ['+', '-', '*'],
         obstacles: [
           {x: 2, y: 2}, {x: 17, y: 2}, {x: 2, y: 17}, {x: 17, y: 17},
-          {x: 10, y: 10}, {x: 9, y: 10}, {x: 11, y: 10}
+          {x: 9, y: 10}, {x: 11, y: 10}
         ],
         speedMs: 130,
         desc: "Core central bunker. High-speed, elite tactical math equations."
@@ -860,8 +868,13 @@
 
         const parsed = parseSanitizedLevelString(rawText);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          /* Preserve the player's current level across the swap by matching
+             levelNum instead of array index. */
+          const prevNum = ACTIVE_LEVELS[state.levelIndex] ? ACTIVE_LEVELS[state.levelIndex].levelNum : 1;
           ACTIVE_LEVELS = parsed;
           syncBaseSpeeds();
+          const alignedIndex = ACTIVE_LEVELS.findIndex(l => l.levelNum === prevNum);
+          state.levelIndex = alignedIndex === -1 ? 0 : alignedIndex;
           console.log("Remote levels loaded successfully in background.");
         } else {
           throw new Error("Invalid level array output");
@@ -936,6 +949,7 @@
       demoMode: false,
       lastTickTime: 0,
       highScores: [1000, 500, 100],
+      maxUnlocked: 1,
       isLandscape: false,
       /* Viewport Zoom and Pan Engine */
       zoom: 1.0,
@@ -986,6 +1000,7 @@
         menuFetch: document.getElementById('sk_menu_fetch'),
         closeNav: document.getElementById('sk_close_nav_menu'),
         closeSettings: document.getElementById('sk_close_settings'),
+        resetProgress: document.getElementById('sk_reset_progress'),
         closeScores: document.getElementById('sk_close_scores'),
         closeLevels: document.getElementById('sk_close_levels'),
         closeInfo: document.getElementById('sk_close_info'),
@@ -1018,6 +1033,8 @@
     function loadSavedData() {
       const scores = localStorage.getItem('sk_high_scores');
       if (scores) state.highScores = JSON.parse(scores);
+      const unlocked = localStorage.getItem('sk_max_level');
+      if (unlocked) state.maxUnlocked = Math.max(1, parseInt(unlocked, 10) || 1);
       const muted = localStorage.getItem('sk_muted');
       if (muted) {
         synth.enabled = JSON.parse(muted) === false;
@@ -1065,11 +1082,17 @@
     function populateLevels() {
       const container = document.getElementById('sk_levels_container');
       container.innerHTML = '';
+      const maxLevelNum = ACTIVE_LEVELS.reduce((m, l) => Math.max(m, l.levelNum), 1);
+      const unlocked = Math.min(state.maxUnlocked, maxLevelNum);
       ACTIVE_LEVELS.forEach((lvl, index) => {
+        const isLocked = lvl.levelNum > unlocked;
         const btn = document.createElement('button');
-        btn.className = 'sk_lvl_select sk_unlocked';
-        btn.innerHTML = `${lvl.levelNum}`;
+        btn.className = 'sk_lvl_select ' + (isLocked ? 'sk_locked' : 'sk_unlocked');
+        btn.innerHTML = isLocked ? '🔒' : `${lvl.levelNum}`;
+        btn.title = isLocked ? `Level ${lvl.levelNum} locked` : `Level ${lvl.levelNum}`;
+        btn.disabled = isLocked;
         btn.addEventListener('click', () => {
+          if (isLocked) return;
           synth.init();
           state.levelIndex = index;
           showPanel(null);
@@ -1491,6 +1514,10 @@
                 state.highScores = state.highScores.slice(0, 5);
                 saveScores();
               }
+              if (activeLvl.levelNum + 1 > state.maxUnlocked) {
+                state.maxUnlocked = activeLvl.levelNum + 1;
+                localStorage.setItem('sk_max_level', state.maxUnlocked);
+              }
               document.getElementById('sk_victory_score').innerText = state.score;
               showPanel('victory');
             } else {
@@ -1901,10 +1928,16 @@
     els.btns.menuFetch.addEventListener('click', () => showPanel('loader'));
 
     /* Close Sub-Popups */
-    els.btns.closeSettings.addEventListener('click', () => showPanel(null));
-    els.btns.closeScores.addEventListener('click', () => showPanel(null));
+    els.btns.closeSettings.addEventListener('click', () => showPanel(null));    els.btns.closeScores.addEventListener('click', () => showPanel(null));
     els.btns.closeLevels.addEventListener('click', () => showPanel(null));
     els.btns.closeInfo.addEventListener('click', () => showPanel(null));
+
+    /* Progress Reset */
+    els.btns.resetProgress.addEventListener('click', () => {
+      state.maxUnlocked = 1;
+      localStorage.removeItem('sk_max_level');
+      synth.beep();
+    });
 
     /* Level Fetcher Actions */
     els.btns.loadRemote.addEventListener('click', () => fetchRemoteLevels("https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Ouromath/levels.json"));
