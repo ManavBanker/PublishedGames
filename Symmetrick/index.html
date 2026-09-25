@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Symmetrick - Quantum Entangled Puzzle</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* Scope everything within sk_game_suite_root to prevent leakage */
+    .sk_game_suite_root {
+      --sk-bg: #0b0c16;
+      --sk-bg-card: rgba(16, 18, 35, 0.95);
+      --sk-border-color: rgba(0, 240, 255, 0.35);
+      --sk-text: #e2e8f0;
+      --sk-text-muted: #94a3b8;
+      --sk-cyan: #00f0ff;
+      --sk-magenta: #ff00ff;
+      --sk-green: #39ff14;
+      --sk-dark: #07080e;
+
+      box-sizing: border-box;
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 550px;
+      background: var(--sk-bg);
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 0, 255, 0.08) 0%, transparent 40%);
+      color: var(--sk-text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .sk_game_suite_root * {
+      box-sizing: border-box;
+    }
+
+    /* Top Navigation / Control Bar */
+    .sk_top_bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(7, 8, 14, 0.92);
+      border-bottom: 1px solid var(--sk-border-color);
+      z-index: 101;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sk_title_area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sk_game_title {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      background: linear-gradient(90deg, var(--sk-cyan), var(--sk-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    /* Scoreboard & stats in Top Bar */
+    .sk_top_stats {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .sk_stat_pill {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .sk_button_group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    /* Standardized Buttons */
+    .sk_btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      color: var(--sk-text);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .sk_btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--sk-cyan);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+    }
+
+    .sk_btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Compact Main Menu Dropdown */
+    .sk_menu_container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .sk_dropdown_menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--sk-bg-card);
+      border: 1px solid var(--sk-border-color);
+      border-radius: 8px;
+      width: 180px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      z-index: 200;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .sk_dropdown_menu.sk_show {
+      display: block;
+    }
+
+    .sk_dropdown_item {
+      padding: 10px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--sk-text);
+      transition: background 0.2s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sk_dropdown_item:hover {
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--sk-cyan);
+    }
+
+    /* Main Grid Area */
+    .sk_main_content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 10px;
+      overflow: hidden;
+      /* Safeguards room for virtual controls below */
+      margin-bottom: 120px;
+    }
+
+    .sk_canvas_wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 420px;
+      max-height: 420px;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 2px solid var(--sk-border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 240, 255, 0.1);
+      background: var(--sk-dark);
+    }
+
+    .sk_canvas {
+      position: absolute;
+      background: transparent;
+      display: block;
+      cursor: default;
+    }
+
+    /* Canvas state changes with pan tool */
+    .sk_canvas.sk_pan_mode {
+      cursor: grab;
+    }
+
+    .sk_canvas.sk_pan_mode:active {
+      cursor: grabbing;
+    }
+
+    .sk_canvas.sk_dragging {
+      cursor: grabbing;
+    }
+
+    /* Popups and Screen Overlays */
+    .sk_screen,
+    .sk_popup {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 8, 14, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      transition: opacity 0.3s ease;
+    }
+
+    .sk_screen_content {
+      background: var(--sk-bg-card);
+      border: 2px solid var(--sk-cyan);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .sk_screen_logo {
+      font-size: 28px;
+      font-weight: 900;
+      margin: 0 0 8px 0;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--sk-cyan), var(--sk-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sk_screen_tagline {
+      font-size: 12px;
+      color: var(--sk-text-muted);
+      margin-bottom: 20px;
+    }
+
+    .sk_screen_title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .sk_screen_text {
+      font-size: 13px;
+      color: var(--sk-text-muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .sk_screen_btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--sk-border-color);
+      color: var(--sk-text);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .sk_screen_btn:hover {
+      background: linear-gradient(90deg, var(--sk-cyan), rgba(0, 240, 255, 0.4));
+      color: var(--sk-dark);
+      box-shadow: 0 0 15px var(--sk-cyan);
+      border-color: transparent;
+    }
+
+    .sk_btn_primary {
+      background: linear-gradient(135deg, var(--sk-cyan), var(--sk-magenta));
+      color: white;
+      border-color: transparent;
+    }
+
+    .sk_btn_primary:hover {
+      background: linear-gradient(135deg, var(--sk-magenta), var(--sk-cyan));
+      box-shadow: 0 0 20px var(--sk-cyan);
+    }
+
+    /* Popup Dialog Custom Styling */
+    .sk_popup_box {
+      background: var(--sk-bg-card);
+      border: 1px solid var(--sk-border-color);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sk_popup_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--sk-cyan);
+    }
+
+    .sk_btn_close {
+      background: transparent;
+      border: none;
+      color: var(--sk-text-muted);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .sk_btn_close:hover {
+      color: var(--sk-magenta);
+    }
+
+    .sk_popup_body {
+      padding: 16px;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    /* Virtual Controllers Zone */
+    .sk_controls_zone {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(7, 8, 14, 0.9);
+      border: 1px solid var(--sk-border-color);
+      border-radius: 16px;
+      padding: 8px 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      z-index: 102;
+      touch-action: none;
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sk_controls_handle {
+      text-align: center;
+      font-size: 10px;
+      color: var(--sk-cyan);
+      cursor: move;
+      padding: 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sk_controls_layout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sk_dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 34px);
+      grid-template-rows: repeat(3, 34px);
+      gap: 4px;
+    }
+
+    .sk_ctrl_btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--sk-cyan);
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sk_ctrl_btn:active {
+      background: var(--sk-cyan);
+      color: var(--sk-dark);
+      box-shadow: 0 0 10px var(--sk-cyan);
+    }
+
+    /* Aux Controls inside joystick zone (zoom + pan mode toggler) */
+    .sk_aux_controls {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .sk_aux_row {
+      display: flex;
+      gap: 4px;
+    }
+
+    .sk_aux_btn {
+      flex: 1;
+      padding: 6px 4px;
+      font-size: 11px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--sk-text);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .sk_aux_btn.sk_active {
+      background: var(--sk-magenta);
+      border-color: var(--sk-magenta);
+      color: #fff;
+    }
+
+    /* Progress bar popup for git fetcher */
+    .sk_progress_container {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 10px;
+      height: 16px;
+    }
+
+    .sk_progress_bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--sk-cyan), var(--sk-magenta));
+      transition: width 0.3s;
+    }
+
+    /* Levels grid inside popup */
+    .sk_level_grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .sk_level_item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 10px 0;
+      font-weight: bold;
+      font-size: 13px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sk_level_item.sk_unlocked {
+      border-color: rgba(0, 240, 255, 0.4);
+      color: var(--sk-cyan);
+    }
+
+    .sk_level_item.sk_unlocked:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--sk-cyan);
+    }
+
+    .sk_level_item.sk_locked {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Utilities */
+    .sk_hidden {
+      display: none !important;
+    }
+
+    .sk_danger {
+      color: var(--sk-magenta);
+      text-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
+    }
+
+    .sk_victory {
+      color: var(--sk-green);
+      text-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+    }
+
+    .sk_setting_row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sk_toggle_btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--sk-border-color);
+      color: var(--sk-text);
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .sk_toggle_btn.sk_active {
+      background: var(--sk-cyan);
+      color: var(--sk-dark);
+      font-weight: bold;
+    }
+
+    .sk_git_input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--sk-border-color);
+      padding: 8px;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Root Game Container -->
+  <div class="sk_game_suite_root" id="sk_game_root">
+
+    <!-- Meta/Labels child tags as specified in requirements -->
+    <div class="sk_labels" data="Minimalist, Spatial-Logic, Grid-Based, Daily-Challenge"></div>
+    <meta class="sk_meta"
+      description="Control two quantum-entangled nodes that mirror movements on an asymmetrical grid. Use obstacles to desynchronize their relative positions and reach both goals simultaneously.">
+
+    <!-- 1. Top Navigation / Control Bar -->
+    <div class="sk_top_bar">
+      <div class="sk_title_area">
+        <span class="sk_game_title">SYMMETRICK</span>
+      </div>
+
+      <div class="sk_top_stats">
+        <div class="sk_stat_pill">Level: <span id="sk_top_lvl_val">1</span></div>
+        <div class="sk_stat_pill">Moves: <span id="sk_top_moves_val">0/20</span></div>
+      </div>
+
+      <div class="sk_button_group">
+        <button class="sk_btn" id="sk_btn_pause">⏸️ Pause</button>
+        <button class="sk_btn" id="sk_btn_fullscreen">📺 Full</button>
+        <button class="sk_btn" id="sk_btn_landscape">📱 Rotate</button>
+
+        <div class="sk_menu_container">
+          <button class="sk_btn" id="sk_btn_menu">☰ Menu</button>
+          <div class="sk_dropdown_menu" id="sk_top_dropdown">
+            <div class="sk_dropdown_item" id="sk_drop_levels">🗺️ Select Level</div>
+            <div class="sk_dropdown_item" id="sk_drop_scores">🏆 High Scores</div>
+            <div class="sk_dropdown_item" id="sk_drop_settings">⚙️ Settings</div>
+            <div class="sk_dropdown_item" id="sk_drop_info">ℹ️ Instructions</div>
+            <div class="sk_dropdown_item" id="sk_drop_git">🌐 Fetch Levels</div>
+            <div class="sk_dropdown_item" id="sk_drop_demo">📺 Watch Auto-Demo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Main Game Area & Screens Overlay -->
+    <div class="sk_main_content">
+      <div class="sk_canvas_wrapper" id="sk_canvas_holder">
+        <canvas class="sk_canvas" id="sk_game_canvas"></canvas>
+
+        <!-- Start Screen -->
+        <div class="sk_screen" id="sk_screen_start">
+          <div class="sk_screen_content">
+            <p class="sk_screen_logo">SYMMETRICK</p>
+            <p class="sk_screen_tagline">Quantum-Entangled Spatial Puzzle</p>
+            <button class="sk_screen_btn sk_btn_primary" id="sk_btn_play_start">Play Game (Enter)</button>
+            <button class="sk_screen_btn" id="sk_btn_daily_start">📅 Daily Challenge</button>
+            <button class="sk_screen_btn" id="sk_btn_watch_demo_start">📺 Watch Demo Mode</button>
+          </div>
+        </div>
+
+        <!-- Level Complete Screen -->
+        <div class="sk_screen sk_hidden" id="sk_screen_cleared">
+          <div class="sk_screen_content">
+            <p class="sk_screen_title sk_victory">Level Cleared!</p>
+            <p class="sk_screen_text">Perfect quantum alignment achieved!</p>
+            <p class="sk_screen_text" style="font-size: 18px;">Moves Used: <b id="sk_cleared_moves">0</b></p>
+            <button class="sk_screen_btn sk_btn_primary" id="sk_btn_next_level">Next Level</button>
+            <button class="sk_screen_btn" id="sk_btn_retry_cleared">Replay Level</button>
+          </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="sk_screen sk_hidden" id="sk_screen_game_over">
+          <div class="sk_screen_content">
+            <p class="sk_screen_title sk_danger">Coherence Lost!</p>
+            <p class="sk_screen_text" id="sk_fail_reason">Out of moves or stepped into a black hole!</p>
+            <button class="sk_screen_btn sk_btn_primary" id="sk_btn_retry_fail">Try Again</button>
+            <button class="sk_screen_btn" id="sk_btn_menu_fail">Main Menu</button>
+          </div>
+        </div>
+
+        <!-- Grand Victory Screen -->
+        <div class="sk_screen sk_hidden" id="sk_screen_victory">
+          <div class="sk_screen_content">
+            <p class="sk_screen_title sk_victory">Symmetry Mastered!</p>
+            <p class="sk_screen_text">Congratulations! You have completed all quantum-entangled nodes perfectly.</p>
+            <button class="sk_screen_btn sk_btn_primary" id="sk_btn_menu_victory">Back to Main Menu</button>
+          </div>
+        </div>
+
+        <!-- Pause Overlay Screen -->
+        <div class="sk_screen sk_hidden" id="sk_screen_paused">
+          <div class="sk_screen_content" style="border-color: var(--sk-magenta);">
+            <p class="sk_screen_title" style="color: var(--sk-magenta);">Game Paused</p>
+            <p class="sk_screen_text">You can freely pan & zoom the grid using controls while paused.</p>
+            <button class="sk_screen_btn sk_btn_primary" id="sk_btn_resume_overlay">Resume Game</button>
+            <button class="sk_screen_btn" id="sk_btn_restart_paused">Restart Level</button>
+            <button class="sk_screen_btn" id="sk_btn_exit_paused">Main Menu</button>
+          </div>
+        </div>
+
+        <!-- POPUP: Levels -->
+        <div class="sk_popup sk_hidden" id="sk_popup_levels">
+          <div class="sk_popup_box">
+            <div class="sk_popup_header">
+              <span>Select Level</span>
+              <button class="sk_btn_close" id="sk_close_levels">×</button>
+            </div>
+            <div class="sk_popup_body">
+              <div class="sk_level_grid" id="sk_level_list"></div>
+              <p class="sk_screen_text" style="margin-top: 15px;">Solve levels to unlock subsequent challenges.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- POPUP: High Scores -->
+        <div class="sk_popup sk_hidden" id="sk_popup_scores">
+          <div class="sk_popup_box">
+            <div class="sk_popup_header">
+              <span>High Scores</span>
+              <button class="sk_btn_close" id="sk_close_scores">×</button>
+            </div>
+            <div class="sk_popup_body">
+              <div id="sk_scores_list"></div>
+              <button class="sk_screen_btn" id="sk_btn_reset_scores" style="margin-top: 15px;">Reset Highscores</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- POPUP: Settings -->
+        <div class="sk_popup sk_hidden" id="sk_popup_settings">
+          <div class="sk_popup_box">
+            <div class="sk_popup_header">
+              <span>Game Settings</span>
+              <button class="sk_btn_close" id="sk_close_settings">×</button>
+            </div>
+            <div class="sk_popup_body">
+              <div class="sk_setting_row">
+                <span>Sound Synthesis</span>
+                <button class="sk_toggle_btn sk_active" id="sk_toggle_sound">ON</button>
+              </div>
+              <div class="sk_setting_row">
+                <span>Visual Particles</span>
+                <button class="sk_toggle_btn sk_active" id="sk_toggle_particles">ON</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POPUP: Info -->
+        <div class="sk_popup sk_hidden" id="sk_popup_info">
+          <div class="sk_popup_box">
+            <div class="sk_popup_header">
+              <span>Quantum Instructions</span>
+              <button class="sk_btn_close" id="sk_close_info">×</button>
+            </div>
+            <div class="sk_popup_body">
+              <p>Solve asymmetrical levels using mirrored physics.</p>
+              <br>
+              <p>• You control the <b style="color: var(--sk-cyan);">Blue Node</b>. The <b
+                  style="color: var(--sk-magenta);">Pink Node</b> mirrors its vertical axis (Left moves Right, Up moves
+                Up).</p>
+              <p>• To desynchronize their positions, crash one node into a block or obstacle.</p>
+              <p>• Land both on their corresponding goals on the exact same turn to solve.</p>
+              <br>
+              <p><b>Tile Mechanics:</b></p>
+              <p>• <b>One-Way Arrows:</b> Can only step onto them in the direction of the arrow.</p>
+              <p>• <b>Swap Gates (G/g):</b> Switch state (open/solid) on every step taken.</p>
+              <p>• <b>Singularities (H):</b> Instantly collapses state if touched.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- POPUP: Fetch Git Levels -->
+        <div class="sk_popup sk_hidden" id="sk_popup_git">
+          <div class="sk_popup_box">
+            <div class="sk_popup_header">
+              <span>Import Custom Levels</span>
+              <button class="sk_btn_close" id="sk_close_git">×</button>
+            </div>
+            <div class="sk_popup_body">
+              <p class="sk_screen_text">Enter raw link to a custom level definitions file (JS/JSON format supported with
+                comment parsing):</p>
+              <input type="text" class="sk_git_input" id="sk_git_url" value="./Symmetrick.json"
+                placeholder="https://raw.github.../levels.json">
+              <button class="sk_screen_btn sk_btn_primary" id="sk_btn_do_fetch">Fetch and Load</button>
+              <button class="sk_screen_btn" id="sk_btn_restore_local">Restore Local Defaults</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- POPUP: Fetch Progress Window -->
+        <div class="sk_popup sk_hidden" id="sk_popup_progress">
+          <div class="sk_popup_box" style="max-width: 320px;">
+            <div class="sk_popup_header">
+              <span>Fetching Levels...</span>
+            </div>
+            <div class="sk_popup_body">
+              <p id="sk_progress_status">Requesting data from git raw link...</p>
+              <div class="sk_progress_container">
+                <div class="sk_progress_bar" id="sk_progress_bar_fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. Drag-able Virtual Joystick & Controllers -->
+    <div class="sk_controls_zone" id="sk_virtual_controls">
+      <div class="sk_controls_handle" id="sk_controls_drag_handle">⠿ Hold & Drag Controller Panel</div>
+      <div class="sk_controls_layout">
+
+        <!-- Virtual Movement Dpad -->
+        <div class="sk_dpad">
+          <div></div>
+          <button class="sk_ctrl_btn" id="sk_v_up">▲</button>
+          <div></div>
+          <button class="sk_ctrl_btn" id="sk_v_left">◀</button>
+          <button class="sk_ctrl_btn" id="sk_v_undo"
+            style="font-size:11px; border-color: rgba(255,255,255,0.15);">⎌</button>
+          <button class="sk_ctrl_btn" id="sk_v_right">▶</button>
+          <div></div>
+          <button class="sk_ctrl_btn" id="sk_v_down">▼</button>
+          <div></div>
+        </div>
+
+        <!-- Interactive Pan & Zoom Controls -->
+        <div class="sk_aux_controls">
+          <div class="sk_aux_row">
+            <button class="sk_aux_btn" id="sk_v_zoom_in" title="Zoom In (Ctrl +)">🔍+</button>
+            <button class="sk_aux_btn" id="sk_v_zoom_out" title="Zoom Out (Ctrl -)">🔍-</button>
+          </div>
+          <div class="sk_aux_row">
+            <button class="sk_aux_btn" id="sk_v_zoom_reset" title="Reset Camera">↺ Zoom</button>
+          </div>
+          <div class="sk_aux_row">
+            <button class="sk_aux_btn" id="sk_v_pan_toggle" title="Toggle Hand Tool to Pan/Drag Grid">🖐️ Drag
+              Pan</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Implementation -->
+  <script>
+    (function () {
+      /* Audio Synthesizer Class (Web Audio API) */
+      class SkAudioSynth {
+        constructor() {
+          this.ctx = null;
+          this.enabled = true;
+        }
+        init() {
+          if (!this.ctx) {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+          }
+        }
+        playMove() {
+          if (!this.enabled) return;
+          this.init();
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(450, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.1);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.1);
+        }
+        playBump() {
+          if (!this.enabled) return;
+          this.init();
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(110, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.08);
+        }
+        playSuccess() {
+          if (!this.enabled) return;
+          this.init();
+          let now = this.ctx.currentTime;
+          let chord = [523.25, 659.25, 783.99, 1046.50]; /* C5, E5, G5, C6 */
+          chord.forEach((freq, i) => {
+            let osc = this.ctx.createOscillator();
+            let gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.08, now + i * 0.08 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.005, now + 0.5);
+            osc.start(now + i * 0.08);
+            osc.stop(now + 0.6);
+          });
+        }
+        playFail() {
+          if (!this.enabled) return;
+          this.init();
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(280, this.ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(70, this.ctx.currentTime + 0.45);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.45);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.45);
+        }
+      }
+
+      const audio = new SkAudioSynth();
+
+      /* Core Handcrafted Levels Definition */
+      const default_levels_data = [
+        {
+          name: "Quantum Entanglement",
+          width: 8, height: 8,
+          grid: [
+            ['#', '#', '#', '#', '#', '#', '#', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', '#', '.', '.', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '#', '.', '#'],
+            ['#', '.', '.', '#', '.', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '#', '#', '#', '#', '#', '#', '#']
+          ],
+          lightStart: {x: 2, y: 5},
+          shadowStart: {x: 5, y: 5},
+          lightGoal: {x: 1, y: 1},
+          shadowGoal: {x: 6, y: 1},
+          maxMoves: 15
+        },
+        {
+          name: "Singularity Avoidance",
+          width: 8, height: 8,
+          grid: [
+            ['#', '#', '#', '#', '#', '#', '#', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', '#', 'H', 'H', '#', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', '.', '#', '#', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '#', '#', '#', '#', '#', '#', '#']
+          ],
+          lightStart: {x: 1, y: 5},
+          shadowStart: {x: 6, y: 5},
+          lightGoal: {x: 2, y: 1},
+          shadowGoal: {x: 5, y: 1},
+          maxMoves: 16
+        },
+        {
+          name: "Vector Pathways",
+          width: 8, height: 8,
+          grid: [
+            ['#', '#', '#', '#', '#', '#', '#', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '^', '.', '#', '#', '.', '^', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', 'v', '.', '.', 'v', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '#', '#', '#', '#', '#', '#', '#']
+          ],
+          lightStart: {x: 2, y: 6},
+          shadowStart: {x: 5, y: 6},
+          lightGoal: {x: 1, y: 1},
+          shadowGoal: {x: 6, y: 1},
+          maxMoves: 20
+        },
+        {
+          name: "Swap Gate Matrices",
+          width: 8, height: 8,
+          grid: [
+            ['#', '#', '#', '#', '#', '#', '#', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', 'G', '.', '.', 'G', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', 'g', '.', '.', 'g', '.', '#'],
+            ['#', '.', '.', '#', '#', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '#', '#', '#', '#', '#', '#', '#']
+          ],
+          lightStart: {x: 1, y: 6},
+          shadowStart: {x: 6, y: 6},
+          lightGoal: {x: 2, y: 1},
+          shadowGoal: {x: 5, y: 1},
+          maxMoves: 25
+        },
+        {
+          name: "Perfect Coherence",
+          width: 8, height: 8,
+          grid: [
+            ['#', '#', '#', '#', '#', '#', '#', '#'],
+            ['#', '.', '.', 'H', 'H', '.', '.', '#'],
+            ['#', '.', '^', '.', '.', '^', '.', '#'],
+            ['#', '#', 'G', '.', '.', 'G', '#', '#'],
+            ['#', '.', '.', 'g', 'g', '.', '.', '#'],
+            ['#', '.', '.', '.', '.', '.', '.', '#'],
+            ['#', '.', '#', '.', '.', '#', '.', '#'],
+            ['#', '#', '#', '#', '#', '#', '#', '#']
+          ],
+          lightStart: {x: 1, y: 6},
+          shadowStart: {x: 6, y: 6},
+          lightGoal: {x: 3, y: 2},
+          shadowGoal: {x: 4, y: 2},
+          maxMoves: 28
+        }
+      ];
+
+      /* Level Database reference to allow runtime overriding */
+      let sk_levels_data = [...default_levels_data];
+
+      /* Global Game State */
+      const state = {
+        gameState: 'start', /* start, playing, cleared, gameover, victory */
+        isPaused: false,
+        currentLevelIdx: 0,
+        isDaily: false,
+        level: null,
+        light: {x: 0, y: 0},
+        shadow: {x: 0, y: 0},
+        gatesActive: true,
+        moves: 0,
+        undoStack: [],
+        particles: [],
+        unlockedLevels: [0],
+        highscores: {},
+        particlesEnabled: true,
+        isDemoPlaying: false,
+        demoMoves: [],
+        demoInterval: null,
+
+        /* Advanced Pan & Zoom state fields */
+        zoomScale: 1.0,
+        panOffset: {x: 0, y: 0},
+        isPanModeActive: false,
+        dragStart: {x: 0, y: 0},
+        isDraggingGrid: false
+      };
+
+      /* UI Nodes Queries */
+      const root = document.getElementById('sk_game_root');
+      const canvas = document.getElementById('sk_game_canvas');
+      const ctx = canvas.getContext('2d');
+      const dropdownMenu = document.getElementById('sk_top_dropdown');
+
+      /* Screen Overlays */
+      const screenStart = document.getElementById('sk_screen_start');
+      const screenCleared = document.getElementById('sk_screen_cleared');
+      const screenGameOver = document.getElementById('sk_screen_game_over');
+      const screenVictory = document.getElementById('sk_screen_victory');
+      const screenPaused = document.getElementById('sk_screen_paused');
+
+      /* Popups */
+      const popupLevels = document.getElementById('sk_popup_levels');
+      const popupScores = document.getElementById('sk_popup_scores');
+      const popupSettings = document.getElementById('sk_popup_settings');
+      const popupInfo = document.getElementById('sk_popup_info');
+      const popupGit = document.getElementById('sk_popup_git');
+      const popupProgress = document.getElementById('sk_popup_progress');
+
+      /* Button / Interactive Element Connections */
+      const btnPlayStart = document.getElementById('sk_btn_play_start');
+      const btnDailyStart = document.getElementById('sk_btn_daily_start');
+      const btnWatchDemoStart = document.getElementById('sk_btn_watch_demo_start');
+      const btnLandscape = document.getElementById('sk_btn_landscape');
+      const btnNextLevel = document.getElementById('sk_btn_next_level');
+      const btnRetryCleared = document.getElementById('sk_btn_retry_cleared');
+      const btnRetryFail = document.getElementById('sk_btn_retry_fail');
+      const btnMenuFail = document.getElementById('sk_btn_menu_fail');
+      const btnMenuVictory = document.getElementById('sk_btn_menu_victory');
+
+      /* Navigation Triggers */
+      const btnMenuToggle = document.getElementById('sk_btn_menu');
+      const btnPause = document.getElementById('sk_btn_pause');
+      const btnFullscreen = document.getElementById('sk_btn_fullscreen');
+
+      /* Dropdown sub-triggers */
+      const dropLevels = document.getElementById('sk_drop_levels');
+      const dropScores = document.getElementById('sk_drop_scores');
+      const dropSettings = document.getElementById('sk_drop_settings');
+      const dropInfo = document.getElementById('sk_drop_info');
+      const dropGit = document.getElementById('sk_drop_git');
+      const dropDemo = document.getElementById('sk_drop_demo');
+
+      /* Overlay Action Bindings */
+      const btnResumeOverlay = document.getElementById('sk_btn_resume_overlay');
+      const btnRestartPaused = document.getElementById('sk_btn_restart_paused');
+      const btnExitPaused = document.getElementById('sk_btn_exit_paused');
+
+      /* HUD displays */
+      const topLvlVal = document.getElementById('sk_top_lvl_val');
+      const topMovesVal = document.getElementById('sk_top_moves_val');
+
+      /* Git importer inputs */
+      const btnDoFetch = document.getElementById('sk_btn_do_fetch');
+      const btnRestoreLocal = document.getElementById('sk_btn_restore_local');
+      const gitUrlInput = document.getElementById('sk_git_url');
+
+      /* Load Saved Progress and sound configurations */
+      function loadSavedData() {
+        try {
+          const unlocked = localStorage.getItem('sk_unlocked');
+          if (unlocked) state.unlockedLevels = JSON.parse(unlocked);
+          const scores = localStorage.getItem('sk_highscores');
+          if (scores) state.highscores = JSON.parse(scores);
+          const audioOn = localStorage.getItem('sk_audio');
+          if (audioOn !== null) {
+            audio.enabled = JSON.parse(audioOn);
+            document.getElementById('sk_toggle_sound').innerText = audio.enabled ? 'ON' : 'OFF';
+            document.getElementById('sk_toggle_sound').classList.toggle('sk_active', audio.enabled);
+          }
+        } catch (e) { }
+      }
+
+      function saveProgress() {
+        try {
+          localStorage.setItem('sk_unlocked', JSON.stringify(state.unlockedLevels));
+          localStorage.setItem('sk_highscores', JSON.stringify(state.highscores));
+          localStorage.setItem('sk_audio', JSON.stringify(audio.enabled));
+        } catch (e) { }
+      }
+
+      /* Viewport sizing & aspect ratio engine */
+      function resizeCanvas() {
+        const holder = document.getElementById('sk_canvas_holder');
+        const d = Math.min(holder.clientWidth, holder.clientHeight, 420);
+        canvas.width = d;
+        canvas.height = d;
+      }
+
+      const resizer = new ResizeObserver(() => {
+        resizeCanvas();
+      });
+      resizer.observe(document.getElementById('sk_canvas_holder'));
+
+      /* Core BFS engine mapping to solve maps for demos and playability validation */
+      function solveBFS(levelObj) {
+        const queue = [{
+          lx: levelObj.lightStart.x, ly: levelObj.lightStart.y,
+          sx: levelObj.shadowStart.x, sy: levelObj.shadowStart.y,
+          gates: true,
+          path: []
+        }];
+        const visited = new Set();
+        visited.add(`${levelObj.lightStart.x}_${levelObj.lightStart.y}_${levelObj.shadowStart.x}_${levelObj.shadowStart.y}_true`);
+
+        const directions = ['up', 'down', 'left', 'right'];
+
+        while (queue.length > 0) {
+          const curr = queue.shift();
+
+          if (curr.lx === levelObj.lightGoal.x && curr.ly === levelObj.lightGoal.y &&
+            curr.sx === levelObj.shadowGoal.x && curr.sy === levelObj.shadowGoal.y) {
+            return curr.path;
+          }
+
+          if (curr.path.length >= levelObj.maxMoves) continue;
+
+          for (const dir of directions) {
+            let dxL = 0, dyL = 0;
+            if (dir === 'up') dyL = -1;
+            if (dir === 'down') dyL = 1;
+            if (dir === 'left') dxL = -1;
+            if (dir === 'right') dxL = 1;
+
+            let dxS = -dxL;
+            let dyS = dyL;
+
+            let nextL = {x: curr.lx + dxL, y: curr.ly + dyL};
+            let nextS = {x: curr.sx + dxS, y: curr.sy + dyS};
+
+            let canL = true;
+            if (nextL.x < 0 || nextL.x >= levelObj.width || nextL.y < 0 || nextL.y >= levelObj.height) {
+              canL = false;
+            } else {
+              const tile = levelObj.grid[nextL.y][nextL.x];
+              if (tile === '#') canL = false;
+              if (tile === 'G' && curr.gates) canL = false;
+              if (tile === 'g' && !curr.gates) canL = false;
+              if (tile === '^' && dyL !== -1) canL = false;
+              if (tile === 'v' && dyL !== 1) canL = false;
+              if (tile === '<' && dxL !== -1) canL = false;
+              if (tile === '>' && dxL !== 1) canL = false;
+            }
+
+            let canS = true;
+            if (nextS.x < 0 || nextS.x >= levelObj.width || nextS.y < 0 || nextS.y >= levelObj.height) {
+              canS = false;
+            } else {
+              const tile = levelObj.grid[nextS.y][nextS.x];
+              if (tile === '#') canS = false;
+              if (tile === 'G' && curr.gates) canS = false;
+              if (tile === 'g' && !curr.gates) canS = false;
+              if (tile === '^' && dyS !== -1) canS = false;
+              if (tile === 'v' && dyS !== 1) canS = false;
+              if (tile === '<' && dxS !== -1) canS = false;
+              if (tile === '>' && dxS !== 1) canS = false;
+            }
+
+            const rxL = canL ? nextL.x : curr.lx;
+            const ryL = canL ? nextL.y : curr.ly;
+            const rxS = canS ? nextS.x : curr.sx;
+            const ryS = canS ? nextS.y : curr.sy;
+
+            if (levelObj.grid[ryL][rxL] === 'H' || levelObj.grid[ryS][rxS] === 'H') continue;
+
+            const nextGates = !curr.gates;
+            const key = `${rxL}_${ryL}_${rxS}_${ryS}_${nextGates}`;
+
+            if (!visited.has(key)) {
+              visited.add(key);
+              queue.push({
+                lx: rxL, ly: ryL,
+                sx: rxS, sy: ryS,
+                gates: nextGates,
+                path: [...curr.path, dir]
+              });
+            }
+          }
+        }
+        return null;
+      }
+
+      /* LCG Seed-based Daily Challenge generator */
+      function generateDailyLevel() {
+        const date = new Date();
+        const seedVal = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
+
+        let seed = seedVal;
+        function random() {
+          let x = Math.sin(seed++) * 10000;
+          return x - Math.floor(x);
+        }
+
+        while (true) {
+          const width = 8;
+          const height = 8;
+          let grid = [];
+          for (let y = 0; y < height; y++) {
+            let row = [];
+            for (let x = 0; x < width; x++) {
+              if (y === 0 || y === height - 1 || x === 0 || x === width - 1) {
+                row.push('#');
+              } else {
+                row.push('.');
+              }
+            }
+            grid.push(row);
+          }
+
+          const lightStart = {x: 1 + Math.floor(random() * 3), y: 1 + Math.floor(random() * 6)};
+          const shadowStart = {x: width - 1 - lightStart.x, y: lightStart.y};
+          const lightGoal = {x: 1 + Math.floor(random() * 3), y: 1 + Math.floor(random() * 6)};
+          const shadowGoal = {x: width - 1 - lightGoal.x, y: lightGoal.y};
+
+          if ((lightStart.x === lightGoal.x && lightStart.y === lightGoal.y) ||
+            (lightStart.x === shadowGoal.x && lightStart.y === shadowGoal.y)) continue;
+
+          const obstacleCount = 6 + Math.floor(random() * 6);
+          for (let i = 0; i < obstacleCount; i++) {
+            let rx = 1 + Math.floor(random() * 6);
+            let ry = 1 + Math.floor(random() * 6);
+
+            if ((rx === lightStart.x && ry === lightStart.y) ||
+              (rx === shadowStart.x && ry === shadowStart.y) ||
+              (rx === lightGoal.x && ry === lightGoal.y) ||
+              (rx === shadowGoal.x && ry === shadowGoal.y)) continue;
+
+            const roll = random();
+            if (roll < 0.4) {
+              grid[ry][rx] = '#';
+            } else if (roll < 0.6) {
+              grid[ry][rx] = 'H';
+            } else if (roll < 0.8) {
+              const arrows = ['^', 'v', '<', '>'];
+              grid[ry][rx] = arrows[Math.floor(random() * 4)];
+            } else {
+              grid[ry][rx] = random() < 0.5 ? 'G' : 'g';
+            }
+          }
+
+          const levelObj = {
+            name: `Daily Puzzle #${seedVal}`,
+            width, height, grid,
+            lightStart, shadowStart, lightGoal, shadowGoal,
+            maxMoves: 25
+          };
+
+          const solution = solveBFS(levelObj);
+          if (solution && solution.length >= 6 && solution.length <= 20) {
+            return levelObj;
+          }
+        }
+      }
+
+      /* Reset Viewport Transformation params */
+      function resetCamera() {
+        state.zoomScale = 1.0;
+        state.panOffset = {x: 0, y: 0};
+      }
+
+      /* Initialize Game Board */
+      function initGame(levelIdx, isDaily = false) {
+        if (state.demoInterval) {
+          clearInterval(state.demoInterval);
+          state.demoInterval = null;
+        }
+
+        state.currentLevelIdx = levelIdx;
+        state.isDaily = isDaily;
+        state.undoStack = [];
+        state.moves = 0;
+        state.isDemoPlaying = false;
+        state.demoMoves = [];
+        state.isPaused = false;
+
+        if (isDaily) {
+          state.level = generateDailyLevel();
+        } else {
+          if (levelIdx >= sk_levels_data.length) {
+            levelIdx = 0;
+            state.currentLevelIdx = 0;
+          }
+          const source = sk_levels_data[levelIdx];
+          state.level = {
+            ...source,
+            grid: source.grid.map(row => [...row]),
+            gatesActive: true
+          };
+        }
+
+        state.light = {...state.level.lightStart};
+        state.shadow = {...state.level.shadowStart};
+        state.gatesActive = true;
+        state.gameState = 'playing';
+
+        resetCamera();
+        hideAllScreens();
+        updateHUD();
+        resizeCanvas();
+      }
+
+      function updateHUD() {
+        topLvlVal.innerText = state.isDaily ? "Daily" : (state.currentLevelIdx + 1);
+        topMovesVal.innerText = `${state.moves}/${state.level ? state.level.maxMoves : 0}`;
+      }
+
+      function saveUndoState() {
+        state.undoStack.push({
+          light: {...state.light},
+          shadow: {...state.shadow},
+          gatesActive: state.gatesActive,
+          moves: state.moves
+        });
+      }
+
+      function undo() {
+        if (state.gameState !== 'playing' || state.isPaused || state.undoStack.length === 0) return;
+        const prev = state.undoStack.pop();
+        state.light = prev.light;
+        state.shadow = prev.shadow;
+        state.gatesActive = prev.gatesActive;
+        state.moves = prev.moves;
+        updateHUD();
+        audio.playMove();
+      }
+
+      function resetLevel() {
+        if (!state.level) return;
+        initGame(state.currentLevelIdx, state.isDaily);
+      }
+
+      /* Unified Game Movement Logic */
+      function handleDirectionalInput(dir) {
+        if (state.gameState !== 'playing' || state.isPaused || state.isDemoPlaying) return;
+
+        let dxL = 0, dyL = 0;
+        if (dir === 'up') dyL = -1;
+        if (dir === 'down') dyL = 1;
+        if (dir === 'left') dxL = -1;
+        if (dir === 'right') dxL = 1;
+
+        let dxS = -dxL;
+        let dyS = dyL;
+
+        const nextL = {x: state.light.x + dxL, y: state.light.y + dyL};
+        const nextS = {x: state.shadow.x + dxS, y: state.shadow.y + dyS};
+
+        function checkWalkable(next, dy, dx) {
+          if (next.x < 0 || next.x >= state.level.width || next.y < 0 || next.y >= state.level.height) return false;
+
+          const cell = state.level.grid[next.y][next.x];
+          if (cell === '#') return false;
+
+          if (cell === 'G' && state.gatesActive) return false;
+          if (cell === 'g' && !state.gatesActive) return false;
+
+          if (cell === '^' && dy !== -1) return false;
+          if (cell === 'v' && dy !== 1) return false;
+          if (cell === '<' && dx !== -1) return false;
+          if (cell === '>' && dx !== 1) return false;
+
+          return true;
+        }
+
+        const canL = checkWalkable(nextL, dyL, dxL);
+        const canS = checkWalkable(nextS, dyS, dxS);
+
+        if (canL || canS) {
+          saveUndoState();
+          if (canL) {
+            state.light = nextL;
+            if (state.particlesEnabled) spawnParticles(state.light.x, state.light.y, '#00f0ff');
+          }
+          if (canS) {
+            state.shadow = nextS;
+            if (state.particlesEnabled) spawnParticles(state.shadow.x, state.shadow.y, '#ff00ff');
+          }
+
+          state.gatesActive = !state.gatesActive;
+          state.moves++;
+          updateHUD();
+          audio.playMove();
+
+          checkMoveOutcomes();
+        } else {
+          audio.playBump();
+        }
+      }
+
+      function checkMoveOutcomes() {
+        const cellL = state.level.grid[state.light.y][state.light.x];
+        const cellS = state.level.grid[state.shadow.y][state.shadow.x];
+
+        if (cellL === 'H' || cellS === 'H') {
+          audio.playFail();
+          endGame(false, "Quantum node fell into a singularity black hole!");
+          return;
+        }
+
+        const lightOnGoal = state.light.x === state.level.lightGoal.x && state.light.y === state.level.lightGoal.y;
+        const shadowOnGoal = state.shadow.x === state.level.shadowGoal.x && state.shadow.y === state.level.shadowGoal.y;
+
+        if (lightOnGoal && shadowOnGoal) {
+          audio.playSuccess();
+          levelCleared();
+          return;
+        }
+
+        if (state.moves >= state.level.maxMoves) {
+          audio.playFail();
+          endGame(false, "Quantum Entanglement lost. (Out of Moves)");
+        }
+      }
+
+      function levelCleared() {
+        state.gameState = 'cleared';
+
+        const key = state.isDaily ? 'daily' : `level_${state.currentLevelIdx}`;
+        if (!state.highscores[key] || state.moves < state.highscores[key]) {
+          state.highscores[key] = state.moves;
+        }
+
+        if (!state.isDaily && state.currentLevelIdx < sk_levels_data.length - 1) {
+          const nextIdx = state.currentLevelIdx + 1;
+          if (!state.unlockedLevels.includes(nextIdx)) {
+            state.unlockedLevels.push(nextIdx);
+          }
+        }
+        saveProgress();
+
+        document.getElementById('sk_cleared_moves').innerText = state.moves;
+        screenCleared.classList.remove('sk_hidden');
+      }
+
+      function endGame(success, reason) {
+        state.gameState = 'gameover';
+        document.getElementById('sk_fail_reason').innerText = reason;
+        screenGameOver.classList.remove('sk_hidden');
+      }
+
+      /* Unified Game Pause state controllers */
+      function togglePause() {
+        if (state.gameState !== 'playing' && state.gameState !== 'gameover' && state.gameState !== 'cleared') return;
+        state.isPaused = !state.isPaused;
+        if (state.isPaused) {
+          screenPaused.classList.remove('sk_hidden');
+          btnPause.innerText = "▶️ Resume";
+        } else {
+          screenPaused.classList.add('sk_hidden');
+          btnPause.innerText = "⏸️ Pause";
+        }
+      }
+
+      /* Watch Demo Mode solver trigger */
+      function watchDemo() {
+        const path = solveBFS(state.level);
+        if (!path || path.length === 0) {
+          alert("No solution found for this configuration.");
+          return;
+        }
+
+        if (state.isPaused) {
+          togglePause();
+        }
+
+        state.isDemoPlaying = true;
+        state.demoMoves = [...path];
+
+        if (state.demoInterval) clearInterval(state.demoInterval);
+
+        state.demoInterval = setInterval(() => {
+          if (state.gameState !== 'playing' || !state.isDemoPlaying || state.demoMoves.length === 0) {
+            clearInterval(state.demoInterval);
+            state.demoInterval = null;
+            state.isDemoPlaying = false;
+            return;
+          }
+
+          const nextDir = state.demoMoves.shift();
+          state.isDemoPlaying = false;
+          handleDirectionalInput(nextDir);
+          state.isDemoPlaying = true;
+        }, 500);
+      }
+
+      function hideAllScreens() {
+        screenStart.classList.add('sk_hidden');
+        screenCleared.classList.add('sk_hidden');
+        screenGameOver.classList.add('sk_hidden');
+        screenVictory.classList.add('sk_hidden');
+        screenPaused.classList.add('sk_hidden');
+        popupLevels.classList.add('sk_hidden');
+        popupScores.classList.add('sk_hidden');
+        popupSettings.classList.add('sk_hidden');
+        popupInfo.classList.add('sk_hidden');
+        popupGit.classList.add('sk_hidden');
+        popupProgress.classList.add('sk_hidden');
+        dropdownMenu.classList.remove('sk_show');
+        btnPause.innerText = "⏸️ Pause";
+      }
+
+      function spawnParticles(gridX, gridY, color) {
+        const cellSize = canvas.width / state.level.width;
+        const px = gridX * cellSize + cellSize / 2;
+        const py = gridY * cellSize + cellSize / 2;
+
+        for (let i = 0; i < 15; i++) {
+          state.particles.push({
+            x: px,
+            y: py,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            radius: Math.random() * 3 + 2,
+            life: 1.0,
+            decay: Math.random() * 0.05 + 0.02,
+            color: color
+          });
+        }
+      }
+
+      /* Zoom adjustments utility */
+      function zoom(amount) {
+        state.zoomScale = Math.max(0.5, Math.min(3.0, state.zoomScale + amount));
+      }
+
+      /* Rendering engine with matrix zoom and panning */
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (!state.level) return;
+
+        ctx.save();
+        /* Apply matrix transformation for camera panning and zoom */
+        ctx.translate(canvas.width / 2 + state.panOffset.x, canvas.height / 2 + state.panOffset.y);
+        ctx.scale(state.zoomScale, state.zoomScale);
+        ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+        const cols = state.level.width;
+        const rows = state.level.height;
+        const cellSize = canvas.width / cols;
+
+        /* Draw Board elements */
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            const tile = state.level.grid[y][x];
+            const px = x * cellSize;
+            const py = y * cellSize;
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(px, py, cellSize, cellSize);
+
+            if (tile === '#') {
+              ctx.fillStyle = 'rgba(20, 25, 45, 0.95)';
+              ctx.fillRect(px + 2, py + 2, cellSize - 4, cellSize - 4);
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+              ctx.lineWidth = 1.5;
+              ctx.strokeRect(px + 2, py + 2, cellSize - 4, cellSize - 4);
+            } else if (tile === 'H') {
+              ctx.beginPath();
+              ctx.arc(px + cellSize / 2, py + cellSize / 2, cellSize / 3, 0, Math.PI * 2);
+              ctx.fillStyle = '#05020c';
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(255, 0, 255, 0.6)';
+              ctx.lineWidth = 2;
+              ctx.stroke();
+
+              const pulse = (Math.sin(Date.now() / 200) + 1) / 2;
+              ctx.beginPath();
+              ctx.arc(px + cellSize / 2, py + cellSize / 2, cellSize / 3 + pulse * 4, 0, Math.PI * 2);
+              ctx.strokeStyle = 'rgba(255, 0, 255, 0.2)';
+              ctx.stroke();
+            } else if (tile === 'G' || tile === 'g') {
+              const isActive = (tile === 'G' && state.gatesActive) || (tile === 'g' && !state.gatesActive);
+              if (isActive) {
+                ctx.fillStyle = 'rgba(255, 75, 75, 0.2)';
+                ctx.fillRect(px + 4, py + 4, cellSize - 8, cellSize - 8);
+                ctx.strokeStyle = '#ff4b4b';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(px + 4, py + 4, cellSize - 8, cellSize - 8);
+                ctx.beginPath();
+                ctx.moveTo(px + 4, py + 4);
+                ctx.lineTo(px + cellSize - 4, py + cellSize - 4);
+                ctx.stroke();
+              } else {
+                ctx.strokeStyle = 'rgba(255, 75, 75, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(px + 6, py + 6, cellSize - 12, cellSize - 12);
+              }
+            } else if (['^', 'v', '<', '>'].includes(tile)) {
+              ctx.fillStyle = 'rgba(0, 240, 255, 0.1)';
+              ctx.fillRect(px + 4, py + 4, cellSize - 8, cellSize - 8);
+              ctx.fillStyle = 'rgba(0, 240, 255, 0.5)';
+              ctx.font = `bold ${cellSize * 0.4}px Arial`;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(tile, px + cellSize / 2, py + cellSize / 2);
+            }
+          }
+        }
+
+        /* Targets definitions */
+        const gL = state.level.lightGoal;
+        const gS = state.level.shadowGoal;
+        const pulseSize = (Math.sin(Date.now() / 150) + 1) / 2 * 3;
+
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#00f0ff';
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(gL.x * cellSize + 8 - pulseSize / 2, gL.y * cellSize + 8 - pulseSize / 2, cellSize - 16 + pulseSize, cellSize - 16 + pulseSize);
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.15)';
+        ctx.fillRect(gL.x * cellSize + 8, gL.y * cellSize + 8, cellSize - 16, cellSize - 16);
+
+        ctx.shadowColor = '#ff00ff';
+        ctx.strokeStyle = '#ff00ff';
+        ctx.strokeRect(gS.x * cellSize + 8 - pulseSize / 2, gS.y * cellSize + 8 - pulseSize / 2, cellSize - 16 + pulseSize, cellSize - 16 + pulseSize);
+        ctx.fillStyle = 'rgba(255, 0, 255, 0.15)';
+        ctx.fillRect(gS.x * cellSize + 8, gS.y * cellSize + 8, cellSize - 16, cellSize - 16);
+
+        ctx.shadowBlur = 0;
+
+        /* Light node rendering */
+        const pSize = cellSize * 0.35;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = '#00f0ff';
+        ctx.fillStyle = '#00f0ff';
+        ctx.beginPath();
+        ctx.arc(state.light.x * cellSize + cellSize / 2, state.light.y * cellSize + cellSize / 2, pSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* Shadow node rendering */
+        ctx.shadowColor = '#ff00ff';
+        ctx.fillStyle = '#ff00ff';
+        ctx.beginPath();
+        ctx.arc(state.shadow.x * cellSize + cellSize / 2, state.shadow.y * cellSize + cellSize / 2, pSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+
+        /* Particles execution */
+        for (let i = state.particles.length - 1; i >= 0; i--) {
+          const p = state.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life -= p.decay;
+
+          if (p.life <= 0) {
+            state.particles.splice(i, 1);
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+          }
+        }
+
+        ctx.restore();
+      }
+
+      /* Continuously loop requests */
+      function update() {
+        draw();
+        requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+
+      /* Keyboard Event handling */
+      window.addEventListener('keydown', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+          e.preventDefault();
+        }
+
+        /* Keyboard Zoom Handling (Ctrl + / Ctrl -) */
+        if (e.ctrlKey) {
+          if (e.key === '=' || e.key === '+') {
+            e.preventDefault();
+            zoom(0.1);
+            return;
+          } else if (e.key === '-') {
+            e.preventDefault();
+            zoom(-0.1);
+            return;
+          } else if (e.key === '0') {
+            e.preventDefault();
+            resetCamera();
+            return;
+          }
+        }
+
+        if (state.gameState === 'playing' && !state.isPaused) {
+          switch (e.code) {
+            case 'ArrowUp':
+            case 'KeyW':
+              handleDirectionalInput('up'); break;
+            case 'ArrowDown':
+            case 'KeyS':
+              handleDirectionalInput('down'); break;
+            case 'ArrowLeft':
+            case 'KeyA':
+              handleDirectionalInput('left'); break;
+            case 'ArrowRight':
+            case 'KeyD':
+              handleDirectionalInput('right'); break;
+            case 'KeyR':
+              resetLevel(); break;
+            case 'KeyZ':
+              undo(); break;
+            case 'Escape':
+              togglePause(); break;
+          }
+        } else if (state.gameState === 'start' && e.code === 'Enter') {
+          initGame(0);
+        }
+      });
+
+      /* ADVANCED MOBILE TOUCH CONTROL ARCHITECTURE */
+      const activeTouches = {};
+      let lastTapTime = 0;
+      let pinchStartDist = 0;
+      let startScale = 1.0;
+
+      canvas.addEventListener('touchstart', (e) => {
+        const rect = canvas.getBoundingClientRect();
+
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          activeTouches[t.identifier] = {
+            startX: t.clientX,
+            startY: t.clientY,
+            lastX: t.clientX,
+            lastY: t.clientY,
+            time: Date.now()
+          };
+        }
+
+        const keys = Object.keys(activeTouches);
+        if (keys.length === 1) {
+          /* Single Touch Hand Drag / Swipe initialization */
+          const touchData = activeTouches[keys[0]];
+          if (state.isPanModeActive || state.isPaused || state.gameState !== 'playing') {
+            state.isDraggingGrid = true;
+            state.dragStart = {
+              x: touchData.startX - state.panOffset.x,
+              y: touchData.startY - state.panOffset.y
+            };
+          }
+        } else if (keys.length === 2) {
+          /* Pinch Zoom initialization */
+          state.isDraggingGrid = false;
+          const t1 = activeTouches[keys[0]];
+          const t2 = activeTouches[keys[1]];
+          pinchStartDist = Math.hypot(t1.startX - t2.startX, t1.startY - t2.startY);
+          startScale = state.zoomScale;
+        }
+      }, {passive: true});
+
+      canvas.addEventListener('touchmove', (e) => {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          if (activeTouches[t.identifier]) {
+            activeTouches[t.identifier].lastX = t.clientX;
+            activeTouches[t.identifier].lastY = t.clientY;
+          }
+        }
+
+        const keys = Object.keys(activeTouches);
+        if (keys.length === 1 && state.isDraggingGrid) {
+          /* Active Single finger Pan Drag translation */
+          const t = activeTouches[keys[0]];
+          state.panOffset.x = t.lastX - state.dragStart.x;
+          state.panOffset.y = t.lastY - state.dragStart.y;
+        } else if (keys.length === 2) {
+          /* Pinch calculation update */
+          const t1 = activeTouches[keys[0]];
+          const t2 = activeTouches[keys[1]];
+          const currentDist = Math.hypot(t1.lastX - t2.lastX, t1.lastY - t2.lastY);
+          if (pinchStartDist > 10) {
+            const ratio = currentDist / pinchStartDist;
+            state.zoomScale = Math.max(0.5, Math.min(3.0, startScale * ratio));
+          }
+        }
+      }, {passive: true});
+
+      canvas.addEventListener('touchend', (e) => {
+        const now = Date.now();
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          const touchData = activeTouches[t.identifier];
+
+          if (touchData) {
+            const dx = t.clientX - touchData.startX;
+            const dy = t.clientY - touchData.startY;
+            const elapsed = now - touchData.time;
+
+            /* Check single finger actions */
+            if (Object.keys(activeTouches).length === 1 && !state.isDraggingGrid) {
+              if (Math.hypot(dx, dy) < 15) {
+                /* Handled single Tap / Double tap detection */
+                if (now - lastTapTime < 300) {
+                  /* Double Tap triggers: Quick undo action */
+                  undo();
+                } else {
+                  /* Single Tap: Instant Action placeholder or Long-press scheduler */
+                  if (elapsed > 500) {
+                    /* Long Press > 500ms triggers: Quick restart */
+                    resetLevel();
+                  }
+                }
+                lastTapTime = now;
+              } else {
+                /* Evaluate Swipe motion if Pan/Drag Mode is inactive */
+                if (!state.isPanModeActive && !state.isPaused && state.gameState === 'playing') {
+                  const threshold = 30;
+                  if (Math.abs(dx) > Math.abs(dy)) {
+                    if (Math.abs(dx) > threshold) {
+                      handleDirectionalInput(dx > 0 ? 'right' : 'left');
+                    }
+                  } else {
+                    if (Math.abs(dy) > threshold) {
+                      handleDirectionalInput(dy > 0 ? 'down' : 'up');
+                    }
+                  }
+                }
+              }
+            }
+            delete activeTouches[t.identifier];
+          }
+        }
+        state.isDraggingGrid = false;
+      }, {passive: true});
+
+      canvas.addEventListener('touchcancel', (e) => {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          delete activeTouches[e.changedTouches[i].identifier];
+        }
+        state.isDraggingGrid = false;
+      }, {passive: true});
+
+      /* Drag support for Mouse interactions on computer screens */
+      let isMouseDragging = false;
+      let mouseDragStart = {x: 0, y: 0};
+
+      canvas.addEventListener('mousedown', (e) => {
+        if (state.isPanModeActive || state.isPaused || state.gameState !== 'playing') {
+          isMouseDragging = true;
+          mouseDragStart.x = e.clientX - state.panOffset.x;
+          mouseDragStart.y = e.clientY - state.panOffset.y;
+          canvas.classList.add('sk_dragging');
+        }
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (isMouseDragging) {
+          state.panOffset.x = e.clientX - mouseDragStart.x;
+          state.panOffset.y = e.clientY - mouseDragStart.y;
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        isMouseDragging = false;
+        canvas.classList.remove('sk_dragging');
+      });
+
+      /* Viewport control actions */
+      document.getElementById('sk_v_zoom_in').addEventListener('click', () => zoom(0.1));
+      document.getElementById('sk_v_zoom_out').addEventListener('click', () => zoom(-0.1));
+      document.getElementById('sk_v_zoom_reset').addEventListener('click', resetCamera);
+
+      const panBtn = document.getElementById('sk_v_pan_toggle');
+      panBtn.addEventListener('click', () => {
+        state.isPanModeActive = !state.isPanModeActive;
+        panBtn.classList.toggle('sk_active', state.isPanModeActive);
+        canvas.classList.toggle('sk_pan_mode', state.isPanModeActive);
+      });
+
+      /* Dropdown controls logic */
+      btnMenuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('sk_show');
+      });
+
+      document.addEventListener('click', () => {
+        dropdownMenu.classList.remove('sk_show');
+      });
+
+      btnPause.addEventListener('click', togglePause);
+
+      /* Trigger sub popups */
+      dropLevels.addEventListener('click', () => {
+        buildLevelsGrid();
+        popupLevels.classList.remove('sk_hidden');
+      });
+      dropScores.addEventListener('click', () => {
+        buildScoresList();
+        popupScores.classList.remove('sk_hidden');
+      });
+      dropSettings.addEventListener('click', () => popupSettings.classList.remove('sk_hidden'));
+      dropInfo.addEventListener('click', () => popupInfo.classList.remove('sk_hidden'));
+      dropGit.addEventListener('click', () => popupGit.classList.remove('sk_hidden'));
+      dropDemo.addEventListener('click', watchDemo);
+
+      /* Popup closer tags */
+      document.getElementById('sk_close_levels').addEventListener('click', () => popupLevels.classList.add('sk_hidden'));
+      document.getElementById('sk_close_scores').addEventListener('click', () => popupScores.classList.add('sk_hidden'));
+      document.getElementById('sk_close_settings').addEventListener('click', () => popupSettings.classList.add('sk_hidden'));
+      document.getElementById('sk_close_info').addEventListener('click', () => popupInfo.classList.add('sk_hidden'));
+      document.getElementById('sk_close_git').addEventListener('click', () => popupGit.classList.add('sk_hidden'));
+
+      /* Core execution screen mappings */
+      btnPlayStart.addEventListener('click', () => initGame(0));
+      btnDailyStart.addEventListener('click', () => initGame(0, true));
+      btnWatchDemoStart.addEventListener('click', () => {
+        initGame(0);
+        watchDemo();
+      });
+
+      btnNextLevel.addEventListener('click', () => {
+        if (state.isDaily) {
+          initGame(0, true);
+        } else if (state.currentLevelIdx < sk_levels_data.length - 1) {
+          initGame(state.currentLevelIdx + 1);
+        } else {
+          state.gameState = 'victory';
+          hideAllScreens();
+          screenVictory.classList.remove('sk_hidden');
+        }
+      });
+
+      btnRetryCleared.addEventListener('click', resetLevel);
+      btnRetryFail.addEventListener('click', resetLevel);
+
+      const toMenu = () => {
+        state.gameState = 'start';
+        hideAllScreens();
+        screenStart.classList.remove('sk_hidden');
+      };
+      btnMenuFail.addEventListener('click', toMenu);
+      btnMenuVictory.addEventListener('click', toMenu);
+
+      /* Pause screen interactive triggers */
+      btnResumeOverlay.addEventListener('click', togglePause);
+      btnRestartPaused.addEventListener('click', () => {
+        togglePause();
+        resetLevel();
+      });
+      btnExitPaused.addEventListener('click', () => {
+        togglePause();
+        toMenu();
+      });
+
+      /* Settings modifications listeners */
+      document.getElementById('sk_toggle_sound').addEventListener('click', (e) => {
+        audio.enabled = !audio.enabled;
+        e.target.innerText = audio.enabled ? "ON" : "OFF";
+        e.target.classList.toggle('sk_active', audio.enabled);
+        saveProgress();
+      });
+
+      document.getElementById('sk_toggle_particles').addEventListener('click', (e) => {
+        state.particlesEnabled = !state.particlesEnabled;
+        e.target.innerText = state.particlesEnabled ? "ON" : "OFF";
+        e.target.classList.toggle('sk_active', state.particlesEnabled);
+      });
+
+      document.getElementById('sk_btn_reset_scores').addEventListener('click', () => {
+        if (confirm("Reset all high scores and unlocked progression?")) {
+          state.unlockedLevels = [0];
+          state.highscores = {};
+          saveProgress();
+          buildScoresList();
+        }
+      });
+
+      /* Dynamic interface loaders */
+      function buildLevelsGrid() {
+        const gridContainer = document.getElementById('sk_level_list');
+        gridContainer.innerHTML = '';
+        sk_levels_data.forEach((lvl, idx) => {
+          const btn = document.createElement('button');
+          const isUnlocked = state.unlockedLevels.includes(idx);
+          btn.className = `sk_level_item ${isUnlocked ? 'sk_unlocked' : 'sk_locked'}`;
+          btn.innerText = idx + 1;
+          if (isUnlocked) {
+            btn.addEventListener('click', () => {
+              popupLevels.classList.add('sk_hidden');
+              initGame(idx);
+            });
+          }
+          gridContainer.appendChild(btn);
+        });
+      }
+
+      function buildScoresList() {
+        const scoresContainer = document.getElementById('sk_scores_list');
+        scoresContainer.innerHTML = '';
+        sk_levels_data.forEach((lvl, idx) => {
+          const row = document.createElement('div');
+          row.className = 'sk_setting_row';
+          const best = state.highscores[`level_${idx}`] ? `${state.highscores[`level_${idx}`]} moves` : 'Unsolved';
+          row.innerHTML = `<span>Level ${idx + 1}: ${lvl.name}</span><b>${best}</b>`;
+          scoresContainer.appendChild(row);
+        });
+      }
+
+      /* Landscape & Fullscreen api implementations */
+      btnLandscape.addEventListener('click', () => {
+        const holder = document.getElementById('sk_canvas_holder');
+        if (holder.style.transform === 'rotate(90deg)') {
+          holder.style.transform = 'none';
+        } else {
+          holder.style.transform = 'rotate(90deg)';
+        }
+        resizeCanvas();
+      });
+
+      btnFullscreen.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          root.requestFullscreen().catch(() => {
+            alert("Fullscreen mode is blocked or unsupported on this device.");
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      /* Dpad listeners */
+      document.getElementById('sk_v_up').addEventListener('click', () => handleDirectionalInput('up'));
+      document.getElementById('sk_v_down').addEventListener('click', () => handleDirectionalInput('down'));
+      document.getElementById('sk_v_left').addEventListener('click', () => handleDirectionalInput('left'));
+      document.getElementById('sk_v_right').addEventListener('click', () => handleDirectionalInput('right'));
+      document.getElementById('sk_v_undo').addEventListener('click', undo);
+
+      /* Virtual Controller Panel Dragging Logic (Supports Multi-Touch with identification) */
+      const sk_controls = document.getElementById('sk_virtual_controls');
+      const sk_handle = document.getElementById('sk_controls_drag_handle');
+
+      let dragOffset = {x: 0, y: 0};
+      let dragActiveTouchId = null;
+
+      sk_handle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        const rect = sk_controls.getBoundingClientRect();
+        dragOffset.x = e.clientX - rect.left;
+        dragOffset.y = e.clientY - rect.top;
+
+        function mouseMoveHandler(evt) {
+          const rootRect = root.getBoundingClientRect();
+          let x = evt.clientX - dragOffset.x - rootRect.left;
+          let y = evt.clientY - dragOffset.y - rootRect.top;
+
+          x = Math.max(0, Math.min(x, rootRect.width - rect.width));
+          y = Math.max(0, Math.min(y, rootRect.height - rect.height));
+
+          sk_controls.style.left = x + (rect.width / 2) + 'px';
+          sk_controls.style.top = y + (rect.height / 2) + 'px';
+          sk_controls.style.bottom = 'auto';
+        }
+
+        function mouseUpHandler() {
+          document.removeEventListener('mousemove', mouseMoveHandler);
+          document.removeEventListener('mouseup', mouseUpHandler);
+        }
+
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      });
+
+      sk_handle.addEventListener('touchstart', (e) => {
+        if (dragActiveTouchId !== null) return;
+        const touch = e.changedTouches[0];
+        dragActiveTouchId = touch.identifier;
+        const rect = sk_controls.getBoundingClientRect();
+        dragOffset.x = touch.clientX - rect.left;
+        dragOffset.y = touch.clientY - rect.top;
+      }, {passive: true});
+
+      sk_handle.addEventListener('touchmove', (e) => {
+        if (dragActiveTouchId === null) return;
+        let activeTouch = null;
+        for (let i = 0; i < e.touches.length; i++) {
+          if (e.touches[i].identifier === dragActiveTouchId) {
+            activeTouch = e.touches[i];
+            break;
+          }
+        }
+        if (!activeTouch) return;
+
+        const rect = sk_controls.getBoundingClientRect();
+        const rootRect = root.getBoundingClientRect();
+        let x = activeTouch.clientX - dragOffset.x - rootRect.left;
+        let y = activeTouch.clientY - dragOffset.y - rootRect.top;
+
+        x = Math.max(0, Math.min(x, rootRect.width - rect.width));
+        y = Math.max(0, Math.min(y, rootRect.height - rect.height));
+
+        sk_controls.style.left = x + (rect.width / 2) + 'px';
+        sk_controls.style.top = y + (rect.height / 2) + 'px';
+        sk_controls.style.bottom = 'auto';
+      }, {passive: true});
+
+      sk_handle.addEventListener('touchend', (e) => {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          if (e.changedTouches[i].identifier === dragActiveTouchId) {
+            dragActiveTouchId = null;
+            break;
+          }
+        }
+      }, {passive: true});
+
+      /* Clean comments & safely parse JS arrays / standard strings returned by github */
+      function cleanAndParseJS(text) {
+        /* Strip multi-line block comments */
+        let cleaned = text.replace(/\/\*[\s\S]*?\*\//g, '');
+        /* Strip single-line comments */
+        cleaned = cleaned.replace(/\/\/.*/g, '');
+        /* Evaluate structure as code configuration object safely using a constructor */
+        const parserFunction = new Function('return ' + cleaned);
+        return parserFunction();
+      }
+
+      /* Levels Fetcher logic */
+      btnDoFetch.addEventListener('click', () => {
+        const url = gitUrlInput.value.trim();
+        if (!url) {
+          alert("Please specify a valid URL link.");
+          return;
+        }
+
+        popupGit.classList.add('sk_hidden');
+        popupProgress.classList.remove('sk_hidden');
+
+        const progressBar = document.getElementById('sk_progress_bar_fill');
+        const progressStatus = document.getElementById('sk_progress_status');
+        progressBar.style.width = '20%';
+        progressStatus.innerText = 'Initializing network pipeline...';
+
+        fetch(url)
+          .then(response => {
+            if (!response.ok) throw new Error("HTTP error: " + response.status);
+            progressBar.style.width = '60%';
+            progressStatus.innerText = 'Parsing level arrays...';
+            return response.text();
+          })
+          .then(data => {
+            const parsed = cleanAndParseJS(data);
+            if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].grid) {
+              sk_levels_data = parsed;
+              progressBar.style.width = '100%';
+              progressStatus.innerText = 'Done!';
+              setTimeout(() => {
+                popupProgress.classList.add('sk_hidden');
+                initGame(0);
+              }, 500);
+            } else {
+              throw new Error("Invalid format layout inside file. File must yield a valid Level Array structure.");
+            }
+          })
+          .catch(err => {
+            popupProgress.classList.add('sk_hidden');
+            alert("Error loading remote content: " + err.message + "\nFallback to local database.");
+            sk_levels_data = [...default_levels_data];
+            initGame(0);
+          });
+      });
+
+      btnRestoreLocal.addEventListener('click', () => {
+        sk_levels_data = [...default_levels_data];
+        popupGit.classList.add('sk_hidden');
+        alert("Restored local level configurations!");
+        initGame(0);
+      });
+
+      /* Initialization sequence */
+      loadSavedData();
+      resizeCanvas();
+    })();
+  </script>
+</body>
+
+</html>
