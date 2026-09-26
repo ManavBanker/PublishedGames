@@ -1,0 +1,2003 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Orbital Tether - Cleanse the Gravity Nodes</title>
+    <style>
+        /* Scoped to prevent host site pollution */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .sk_game_suite_root {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle, #0e101f 0%, #05050d 100%);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sk_game_suite_root * {
+            box-sizing: border-box;
+        }
+
+        /* Top Bar Styling */
+        .sk_top_bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            background: rgba(13, 15, 30, 0.95);
+            border-bottom: 2px solid #1a2244;
+            z-index: 10;
+        }
+
+        .sk_game_title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #00f3ff, #ff007f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .sk_score_display {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #00f3ff;
+            margin: 0 10px;
+        }
+
+        .sk_top_controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .sk_btn {
+            background: #11162e;
+            border: 1px solid #00f3ff;
+            color: #00f3ff;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .sk_btn:hover {
+            background: #00f3ff;
+            color: #05050d;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.6);
+        }
+
+        .sk_btn:active {
+            transform: scale(0.95);
+        }
+
+        .sk_primary_btn {
+            background: linear-gradient(135deg, #ff007f 0%, #7b00ff 100%);
+            border: none;
+            color: #fff;
+        }
+
+        .sk_primary_btn:hover {
+            background: linear-gradient(135deg, #ff3399 0%, #9933ff 100%);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+        }
+
+        /* Responsive Dropdown Menu */
+        .sk_menu_container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .sk_dropdown_menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: #0d0f1e;
+            border: 2px solid #1a2244;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            min-width: 160px;
+            flex-direction: column;
+            padding: 6px;
+            gap: 4px;
+        }
+
+        .sk_dropdown_menu.show {
+            display: flex;
+        }
+
+        .sk_dropdown_menu .sk_btn {
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        /* Main Game Layout and Canvas Ratio 1:1 Constraints with Fluid Responsiveness */
+        .sk_game_suite_root {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: radial-gradient(circle, #0e101f 0%, #05050d 100%);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sk_main_wrapper {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden;
+            padding: 5px;
+            min-height: 0;
+        }
+
+        .sk_game_area {
+            position: relative;
+            width: 100%;
+            max-width: min(480px, calc(100vh - 180px), calc(100vw - 20px));
+            aspect-ratio: 1 / 1;
+            background: rgba(5, 5, 13, 0.6);
+            border: 2px solid #1a2244;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 1;
+        }
+
+        .sk_canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            touch-action: none;
+            /* Prevent browser handling double taps or native zoom on canvas */
+        }
+
+        /* Screens/Overlays */
+        .sk_screen,
+        .sk_overlay_screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 13, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            transition: opacity 0.3s ease;
+        }
+
+        .sk_hidden {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .sk_menu_content,
+        .sk_overlay_content {
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            background: rgba(13, 15, 30, 0.98);
+            border: 2px solid #1a2244;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.15);
+        }
+
+        .sk_logo_glow {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #00f3ff, #ff007f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+        }
+
+        .sk_subtitle {
+            font-size: 0.9rem;
+            color: #8c9ec4;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .sk_overlay_title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .sk_lose_color {
+            color: #ff3b30;
+            text-shadow: 0 0 15px rgba(255, 59, 48, 0.4);
+        }
+
+        .sk_win_color {
+            color: #4cd964;
+            text-shadow: 0 0 15px rgba(76, 217, 100, 0.4);
+        }
+
+        .sk_victory_color {
+            color: #ffcc00;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+        }
+
+        .sk_overlay_text {
+            color: #a4b3d6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        /* POPUP MODALS */
+        .sk_popup {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 13, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .sk_popup_content {
+            background: #0d0f1e;
+            border: 2px solid #00f3ff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            max-height: 85%;
+            overflow-y: auto;
+        }
+
+        .sk_popup_title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #00f3ff;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #1a2244;
+            padding-bottom: 8px;
+        }
+
+        .sk_popup p {
+            font-size: 0.85rem;
+            color: #c4d1eb;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .sk_close_btn {
+            width: 100%;
+            margin-top: 15px;
+            background: #1a2244;
+            border-color: #3b4b8c;
+            color: #8c9ec4;
+        }
+
+        .sk_close_btn:hover {
+            background: #ff3b30;
+            color: white;
+            border-color: #ff3b30;
+        }
+
+        /* Level Selector Screen Grid */
+        .sk_level_grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .sk_level_bubble {
+            background: #11162e;
+            border: 1px solid #1a2244;
+            color: #6a7da8;
+            padding: 10px 0;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sk_level_bubble.sk_unlocked {
+            border-color: #00f3ff;
+            color: #00f3ff;
+        }
+
+        .sk_level_bubble.sk_unlocked:hover {
+            background: #00f3ff;
+            color: #05050d;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .sk_level_bubble.sk_cleared {
+            background: #1a3c22;
+            border-color: #4cd964;
+            color: #4cd964;
+        }
+
+        /* HUD Elements */
+        .sk_hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .sk_hud_item {
+            background: rgba(13, 15, 30, 0.85);
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid #1a2244;
+            font-size: 0.8rem;
+            color: #8c9ec4;
+        }
+
+        .sk_hud_item b {
+            color: #00f3ff;
+        }
+
+        /* Draggable Controls Console - Responsive Compact Sizing */
+        .sk_draggable_controls {
+            position: relative;
+            margin: 8px auto;
+            width: 95%;
+            max-width: 480px;
+            background: rgba(13, 15, 30, 0.95);
+            border: 2px solid #1a2244;
+            border-radius: 8px;
+            padding: 8px 12px;
+            z-index: 15;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            touch-action: none;
+            flex-shrink: 0;
+        }
+
+        .sk_drag_handle {
+            font-size: 0.65rem;
+            text-align: center;
+            color: #55648f;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            border-bottom: 1px solid #1a2244;
+            padding-bottom: 2px;
+            cursor: grab;
+        }
+
+        .sk_controls_inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sk_control_pad_left {
+            display: flex;
+            gap: 4px;
+        }
+
+        .sk_ctrl_btn {
+            background: #1c2242;
+            border: 1px solid #303d73;
+            color: #8fa0dd;
+            width: 38px;
+            height: 38px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s ease;
+        }
+
+        .sk_ctrl_btn:active {
+            background: #ff007f;
+            border-color: #ff007f;
+            color: #fff;
+            transform: scale(0.9);
+        }
+
+        .sk_action_btn {
+            width: 80px;
+            height: 38px;
+            border-radius: 19px;
+            background: linear-gradient(135deg, #00f3ff 0%, #0077ff 100%);
+            border: none;
+            color: #fff;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            font-weight: 800;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        @media (max-width: 360px) {
+            .sk_ctrl_btn {
+                width: 34px;
+                height: 34px;
+                font-size: 0.8rem;
+            }
+
+            .sk_action_btn {
+                width: 70px;
+                height: 34px;
+                font-size: 0.7rem;
+            }
+        }
+
+        .sk_score_row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed #1a2244;
+        }
+
+        .sk_score_row:last-child {
+            border-bottom: none;
+        }
+
+        /* Loading Progress Overlay style */
+        .sk_progress_overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #05050d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 20px;
+        }
+
+        .sk_progress_bar_container {
+            width: 80%;
+            max-width: 300px;
+            height: 10px;
+            background: #11162e;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #1a2244;
+            margin-top: 15px;
+        }
+
+        .sk_progress_fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00f3ff, #ff007f);
+            transition: width 0.1s linear;
+        }
+
+        .sk_loader_options {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Pan Tool active state */
+        .sk_btn_active {
+            background: #ff007f !important;
+            border-color: #ff007f !important;
+            color: #fff !important;
+            box-shadow: 0 0 12px rgba(255, 0, 127, 0.6);
+        }
+    </style>
+    <link rel="stylesheet" href="css/framework.css">
+</head>
+
+<body>
+
+    <div class="sk_game_suite_root">
+        <!-- Meta tags for parser context -->
+        <div class="sk_labels" data="Physics-based, Minimalist, Spatial, Reflex"></div>
+        <meta class="sk_meta"
+            description="Launch your particle from orbit to orbit to cleanse all gravity nodes, but beware: every successful jump tethers the nodes together with a solid laser line that you can never cross again.">
+
+        <!-- Progress Bar Initializer -->
+        <div class="sk_progress_overlay" id="sk_loader_screen">
+            <div class="sk_logo_glow">Orbital Tether</div>
+            <p style="color: #8c9ec4; font-size: 0.9rem;">Initializing Quantum Matrix...</p>
+            <div class="sk_progress_bar_container">
+                <div class="sk_progress_fill" id="sk_progress_bar_fill"></div>
+            </div>
+            <div class="sk_loader_options">
+                <button class="sk_btn sk_primary_btn" id="sk_load_local_fallback">Skip & Load Local Data</button>
+            </div>
+        </div>
+
+        <!-- Top Navigation and Control Bar -->
+        <div class="sk_top_bar">
+            <div class="sk_game_title">Orbital Tether</div>
+            <div class="sk_score_display">Score: <span id="sk_top_score_val">0</span></div>
+            <div class="sk_top_controls">
+                <button class="sk_btn" id="sk_btn_fullscreen" title="Fullscreen">&#x26F6;</button>
+                <button class="sk_btn" id="sk_btn_orientation" title="Rotate">&#x27F3;</button>
+                <!-- Single Compact Dropdown Menu -->
+                <div class="sk_menu_container">
+                    <button class="sk_btn sk_primary_btn" id="sk_menu_toggle">Menu &#x2630;</button>
+                    <div class="sk_dropdown_menu" id="sk_menu_dropdown">
+                        <button class="sk_btn" id="sk_btn_pause">Pause / Resume</button>
+                        <button class="sk_btn" id="sk_btn_levels">Sector Select</button>
+                        <button class="sk_btn" id="sk_btn_settings">Settings</button>
+                        <button class="sk_btn" id="sk_btn_scores">High Scores</button>
+                        <button class="sk_btn" id="sk_btn_info">Tether Protocol</button>
+                        <button class="sk_btn" id="sk_btn_demo_top">Auto-Demo Mode</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Popup Modals -->
+        <!-- Levels Popup -->
+        <div class="sk_popup sk_hidden" id="sk_popup_levels">
+            <div class="sk_popup_content">
+                <div class="sk_popup_title">Select Gravity Sector</div>
+                <div class="sk_level_grid" id="sk_level_grid"></div>
+                <button class="sk_btn sk_close_btn" id="sk_close_levels">Close</button>
+            </div>
+        </div>
+
+        <!-- Settings Popup -->
+        <div class="sk_popup sk_hidden" id="sk_popup_settings">
+            <div class="sk_popup_content">
+                <div class="sk_popup_title">Control Settings</div>
+                <p>Sound FX: <button class="sk_btn" id="sk_toggle_sound">ON</button></p>
+                <p>Difficulty Orbit Speed: <button class="sk_btn" id="sk_toggle_difficulty">Normal</button></p>
+                <p>Input Mode: <button class="sk_btn" id="sk_toggle_sensitivity">Tap + Spacebar</button></p>
+                <button class="sk_btn sk_close_btn" id="sk_close_settings">Close</button>
+            </div>
+        </div>
+
+        <!-- Scores Popup -->
+        <div class="sk_popup sk_hidden" id="sk_popup_scores">
+            <div class="sk_popup_content">
+                <div class="sk_popup_title">High Scores</div>
+                <div id="sk_high_scores_list"></div>
+                <button class="sk_btn sk_close_btn" id="sk_close_scores">Close</button>
+            </div>
+        </div>
+
+        <!-- Info Popup -->
+        <div class="sk_popup sk_hidden" id="sk_popup_info">
+            <div class="sk_popup_content">
+                <div class="sk_popup_title">Tether Protocol</div>
+                <p>&bull; You control a glowing particle orbiting a <b>Gravity Node</b>.</p>
+                <p>&bull; Press <b>SPACE</b>, <b>Click</b>, or tap <b>LAUNCH</b> to break orbit and fly tangentially.</p>
+                <p>&bull; Land on another node's outer field to begin orbiting it.</p>
+                <p>&bull; Double Tap the play field to invert orbit direction.</p>
+                <p>&bull; <b>CRITICAL:</b> A permanent solid laser <b>Tether</b> line is created behind you on every jump.
+                    You will instantly explode if you cross one!</p>
+                <p>&bull; Use Zoom controls (or scroll/pinch) and drag the field if necessary to see outer zones.</p>
+                <button class="sk_btn sk_close_btn" id="sk_close_info">Close</button>
+            </div>
+        </div>
+
+        <!-- Main Screens & Dynamic Canvas Container -->
+        <div class="sk_main_wrapper">
+            <!-- Start Menu Screen -->
+            <div class="sk_screen" id="sk_screen_menu">
+                <div class="sk_menu_content">
+                    <div class="sk_logo_glow">Orbital Tether</div>
+                    <p class="sk_subtitle">Launch through spatial orbits. Weave a secure web of gravity lines. Do not
+                        cross the deadzone.</p>
+                    <button class="sk_btn sk_primary_btn" id="sk_btn_start_game"
+                        style="margin-bottom:10px; width:100%;">INITIATE ORBIT (Enter)</button>
+                    <button class="sk_btn" id="sk_btn_demo" style="width:100%;">WATCH DEMO</button>
+                </div>
+            </div>
+
+            <!-- Canvas Game Arena constrained to square viewports safely -->
+            <div class="sk_game_area" id="sk_canvas_box">
+                <div class="sk_hud">
+                    <span class="sk_hud_item">Zone: <b id="sk_hud_level">1/6</b></span>
+                    <span class="sk_hud_item">Nodes: <b id="sk_hud_cleansed">0/3</b></span>
+                </div>
+                <canvas class="sk_canvas" id="sk_game_canvas"></canvas>
+            </div>
+
+            <!-- Game Over Overlay -->
+            <div class="sk_overlay_screen sk_hidden" id="sk_screen_gameover">
+                <div class="sk_overlay_content">
+                    <div class="sk_overlay_title sk_lose_color">Particle Disintegrated</div>
+                    <p class="sk_overlay_text" id="sk_lose_reason">Tether collision detected! The particle fractured
+                        into core dust.</p>
+                    <button class="sk_btn sk_primary_btn" id="sk_btn_retry"
+                        style="margin-bottom:8px; width:100%;">Relaunch Particle</button>
+                    <button class="sk_btn" id="sk_btn_menu_lose" style="width:100%;">Abort to Menu</button>
+                </div>
+            </div>
+
+            <!-- Level Win Overlay -->
+            <div class="sk_overlay_screen sk_hidden" id="sk_screen_win">
+                <div class="sk_overlay_content">
+                    <div class="sk_overlay_title sk_win_color">Node Cleanse Complete</div>
+                    <p class="sk_overlay_text">Gravity matrix stable. Moving to next coordinate cluster.</p>
+                    <button class="sk_btn sk_primary_btn" id="sk_btn_next" style="margin-bottom:8px; width:100%;">Enter
+                        Next Sector</button>
+                    <button class="sk_btn" id="sk_btn_menu_win" style="width:100%;">Main Menu</button>
+                </div>
+            </div>
+
+            <!-- Full Campaign Victory Overlay -->
+            <div class="sk_overlay_screen sk_hidden" id="sk_screen_victory">
+                <div class="sk_overlay_content">
+                    <div class="sk_overlay_title sk_victory_color">Gravity Mastered!</div>
+                    <p class="sk_overlay_text">All sectors cleansed of quantum instability. You have built the perfect
+                        spatial lattice.</p>
+                    <button class="sk_btn sk_primary_btn" id="sk_btn_restart_campaign" style="width:100%;">Restart
+                        Matrix</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Draggable Mobile and Touch Virtual Controls Console -->
+        <div class="sk_draggable_controls" id="sk_controls_zone">
+            <div class="sk_drag_handle">&#x1F392; Console (Drag to Move Container)</div>
+            <div class="sk_controls_inner">
+                <div class="sk_control_pad_left">
+                    <button class="sk_ctrl_btn" id="sk_ctrl_left" title="Orbit Counterclockwise">&#x25C0;</button>
+                    <button class="sk_ctrl_btn" id="sk_ctrl_right" title="Orbit Clockwise">&#x25B6;</button>
+                    <button class="sk_ctrl_btn" id="sk_ctrl_pan_tool" title="Hand Pan Tool">&#x270B;</button>
+                    <button class="sk_ctrl_btn" id="sk_ctrl_zoom_in" title="Zoom In">+</button>
+                    <button class="sk_ctrl_btn" id="sk_ctrl_zoom_out" title="Zoom Out">-</button>
+                </div>
+                <div class="sk_control_pad_right">
+                    <button class="sk_ctrl_btn sk_action_btn" id="sk_ctrl_launch">LAUNCH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            /* Game Audio Engine Using Web Audio API */
+            const AudioEngine = {
+                ctx: null,
+                enabled: true,
+
+                init() {
+                    /* Context initialized safely upon user click sequences */
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) {
+                        this.ctx = new AudioContextClass();
+                    }
+                },
+
+                resume() {
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
+                },
+
+                playLaunch() {
+                    if (!this.enabled || !this.ctx) return;
+                    this.resume();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(700, this.ctx.currentTime + 0.15);
+
+                    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.15);
+                },
+
+                playCapture() {
+                    if (!this.enabled || !this.ctx) return;
+                    this.resume();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+                    osc.frequency.setValueAtTime(1040, this.ctx.currentTime + 0.08);
+
+                    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.25);
+                },
+
+                playExplode() {
+                    if (!this.enabled || !this.ctx) return;
+                    this.resume();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(200, this.ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(40, this.ctx.currentTime + 0.4);
+
+                    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.4);
+                },
+
+                playLevelClear() {
+                    if (!this.enabled || !this.ctx) return;
+                    this.resume();
+                    const notes = [261.63, 329.63, 392.00, 523.25];
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.1);
+
+                        gain.gain.setValueAtTime(0.1, this.ctx.currentTime + idx * 0.1);
+                        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + idx * 0.1 + 0.3);
+
+                        osc.start(this.ctx.currentTime + idx * 0.1);
+                        osc.stop(this.ctx.currentTime + idx * 0.1 + 0.3);
+                    });
+                }
+            };
+
+            /* Global game state manager */
+            const GameState = {
+                score: 0,
+                currentLevelIdx: 0,
+                unlockedLevelIdx: 0,
+                soundEnabled: true,
+                orbitSpeedSetting: 'Normal',
+                inputMode: 'Tap + Spacebar',
+                highScores: [],
+                levels: [],
+                isPaused: false
+            };
+
+            /* Zoom and Camera Matrix Tracking */
+            const ViewEngine = {
+                zoom: 1.0,
+                panX: 0,
+                panY: 0,
+                isPanActive: false,
+                isDragging: false,
+                dragStartX: 0,
+                dragStartY: 0,
+                baseX: 0,
+                baseY: 0,
+
+                reset() {
+                    this.zoom = 1.0;
+                    this.panX = 0;
+                    this.panY = 0;
+                },
+
+                zoomIn() {
+                    this.zoom = Math.min(3.0, this.zoom + 0.1);
+                },
+
+                zoomOut() {
+                    this.zoom = Math.max(0.5, this.zoom - 0.1);
+                },
+
+                togglePan() {
+                    this.isPanActive = !this.isPanActive;
+                    const btn = document.getElementById('sk_ctrl_pan_tool');
+                    if (this.isPanActive) {
+                        btn.classList.add('sk_btn_active');
+                    } else {
+                        btn.classList.remove('sk_btn_active');
+                    }
+                }
+            };
+
+            /* Load/Save state inside LocalStorage safely */
+            function loadProgression() {
+                try {
+                    const saved = localStorage.getItem('sk_orbital_tether_save');
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        GameState.unlockedLevelIdx = parsed.unlockedLevelIdx || 0;
+                        GameState.soundEnabled = parsed.soundEnabled !== false;
+                        GameState.orbitSpeedSetting = parsed.orbitSpeedSetting || 'Normal';
+                        GameState.highScores = parsed.highScores || [];
+                        AudioEngine.enabled = GameState.soundEnabled;
+                    }
+                } catch (e) {
+                    console.error("Local storage not accessible", e);
+                }
+            }
+
+            function saveProgression() {
+                try {
+                    const payload = {
+                        unlockedLevelIdx: GameState.unlockedLevelIdx,
+                        soundEnabled: GameState.soundEnabled,
+                        orbitSpeedSetting: GameState.orbitSpeedSetting,
+                        highScores: GameState.highScores
+                    };
+                    localStorage.setItem('sk_orbital_tether_save', JSON.stringify(payload));
+                } catch (e) {
+                    console.error("Local storage save failed", e);
+                }
+            }
+
+            /* Original 6 fallback levels, parsed structure compliant */
+            const LocalLevels = [
+                {
+                    id: 1,
+                    name: "Alpha Triangle",
+                    nodes: [
+                        {x: 0.30, y: 0.60, r: 65, vr: 15, baseSpeed: 0.025},
+                        {x: 0.50, y: 0.30, r: 65, vr: 15, baseSpeed: 0.025},
+                        {x: 0.70, y: 0.60, r: 65, vr: 15, baseSpeed: 0.025}
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Beta Diamond",
+                    nodes: [
+                        {x: 0.25, y: 0.50, r: 60, vr: 14, baseSpeed: 0.028},
+                        {x: 0.50, y: 0.25, r: 60, vr: 14, baseSpeed: -0.028},
+                        {x: 0.75, y: 0.50, r: 60, vr: 14, baseSpeed: 0.028},
+                        {x: 0.50, y: 0.75, r: 60, vr: 14, baseSpeed: -0.028}
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Delta Cross",
+                    nodes: [
+                        {x: 0.50, y: 0.50, r: 70, vr: 18, baseSpeed: 0.022},
+                        {x: 0.20, y: 0.25, r: 50, vr: 12, baseSpeed: -0.035},
+                        {x: 0.80, y: 0.25, r: 50, vr: 12, baseSpeed: 0.035},
+                        {x: 0.80, y: 0.75, r: 50, vr: 12, baseSpeed: -0.035},
+                        {x: 0.20, y: 0.75, r: 50, vr: 12, baseSpeed: 0.035}
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Gamma Constellation",
+                    nodes: [
+                        {x: 0.20, y: 0.40, r: 55, vr: 13, baseSpeed: 0.03},
+                        {x: 0.40, y: 0.20, r: 50, vr: 12, baseSpeed: -0.032},
+                        {x: 0.60, y: 0.40, r: 60, vr: 14, baseSpeed: 0.028},
+                        {x: 0.80, y: 0.60, r: 55, vr: 13, baseSpeed: -0.03},
+                        {x: 0.50, y: 0.75, r: 65, vr: 15, baseSpeed: 0.025}
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Epsilon Cascade",
+                    nodes: [
+                        {x: 0.15, y: 0.50, r: 55, vr: 13, baseSpeed: 0.032, drift: {ampY: 0.12, spdY: 0.0015, angle: 0}},
+                        {x: 0.35, y: 0.25, r: 55, vr: 13, baseSpeed: -0.032, drift: {ampX: 0.08, spdX: 0.002, angle: 1.5}},
+                        {x: 0.65, y: 0.25, r: 55, vr: 13, baseSpeed: 0.032},
+                        {x: 0.85, y: 0.50, r: 55, vr: 13, baseSpeed: -0.032, drift: {ampY: 0.12, spdY: 0.0015, angle: 3}},
+                        {x: 0.65, y: 0.75, r: 55, vr: 13, baseSpeed: 0.032},
+                        {x: 0.35, y: 0.75, r: 55, vr: 13, baseSpeed: -0.032}
+                    ]
+                },
+                {
+                    id: 6,
+                    name: "Infinity Matrix",
+                    nodes: [
+                        {x: 0.50, y: 0.50, r: 55, vr: 13, baseSpeed: 0.025},
+                        {x: 0.25, y: 0.30, r: 50, vr: 12, baseSpeed: -0.03},
+                        {x: 0.75, y: 0.30, r: 50, vr: 12, baseSpeed: 0.03},
+                        {x: 0.75, y: 0.70, r: 50, vr: 12, baseSpeed: -0.03},
+                        {x: 0.25, y: 0.70, r: 50, vr: 12, baseSpeed: 0.03},
+                        {x: 0.50, y: 0.18, r: 45, vr: 11, baseSpeed: -0.035},
+                        {x: 0.50, y: 0.82, r: 45, vr: 11, baseSpeed: 0.035}
+                    ]
+                }
+            ];
+
+            /* Fetch dynamic levels from Raw Github Repo safely */
+            function initializeDynamicLevels() {
+                const fill = document.getElementById('sk_progress_bar_fill');
+                let currentWidth = 0;
+
+                const updateInterval = setInterval(() => {
+                    if (currentWidth < 60) {
+                        currentWidth += 5;
+                        fill.style.width = `${currentWidth}%`;
+                    }
+                }, 100);
+
+                /* Absolute URL fetch targeting raw configuration files. Uses robust error proofing string comments cleanup */
+                fetch('./Orbital Tether.json')
+                    .then(res => {
+                        if (!res.ok) throw new Error("Could not parse dynamic repository payload data.");
+                        return res.text();
+                    })
+                    .then(text => {
+                        /* Strip both single-line & multi-line comments securely prior to JSON parsing */
+                        const sanitized = text
+                            .replace(/\/\*[\s\S]*?\*\//g, "")
+                            .replace(/\/\/.*/g, "");
+                        GameState.levels = JSON.parse(sanitized);
+                        clearInterval(updateInterval);
+                        fill.style.width = "100%";
+                        setTimeout(dismissLoader, 500);
+                    })
+                    .catch(err => {
+                        console.warn("Failed retrieving external levels, loading fallback profiles.", err);
+                        GameState.levels = LocalLevels;
+                        clearInterval(updateInterval);
+                        fill.style.width = "100%";
+                        setTimeout(dismissLoader, 500);
+                    });
+            }
+
+            function dismissLoader() {
+                const screen = document.getElementById('sk_loader_screen');
+                if (screen) screen.style.display = 'none';
+            }
+
+            /* Fallback loader bypass handler */
+            document.getElementById('sk_load_local_fallback').addEventListener('click', () => {
+                GameState.levels = LocalLevels;
+                dismissLoader();
+            });
+
+            /* Game Canvas Mechanics configuration */
+            const canvas = document.getElementById('sk_game_canvas');
+            const ctx = canvas.getContext('2d');
+            const baseW = 500;
+            const baseH = 500;
+
+            let isRunning = false;
+            let isDemoMode = false;
+            let explosionParticles = [];
+            let currentNodes = [];
+            let activeTethers = [];
+            let visitedNodeIds = new Set();
+
+            /* Active player orbiting physics particle object properties */
+            const PlayerParticle = {
+                x: 0,
+                y: 0,
+                r: 6,
+                orbitNode: null,
+                orbitAngle: 0,
+                orbitDirection: 1, /* 1 for Clockwise, -1 for Counter */
+                isFlying: false,
+                vx: 0,
+                vy: 0,
+                speed: 7.5,
+                prevOrbitNode: null,
+                color: '#fffb00',
+                trail: []
+            };
+
+            /* Enforce 1:1 pixel exact canvas size scaling */
+            function handleResize() {
+                const box = document.getElementById('sk_canvas_box');
+                const dpr = window.devicePixelRatio || 1;
+
+                canvas.width = baseW * dpr;
+                canvas.height = baseH * dpr;
+                ctx.scale(dpr, dpr);
+            }
+
+            window.addEventListener('resize', handleResize);
+            handleResize();
+
+            /* Mathematical mappings from relative spatial units to fixed width pixels */
+            function scaleX(val) {return val * baseW;}
+            function scaleY(val) {return val * baseH;}
+
+            function initLevel(levelIdx) {
+                currentNodes = [];
+                activeTethers = [];
+                visitedNodeIds.clear();
+                explosionParticles = [];
+                ViewEngine.reset();
+
+                const currentLevelsList = GameState.levels.length > 0 ? GameState.levels : LocalLevels;
+                const levelDef = currentLevelsList[levelIdx];
+                if (!levelDef) return;
+
+                levelDef.nodes.forEach((nd, index) => {
+                    currentNodes.push({
+                        id: index,
+                        rawX: nd.x,
+                        rawY: nd.y,
+                        x: scaleX(nd.x),
+                        y: scaleY(nd.y),
+                        r: nd.r,
+                        vr: nd.vr,
+                        speed: nd.baseSpeed * (GameState.orbitSpeedSetting === 'Swift' ? 1.4 : 1.0),
+                        drift: nd.drift ? {...nd.drift} : null,
+                        visited: index === 0,
+                        pulse: 0
+                    });
+                });
+
+                visitedNodeIds.add(0);
+
+                const firstNode = currentNodes[0];
+                PlayerParticle.orbitNode = firstNode;
+                PlayerParticle.prevOrbitNode = firstNode;
+                PlayerParticle.orbitAngle = 0;
+                PlayerParticle.orbitDirection = 1;
+                PlayerParticle.isFlying = false;
+                PlayerParticle.vx = 0;
+                PlayerParticle.vy = 0;
+                PlayerParticle.trail = [];
+                updatePlayerPositionOnOrbit();
+
+                document.getElementById('sk_hud_level').textContent = `${levelIdx + 1}/${currentLevelsList.length}`;
+                document.getElementById('sk_hud_cleansed').textContent = `${visitedNodeIds.size}/${currentNodes.length}`;
+                document.getElementById('sk_top_score_val').textContent = GameState.score;
+            }
+
+            function updatePlayerPositionOnOrbit() {
+                const node = PlayerParticle.orbitNode;
+                PlayerParticle.x = node.x + Math.cos(PlayerParticle.orbitAngle) * node.r;
+                PlayerParticle.y = node.y + Math.sin(PlayerParticle.orbitAngle) * node.r;
+            }
+
+            function triggerLaunch() {
+                if (GameState.isPaused) return;
+                if (PlayerParticle.isFlying) return;
+
+                AudioEngine.playLaunch();
+                PlayerParticle.isFlying = true;
+                PlayerParticle.prevOrbitNode = PlayerParticle.orbitNode;
+
+                const angle = PlayerParticle.orbitAngle;
+                const dir = PlayerParticle.orbitDirection;
+                PlayerParticle.vx = -Math.sin(angle) * PlayerParticle.speed * dir;
+                PlayerParticle.vy = Math.cos(angle) * PlayerParticle.speed * dir;
+
+                PlayerParticle.orbitNode = null;
+            }
+
+            function triggerReverseDirection(newDir) {
+                if (GameState.isPaused) return;
+                if (PlayerParticle.isFlying) return;
+                PlayerParticle.orbitDirection = newDir;
+            }
+
+            function handleCollisionExplosion() {
+                AudioEngine.playExplode();
+                isRunning = false;
+
+                for (let i = 0; i < 40; i++) {
+                    explosionParticles.push({
+                        x: PlayerParticle.x,
+                        y: PlayerParticle.y,
+                        vx: (Math.random() - 0.5) * 8,
+                        vy: (Math.random() - 0.5) * 8,
+                        r: Math.random() * 4 + 2,
+                        color: i % 2 === 0 ? '#ff007f' : '#ffea00',
+                        alpha: 1,
+                        decay: Math.random() * 0.03 + 0.01
+                    });
+                }
+
+                setTimeout(() => {
+                    if (!isDemoMode) {
+                        document.getElementById('sk_screen_gameover').classList.remove('sk_hidden');
+                    } else {
+                        initLevel(0);
+                        isRunning = true;
+                    }
+                }, 1200);
+            }
+
+            function distanceToSegment(px, py, x1, y1, x2, y2) {
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                if (dx === 0 && dy === 0) {
+                    return Math.hypot(px - x1, py - y1);
+                }
+                let t = ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy);
+                t = Math.max(0, Math.min(1, t));
+                const closestX = x1 + t * dx;
+                const closestY = y1 + t * dy;
+                return Math.hypot(px - closestX, py - closestY);
+            }
+
+            /* Auto Play Solver for Demo Mode operations */
+            function runDemoAILogic() {
+                if (PlayerParticle.isFlying) return;
+
+                let targetNode = currentNodes.find(n => !n.visited);
+                if (!targetNode) {
+                    targetNode = currentNodes.find(n => n.id !== PlayerParticle.orbitNode.id);
+                }
+
+                if (!targetNode) return;
+
+                const angle = PlayerParticle.orbitAngle;
+                const dir = PlayerParticle.orbitDirection;
+                const vx = -Math.sin(angle) * PlayerParticle.speed * dir;
+                const vy = Math.cos(angle) * PlayerParticle.speed * dir;
+
+                const dx = targetNode.x - PlayerParticle.x;
+                const dy = targetNode.y - PlayerParticle.y;
+                const speed = PlayerParticle.speed;
+
+                const t = (dx * vx + dy * vy) / (speed * speed);
+                if (t > 0) {
+                    const closestX = PlayerParticle.x + vx * t;
+                    const closestY = PlayerParticle.y + vy * t;
+                    const distToNode = Math.hypot(targetNode.x - closestX, targetNode.y - closestY);
+
+                    if (distToNode < targetNode.r * 0.4) {
+                        let trajectoryBlocked = false;
+                        activeTethers.forEach(tether => {
+                            const fromNode = currentNodes[tether.fromId];
+                            const toNode = currentNodes[tether.toId];
+                            const d = distanceToSegment(closestX, closestY, fromNode.x, fromNode.y, toNode.x, toNode.y);
+                            if (d < 15) {
+                                trajectoryBlocked = true;
+                            }
+                        });
+
+                        if (!trajectoryBlocked) {
+                            triggerLaunch();
+                        }
+                    }
+                }
+            }
+
+            /* Frame Updates and Collision Detection */
+            function updateFrame() {
+                if (GameState.isPaused) return;
+
+                currentNodes.forEach(node => {
+                    if (node.drift) {
+                        node.drift.angle += node.drift.spdY || node.drift.spdX;
+                        if (node.drift.ampY) {
+                            node.y = scaleY(node.rawY) + Math.sin(node.drift.angle) * scaleY(node.drift.ampY);
+                        }
+                        if (node.drift.ampX) {
+                            node.x = scaleX(node.rawX) + Math.cos(node.drift.angle) * scaleX(node.drift.ampX);
+                        }
+                    }
+                    node.pulse = (node.pulse + 0.05) % (Math.PI * 2);
+                });
+
+                if (isDemoMode) {
+                    runDemoAILogic();
+                }
+
+                if (PlayerParticle.isFlying) {
+                    PlayerParticle.x += PlayerParticle.vx;
+                    PlayerParticle.y += PlayerParticle.vy;
+
+                    PlayerParticle.trail.push({x: PlayerParticle.x, y: PlayerParticle.y, alpha: 1.0});
+                    if (PlayerParticle.trail.length > 15) {
+                        PlayerParticle.trail.shift();
+                    }
+
+                    if (PlayerParticle.x < -100 || PlayerParticle.x > baseW + 100 ||
+                        PlayerParticle.y < -100 || PlayerParticle.y > baseH + 100) {
+                        handleCollisionExplosion();
+                        return;
+                    }
+
+                    for (let i = 0; i < activeTethers.length; i++) {
+                        const teth = activeTethers[i];
+                        if (teth.fromId === PlayerParticle.prevOrbitNode.id || teth.toId === PlayerParticle.prevOrbitNode.id) {
+                            continue;
+                        }
+
+                        const fromNode = currentNodes[teth.fromId];
+                        const toNode = currentNodes[teth.toId];
+
+                        const dx = toNode.x - fromNode.x;
+                        const dy = toNode.y - fromNode.y;
+                        const dist = Math.hypot(dx, dy);
+                        if (dist === 0) continue;
+                        const ux = dx / dist;
+                        const uy = dy / dist;
+
+                        const startX = fromNode.x + ux * fromNode.r;
+                        const startY = fromNode.y + uy * fromNode.r;
+                        const endX = toNode.x - ux * toNode.r;
+                        const endY = toNode.y - uy * toNode.r;
+
+                        const distToTether = distanceToSegment(PlayerParticle.x, PlayerParticle.y, startX, startY, endX, endY);
+                        if (distToTether < PlayerParticle.r + 3) {
+                            handleCollisionExplosion();
+                            return;
+                        }
+                    }
+
+                    for (let i = 0; i < currentNodes.length; i++) {
+                        const node = currentNodes[i];
+                        if (node.id === PlayerParticle.prevOrbitNode.id) continue;
+
+                        const distToNode = Math.hypot(PlayerParticle.x - node.x, PlayerParticle.y - node.y);
+
+                        if (distToNode <= node.r) {
+                            AudioEngine.playCapture();
+                            PlayerParticle.isFlying = false;
+                            PlayerParticle.orbitNode = node;
+
+                            const entryAngle = Math.atan2(PlayerParticle.y - node.y, PlayerParticle.x - node.x);
+                            PlayerParticle.orbitAngle = entryAngle;
+
+                            const rx = PlayerParticle.x - node.x;
+                            const ry = PlayerParticle.y - node.y;
+                            const crossProduct = rx * PlayerParticle.vy - ry * PlayerParticle.vx;
+                            PlayerParticle.orbitDirection = crossProduct >= 0 ? 1 : -1;
+
+                            activeTethers.push({
+                                fromId: PlayerParticle.prevOrbitNode.id,
+                                toId: node.id
+                            });
+
+                            if (!node.visited) {
+                                node.visited = true;
+                                visitedNodeIds.add(node.id);
+                                GameState.score += 100;
+                                document.getElementById('sk_top_score_val').textContent = GameState.score;
+                                document.getElementById('sk_hud_cleansed').textContent = `${visitedNodeIds.size}/${currentNodes.length}`;
+                            }
+
+                            if (visitedNodeIds.size === currentNodes.length) {
+                                isRunning = false;
+                                AudioEngine.playLevelClear();
+                                setTimeout(() => {
+                                    if (isDemoMode) {
+                                        const currentLevelsList = GameState.levels.length > 0 ? GameState.levels : LocalLevels;
+                                        GameState.currentLevelIdx = (GameState.currentLevelIdx + 1) % currentLevelsList.length;
+                                        initLevel(GameState.currentLevelIdx);
+                                        isRunning = true;
+                                    } else {
+                                        handleLevelWin();
+                                    }
+                                }, 1000);
+                            }
+                            break;
+                        }
+                    }
+
+                } else {
+                    const node = PlayerParticle.orbitNode;
+                    PlayerParticle.orbitAngle += node.speed * PlayerParticle.orbitDirection;
+                    updatePlayerPositionOnOrbit();
+
+                    for (let i = 0; i < activeTethers.length; i++) {
+                        const teth = activeTethers[i];
+                        if (teth.fromId === node.id || teth.toId === node.id) {
+                            continue;
+                        }
+                        const fromNode = currentNodes[teth.fromId];
+                        const toNode = currentNodes[teth.toId];
+
+                        const dx = toNode.x - fromNode.x;
+                        const dy = toNode.y - fromNode.y;
+                        const dist = Math.hypot(dx, dy);
+                        if (dist === 0) continue;
+                        const ux = dx / dist;
+                        const uy = dy / dist;
+
+                        const startX = fromNode.x + ux * fromNode.r;
+                        const startY = fromNode.y + uy * fromNode.r;
+                        const endX = toNode.x - ux * toNode.r;
+                        const endY = toNode.y - uy * toNode.r;
+
+                        const distToTether = distanceToSegment(PlayerParticle.x, PlayerParticle.y, startX, startY, endX, endY);
+                        if (distToTether < PlayerParticle.r + 3) {
+                            handleCollisionExplosion();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            /* Rendering Pipeline using View Zoom/Pan transform matrices */
+            function drawFrame() {
+                ctx.fillStyle = 'rgba(10, 12, 26, 0.45)';
+                ctx.fillRect(0, 0, baseW, baseH);
+
+                ctx.save();
+                /* Translate and Scale around canvas pivot for perfect visual stability */
+                ctx.translate(baseW / 2 + ViewEngine.panX, baseH / 2 + ViewEngine.panY);
+                ctx.scale(ViewEngine.zoom, ViewEngine.zoom);
+                ctx.translate(-baseW / 2, -baseH / 2);
+
+                /* Draw faint coordinates stars grid map */
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+                ctx.lineWidth = 1;
+                const spacing = 40;
+                for (let x = -500; x < baseW + 500; x += spacing) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, -500);
+                    ctx.lineTo(x, baseH + 500);
+                    ctx.stroke();
+                }
+                for (let y = -500; y < baseH + 500; y += spacing) {
+                    ctx.beginPath();
+                    ctx.moveTo(-500, y);
+                    ctx.lineTo(baseW + 500, y);
+                    ctx.stroke();
+                }
+
+                /* Active Laser Tethers with shadow blur */
+                activeTethers.forEach(teth => {
+                    const fromNode = currentNodes[teth.fromId];
+                    const toNode = currentNodes[teth.toId];
+
+                    const dx = toNode.x - fromNode.x;
+                    const dy = toNode.y - fromNode.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist === 0) return;
+                    const ux = dx / dist;
+                    const uy = dy / dist;
+
+                    const startX = fromNode.x + ux * fromNode.r;
+                    const startY = fromNode.y + uy * fromNode.r;
+                    const endX = toNode.x - ux * toNode.r;
+                    const endY = toNode.y - uy * toNode.r;
+
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(endX, endY);
+                    ctx.strokeStyle = 'rgba(255, 0, 127, 0.6)';
+                    ctx.lineWidth = 6;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#ff007f';
+                    ctx.stroke();
+
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 0;
+                    ctx.stroke();
+                });
+
+                /* Gravity Nodes */
+                currentNodes.forEach(node => {
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+                    ctx.strokeStyle = node.visited ? 'rgba(76, 217, 100, 0.15)' : 'rgba(0, 243, 255, 0.15)';
+                    ctx.lineWidth = 2 + Math.sin(node.pulse) * 1.2;
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+                    ctx.strokeStyle = node.visited ? 'rgba(76, 217, 100, 0.45)' : 'rgba(0, 243, 255, 0.45)';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([6, 8]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.vr, 0, Math.PI * 2);
+                    ctx.fillStyle = node.visited ? '#4cd964' : '#11162e';
+                    ctx.strokeStyle = node.visited ? '#ffffff' : '#00f3ff';
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = node.visited ? 10 : 4;
+                    ctx.shadowColor = node.visited ? '#4cd964' : '#00f3ff';
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                });
+
+                /* Render Player Particle trails safely */
+                if (isRunning || explosionParticles.length > 0) {
+                    PlayerParticle.trail.forEach((p, idx) => {
+                        p.alpha -= 0.05;
+                        if (p.alpha <= 0) return;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, PlayerParticle.r * (idx / PlayerParticle.trail.length), 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 251, 0, ${p.alpha * 0.45})`;
+                        ctx.fill();
+                    });
+
+                    if (isRunning) {
+                        ctx.beginPath();
+                        ctx.arc(PlayerParticle.x, PlayerParticle.y, PlayerParticle.r, 0, Math.PI * 2);
+                        ctx.fillStyle = PlayerParticle.color;
+                        ctx.shadowBlur = 15;
+                        ctx.shadowColor = '#fffb00';
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                /* Render debris explosions and clean up dead particles */
+                for (let i = explosionParticles.length - 1; i >= 0; i--) {
+                    const p = explosionParticles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.alpha -= p.decay;
+                    if (p.alpha <= 0) {
+                        explosionParticles.splice(i, 1);
+                        continue;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fill();
+                    ctx.globalAlpha = 1.0;
+                }
+
+                /* Draw visual pause overlay directly on canvas */
+                if (GameState.isPaused) {
+                    ctx.fillStyle = 'rgba(5, 5, 13, 0.6)';
+                    ctx.fillRect(0, 0, baseW, baseH);
+                    ctx.font = 'bold 24px Segoe UI, Roboto, sans-serif';
+                    ctx.fillStyle = '#00f3ff';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('PAUSED', baseW / 2, baseH / 2);
+                }
+
+                ctx.restore();
+            }
+
+            function mainLoop() {
+                if (isRunning) {
+                    updateFrame();
+                }
+                drawFrame();
+                requestAnimationFrame(mainLoop);
+            }
+
+            /* Screen management transitions handler */
+            function showScreen(screenId) {
+                document.getElementById('sk_screen_menu').classList.add('sk_hidden');
+                document.getElementById('sk_screen_gameover').classList.add('sk_hidden');
+                document.getElementById('sk_screen_win').classList.add('sk_hidden');
+                document.getElementById('sk_screen_victory').classList.add('sk_hidden');
+
+                const screen = document.getElementById(screenId);
+                if (screen) {
+                    screen.classList.remove('sk_hidden');
+                }
+            }
+
+            function handleLevelWin() {
+                const currentLevelsList = GameState.levels.length > 0 ? GameState.levels : LocalLevels;
+                if (GameState.currentLevelIdx === GameState.unlockedLevelIdx) {
+                    GameState.unlockedLevelIdx = Math.min(currentLevelsList.length - 1, GameState.unlockedLevelIdx + 1);
+                    saveProgression();
+                }
+
+                const currentScore = GameState.score;
+                const scoreRecorded = {level: currentLevelsList[GameState.currentLevelIdx].name, score: currentScore, date: new Date().toLocaleDateString()};
+                GameState.highScores.push(scoreRecorded);
+                GameState.highScores.sort((a, b) => b.score - a.score);
+                if (GameState.highScores.length > 5) GameState.highScores.pop();
+                saveProgression();
+
+                if (GameState.currentLevelIdx >= currentLevelsList.length - 1) {
+                    showScreen('sk_screen_victory');
+                } else {
+                    showScreen('sk_screen_win');
+                }
+            }
+
+            function closeAllPopups() {
+                document.querySelectorAll('.sk_popup').forEach(p => p.classList.add('sk_hidden'));
+            }
+
+            function renderLevelSelector() {
+                const grid = document.getElementById('sk_level_grid');
+                grid.innerHTML = '';
+                const currentLevelsList = GameState.levels.length > 0 ? GameState.levels : LocalLevels;
+                currentLevelsList.forEach((lvl, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `sk_level_bubble`;
+                    if (idx <= GameState.unlockedLevelIdx) {
+                        btn.classList.add('sk_unlocked');
+                    }
+                    if (idx < GameState.unlockedLevelIdx) {
+                        btn.classList.add('sk_cleared');
+                    }
+                    btn.textContent = lvl.id;
+
+                    btn.addEventListener('click', () => {
+                        if (idx <= GameState.unlockedLevelIdx) {
+                            GameState.currentLevelIdx = idx;
+                            closeAllPopups();
+                            showScreen('none');
+                            isDemoMode = false;
+                            initLevel(idx);
+                            isRunning = true;
+                        }
+                    });
+                    grid.appendChild(btn);
+                });
+            }
+
+            function renderHighScores() {
+                const container = document.getElementById('sk_high_scores_list');
+                container.innerHTML = '';
+                if (GameState.highScores.length === 0) {
+                    container.innerHTML = '<p>No launches logged yet. Clear your first gravity node!</p>';
+                    return;
+                }
+                GameState.highScores.forEach(entry => {
+                    const row = document.createElement('div');
+                    row.className = 'sk_score_row';
+                    row.innerHTML = `<span>${entry.level}</span><span><b>${entry.score}</b> PTS</span>`;
+                    container.appendChild(row);
+                });
+            }
+
+            /* Convert Screen point to Zoom/Pan World Coordinate */
+            function screenToWorld(clientX, clientY) {
+                const rect = canvas.getBoundingClientRect();
+                /* Calculate CSS pixels within canvas scale */
+                const canvasX = (clientX - rect.left) * (baseW / rect.width);
+                const canvasY = (clientY - rect.top) * (baseH / rect.height);
+
+                /* Map translation matrix inverted */
+                const worldX = (canvasX - (baseW / 2) - ViewEngine.panX) / ViewEngine.zoom + (baseW / 2);
+                const worldY = (canvasY - (baseH / 2) - ViewEngine.panY) / ViewEngine.zoom + (baseH / 2);
+
+                return {x: worldX, y: worldY};
+            }
+
+            /* Input registers mapping logic */
+            function registerInputs() {
+                /* Dropdown Menu Toggle */
+                const dropdown = document.getElementById('sk_menu_dropdown');
+                document.getElementById('sk_menu_toggle').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('show');
+                });
+
+                document.addEventListener('click', () => {
+                    dropdown.classList.remove('show');
+                });
+
+                /* Toggle Pause/Resume */
+                function togglePause() {
+                    GameState.isPaused = !GameState.isPaused;
+                }
+
+                document.getElementById('sk_btn_pause').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    togglePause();
+                    dropdown.classList.remove('show');
+                });
+
+                /* Physical keyboard navigation and controls mapping */
+                window.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        triggerLaunch();
+                    }
+                    if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+                        triggerReverseDirection(-1);
+                    }
+                    if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+                        triggerReverseDirection(1);
+                    }
+                    if (e.code === 'KeyP') {
+                        togglePause();
+                    }
+                    if (e.code === 'Equal' && e.ctrlKey) {
+                        e.preventDefault();
+                        ViewEngine.zoomIn();
+                    }
+                    if (e.code === 'Minus' && e.ctrlKey) {
+                        e.preventDefault();
+                        ViewEngine.zoomOut();
+                    }
+                    if (e.code === 'Enter') {
+                        const startBtn = document.getElementById('sk_btn_start_game');
+                        if (!startBtn.parentElement.parentElement.classList.contains('sk_hidden')) {
+                            startBtn.click();
+                        }
+                    }
+                });
+
+                /* Touch / Zoom / Pan Multi-Touch Handlers */
+                let touchRegistry = {};
+                let initialPinchDistance = 0;
+                let startZoom = 1.0;
+
+                canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    AudioEngine.init();
+
+                    /* Track multi-touch points inside the registry */
+                    for (let i = 0; i < e.targetTouches.length; i++) {
+                        const touch = e.targetTouches[i];
+                        touchRegistry[touch.identifier] = {
+                            x: touch.clientX,
+                            y: touch.clientY,
+                            time: Date.now()
+                        };
+                    }
+
+                    if (e.targetTouches.length === 2) {
+                        /* Pinch zoom setup */
+                        const t1 = e.targetTouches[0];
+                        const t2 = e.targetTouches[1];
+                        initialPinchDistance = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+                        startZoom = ViewEngine.zoom;
+                    } else if (e.targetTouches.length === 1) {
+                        /* Standard gesture tracker */
+                        const touch = e.targetTouches[0];
+                        if (ViewEngine.isPanActive) {
+                            ViewEngine.isDragging = true;
+                            ViewEngine.dragStartX = touch.clientX - ViewEngine.panX;
+                            ViewEngine.dragStartY = touch.clientY - ViewEngine.panY;
+                        }
+                    }
+                }, {passive: false});
+
+                canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    if (e.targetTouches.length === 2 && initialPinchDistance > 0) {
+                        /* Continuous 2 finger pinch-to-zoom logic */
+                        const t1 = e.targetTouches[0];
+                        const t2 = e.targetTouches[1];
+                        const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+                        const factor = dist / initialPinchDistance;
+                        ViewEngine.zoom = Math.max(0.5, Math.min(3.0, startZoom * factor));
+                    } else if (e.targetTouches.length === 1 && ViewEngine.isDragging) {
+                        const touch = e.targetTouches[0];
+                        ViewEngine.panX = touch.clientX - ViewEngine.dragStartX;
+                        ViewEngine.panY = touch.clientY - ViewEngine.dragStartY;
+                    }
+                }, {passive: false});
+
+                canvas.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+
+                    /* Process single or double tap logic from registry on launch action */
+                    for (let i = 0; i < e.changedTouches.length; i++) {
+                        const touch = e.changedTouches[i];
+                        const data = touchRegistry[touch.identifier];
+                        if (data) {
+                            const delta = Date.now() - data.time;
+                            if (delta < 300) {
+                                /* Action Tap Trigger if panning is inactive */
+                                if (!ViewEngine.isPanActive) {
+                                    /* Simple double tap triggers direction flip */
+                                    if (this.lastTap && (Date.now() - this.lastTap < 300)) {
+                                        triggerReverseDirection(PlayerParticle.orbitDirection * -1);
+                                    } else {
+                                        triggerLaunch();
+                                    }
+                                    this.lastTap = Date.now();
+                                }
+                            }
+                            delete touchRegistry[touch.identifier];
+                        }
+                    }
+
+                    if (e.targetTouches.length < 2) {
+                        initialPinchDistance = 0;
+                    }
+                    if (e.targetTouches.length === 0) {
+                        ViewEngine.isDragging = false;
+                    }
+                }, {passive: false});
+
+                /* Mouse Event bindings for desktop interaction, panning and zoom mapping */
+                canvas.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    AudioEngine.init();
+                    if (ViewEngine.isPanActive) {
+                        ViewEngine.isDragging = true;
+                        ViewEngine.dragStartX = e.clientX - ViewEngine.panX;
+                        ViewEngine.dragStartY = e.clientY - ViewEngine.panY;
+                    } else {
+                        triggerLaunch();
+                    }
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    if (ViewEngine.isDragging) {
+                        ViewEngine.panX = e.clientX - ViewEngine.dragStartX;
+                        ViewEngine.panY = e.clientY - ViewEngine.dragStartY;
+                    }
+                });
+
+                window.addEventListener('mouseup', () => {
+                    ViewEngine.isDragging = false;
+                });
+
+                /* Wheel scroll Zoom */
+                canvas.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    if (e.deltaY < 0) {
+                        ViewEngine.zoomIn();
+                    } else {
+                        ViewEngine.zoomOut();
+                    }
+                }, {passive: false});
+
+                /* Dynamic UI Panel bindings */
+                document.getElementById('sk_ctrl_launch').addEventListener('click', triggerLaunch);
+                document.getElementById('sk_ctrl_left').addEventListener('click', () => triggerReverseDirection(-1));
+                document.getElementById('sk_ctrl_right').addEventListener('click', () => triggerReverseDirection(1));
+                document.getElementById('sk_ctrl_pan_tool').addEventListener('click', () => ViewEngine.togglePan());
+                document.getElementById('sk_ctrl_zoom_in').addEventListener('click', () => ViewEngine.zoomIn());
+                document.getElementById('sk_ctrl_zoom_out').addEventListener('click', () => ViewEngine.zoomOut());
+
+                /* Game Screen flow */
+                document.getElementById('sk_btn_start_game').addEventListener('click', () => {
+                    AudioEngine.init();
+                    isDemoMode = false;
+                    showScreen('none');
+                    GameState.score = 0;
+                    initLevel(GameState.currentLevelIdx);
+                    isRunning = true;
+                });
+
+                document.getElementById('sk_btn_demo').addEventListener('click', () => {
+                    AudioEngine.init();
+                    isDemoMode = true;
+                    showScreen('none');
+                    initLevel(0);
+                    isRunning = true;
+                });
+
+                document.getElementById('sk_btn_demo_top').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    AudioEngine.init();
+                    isDemoMode = true;
+                    showScreen('none');
+                    initLevel(0);
+                    isRunning = true;
+                    dropdown.classList.remove('show');
+                });
+
+                document.getElementById('sk_btn_retry').addEventListener('click', () => {
+                    showScreen('none');
+                    initLevel(GameState.currentLevelIdx);
+                    isRunning = true;
+                });
+
+                document.getElementById('sk_btn_menu_lose').addEventListener('click', () => {
+                    showScreen('sk_screen_menu');
+                });
+
+                document.getElementById('sk_btn_next').addEventListener('click', () => {
+                    showScreen('none');
+                    GameState.currentLevelIdx++;
+                    initLevel(GameState.currentLevelIdx);
+                    isRunning = true;
+                });
+
+                document.getElementById('sk_btn_menu_win').addEventListener('click', () => {
+                    showScreen('sk_screen_menu');
+                });
+
+                document.getElementById('sk_btn_restart_campaign').addEventListener('click', () => {
+                    GameState.currentLevelIdx = 0;
+                    GameState.score = 0;
+                    showScreen('none');
+                    initLevel(0);
+                    isRunning = true;
+                });
+
+                /* Popups Triggers */
+                document.getElementById('sk_btn_levels').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    renderLevelSelector();
+                    document.getElementById('sk_popup_levels').classList.remove('sk_hidden');
+                    dropdown.classList.remove('show');
+                });
+                document.getElementById('sk_close_levels').addEventListener('click', closeAllPopups);
+
+                document.getElementById('sk_btn_settings').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.getElementById('sk_popup_settings').classList.remove('sk_hidden');
+                    dropdown.classList.remove('show');
+                });
+                document.getElementById('sk_close_settings').addEventListener('click', closeAllPopups);
+
+                document.getElementById('sk_btn_scores').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    renderHighScores();
+                    document.getElementById('sk_popup_scores').classList.remove('sk_hidden');
+                    dropdown.classList.remove('show');
+                });
+                document.getElementById('sk_close_scores').addEventListener('click', closeAllPopups);
+
+                document.getElementById('sk_btn_info').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.getElementById('sk_popup_info').classList.remove('sk_hidden');
+                    dropdown.classList.remove('show');
+                });
+                document.getElementById('sk_close_info').addEventListener('click', closeAllPopups);
+
+                document.getElementById('sk_toggle_sound').addEventListener('click', () => {
+                    GameState.soundEnabled = !GameState.soundEnabled;
+                    AudioEngine.enabled = GameState.soundEnabled;
+                    document.getElementById('sk_toggle_sound').textContent = GameState.soundEnabled ? 'ON' : 'OFF';
+                    saveProgression();
+                });
+
+                document.getElementById('sk_toggle_difficulty').addEventListener('click', () => {
+                    if (GameState.orbitSpeedSetting === 'Normal') {
+                        GameState.orbitSpeedSetting = 'Swift';
+                    } else {
+                        GameState.orbitSpeedSetting = 'Normal';
+                    }
+                    document.getElementById('sk_toggle_difficulty').textContent = GameState.orbitSpeedSetting;
+                    saveProgression();
+                    if (isRunning) {
+                        initLevel(GameState.currentLevelIdx);
+                    }
+                });
+
+                document.getElementById('sk_toggle_sensitivity').addEventListener('click', () => {
+                    if (GameState.inputMode === 'Tap + Spacebar') {
+                        GameState.inputMode = 'Console Only';
+                    } else {
+                        GameState.inputMode = 'Tap + Spacebar';
+                    }
+                    document.getElementById('sk_toggle_sensitivity').textContent = GameState.inputMode;
+                });
+
+                /* View transform Orientation adjustment */
+                document.getElementById('sk_btn_orientation').addEventListener('click', () => {
+                    const suiteRoot = document.querySelector('.sk_game_suite_root');
+                    if (suiteRoot.style.transform === 'rotate(90deg)') {
+                        suiteRoot.style.transform = 'none';
+                        suiteRoot.style.width = '100%';
+                        suiteRoot.style.height = '100%';
+                    } else {
+                        suiteRoot.style.transform = 'rotate(90deg)';
+                        suiteRoot.style.transformOrigin = 'center center';
+                    }
+                    handleResize();
+                });
+
+                /* Fullscreen API Handlers */
+                document.getElementById('sk_btn_fullscreen').addEventListener('click', () => {
+                    const gameSuite = document.querySelector('.sk_game_suite_root');
+                    if (!document.fullscreenElement) {
+                        gameSuite.requestFullscreen().catch(err => {
+                            alert(`Error enabling fullscreen: ${err.message}`);
+                        });
+                    } else {
+                        document.exitFullscreen();
+                    }
+                });
+            }
+
+            /* Draggable HUD Console Panel setup with drag boundary protection */
+            function makeHUDDraggable() {
+                const dragContainer = document.getElementById('sk_controls_zone');
+                let activeDrag = false;
+                let currentX;
+                let currentY;
+                let initialX;
+                let initialY;
+                let xOffset = 0;
+                let yOffset = 0;
+
+                dragContainer.addEventListener('mousedown', dragStart);
+                dragContainer.addEventListener('touchstart', dragStart, {passive: true});
+                window.addEventListener('mousemove', drag);
+                window.addEventListener('touchmove', drag, {passive: false});
+                window.addEventListener('mouseup', dragEnd);
+                window.addEventListener('touchend', dragEnd);
+
+                function dragStart(e) {
+                    if (e.target.closest('.sk_ctrl_btn') || e.target.closest('.sk_action_btn')) return;
+
+                    if (e.type === 'touchstart') {
+                        initialX = e.touches[0].clientX - xOffset;
+                        initialY = e.touches[0].clientY - yOffset;
+                    } else {
+                        initialX = e.clientX - xOffset;
+                        initialY = e.clientY - yOffset;
+                    }
+                    activeDrag = true;
+                }
+
+                function drag(e) {
+                    if (activeDrag) {
+                        if (e.type === 'touchmove') {
+                            e.preventDefault();
+                            currentX = e.touches[0].clientX - initialX;
+                            currentY = e.touches[0].clientY - initialY;
+                        } else {
+                            currentX = e.clientX - initialX;
+                            currentY = e.clientY - initialY;
+                        }
+                        xOffset = currentX;
+                        yOffset = currentY;
+                        setTranslate(currentX, currentY, dragContainer);
+                    }
+                }
+
+                function setTranslate(xPos, yPos, el) {
+                    el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+                }
+
+                function dragEnd() {
+                    activeDrag = false;
+                }
+            }
+
+            /* Boot sequence operations */
+            loadProgression();
+            registerInputs();
+            makeHUDDraggable();
+            initializeDynamicLevels();
+
+            document.getElementById('sk_toggle_sound').textContent = GameState.soundEnabled ? 'ON' : 'OFF';
+            document.getElementById('sk_toggle_difficulty').textContent = GameState.orbitSpeedSetting;
+
+            mainLoop();
+        })();
+    </script>
+    <script src="js/framework.js"></script>
+</body>
+
+</html>

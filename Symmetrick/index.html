@@ -233,6 +233,18 @@
       transition: opacity 0.3s ease;
     }
 
+    .sk_popup {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
+      padding: 12px;
+      box-sizing: border-box;
+      z-index: 200;
+    }
+
     .sk_screen_content {
       background: var(--sk-bg-card);
       border: 2px solid var(--sk-cyan);
@@ -310,10 +322,12 @@
       background: var(--sk-bg-card);
       border: 1px solid var(--sk-border-color);
       border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      max-height: 80vh;
-      overflow-y: auto;
+      width: 100%;
+      max-width: 520px;
+      max-height: calc(100vh - 24px);
+      max-height: calc(100dvh - 24px);
+      min-height: 0;
+      overflow: hidden;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
@@ -323,6 +337,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex: 0 0 auto;
+      min-width: 0;
+      gap: 12px;
       padding: 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       font-size: 16px;
@@ -343,6 +360,10 @@
     }
 
     .sk_popup_body {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
       padding: 16px;
       line-height: 1.5;
       font-size: 13px;
@@ -459,16 +480,19 @@
     /* Levels grid inside popup */
     .sk_level_grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      width: 100%;
       gap: 8px;
       margin-bottom: 12px;
     }
 
     .sk_level_item {
+      min-width: 0;
+      min-height: 40px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 6px;
-      padding: 10px 0;
+      padding: 10px 4px;
       font-weight: bold;
       font-size: 13px;
       text-align: center;
@@ -489,6 +513,37 @@
     .sk_level_item.sk_locked {
       opacity: 0.3;
       cursor: not-allowed;
+    }
+
+    @media (max-width: 480px) {
+      .sk_popup {
+        padding: 8px;
+      }
+
+      .sk_popup_box {
+        max-height: calc(100vh - 16px);
+        max-height: calc(100dvh - 16px);
+      }
+
+      .sk_popup_body {
+        padding: 12px;
+      }
+
+      .sk_level_grid {
+        gap: 6px;
+      }
+
+      .sk_level_item {
+        min-height: 42px;
+        padding: 8px 2px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .sk_level_grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     /* Utilities */
@@ -966,6 +1021,9 @@
         }
       ];
 
+      /* Remote level source (used for fetching levels at startup) */
+      const REMOTE_LEVELS_URL = 'https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/Symmetrick/levels.json';
+
       /* Level Database reference to allow runtime overriding */
       let sk_levels_data = [...default_levels_data];
 
@@ -1055,6 +1113,7 @@
       const btnDoFetch = document.getElementById('sk_btn_do_fetch');
       const btnRestoreLocal = document.getElementById('sk_btn_restore_local');
       const gitUrlInput = document.getElementById('sk_git_url');
+      gitUrlInput.value = REMOTE_LEVELS_URL;
 
       /* Load Saved Progress and sound configurations */
       function loadSavedData() {
@@ -2148,6 +2207,9 @@
             const parsed = cleanAndParseJS(data);
             if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].grid) {
               sk_levels_data = parsed;
+              if (!popupLevels.classList.contains('sk_hidden')) {
+                buildLevelsGrid();
+              }
               progressBar.style.width = '100%';
               progressStatus.innerText = 'Done!';
               setTimeout(() => {
@@ -2176,7 +2238,29 @@
       /* Initialization sequence */
       loadSavedData();
       resizeCanvas();
+
+      /* Auto-fetch levels from remote source on startup; fall back to local database on failure */
+      fetch(REMOTE_LEVELS_URL)
+        .then(response => {
+          if (!response.ok) throw new Error("HTTP error: " + response.status);
+          return response.text();
+        })
+        .then(data => {
+          const parsed = cleanAndParseJS(data);
+          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].grid) {
+            sk_levels_data = parsed;
+            if (!popupLevels.classList.contains('sk_hidden')) {
+              buildLevelsGrid();
+            }
+          } else {
+            throw new Error("Invalid format layout inside file.");
+          }
+        })
+        .catch(() => {
+          sk_levels_data = [...default_levels_data];
+        });
     })();
+
   </script>
 </body>
 
