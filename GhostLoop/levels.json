@@ -1,0 +1,1637 @@
+[
+  {
+    "name": "Split Decisions",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 4 },
+      { "x": 3, "y": 5 },
+      { "x": 3, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Crossroad Core",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Parallel Lanes",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 },
+      { "x": 5, "y": 3 },
+      { "x": 6, "y": 3 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 1 } },
+      { "start": { "x": 7, "y": 5 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Corner Pockets",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 0 },
+      { "x": 0, "y": 7 },
+      { "x": 7, "y": 0 },
+      { "x": 7, "y": 7 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Center Guard",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 7, "y": 2 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Spiral Alley",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 1, "y": 2 },
+      { "x": 1, "y": 3 },
+      { "x": 1, "y": 4 },
+      { "x": 1, "y": 5 },
+      { "x": 1, "y": 6 },
+      { "x": 6, "y": 1 },
+      { "x": 6, "y": 2 },
+      { "x": 6, "y": 3 },
+      { "x": 6, "y": 4 },
+      { "x": 6, "y": 5 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } }
+    ]
+  },
+  {
+    "name": "Gridlock",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 4 },
+      { "x": 2, "y": 6 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 4 },
+      { "x": 4, "y": 6 },
+      { "x": 6, "y": 2 },
+      { "x": 6, "y": 4 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 5, "y": 5 } },
+      { "start": { "x": 5, "y": 1 }, "end": { "x": 1, "y": 5 } }
+    ]
+  },
+  {
+    "name": "The Chevron",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 },
+      { "x": 5, "y": 2 },
+      { "x": 6, "y": 1 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } },
+      { "start": { "x": 0, "y": 7 }, "end": { "x": 7, "y": 0 } },
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Dual Squeeze",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 0 },
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 },
+      { "x": 4, "y": 6 },
+      { "x": 4, "y": 7 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 1, "y": 3 }, "end": { "x": 6, "y": 3 } }
+    ]
+  },
+  {
+    "name": "Mirror Maze",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 5 },
+      { "x": 2, "y": 4 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 3 },
+      { "x": 6, "y": 2 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Ring of Fire",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 5, "y": 5 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Symmetrical Wall",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 4 },
+      { "x": 1, "y": 4 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 },
+      { "x": 7, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 2 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Serpentine Paths",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 5, "y": 5 },
+      { "x": 5, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 1, "y": 4 }, "end": { "x": 6, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Four Quadrants",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 0, "y": 3 },
+      { "x": 7, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 1, "y": 5 }, "end": { "x": 6, "y": 2 } },
+      { "start": { "x": 2, "y": 1 }, "end": { "x": 5, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Hourglass",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 3 },
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 },
+      { "x": 7, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 3, "y": 1 }, "end": { "x": 4, "y": 6 } },
+      { "start": { "x": 4, "y": 1 }, "end": { "x": 3, "y": 6 } },
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Diamond Fields",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 1 },
+      { "x": 1, "y": 3 },
+      { "x": 6, "y": 3 },
+      { "x": 3, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 2, "y": 2 }, "end": { "x": 5, "y": 5 } },
+      { "start": { "x": 5, "y": 2 }, "end": { "x": 2, "y": 5 } }
+    ]
+  },
+  {
+    "name": "Weaving Lanes",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 2 },
+      { "x": 3, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 4, "y": 5 },
+      { "x": 6, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } }
+    ]
+  },
+  {
+    "name": "Central Peak",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 1 } },
+      { "start": { "x": 0, "y": 6 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 1, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 6, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Outer Rim",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 2 },
+      { "x": 0, "y": 5 },
+      { "x": 7, "y": 2 },
+      { "x": 7, "y": 5 },
+      { "x": 2, "y": 0 },
+      { "x": 5, "y": 0 },
+      { "x": 2, "y": 7 },
+      { "x": 5, "y": 7 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 3, "y": 3 }, "end": { "x": 4, "y": 4 } },
+      { "start": { "x": 4, "y": 3 }, "end": { "x": 3, "y": 4 } }
+    ]
+  },
+  {
+    "name": "Snake River",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 1 },
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 6 },
+      { "x": 5, "y": 6 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Blockade",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 4, "y": 1 },
+      { "x": 4, "y": 2 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 2 }, "end": { "x": 6, "y": 2 } },
+      { "start": { "x": 6, "y": 3 }, "end": { "x": 1, "y": 3 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 2, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Pillar Crossing",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Staggered Gates",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 5, "y": 3 },
+      { "x": 7, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 6, "y": 1 } },
+      { "start": { "x": 6, "y": 5 }, "end": { "x": 0, "y": 1 } }
+    ]
+  },
+  {
+    "name": "Divided Highway",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 3 },
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 },
+      { "x": 7, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 1 } },
+      { "start": { "x": 7, "y": 6 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Double Cross",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 2, "y": 1 }, "end": { "x": 5, "y": 6 } },
+      { "start": { "x": 5, "y": 1 }, "end": { "x": 2, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Trench Run",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 0 },
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 5, "y": 5 },
+      { "x": 5, "y": 6 },
+      { "x": 5, "y": 7 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 1, "y": 4 }, "end": { "x": 6, "y": 3 } },
+      { "start": { "x": 0, "y": 6 }, "end": { "x": 7, "y": 1 } }
+    ]
+  },
+  {
+    "name": "Zigzag Horizon",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 5, "y": 1 },
+      { "x": 2, "y": 6 },
+      { "x": 4, "y": 5 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 7, "y": 4 }, "end": { "x": 0, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Hatch",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 4, "y": 3 },
+      { "x": 3, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Choke Point",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 0 },
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 4, "y": 5 },
+      { "x": 4, "y": 6 },
+      { "x": 4, "y": 7 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 7, "y": 4 }, "end": { "x": 0, "y": 3 } },
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Temple Columns",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 3, "y": 1 },
+      { "x": 5, "y": 1 },
+      { "x": 1, "y": 5 },
+      { "x": 3, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Orbital Tracks",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 1, "y": 4 }, "end": { "x": 6, "y": 4 } }
+    ]
+  },
+  {
+    "name": "Keyhole Puzzle",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 1, "y": 1 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Binary Stars",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 1, "y": 2 }, "end": { "x": 6, "y": 5 } },
+      { "start": { "x": 6, "y": 2 }, "end": { "x": 1, "y": 5 } }
+    ]
+  },
+  {
+    "name": "Checkerboard",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 3, "y": 3 },
+      { "x": 5, "y": 5 },
+      { "x": 1, "y": 5 },
+      { "x": 5, "y": 1 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Maze Core",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 4, "y": 5 },
+      { "x": 4, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Grid Alignment",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 2 },
+      { "x": 2, "y": 1 },
+      { "x": 5, "y": 6 },
+      { "x": 6, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Subway System",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 1 },
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 1 },
+      { "x": 5, "y": 6 },
+      { "x": 6, "y": 6 },
+      { "x": 7, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Offset Slices",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Parallel Universe",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 0, "y": 6 }, "end": { "x": 6, "y": 0 } },
+      { "start": { "x": 6, "y": 7 }, "end": { "x": 7, "y": 1 } }
+    ]
+  },
+  {
+    "name": "Symmetrical Hazard",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 },
+      { "x": 4, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 7, "y": 3 }, "end": { "x": 0, "y": 4 } },
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } }
+    ]
+  },
+  {
+    "name": "The Vortex",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 3, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } },
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Narrow Slip",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 5, "y": 5 },
+      { "x": 5, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 1, "y": 5 }, "end": { "x": 6, "y": 2 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Bypass Lane",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 4 },
+      { "x": 2, "y": 4 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 1 } },
+      { "start": { "x": 0, "y": 6 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 1, "y": 2 }, "end": { "x": 6, "y": 5 } },
+      { "start": { "x": 6, "y": 2 }, "end": { "x": 1, "y": 5 } }
+    ]
+  },
+  {
+    "name": "Crossing Streams",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 7, "y": 2 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Trifecta Block",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 5, "y": 3 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 2, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Corridor Sync",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 2 },
+      { "x": 1, "y": 2 },
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 },
+      { "x": 6, "y": 5 },
+      { "x": 7, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 3, "y": 1 }, "end": { "x": 4, "y": 6 } },
+      { "start": { "x": 4, "y": 1 }, "end": { "x": 3, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Thread the Needle",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 4 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 1 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 4 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } },
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Temporal Helix",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 1 },
+      { "x": 1, "y": 4 },
+      { "x": 1, "y": 5 },
+      { "x": 6, "y": 2 },
+      { "x": 6, "y": 3 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 2, "y": 2 }, "end": { "x": 5, "y": 5 } },
+      { "start": { "x": 5, "y": 2 }, "end": { "x": 2, "y": 5 } }
+    ]
+  },
+  {
+    "name": "Perimeter Check",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 6, "y": 1 },
+      { "x": 1, "y": 6 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 7, "y": 2 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Final Paradox",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 },
+      { "x": 5, "y": 5 },
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 4 },
+      { "x": 5, "y": 3 },
+      { "x": 5, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Grid Slicer",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 4 },
+      { "x": 1, "y": 4 },
+      { "x": 2, "y": 4 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 3 },
+      { "x": 5, "y": 3 },
+      { "x": 6, "y": 3 },
+      { "x": 7, "y": 3 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Hourglass Lock",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 6, "y": 1 },
+      { "x": 1, "y": 6 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 5 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 7, "y": 3 }, "end": { "x": 0, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 3, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Diagonal Drift",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 5 },
+      { "x": 5, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Symmetric Splits",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 1, "y": 6 }, "end": { "x": 6, "y": 1 } }
+    ]
+  },
+  {
+    "name": "Corridor Weave",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 1 },
+      { "x": 5, "y": 1 },
+      { "x": 6, "y": 1 },
+      { "x": 1, "y": 6 },
+      { "x": 2, "y": 6 },
+      { "x": 5, "y": 6 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Interlocking Rings",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 1 },
+      { "x": 1, "y": 2 },
+      { "x": 3, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 4, "y": 5 },
+      { "x": 6, "y": 5 },
+      { "x": 5, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Offset Grid",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 4, "y": 2 },
+      { "x": 3, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Cross Over Pass",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 2 },
+      { "x": 3, "y": 5 },
+      { "x": 4, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 2, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Dual Tunnel",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 2 },
+      { "x": 1, "y": 2 },
+      { "x": 2, "y": 2 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 },
+      { "x": 5, "y": 5 },
+      { "x": 6, "y": 5 },
+      { "x": 7, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 4 }, "end": { "x": 6, "y": 3 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 3, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Center Maze",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 1 },
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 },
+      { "x": 4, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Symmetric Columns",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 3 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 2 },
+      { "x": 5, "y": 4 },
+      { "x": 5, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 1, "y": 2 }, "end": { "x": 6, "y": 5 } },
+      { "start": { "x": 6, "y": 2 }, "end": { "x": 1, "y": 5 } }
+    ]
+  },
+  {
+    "name": "Outer Rings",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 2, "y": 1 },
+      { "x": 5, "y": 1 },
+      { "x": 6, "y": 1 },
+      { "x": 1, "y": 6 },
+      { "x": 2, "y": 6 },
+      { "x": 5, "y": 6 },
+      { "x": 6, "y": 6 },
+      { "x": 1, "y": 2 },
+      { "x": 6, "y": 2 },
+      { "x": 1, "y": 5 },
+      { "x": 6, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Narrow Crossways",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 1 },
+      { "x": 3, "y": 6 },
+      { "x": 4, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 7, "y": 2 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Hourglass Grid",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 2 },
+      { "x": 1, "y": 2 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 5 },
+      { "x": 7, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Temporal Walls",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 0 },
+      { "x": 2, "y": 1 },
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 },
+      { "x": 5, "y": 6 },
+      { "x": 5, "y": 7 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 7, "y": 3 }, "end": { "x": 0, "y": 4 } },
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } }
+    ]
+  },
+  {
+    "name": "Divided Quarters",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 0 },
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 },
+      { "x": 4, "y": 6 },
+      { "x": 4, "y": 7 },
+      { "x": 0, "y": 4 },
+      { "x": 1, "y": 4 },
+      { "x": 6, "y": 3 },
+      { "x": 7, "y": 3 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Symmetric Lanes",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 2 },
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 },
+      { "x": 6, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Weave Network",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Cross Blockade",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 2 },
+      { "x": 3, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 3, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 3 }, "end": { "x": 6, "y": 3 } },
+      { "start": { "x": 1, "y": 4 }, "end": { "x": 6, "y": 4 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 2, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Offset Corridor",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Center Slot",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 3 },
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 },
+      { "x": 7, "y": 4 },
+      { "x": 3, "y": 1 },
+      { "x": 4, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Temporal Grid",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Parallel Sync",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 1 } },
+      { "start": { "x": 7, "y": 6 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Weaving Grid",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 6, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Corner Alignment",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 7, "y": 2 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Double Choke",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 1 },
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 },
+      { "x": 4, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 2, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Center Hub",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Symmetric Cross",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Hourglass Weave",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Outer Boundary",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 0, "y": 2 },
+      { "x": 7, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 1, "y": 1 }, "end": { "x": 6, "y": 6 } },
+      { "start": { "x": 6, "y": 1 }, "end": { "x": 1, "y": 6 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Center Weave",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 3 },
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 },
+      { "x": 5, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Symmetric Division",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Pivot",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Grid Crossing",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Parallel Align",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 2 },
+      { "x": 6, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Double Loop",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Temporal Gridlock",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 2 },
+      { "x": 4, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Outer Cross",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 6, "y": 1 },
+      { "x": 1, "y": 6 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Symmetric Pathways",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Center Block Align",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 3 },
+      { "x": 3, "y": 4 },
+      { "x": 4, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 6 } },
+      { "start": { "x": 7, "y": 1 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Hourglass Weave Grid",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 3 },
+      { "x": 2, "y": 3 },
+      { "x": 5, "y": 4 },
+      { "x": 6, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Parallel Stream",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 1 }, "end": { "x": 7, "y": 1 } },
+      { "start": { "x": 7, "y": 6 }, "end": { "x": 0, "y": 6 } },
+      { "start": { "x": 1, "y": 0 }, "end": { "x": 6, "y": 7 } },
+      { "start": { "x": 6, "y": 0 }, "end": { "x": 1, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Weave Corridor Network",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 2, "y": 2 },
+      { "x": 5, "y": 2 },
+      { "x": 2, "y": 5 },
+      { "x": 5, "y": 5 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 3 }, "end": { "x": 7, "y": 3 } },
+      { "start": { "x": 0, "y": 4 }, "end": { "x": 7, "y": 4 } },
+      { "start": { "x": 3, "y": 0 }, "end": { "x": 3, "y": 7 } },
+      { "start": { "x": 4, "y": 0 }, "end": { "x": 4, "y": 7 } }
+    ]
+  },
+  {
+    "name": "The Center Junction",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 3, "y": 3 },
+      { "x": 4, "y": 4 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 0 }, "end": { "x": 7, "y": 7 } },
+      { "start": { "x": 7, "y": 0 }, "end": { "x": 0, "y": 7 } },
+      { "start": { "x": 0, "y": 5 }, "end": { "x": 7, "y": 2 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } }
+    ]
+  },
+  {
+    "name": "Symmetric Outer Grid",
+    "gridSize": 8,
+    "obstacles": [
+      { "x": 1, "y": 1 },
+      { "x": 6, "y": 1 },
+      { "x": 1, "y": 6 },
+      { "x": 6, "y": 6 }
+    ],
+    "terminals": [
+      { "start": { "x": 0, "y": 2 }, "end": { "x": 7, "y": 5 } },
+      { "start": { "x": 7, "y": 2 }, "end": { "x": 0, "y": 5 } },
+      { "start": { "x": 2, "y": 0 }, "end": { "x": 5, "y": 7 } },
+      { "start": { "x": 5, "y": 0 }, "end": { "x": 2, "y": 7 } }
+    ]
+  }
+]

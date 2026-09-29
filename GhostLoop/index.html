@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Ghost Loop - Time-Loop Spatial Puzzle</title>
+  <style>
+    :root {
+      --bg-dark: #07070d;
+      --bg-card: #121220;
+      --border-color: #2a2a44;
+      --neon-cyan: #00f0ff;
+      --neon-magenta: #ff007f;
+      --neon-green: #39ff14;
+      --neon-gold: #ffdf00;
+      --text-main: #f0f4f8;
+      --text-sub: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      color: var(--text-main);
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      overscroll-behavior: none;
+    }
+
+    /* Main Container */
+    .gl-app {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100vh;
+      position: relative;
+    }
+
+    @supports (height: 100dvh) {
+      .gl-app { height: 100dvh; }
+    }
+
+    /* Header Navigation Bar */
+    .gl-header {
+      height: 56px;
+      background: rgba(15, 15, 26, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+    }
+
+    .gl-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gl-logo {
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+    }
+
+    .gl-header-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .gl-header-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .gl-btn {
+      background: #18182a;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      min-height: 40px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .gl-btn:hover {
+      background: #22223a;
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+    }
+
+    .gl-btn-primary {
+      background: var(--neon-magenta);
+      border-color: var(--neon-magenta);
+      color: #fff;
+    }
+
+    .gl-btn-primary:hover {
+      background: #ff2a95;
+      border-color: #ff2a95;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+    }
+
+    .gl-btn-success {
+      background: var(--neon-green);
+      border-color: var(--neon-green);
+      color: #000;
+    }
+
+    .gl-btn-success:hover {
+      background: #50ff30;
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+    }
+
+    /* Main Game Layout */
+    .gl-main {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    /* HUD Bar overlay */
+    .gl-hud {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+      pointer-events: none;
+      max-width: calc(100% - 32px);
+    }
+
+    .gl-badge {
+      background: rgba(18, 18, 32, 0.85);
+      border-left: 4px solid var(--neon-cyan);
+      padding: 6px 12px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Canvas Wrapper */
+    .gl-canvas-viewport {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      padding: clamp(6px, 1.5vmin, 20px);
+      background: radial-gradient(circle at center, #111122 0%, #05050a 100%);
+      touch-action: none;
+    }
+
+    #gl_canvas {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      background-color: #0a0a12;
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 2px rgba(255, 255, 255, 0.1);
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    /* Virtual D-Pad Controller */
+    .gl-controller {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 210px;
+      background: rgba(18, 18, 32, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      backdrop-filter: blur(10px);
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .gl-dpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 6px;
+      justify-items: center;
+      align-items: center;
+    }
+
+    .gl-dpad-btn {
+      width: 44px;
+      height: 44px;
+      background: #1a1a2e;
+      border: 1px solid #333355;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.15s ease;
+    }
+
+    .gl-dpad-btn:active {
+      background: var(--neon-cyan);
+      color: #000;
+      border-color: var(--neon-cyan);
+    }
+
+    .gl-ctrl-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .gl-ctrl-actions .gl-btn {
+      flex: 1;
+      justify-content: center;
+      padding: 10px 0;
+      font-size: 0.8rem;
+    }
+
+    /* Generic Overlay Modal System */
+    .gl-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 10, 0.88);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(12px, 3vw, 24px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .gl-modal-overlay.active {
+      display: flex !important;
+      opacity: 1;
+    }
+
+    .gl-modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 480px;
+      max-height: calc(100vh - 2 * clamp(12px, 3vw, 24px));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: clamp(14px, 3vw, 24px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      transform: translateY(10px);
+      transition: transform 0.25s ease;
+    }
+
+    @supports (height: 100dvh) {
+      .gl-modal-card { max-height: calc(100dvh - 2 * clamp(12px, 3vw, 24px)); }
+    }
+
+    .gl-modal-overlay.active .gl-modal-card {
+      transform: translateY(0);
+    }
+
+    .gl-modal-header {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--neon-cyan);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .gl-modal-body {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+    }
+
+    .gl-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    /* Level Selector List */
+    .gl-level-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: min(280px, 45vh);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      padding-right: 4px;
+    }
+
+    @supports (height: 45dvh) {
+      .gl-level-list { max-height: min(280px, 45dvh); }
+    }
+
+    .gl-level-item {
+      background: #18182b;
+      border: 1px solid var(--border-color);
+      padding: 12px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .gl-level-item:hover:not(.locked) {
+      border-color: var(--neon-cyan);
+      background: #20203a;
+    }
+
+    .gl-level-item.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Settings Rows */
+    .gl-setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+
+    /* ============================================================
+       Responsive Rules
+       ============================================================ */
+
+    /* Desktop / fine pointer: on-screen D-pad is not needed (mouse + keyboard) */
+    @media (hover: hover) and (pointer: fine) {
+      .gl-controller { display: none; }
+    }
+
+    /* Touch devices and narrow viewports: reveal the controller */
+    @media (pointer: coarse), (max-width: 900px) {
+      .gl-controller { display: flex; }
+    }
+
+    /* Tablet & below */
+    @media (max-width: 900px) {
+      .gl-header { padding: 0 12px; }
+      .gl-logo { font-size: 1.15rem; }
+      .gl-btn { padding: 7px 11px; font-size: 0.78rem; }
+      .gl-controller { width: 190px; bottom: 14px; right: 14px; padding: 10px; }
+      .gl-dpad-btn { width: 40px; height: 40px; }
+    }
+
+    /* Portrait phones and tablets: dedicated control bar below the board, no overlap.
+       Coarse pointers with >=560px of height get the bar; so does any narrow window. */
+    @media (pointer: coarse) and (min-height: 560px), (max-width: 640px) {
+      .gl-header { height: 50px; }
+      .gl-main { flex-direction: column; }
+
+      .gl-hud {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 6px 8px;
+        max-width: none;
+      }
+
+      .gl-badge {
+        font-size: 0.66rem;
+        padding: 4px 8px;
+        border-left-width: 3px;
+      }
+
+      .gl-controller {
+        position: static;
+        width: auto;
+        flex: 0 0 auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        box-shadow: none;
+        background: rgba(15, 15, 26, 0.95);
+        padding: 8px;
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+      }
+
+      /* Collapse the 3x3 d-pad into a single row to keep the bar short */
+      .gl-dpad-grid {
+        grid-template-columns: repeat(5, auto);
+        grid-template-rows: auto;
+        gap: 6px;
+        align-items: center;
+      }
+      .gl-dpad-grid > div { display: none; }
+      .gl-dpad-btn { width: 46px; height: 46px; font-size: 1rem; }
+      #gl_pad_undo { width: auto; min-width: 62px; padding: 0 10px; font-size: 0.7rem !important; }
+
+      .gl-ctrl-actions { flex: 1; min-width: 0; max-width: 460px; }
+      .gl-ctrl-actions .gl-btn { padding: 12px 4px; font-size: 0.78rem; }
+    }
+
+    /* Landscape phones / very short viewports: reclaim vertical space.
+       The board is height-bound here, so a right-hand gutter shifts it clear
+       of the floating controller without shrinking it. */
+    @media (max-height: 520px) {
+      .gl-header { height: 42px; }
+      .gl-logo { font-size: 1rem; letter-spacing: 1px; }
+      .gl-btn { min-height: 34px; padding: 5px 10px; font-size: 0.74rem; }
+      .gl-controller { width: 168px; bottom: 10px; right: 10px; padding: 8px; gap: 8px; }
+      .gl-dpad-grid { gap: 4px; }
+      .gl-dpad-btn { width: 34px; height: 34px; font-size: 0.85rem; }
+      .gl-hud { top: 8px; left: 8px; gap: 5px; }
+      .gl-badge { font-size: 0.64rem; padding: 3px 8px; }
+      .gl-modal-card { gap: 10px; }
+      .gl-modal-header { font-size: 1.05rem; padding-bottom: 8px; }
+    }
+
+    @media (pointer: coarse) and (max-height: 520px) {
+      .gl-canvas-viewport { padding-right: 196px; }
+    }
+
+    /* Large displays: let the board breathe */
+    @media (min-width: 1200px) and (min-height: 800px) {
+      .gl-modal-card { max-width: 560px; }
+      .gl-controller { width: 230px; }
+      .gl-dpad-btn { width: 48px; height: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="gl-app">
+    <!-- Top Header Navigation -->
+    <header class="gl-header">
+      <div class="gl-title-group">
+        <div class="gl-logo">GHOST LOOP</div>
+      </div>
+      <div class="gl-header-nav">
+        <button class="gl-btn" id="gl_btn_menu_levels">🗺️ Levels</button>
+        <button class="gl-btn" id="gl_btn_menu_demo">🤖 AI Demo</button>
+        <button class="gl-btn" id="gl_btn_menu_help">❓ Help</button>
+        <button class="gl-btn" id="gl_btn_menu_settings">⚙️ Settings</button>
+      </div>
+    </header>
+
+    <!-- Main Game Viewport -->
+    <main class="gl-main">
+      <div class="gl-hud">
+        <div class="gl-badge" id="gl_hud_level">LEVEL 1: SYNCHRONICITY</div>
+        <div class="gl-badge" id="gl_hud_phase" style="border-left-color: var(--neon-cyan);">PHASE: ALPHA (1/4)</div>
+        <div class="gl-badge" id="gl_hud_status" style="border-left-color: var(--neon-green);">STATUS: RECORDING</div>
+      </div>
+
+      <div class="gl-canvas-viewport" id="gl_viewport">
+        <canvas id="gl_canvas" width="600" height="600"></canvas>
+      </div>
+
+      <!-- On-Screen D-Pad Controller -->
+      <div class="gl-controller">
+        <div class="gl-dpad-grid">
+          <div></div>
+          <button class="gl-dpad-btn" id="gl_pad_up">▲</button>
+          <div></div>
+          <button class="gl-dpad-btn" id="gl_pad_left">◄</button>
+          <button class="gl-dpad-btn" id="gl_pad_undo" style="font-size: 0.65rem;">UNDO</button>
+          <button class="gl-dpad-btn" id="gl_pad_right">►</button>
+          <div></div>
+          <button class="gl-dpad-btn" id="gl_pad_down">▼</button>
+          <div></div>
+        </div>
+        <div class="gl-ctrl-actions">
+          <button class="gl-btn gl-btn-primary" id="gl_act_run">RUN PHASE</button>
+          <button class="gl-btn" id="gl_act_reset">RESET</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal Overlays -->
+    <!-- Start Screen Overlay -->
+    <div class="gl-modal-overlay active" id="gl_modal_start">
+      <div class="gl-modal-card" style="text-align: center; max-width: 420px;">
+        <h1 class="gl-logo" style="font-size: 2.4rem; margin-bottom: 6px;">GHOST LOOP</h1>
+        <p style="color: var(--neon-cyan); letter-spacing: 2px; font-size: 0.85rem; font-weight: 700; margin-bottom: 20px;">TEMPORAL SPATIAL PUZZLE</p>
+        <p class="gl-modal-body" style="margin-bottom: 24px;">
+          Guide energy sparks to their destinations across sequential time phases. Avoid temporal paradoxes caused by intersecting past paths!
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button class="gl-btn gl-btn-primary" id="gl_btn_start_play" style="justify-content: center; padding: 12px; font-size: 1rem;">PLAY GAME</button>
+          <button class="gl-btn" id="gl_btn_start_demo" style="justify-content: center; padding: 10px;">WATCH AI DEMO</button>
+          <button class="gl-btn" id="gl_btn_start_help" style="justify-content: center;">INSTRUCTIONS</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Levels Modal -->
+    <div class="gl-modal-overlay" id="gl_modal_levels">
+      <div class="gl-modal-card">
+        <div class="gl-modal-header">SELECT LEVEL</div>
+        <div class="gl-level-list" id="gl_level_container"></div>
+        <div class="gl-modal-footer">
+          <button class="gl-btn gl-btn-primary" id="gl_close_levels">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="gl-modal-overlay" id="gl_modal_help">
+      <div class="gl-modal-card">
+        <div class="gl-modal-header">HOW TO PLAY</div>
+        <div class="gl-modal-body">
+          <p><b>1. Record Path:</b> Draw a route from the active Start Terminal to End Terminal by dragging grid cells, clicking adjacent tiles, or using WASD/Arrow keys.</p><br>
+          <p><b>2. Run Phase:</b> Once at the End Terminal, hit <b>RUN PHASE</b> to lock in your path and trigger the time-loop simulation.</p><br>
+          <p><b>3. Avoid Paradoxes:</b> During simulation, previously locked paths play simultaneously. Sparks MUST NOT occupy the same tile or swap adjacent tiles at the exact same tick!</p><br>
+          <p><b>4. Complete Loop:</b> Complete all 4 phases (Alpha, Beta, Gamma, Delta) to solve the level.</p>
+        </div>
+        <div class="gl-modal-footer">
+          <button class="gl-btn gl-btn-primary" id="gl_close_help">Understood</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="gl-modal-overlay" id="gl_modal_settings">
+      <div class="gl-modal-card">
+        <div class="gl-modal-header">SETTINGS</div>
+        <div class="gl-modal-body">
+          <div class="gl-setting-row">
+            <span>Audio Synthesizer</span>
+            <button class="gl-btn" id="gl_setting_audio">ENABLED</button>
+          </div>
+          <div class="gl-setting-row">
+            <span>Simulation Speed</span>
+            <button class="gl-btn" id="gl_setting_speed">NORMAL (200ms)</button>
+          </div>
+        </div>
+        <div class="gl-modal-footer">
+          <button class="gl-btn gl-btn-primary" id="gl_close_settings">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paradox Alert Modal -->
+    <div class="gl-modal-overlay" id="gl_modal_paradox">
+      <div class="gl-modal-card" style="border-color: var(--neon-magenta);">
+        <div class="gl-modal-header" style="color: var(--neon-magenta);">TEMPORAL PARADOX!</div>
+        <div class="gl-modal-body" id="gl_paradox_msg">Sparks collided in space-time! The loop has collapsed.</div>
+        <div class="gl-modal-footer">
+          <button class="gl-btn" id="gl_btn_reset_level">Reset Level</button>
+          <button class="gl-btn gl-btn-primary" id="gl_btn_retry_phase">Retry Phase</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase Win Modal -->
+    <div class="gl-modal-overlay" id="gl_modal_phase_win">
+      <div class="gl-modal-card" style="border-color: var(--neon-green);">
+        <div class="gl-modal-header" style="color: var(--neon-green);">PHASE STABILIZED!</div>
+        <div class="gl-modal-body">Time phase successfully locked into the continuum.</div>
+        <div class="gl-modal-footer">
+          <button class="gl-btn gl-btn-success" id="gl_btn_next_phase">Next Phase</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level Solved Modal -->
+    <div class="gl-modal-overlay" id="gl_modal_level_win">
+      <div class="gl-modal-card" style="border-color: var(--neon-cyan);">
+        <div class="gl-modal-header" style="color: var(--neon-cyan);">LEVEL SOLVED!</div>
+        <div class="gl-modal-body">All 4 temporal pathways synchronized flawlessly without paradoxes!</div>
+        <div class="gl-modal-footer">
+          <button class="gl-btn" id="gl_btn_win_menu">Level Select</button>
+          <button class="gl-btn gl-btn-primary" id="gl_btn_win_next">Next Level</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      /* Audio Synthesizer */
+      let audioCtx = null;
+      const soundSettings = { enabled: true, speed: 200 };
+
+      function playTone(freq, duration, type = 'sine', volume = 0.08) {
+        if (!soundSettings.enabled) return;
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      const sound = {
+        step: () => playTone(523.25, 0.06, 'sine', 0.04),
+        undo: () => playTone(329.63, 0.08, 'triangle', 0.05),
+        error: () => playTone(140, 0.2, 'sawtooth', 0.1),
+        success: () => {
+          playTone(523.25, 0.08); setTimeout(() => playTone(659.25, 0.08), 70);
+          setTimeout(() => playTone(783.99, 0.08), 140); setTimeout(() => playTone(1046.50, 0.2), 210);
+        },
+        paradox: () => playTone(90, 0.4, 'sawtooth', 0.2)
+      };
+
+      /* Level Configurations */
+      const LEVELS = [
+        {
+          name: "Synchronicity",
+          gridSize: 8,
+          obstacles: [{x: 3, y: 3}, {x: 4, y: 4}],
+          terminals: [
+            { start: {x: 1, y: 1}, end: {x: 6, y: 6} },
+            { start: {x: 6, y: 1}, end: {x: 1, y: 6} },
+            { start: {x: 1, y: 3}, end: {x: 6, y: 3} },
+            { start: {x: 3, y: 1}, end: {x: 3, y: 6} }
+          ]
+        },
+        {
+          name: "The Funnel",
+          gridSize: 8,
+          obstacles: [
+            {x: 3, y: 0}, {x: 3, y: 1}, {x: 3, y: 2},
+            {x: 3, y: 5}, {x: 3, y: 6}, {x: 3, y: 7}
+          ],
+          terminals: [
+            { start: {x: 1, y: 1}, end: {x: 5, y: 1} },
+            { start: {x: 1, y: 6}, end: {x: 5, y: 6} },
+            { start: {x: 1, y: 3}, end: {x: 6, y: 4} },
+            { start: {x: 5, y: 3}, end: {x: 1, y: 4} }
+          ]
+        },
+        {
+          name: "Island Matrix",
+          gridSize: 8,
+          obstacles: [
+            {x: 1, y: 1}, {x: 1, y: 6}, {x: 6, y: 1}, {x: 6, y: 6},
+            {x: 3, y: 3}, {x: 4, y: 4}
+          ],
+          terminals: [
+            { start: {x: 0, y: 3}, end: {x: 7, y: 3} },
+            { start: {x: 3, y: 0}, end: {x: 3, y: 7} },
+            { start: {x: 0, y: 0}, end: {x: 7, y: 7} },
+            { start: {x: 7, y: 0}, end: {x: 0, y: 7} }
+          ]
+        },
+        {
+          name: "Winding Corridors",
+          gridSize: 8,
+          obstacles: [
+            {x: 2, y: 1}, {x: 2, y: 2}, {x: 2, y: 3}, {x: 2, y: 4},
+            {x: 5, y: 3}, {x: 5, y: 4}, {x: 5, y: 5}, {x: 5, y: 6}
+          ],
+          terminals: [
+            { start: {x: 0, y: 0}, end: {x: 7, y: 7} },
+            { start: {x: 7, y: 0}, end: {x: 0, y: 7} },
+            { start: {x: 1, y: 7}, end: {x: 6, y: 0} },
+            { start: {x: 0, y: 4}, end: {x: 7, y: 2} }
+          ]
+        },
+        {
+          name: "Chamber Paradox",
+          gridSize: 8,
+          obstacles: [
+            {x: 2, y: 2}, {x: 3, y: 2}, {x: 4, y: 2}, {x: 5, y: 2},
+            {x: 2, y: 5}, {x: 3, y: 5}, {x: 4, y: 5}, {x: 5, y: 5}
+          ],
+          terminals: [
+            { start: {x: 1, y: 3}, end: {x: 6, y: 4} },
+            { start: {x: 6, y: 3}, end: {x: 1, y: 4} },
+            { start: {x: 3, y: 1}, end: {x: 4, y: 6} },
+            { start: {x: 4, y: 1}, end: {x: 3, y: 6} }
+          ]
+        }
+      ];
+
+      const PHASE_INFO = [
+        { name: 'ALPHA', color: '#00f0ff' },
+        { name: 'BETA', color: '#ff007f' },
+        { name: 'GAMMA', color: '#39ff14' },
+        { name: 'DELTA', color: '#ffdf00' }
+      ];
+
+      /* Game Engine State */
+      const state = {
+        levelIndex: 0,
+        phaseIndex: 0,
+        unlockedLevels: [0],
+        recordedPaths: [[], [], [], []],
+        currentPath: [],
+        status: 'RECORDING', // RECORDING, SIMULATING, PARADOX, CLEAR
+        simTick: 0,
+        simMaxTicks: 0,
+        simTimer: null,
+        isMouseDown: false,
+        isAIDemo: false
+      };
+
+      /* Canvas & Context Initialization */
+      const canvas = document.getElementById('gl_canvas');
+      const ctx = canvas.getContext('2d');
+      const viewportEl = document.getElementById('gl_viewport');
+
+      /* Viewport Sizing: canvas fills the largest square that fits, at device resolution */
+      const MIN_CANVAS_PX = 140;
+      const MAX_CANVAS_PX = 1100;
+      const MAX_DPR = 2.5;
+
+      let viewSize = 600;    // CSS pixel side length of the board
+      let renderScale = 1;  // device pixel ratio (capped for performance)
+
+      function resizeCanvas() {
+        const rect = viewportEl.getBoundingClientRect();
+        const cs = getComputedStyle(viewportEl);
+        const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+        const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+
+        const avail = Math.min(rect.width - padX, rect.height - padY);
+        const size = Math.max(MIN_CANVAS_PX, Math.min(Math.floor(avail) || MIN_CANVAS_PX, MAX_CANVAS_PX));
+
+        const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+        renderScale = dpr;
+        viewSize = size;
+
+        canvas.style.width = size + 'px';
+        canvas.style.height = size + 'px';
+        canvas.width = Math.round(size * dpr);
+        canvas.height = Math.round(size * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      let resizeQueued = false;
+      function scheduleResize() {
+        if (resizeQueued) return;
+        resizeQueued = true;
+        requestAnimationFrame(() => {
+          resizeQueued = false;
+          resizeCanvas();
+        });
+      }
+
+      // A device pixel ratio change (browser zoom, moving a window between
+      // different-density displays) alters the backing store without altering
+      // the CSS box size, so neither resize nor ResizeObserver reports it.
+      // Catching it at the top of the render loop covers every such case.
+      function pixelRatioChanged() {
+        return Math.min(window.devicePixelRatio || 1, MAX_DPR) !== renderScale;
+      }
+
+      window.addEventListener('resize', scheduleResize);
+      window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 250));
+      if (window.ResizeObserver) {
+        new ResizeObserver(scheduleResize).observe(viewportEl);
+      }
+
+      resizeCanvas();
+
+      /* Helper Modal Controls */
+      function setModal(id, visible) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (visible) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      }
+
+      // Multi-agent Space-Time BFS Pathfinding Solver
+      function solveLevelAI(level) {
+        const gridN = level.gridSize;
+        const obstacles = new Set(level.obstacles.map(o => `${o.x},${o.y}`));
+        const solvedPaths = [];
+
+        for (let p = 0; p < 4; p++) {
+          const term = level.terminals[p];
+          const start = term.start;
+          const end = term.end;
+
+          // Space-Time BFS Queue: { x, y, time, path }
+          const queue = [{ x: start.x, y: start.y, time: 0, path: [{x: start.x, y: start.y}] }];
+          const visited = new Set([`${start.x},${start.y},0`]);
+          let foundPath = null;
+
+          while (queue.length > 0) {
+            const curr = queue.shift();
+
+            if (curr.x === end.x && curr.y === end.y) {
+              foundPath = curr.path;
+              break;
+            }
+
+            const nextTime = curr.time + 1;
+            const dirs = [{x: 0, y: -1}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 1, y: 0}];
+
+            for (let d of dirs) {
+              const nx = curr.x + d.x;
+              const ny = curr.y + d.y;
+
+              if (nx < 0 || nx >= gridN || ny < 0 || ny >= gridN) continue;
+              if (obstacles.has(`${nx},${ny}`)) continue;
+
+              const visitKey = `${nx},${ny},${nextTime}`;
+              if (visited.has(visitKey)) continue;
+
+              // Check paradox collisions with already solved past paths at nextTime
+              let collision = false;
+              for (let prevP = 0; prevP < p; prevP++) {
+                const prevPath = solvedPaths[prevP];
+                const prevPos = prevPath[Math.min(nextTime, prevPath.length - 1)];
+                const prevOldPos = prevPath[Math.min(curr.time, prevPath.length - 1)];
+
+                // Same cell occupancy check
+                if (prevPos.x === nx && prevPos.y === ny) {
+                  collision = true;
+                  break;
+                }
+                // Simultaneous swap check
+                if (prevPos.x === curr.x && prevPos.y === curr.y && prevOldPos.x === nx && prevOldPos.y === ny) {
+                  collision = true;
+                  break;
+                }
+              }
+
+              if (!collision) {
+                visited.add(visitKey);
+                queue.push({
+                  x: nx,
+                  y: ny,
+                  time: nextTime,
+                  path: [...curr.path, {x: nx, y: ny}]
+                });
+              }
+            }
+          }
+
+          if (foundPath) {
+            solvedPaths.push(foundPath);
+          } else {
+            // Fallback direct path line if complex maze
+            solvedPaths.push([start, end]);
+          }
+        }
+
+        return solvedPaths;
+      }
+
+      /* Game Flow & Phase Control Functions */
+      function updateHUD() {
+        const lvl = LEVELS[state.levelIndex];
+        const pInfo = PHASE_INFO[state.phaseIndex];
+
+        document.getElementById('gl_hud_level').textContent = `LEVEL ${state.levelIndex + 1}: ${lvl.name.toUpperCase()}`;
+        const pEl = document.getElementById('gl_hud_phase');
+        pEl.textContent = `PHASE: ${pInfo.name} (${state.phaseIndex + 1}/4)`;
+        pEl.style.borderLeftColor = pInfo.color;
+
+        const sEl = document.getElementById('gl_hud_status');
+        sEl.textContent = `STATUS: ${state.status}`;
+      }
+
+      function initPhase(phaseIdx) {
+        state.phaseIndex = phaseIdx;
+        state.status = 'RECORDING';
+        state.simTick = 0;
+        if (state.simTimer) clearInterval(state.simTimer);
+
+        const startTerm = LEVELS[state.levelIndex].terminals[phaseIdx].start;
+        state.currentPath = [{ x: startTerm.x, y: startTerm.y }];
+
+        for (let i = phaseIdx; i < 4; i++) {
+          state.recordedPaths[i] = [];
+        }
+
+        updateHUD();
+      }
+
+      function initLevel(levelIdx) {
+        state.levelIndex = levelIdx;
+        state.isAIDemo = false;
+        initPhase(0);
+      }
+
+      function attemptStep(nx, ny) {
+        if (state.status !== 'RECORDING') return;
+        const lvl = LEVELS[state.levelIndex];
+        const last = state.currentPath[state.currentPath.length - 1];
+
+        // Ensure step is orthogonal adjacent
+        const dist = Math.abs(last.x - nx) + Math.abs(last.y - ny);
+        if (dist !== 1) return;
+
+        // Boundaries & obstacles
+        if (nx < 0 || nx >= lvl.gridSize || ny < 0 || ny >= lvl.gridSize) return sound.error();
+        if (lvl.obstacles.some(o => o.x === nx && o.y === ny)) return sound.error();
+
+        // Undo backtrack check
+        if (state.currentPath.length > 1) {
+          const prev = state.currentPath[state.currentPath.length - 2];
+          if (prev.x === nx && prev.y === ny) {
+            state.currentPath.pop();
+            sound.undo();
+            return;
+          }
+        }
+
+        // Self overlap restriction
+        if (state.currentPath.some(c => c.x === nx && c.y === ny)) return sound.error();
+
+        state.currentPath.push({ x: nx, y: ny });
+        sound.step();
+      }
+
+      function undoStep() {
+        if (state.status === 'RECORDING' && state.currentPath.length > 1) {
+          state.currentPath.pop();
+          sound.undo();
+        }
+      }
+
+      function runPhaseSimulation() {
+        if (state.status !== 'RECORDING') return;
+        const target = LEVELS[state.levelIndex].terminals[state.phaseIndex].end;
+        const last = state.currentPath[state.currentPath.length - 1];
+
+        if (last.x !== target.x || last.y !== target.y) {
+          sound.error();
+          return;
+        }
+
+        state.recordedPaths[state.phaseIndex] = [...state.currentPath];
+        state.status = 'SIMULATING';
+        state.simTick = 0;
+        updateHUD();
+
+        let maxLen = 0;
+        for (let i = 0; i <= state.phaseIndex; i++) {
+          if (state.recordedPaths[i].length > maxLen) maxLen = state.recordedPaths[i].length;
+        }
+        state.simMaxTicks = maxLen;
+
+        if (state.simTimer) clearInterval(state.simTimer);
+        state.simTimer = setInterval(simTickStep, soundSettings.speed);
+      }
+
+      function simTickStep() {
+        if (state.status !== 'SIMULATING') {
+          clearInterval(state.simTimer);
+          return;
+        }
+
+        state.simTick++;
+        const positions = [];
+        for (let i = 0; i <= state.phaseIndex; i++) {
+          const path = state.recordedPaths[i];
+          const posIdx = Math.min(state.simTick, path.length - 1);
+          positions.push({
+            phase: i,
+            curr: path[posIdx],
+            prev: path[Math.max(0, posIdx - 1)]
+          });
+        }
+
+        // Check Paradox Conditions
+        let paradox = false;
+        let msg = "";
+
+        for (let i = 0; i < positions.length; i++) {
+          for (let j = i + 1; j < positions.length; j++) {
+            const p1 = positions[i], p2 = positions[j];
+            // Condition 1: Same cell collision
+            if (p1.curr.x === p2.curr.x && p1.curr.y === p2.curr.y) {
+              paradox = true;
+              msg = `Phase ${PHASE_INFO[p1.phase].name} and ${PHASE_INFO[p2.phase].name} collided on tile (${p1.curr.x}, ${p1.curr.y}).`;
+              break;
+            }
+            // Condition 2: Simultaneous cross-over swap
+            if (p1.curr.x === p2.prev.x && p1.curr.y === p2.prev.y && p1.prev.x === p2.curr.x && p1.prev.y === p2.curr.y) {
+              paradox = true;
+              msg = `Phase ${PHASE_INFO[p1.phase].name} and ${PHASE_INFO[p2.phase].name} crossed over each other simultaneously!`;
+              break;
+            }
+          }
+          if (paradox) break;
+        }
+
+        if (paradox) {
+          clearInterval(state.simTimer);
+          state.status = 'PARADOX';
+          sound.paradox();
+          updateHUD();
+          document.getElementById('gl_paradox_msg').textContent = msg;
+          setModal('gl_modal_paradox', true);
+          return;
+        }
+
+        // Phase completed check
+        if (state.simTick >= state.simMaxTicks - 1) {
+          clearInterval(state.simTimer);
+          sound.success();
+          state.status = 'CLEAR';
+          updateHUD();
+
+          if (state.phaseIndex === 3) {
+            if (!state.unlockedLevels.includes(state.levelIndex + 1) && state.levelIndex + 1 < LEVELS.length) {
+              state.unlockedLevels.push(state.levelIndex + 1);
+            }
+            setModal('gl_modal_level_win', true);
+          } else {
+            if (state.isAIDemo) {
+              setTimeout(() => {
+                initPhase(state.phaseIndex + 1);
+                autoPlayAIPhase();
+              }, 600);
+            } else {
+              setModal('gl_modal_phase_win', true);
+            }
+          }
+        }
+      }
+
+      function autoPlayAIPhase() {
+        const solved = solveLevelAI(LEVELS[state.levelIndex]);
+        if (solved && solved[state.phaseIndex]) {
+          state.currentPath = [...solved[state.phaseIndex]];
+          setTimeout(() => runPhaseSimulation(), 400);
+        }
+      }
+
+      function startAIDemo() {
+        state.isAIDemo = true;
+        setModal('gl_modal_start', false);
+        setModal('gl_modal_levels', false);
+        initLevel(state.levelIndex);
+        autoPlayAIPhase();
+      }
+
+      function render() {
+        const lvl = LEVELS[state.levelIndex];
+        const size = lvl.gridSize;
+        const board = viewSize;
+        const cellSize = board / size;
+
+        if (pixelRatioChanged()) resizeCanvas();
+
+        ctx.setTransform(renderScale, 0, 0, renderScale, 0, 0);
+
+        // Background grid
+        ctx.fillStyle = '#07070d';
+        ctx.fillRect(0, 0, board, board);
+
+        ctx.strokeStyle = '#18182b';
+        ctx.lineWidth = Math.max(1, cellSize * 0.02);
+        for (let i = 0; i <= size; i++) {
+          ctx.beginPath(); ctx.moveTo(i * cellSize, 0); ctx.lineTo(i * cellSize, board); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, i * cellSize); ctx.lineTo(board, i * cellSize); ctx.stroke();
+        }
+
+        // Draw Obstacles
+        const obsInset = cellSize * 0.06;
+        lvl.obstacles.forEach(obs => {
+          ctx.fillStyle = '#222238';
+          ctx.fillRect(obs.x * cellSize + obsInset, obs.y * cellSize + obsInset, cellSize - obsInset * 2, cellSize - obsInset * 2);
+        });
+
+        // Draw Terminals
+        for (let i = 0; i < 4; i++) {
+          const term = lvl.terminals[i];
+          if (!term) continue;
+          const color = PHASE_INFO[i].color;
+
+          // Start Terminal (Filled Circle)
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(term.start.x * cellSize + cellSize / 2, term.start.y * cellSize + cellSize / 2, cellSize * 0.25, 0, Math.PI * 2);
+          ctx.fill();
+
+          // End Terminal (Outer Glowing Ring)
+          ctx.strokeStyle = color;
+          ctx.lineWidth = Math.max(1.5, cellSize * 0.05);
+          ctx.beginPath();
+          ctx.arc(term.end.x * cellSize + cellSize / 2, term.end.y * cellSize + cellSize / 2, cellSize * 0.33, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // Draw Previously Locked Phase Paths
+        for (let i = 0; i < state.phaseIndex; i++) {
+          drawPath(state.recordedPaths[i], PHASE_INFO[i].color, 0.08, true);
+        }
+
+        // Draw Active Recording Path
+        if (state.status === 'RECORDING' && state.currentPath.length > 0) {
+          drawPath(state.currentPath, PHASE_INFO[state.phaseIndex].color, 0.12, false);
+        }
+
+        // Draw Moving Simulation Sparks
+        if (state.status === 'SIMULATING') {
+          for (let i = 0; i <= state.phaseIndex; i++) {
+            const path = state.recordedPaths[i];
+            const posIdx = Math.min(state.simTick, path.length - 1);
+            const cell = path[posIdx];
+            if (!cell) continue;
+
+            const cx = cell.x * cellSize + cellSize / 2;
+            const cy = cell.y * cellSize + cellSize / 2;
+
+            ctx.fillStyle = PHASE_INFO[i].color;
+            ctx.shadowColor = PHASE_INFO[i].color;
+            ctx.shadowBlur = cellSize * 0.25;
+            ctx.beginPath();
+            ctx.arc(cx, cy, cellSize * 0.31, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        }
+
+        requestAnimationFrame(render);
+      }
+
+      function drawPath(path, color, widthScale, isDashed) {
+        if (!path || path.length === 0) return;
+        const cellSize = viewSize / LEVELS[state.levelIndex].gridSize;
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = Math.max(1.5, cellSize * widthScale);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (isDashed) ctx.setLineDash([cellSize * 0.12, cellSize * 0.16]); else ctx.setLineDash([]);
+
+        ctx.beginPath();
+        ctx.moveTo(path[0].x * cellSize + cellSize / 2, path[0].y * cellSize + cellSize / 2);
+        for (let i = 1; i < path.length; i++) {
+          ctx.lineTo(path[i].x * cellSize + cellSize / 2, path[i].y * cellSize + cellSize / 2);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Mouse & Touch Drag Drawing Logic
+      function getCanvasGridPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = Math.floor(((clientX - rect.left) / rect.width) * LEVELS[state.levelIndex].gridSize);
+        const y = Math.floor(((clientY - rect.top) / rect.height) * LEVELS[state.levelIndex].gridSize);
+        return { x, y };
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        state.isMouseDown = true;
+        const pos = getCanvasGridPos(e);
+        attemptStep(pos.x, pos.y);
+      });
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (state.isMouseDown) {
+          const pos = getCanvasGridPos(e);
+          attemptStep(pos.x, pos.y);
+        }
+      });
+
+      window.addEventListener('mouseup', () => state.isMouseDown = false);
+
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        state.isMouseDown = true;
+        const pos = getCanvasGridPos(e);
+        attemptStep(pos.x, pos.y);
+      }, { passive: false });
+
+      canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (state.isMouseDown) {
+          const pos = getCanvasGridPos(e);
+          attemptStep(pos.x, pos.y);
+        }
+      }, { passive: false });
+
+      window.addEventListener('touchend', () => state.isMouseDown = false);
+
+      canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      // Keyboard Controls
+      window.addEventListener('keydown', (e) => {
+        if (state.status !== 'RECORDING') return;
+        const last = state.currentPath[state.currentPath.length - 1];
+        const moves = {
+          ArrowUp: [0, -1], w: [0, -1], W: [0, -1],
+          ArrowDown: [0, 1], s: [0, 1], S: [0, 1],
+          ArrowLeft: [-1, 0], a: [-1, 0], A: [-1, 0],
+          ArrowRight: [1, 0], d: [1, 0], D: [1, 0]
+        };
+        if (moves[e.key]) {
+          e.preventDefault();
+          attemptStep(last.x + moves[e.key][0], last.y + moves[e.key][1]);
+          return;
+        }
+        if (e.key === 'Backspace' || e.key === 'Escape') {
+          e.preventDefault();
+          undoStep();
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          runPhaseSimulation();
+        }
+      });
+
+      // On-Screen D-Pad Buttons
+      document.getElementById('gl_pad_up').addEventListener('click', () => { const l = state.currentPath[state.currentPath.length - 1]; attemptStep(l.x, l.y - 1); });
+      document.getElementById('gl_pad_down').addEventListener('click', () => { const l = state.currentPath[state.currentPath.length - 1]; attemptStep(l.x, l.y + 1); });
+      document.getElementById('gl_pad_left').addEventListener('click', () => { const l = state.currentPath[state.currentPath.length - 1]; attemptStep(l.x - 1, l.y); });
+      document.getElementById('gl_pad_right').addEventListener('click', () => { const l = state.currentPath[state.currentPath.length - 1]; attemptStep(l.x + 1, l.y); });
+      document.getElementById('gl_pad_undo').addEventListener('click', undoStep);
+      document.getElementById('gl_act_run').addEventListener('click', runPhaseSimulation);
+      document.getElementById('gl_act_reset').addEventListener('click', () => initPhase(state.phaseIndex));
+
+      // Header Button Bindings
+      document.getElementById('gl_btn_menu_levels').addEventListener('click', () => { populateLevelList(); setModal('gl_modal_levels', true); });
+      document.getElementById('gl_btn_menu_demo').addEventListener('click', startAIDemo);
+      document.getElementById('gl_btn_menu_help').addEventListener('click', () => setModal('gl_modal_help', true));
+      document.getElementById('gl_btn_menu_settings').addEventListener('click', () => setModal('gl_modal_settings', true));
+
+      // Modal Action Bindings
+      document.getElementById('gl_btn_start_play').addEventListener('click', () => {
+        setModal('gl_modal_start', false);
+        initLevel(0);
+      });
+      document.getElementById('gl_btn_start_demo').addEventListener('click', startAIDemo);
+      document.getElementById('gl_btn_start_help').addEventListener('click', () => setModal('gl_modal_help', true));
+
+      document.getElementById('gl_close_levels').addEventListener('click', () => setModal('gl_modal_levels', false));
+      document.getElementById('gl_close_help').addEventListener('click', () => setModal('gl_modal_help', false));
+      document.getElementById('gl_close_settings').addEventListener('click', () => setModal('gl_modal_settings', false));
+
+      document.getElementById('gl_btn_retry_phase').addEventListener('click', () => {
+        setModal('gl_modal_paradox', false);
+        initPhase(state.phaseIndex);
+      });
+
+      document.getElementById('gl_btn_reset_level').addEventListener('click', () => {
+        setModal('gl_modal_paradox', false);
+        initLevel(state.levelIndex);
+      });
+
+      document.getElementById('gl_btn_next_phase').addEventListener('click', () => {
+        setModal('gl_modal_phase_win', false);
+        initPhase(state.phaseIndex + 1);
+      });
+
+      document.getElementById('gl_btn_win_menu').addEventListener('click', () => {
+        setModal('gl_modal_level_win', false);
+        populateLevelList();
+        setModal('gl_modal_levels', true);
+      });
+
+      document.getElementById('gl_btn_win_next').addEventListener('click', () => {
+        setModal('gl_modal_level_win', false);
+        if (state.levelIndex + 1 < LEVELS.length) {
+          initLevel(state.levelIndex + 1);
+        } else {
+          setModal('gl_modal_start', true);
+        }
+      });
+
+      // Settings toggles
+      document.getElementById('gl_setting_audio').addEventListener('click', function() {
+        soundSettings.enabled = !soundSettings.enabled;
+        this.textContent = soundSettings.enabled ? 'ENABLED' : 'MUTED';
+      });
+
+      document.getElementById('gl_setting_speed').addEventListener('click', function() {
+        if (soundSettings.speed === 200) {
+          soundSettings.speed = 100;
+          this.textContent = 'FAST (100ms)';
+        } else {
+          soundSettings.speed = 200;
+          this.textContent = 'NORMAL (200ms)';
+        }
+      });
+
+      function populateLevelList() {
+        const container = document.getElementById('gl_level_container');
+        container.innerHTML = '';
+        LEVELS.forEach((lvl, idx) => {
+          const isUnlocked = state.unlockedLevels.includes(idx);
+          const item = document.createElement('div');
+          item.className = `gl-level-item ${isUnlocked ? '' : 'locked'}`;
+          item.innerHTML = `
+            <div>
+              <div style="font-weight:700; color:${isUnlocked ? 'var(--neon-cyan)' : 'var(--text-sub)'}">${idx + 1}. ${lvl.name}</div>
+              <div style="font-size:0.75rem; color:var(--text-sub)">Grid Size: ${lvl.gridSize}x${lvl.gridSize}</div>
+            </div>
+            <div>${isUnlocked ? '▶ PLAY' : '🔒 LOCKED'}</div>
+          `;
+          if (isUnlocked) {
+            item.addEventListener('click', () => {
+              setModal('gl_modal_levels', false);
+              setModal('gl_modal_start', false);
+              initLevel(idx);
+            });
+          }
+          container.appendChild(item);
+        });
+      }
+
+      /* Application Bootstrapping */
+      initLevel(0);
+      render();
+    })();
+  </script>
+</body>
+</html>
