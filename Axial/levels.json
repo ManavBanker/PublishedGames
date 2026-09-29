@@ -55,17 +55,6 @@
     "demoPath": ["LEFT", "UP", "UP", "LEFT"]
   },
   {
-    "name": "Symmetric Passage",
-    "gridSize": 6,
-    "playerStart": { "col": 2, "row": 5 },
-    "blueGoal": { "col": 1, "row": 3 },
-    "redGoal": { "col": 4, "row": 3 },
-    "walls": [{ "col": 2, "row": 4 }],
-    "voids": [{ "col": 0, "row": 0 }, { "col": 5, "row": 0 }],
-    "initAngle": 1.57079632679,
-    "demoPath": ["LEFT", "UP", "UP", "RIGHT"]
-  },
-  {
     "name": "Double Helix",
     "gridSize": 6,
     "playerStart": { "col": 1, "row": 4 },
