@@ -527,12 +527,6 @@
             transition: width 0.1s linear;
         }
 
-        .sk_loader_options {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
         /* Pan Tool active state */
         .sk_btn_active {
             background: #ff007f !important;
@@ -558,9 +552,6 @@
             <p style="color: #8c9ec4; font-size: 0.9rem;">Initializing Quantum Matrix...</p>
             <div class="sk_progress_bar_container">
                 <div class="sk_progress_fill" id="sk_progress_bar_fill"></div>
-            </div>
-            <div class="sk_loader_options">
-                <button class="sk_btn sk_primary_btn" id="sk_load_local_fallback">Skip & Load Local Data</button>
             </div>
         </div>
 
@@ -971,7 +962,7 @@
                 }, 100);
 
                 /* Absolute URL fetch targeting raw configuration files. Uses robust error proofing string comments cleanup */
-                fetch('./Orbital Tether.json')
+                fetch('https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/OrbitalTether/levels.json')
                     .then(res => {
                         if (!res.ok) throw new Error("Could not parse dynamic repository payload data.");
                         return res.text();
@@ -981,7 +972,9 @@
                         const sanitized = text
                             .replace(/\/\*[\s\S]*?\*\//g, "")
                             .replace(/\/\/.*/g, "");
-                        GameState.levels = JSON.parse(sanitized);
+                        const parsed = JSON.parse(sanitized);
+                        /* Remote payload ships ids 7-100, renumber sequentially for a 1-94 campaign */
+                        GameState.levels = parsed.map((lvl, idx) => ({...lvl, id: idx + 1}));
                         clearInterval(updateInterval);
                         fill.style.width = "100%";
                         setTimeout(dismissLoader, 500);
@@ -999,12 +992,6 @@
                 const screen = document.getElementById('sk_loader_screen');
                 if (screen) screen.style.display = 'none';
             }
-
-            /* Fallback loader bypass handler */
-            document.getElementById('sk_load_local_fallback').addEventListener('click', () => {
-                GameState.levels = LocalLevels;
-                dismissLoader();
-            });
 
             /* Game Canvas Mechanics configuration */
             const canvas = document.getElementById('sk_game_canvas');
