@@ -316,6 +316,39 @@
       transform: translateY(0);
     }
 
+    /* Level Loader Overlay */
+    #gl_modal_loading {
+      background: var(--bg-dark);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      z-index: 200;
+    }
+
+    .gl-loader-track {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .gl-loader-bar {
+      width: 4%;
+      height: 100%;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 12px var(--neon-cyan);
+      transition: width 0.3s ease;
+    }
+
+    .gl-loader-status {
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      color: var(--text-sub);
+      text-align: center;
+      min-height: 1.1em;
+    }
+
     .gl-modal-header {
       font-size: 1.3rem;
       font-weight: 800;
@@ -502,6 +535,7 @@
         <button class="gl-btn" id="gl_btn_menu_demo">🤖 AI Demo</button>
         <button class="gl-btn" id="gl_btn_menu_help">❓ Help</button>
         <button class="gl-btn" id="gl_btn_menu_settings">⚙️ Settings</button>
+        <button class="gl-btn" id="gl_btn_fullscreen" title="Toggle Fullscreen">⛶ Full</button>
       </div>
     </header>
 
@@ -635,6 +669,17 @@
         </div>
       </div>
     </div>
+
+    <!-- Level Loader Overlay -->
+    <div class="gl-modal-overlay active" id="gl_modal_loading">
+      <div class="gl-modal-card" style="text-align: center; max-width: 380px;">
+        <h1 class="gl-logo" style="font-size: 1.8rem; margin-bottom: 4px;">GHOST LOOP</h1>
+        <div class="gl-loader-track">
+          <div class="gl-loader-bar" id="gl_loader_bar"></div>
+        </div>
+        <div class="gl-loader-status" id="gl_loader_status">Linking temporal array...</div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -675,7 +720,10 @@
       };
 
       /* Level Configurations */
-      const LEVELS = [
+      const LEVELS_URL = "https://raw.githubusercontent.com/ManavBanker/PublishedGames/refs/heads/main/GhostLoop/levels.json";
+
+      /* Offline fallback used only when the remote level array cannot be retrieved */
+      const FALLBACK_LEVELS = [
         {
           name: "Synchronicity",
           gridSize: 8,
@@ -744,6 +792,8 @@
           ]
         }
       ];
+
+      let LEVELS = FALLBACK_LEVELS;
 
       const PHASE_INFO = [
         { name: 'ALPHA', color: '#00f0ff' },
@@ -835,6 +885,90 @@
         } else {
           el.classList.remove('active');
         }
+      }
+
+      /* ==========================================
+         LEVEL FETCHER: remote array + local fallback
+         ========================================== */
+      function sanitizeLevels(parsed) {
+        if (!Array.isArray(parsed) || parsed.length === 0) return [];
+
+        const clean = [];
+        for (const raw of parsed) {
+          if (!raw || typeof raw !== 'object') continue;
+
+          const size = Number(raw.gridSize);
+          if (!Number.isInteger(size) || size < 2 || size > 32) continue;
+
+          const inBounds = p => p && Number.isInteger(p.x) && Number.isInteger(p.y) &&
+            p.x >= 0 && p.x < size && p.y >= 0 && p.y < size;
+
+          const obstacles = Array.isArray(raw.obstacles)
+            ? raw.obstacles
+                .filter(o => inBounds(o))
+                .map(o => ({ x: o.x, y: o.y }))
+                .filter((o, i, arr) => arr.findIndex(d => d.x === o.x && d.y === o.y) === i)
+            : [];
+
+          const terminals = (Array.isArray(raw.terminals) ? raw.terminals : [])
+            .filter(t => t && inBounds(t.start) && inBounds(t.end))
+            .slice(0, 4)
+            .map(t => ({
+              start: { x: t.start.x, y: t.start.y },
+              end: { x: t.end.x, y: t.end.y }
+            }));
+
+          if (terminals.length === 0) continue;
+
+          clean.push({
+            name: typeof raw.name === 'string' && raw.name.trim() ? raw.name.trim() : `Level ${clean.length + 1}`,
+            gridSize: size,
+            obstacles,
+            terminals
+          });
+        }
+
+        return clean;
+      }
+
+      function loadLevels() {
+        const bar = document.getElementById('gl_loader_bar');
+        const status = document.getElementById('gl_loader_status');
+        const setProgress = (pct, msg) => {
+          if (bar) bar.style.width = pct + '%';
+          if (status && msg) status.textContent = msg;
+        };
+
+        return fetch(LEVELS_URL)
+          .then(response => {
+            setProgress(45, 'Temporal array incoming...');
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            return response.text();
+          })
+          .then(text => {
+            setProgress(80, 'Decoding level geometry...');
+
+            /* Tolerate comment annotations in the hosted file before parsing */
+            const cleansed = text
+              .replace(/\/\*[\s\S]*?\*\//g, '')
+              .replace(/(^|[^:])\/\/.*$/gm, '$1')
+              .trim();
+
+            const levels = sanitizeLevels(JSON.parse(cleansed));
+            if (levels.length === 0) throw new Error('No valid levels in payload');
+            return levels;
+          })
+          .then(levels => {
+            LEVELS = levels;
+            setProgress(100, 'Sync complete.');
+            return LEVELS;
+          })
+          .catch(err => {
+            console.warn('[GhostLoop] Remote level fetch failed, using local fallback.', err);
+            LEVELS = FALLBACK_LEVELS;
+            setProgress(100, 'Offline — local array loaded.');
+            return LEVELS;
+          });
       }
 
       // Multi-agent Space-Time BFS Pathfinding Solver
@@ -1266,7 +1400,7 @@
           attemptStep(last.x + moves[e.key][0], last.y + moves[e.key][1]);
           return;
         }
-        if (e.key === 'Backspace' || e.key === 'Escape') {
+        if (e.key === 'Backspace' || (e.key === 'Escape' && !document.fullscreenElement && !document.webkitFullscreenElement)) {
           e.preventDefault();
           undoStep();
         }
@@ -1290,6 +1424,47 @@
       document.getElementById('gl_btn_menu_demo').addEventListener('click', startAIDemo);
       document.getElementById('gl_btn_menu_help').addEventListener('click', () => setModal('gl_modal_help', true));
       document.getElementById('gl_btn_menu_settings').addEventListener('click', () => setModal('gl_modal_settings', true));
+
+      /* Fullscreen toggle.
+         The button is removed where the Fullscreen API is unavailable, so iPhone
+         Safari never presents a control that cannot work: element fullscreen is
+         WONTFIX there (WebKit bug 212934) and fullscreenEnabled alone is not a
+         reliable signal, hence the UA check. iPad is deliberately kept - iOS
+         supports fullscreen there. fullscreenEnabled is also false when the
+         feature is blocked outright, such as inside a cross-origin iframe. */
+      (function setupFullscreen() {
+        const btn = document.getElementById('gl_btn_fullscreen');
+        const root = document.querySelector('.gl-app');
+        const isIPhone = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const active = () => document.fullscreenElement || document.webkitFullscreenElement;
+
+        if (document.fullscreenEnabled === false || isIPhone ||
+            !(root.requestFullscreen || root.webkitRequestFullscreen)) {
+          btn.remove();
+          return;
+        }
+
+        const syncLabel = () => {
+          btn.textContent = active() ? '⛶ Exit Full' : '⛶ Full';
+          resizeCanvas();
+        };
+
+        btn.addEventListener('click', () => {
+          if (active()) {
+            const exit = document.exitFullscreen || document.webkitExitFullscreen;
+            const done = exit.call(document);
+            if (done && done.catch) done.catch(() => {});
+          } else if (root.requestFullscreen) {
+            root.requestFullscreen().catch(err => console.warn('[GhostLoop] Fullscreen failed.', err));
+          } else {
+            root.webkitRequestFullscreen();
+          }
+        });
+
+        // Esc and F11 change fullscreen without going through the button
+        document.addEventListener('fullscreenchange', syncLabel);
+        document.addEventListener('webkitfullscreenchange', syncLabel);
+      })();
 
       // Modal Action Bindings
       document.getElementById('gl_btn_start_play').addEventListener('click', () => {
@@ -1375,8 +1550,11 @@
       }
 
       /* Application Bootstrapping */
-      initLevel(0);
       render();
+      loadLevels().then(() => {
+        setModal('gl_modal_loading', false);
+        initLevel(0);
+      });
     })();
   </script>
 </body>
